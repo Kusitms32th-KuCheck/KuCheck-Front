@@ -1,26 +1,556 @@
-@import "tailwindcss";
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Pretendard Variable';
+  /* Using 'truetype-variations' or 'truetype' is often better */
+  src: url('/fonts/PretendardVariable.ttf') format('truetype-variations'),
+  url('/fonts/PretendardVariable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-desktop: 1440px;
+  --breakpoint-laptop: 1025px;
+  --breakpoint-tablet: 766px;
+  --breakpoint-ios: 375px;
+  --breakpoint-android: 360px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* tailwindCSS에서 해당 color들을 사용할 수 있도록 변경 */
+/* :root에 선언된 애들을 사용하고 있어서 그대로 뒀습니다. 아래와 같이 @theme에 선언해주면 tailwindcss처럼 사용할 수 있어서 @theme도 만들었습니다. */
+@theme {
+  --color-primary-50: #EAEFFF;
+  --color-primary-100: #D4DFFF;
+  --color-primary-200: #B4C7FF;
+  --color-primary-300: #94AEFF;
+  --color-primary-400: #5F86FF;
+  --color-primary-500: #2A5EFF;
+  --color-primary-600: #2655E6;
+  --color-primary-700: #224BCC;
+  --color-primary-800: #1538A1;
+  --color-primary-900: #0C2369;
+
+  --color-gray-50: #FCFDFF;
+  --color-gray-100: #F2F4F5;
+  --color-gray-200: #D7D7E3;
+  --color-gray-300: #C4C6D3;
+  --color-gray-400: #A9AABE;
+  --color-gray-500: #7E83A1;
+  --color-gray-600: #747693;
+  --color-gray-700: #393F4E;
+  --color-gray-800: #262A34;
+  --color-gray-900: #353744;
+
+  --color-sub-red: #EA1B1B;
+  --color-sub-red-accent: #D80516;
+  --color-sub-red-light: #FFE9E9;
+  --color-sub-green: #00C400;
+  --color-sub-green-light: #DBF1DB;
+  --color-dim: #00000066;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --shadow-middlemodal: 0px 4px 50px 0px #0000000d;
+  --shadow-location-search: 0px 4px 28px 0px #0000000d;
+}
+
+/* 전역 폰트 스타일 */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Pretendard, 'Pretendard Variable', sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+{/* title */}
+@utility title-lg-bold {
+  /* Title/lg/bold */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 72px; /* 120% */
+}
+@utility title-lg-semibold {
+  /* Title/lg/semiBold */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 72px; /* 120% */
+}
+@utility title-lg-medium {
+  /* Title/lg/medium */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 72px; /* 120% */
+}
+@utility title-lg-regular {
+  /* Title/lg/regular */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 73px; /* 121.667% */
+}
+@utility title-md-bold {
+  /* Title/md/bold */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-md-semibold {
+  /* Title/md/semibold */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-md-medium {
+  /* Title/md/medium */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-md-regular {
+  /* Title/md/regular */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-sm-bold {
+  /* Title/sm/bold */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 52px; /* 130% */
+}
+@utility title-sm-semibold {
+  /* Title/sm/semiBold */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 52px; /* 130% */
+}
+@utility title-sm-medium {
+  /* Title/sm/medium */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 52px; /* 130% */
+}
+@utility title-sm-regular {
+  /* Title/sm/regular */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 52px; /* 130% */
+}
+
+{/* heading */}
+@utility heading-3xl-bold {
+  /* Heading/3xl/bold */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-3xl-semibold {
+  /* Heading/3xl/semibold */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-3xl-medium {
+  /* Heading/3xl/medium */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-3xl-regular {
+  /* Heading/3xl/regular */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-2xl-bold {
+  /* Heading/2xl/bold */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px; /* 150% */
+}
+@utility heading-2xl-semibold {
+  /* Heading/2xl/semibold */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 48px; /* 150% */
+}
+@utility heading-2xl-medium {
+  /* Heading/2xl/medium */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 48px; /* 150% */
+}
+@utility heading-2xl-regular {
+  /* Heading/2xl/regular */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 48px; /* 150% */
+}
+@utility heading-1xl-bold {
+  /* Heading/1xl/bold */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-1xl-semibold {
+  /* Heading/1xl/semibold */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-1xl-medium {
+  /* Heading/1xl/medium */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-1xl-regular {
+  /* Heading/1xl/regular */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-lg-bold {
+  /* Heading/lg/bold */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-lg-semibold {
+  /* Heading/lg/semibold */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-lg-medium {
+  /* Heading/lg/medium */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-lg-regular {
+  /* Heading/lg/regular */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-md-bold {
+  /* Heading/md/bold */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-md-semibold {
+  /* Heading/md/semibold */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-md-medium {
+  /* Heading/md/medium */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-md-regular {
+  /* Heading/md/regular */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-sm-bold {
+  /* Heading/sm/bold */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px; /* 160% */
+}
+@utility heading-sm-semibold {
+  /* Heading/sm/semibold */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px; /* 160% */
+}
+@utility heading-sm-medium {
+  /* Heading/sm/medium */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px; /* 160% */
+}
+@utility heading-sm-regular {
+  /* Heading/sm/regular */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 160% */
+}
+
+{/* body */}
+@utility body-2xl-bold {
+  /* Body/2xl/bold */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-2xl-semibold {
+  /* Body/2xl/semibold */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-2xl-medium {
+  /* Body/2xl/medium */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-2xl-regular {
+  /* Body/2xl/regular */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-read {
+  /* Body/read */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 188.235% */
+}
+@utility body-xl-bold {
+  /* Body/xl/bold */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-xl-semibold {
+  /* Body/xl/semibold */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-xl-medium {
+  /* Body/xl/medium */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-xl-regular {
+  /* Body/xl/regular */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-lg-bold {
+  /* Body/lg/bold */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 150% */
+}
+@utility body-lg-semibold {
+  /* Body/lg/semibold */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+}
+@utility body-lg-medium {
+  /* Body/lg/medium */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+}
+@utility body-lg-regular {
+  /* Body/lg/regular */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+}
+@utility body-sm-bold {
+  /* Body/sm/bold */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 142.857% */
+}
+@utility body-sm-semibold {
+  /* Body/sm/semibold */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 142.857% */
+}
+@utility body-sm-medium {
+  /* Body/sm/medium */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}
+@utility body-sm-regular {
+  /* Body/sm/regular */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+
+{/* caption */}
+@utility caption-md-bold {
+  /* Caption/md/bold */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-md-semibold {
+  /* Caption/md/semibold */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-md-medium {
+  /* Caption/md/medium */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-md-regular {
+  /* Caption/md/regular */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-sm-medium {
+  /* Caption/sm/medium */
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 133.333% */
+}
+@utility caption-sm-semibold {
+  /* Caption/sm/semibold */
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 133.333% */
 }
