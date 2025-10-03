@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "svgr": "svgr --icon --typescript --no-prettier --out-dir src/assets/svgComponents public/common --ignore-existing"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
