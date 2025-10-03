@@ -20,8 +20,8 @@ const pretendard = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Korfit',
-  description: 'Kickstart your job in Korea with a hiring roadmap for foreigners.',
+  title: 'Ku-Check',
+  description: '큐시즘 출석체크 서비스',
 }
 
 export default function RootLayout({
