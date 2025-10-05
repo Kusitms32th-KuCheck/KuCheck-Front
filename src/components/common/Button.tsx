@@ -1,18 +1,19 @@
 import { ReactNode } from 'react'
 
-const buttonStyleType = {
-  active: 'bg-main text-white',
-  disabled: 'text-gray5 bg-gray2',
-  outline: 'border border-gray2 text-gray5',
-}
-const buttonSize = {
-  lg: 'py-4 px-6',
-  sm: 'py-3 px-4',
+const buttonType = {
+  primary: {
+    default: 'bg-[#E2F2FF] text-primary-400',
+    disabled: '',
+  },
+  secondary: {
+    default: 'bg-primary-50 text-primary-400',
+    disabled: 'bg-gray-100 text-gray-300',
+  },
 }
 
 interface ButtonProps {
-  type: 'active' | 'disabled' | 'outline'
-  size: 'lg' | 'sm'
+  type: 'primary' | 'secondary'
+  status: 'default' | 'disabled'
   customClassName?: string
   children: ReactNode
   onClick: () => void
@@ -24,8 +25,7 @@ interface ButtonProps {
 
 const Button = ({
   children,
-  type = 'active',
-  size = 'lg',
+  type = 'primary',
   customClassName,
   onClick,
   leftIcon,
@@ -33,9 +33,8 @@ const Button = ({
   disabled,
   buttonType = 'button',
 }: ButtonProps) => {
-  const base = 'flex items-center justify-center gap-x-1 rounded-[16px] button'
-  const style = buttonStyleType[type]
-  const styleSize = buttonSize[size]
+  const base = 'flex items-center justify-center px-1 py-[2px] rounded-[4px] caption'
+  const style = buttonType[type]
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (buttonType === 'button') {
@@ -49,7 +48,7 @@ const Button = ({
       type={buttonType}
       disabled={disabled}
       onClick={handleClick}
-      className={`${base} ${style} ${styleSize} ${customClassName}`}
+      className={`${base} ${style} ${customClassName}`}
     >
       {leftIcon}
       {children}
