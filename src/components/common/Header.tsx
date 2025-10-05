@@ -1,5 +1,8 @@
+'use client'
+
 import { ChevronLeftBlackIcon, HomeLogoIcon, NotificationIcon, SettingIcon } from '@/assets/svgComponents'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 interface HeaderProps {
   title?: string
@@ -8,12 +11,18 @@ interface HeaderProps {
 }
 
 const Header = ({ title, headerType = 'default', onBack }: HeaderProps) => {
+  const router = useRouter()
   const renderHeaderType = (headerType: 'default' | 'dynamic') => {
     switch (headerType) {
       case 'dynamic':
         return (
           <div className="relative flex h-[62px] items-center px-[7px]">
-            <ChevronLeftBlackIcon width={36} height={36} />
+            <ChevronLeftBlackIcon
+              onClick={onBack ? onBack : () => router.back()}
+              width={36}
+              height={36}
+              className="cursor-pointer"
+            />
             <p className="body-lg-semibold absolute left-1/2 -translate-x-1/2 whitespace-nowrap">{title}</p>
           </div>
         )
