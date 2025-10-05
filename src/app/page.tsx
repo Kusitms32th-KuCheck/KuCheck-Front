@@ -18,7 +18,7 @@ export default function Home() {
             <AttendanceQRCard />
           </div>
           <NoticeCard />
-          <Banner></Banner>
+          <Banner />
         </div>
       </div>
     </main>

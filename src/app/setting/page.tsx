@@ -4,8 +4,10 @@ import Header from '@/components/common/Header'
 import { CameraIcon, ProfileIcon } from '@/assets/svgComponents'
 import { useState } from 'react'
 import LogoutModal from '@/components/modal/LogoutModal'
+import { useRouter } from 'next/navigation'
 
 export default function SettingPage() {
+  const router = useRouter()
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   return (
     <main className="flex items-center justify-center bg-gray-100">
@@ -26,8 +28,22 @@ export default function SettingPage() {
           <section className="flex flex-col gap-y-[18px] border-b border-gray-100 px-5 py-[18px]">
             <p className="caption-sm-semibold">서비스 안내</p>
             <div className="flex flex-col gap-y-[18px]">
-              <button className="body-lg-regular flex cursor-pointer items-start">개인정보 처리 방침</button>
-              <button className="body-lg-regular flex cursor-pointer items-start">서비스 이용 약관</button>
+              <button
+                onClick={() => {
+                  router.push('/setting/privacy-policy')
+                }}
+                className="body-lg-regular flex cursor-pointer items-start"
+              >
+                개인정보 처리 방침
+              </button>
+              <button
+                onClick={() => {
+                  router.push('/setting/service-term')
+                }}
+                className="body-lg-regular flex cursor-pointer items-start"
+              >
+                서비스 이용 약관
+              </button>
             </div>
           </section>
           <section className="flex flex-col gap-y-[18px] border-b border-gray-100 px-5 py-[18px]">
@@ -47,7 +63,14 @@ export default function SettingPage() {
           <section className="flex flex-col gap-y-[18px] px-5 py-[18px]">
             <p className="caption-sm-semibold">기타</p>
             <div className="flex flex-col gap-y-[18px]">
-              <button className="body-lg-regular flex cursor-pointer items-start">만든 사람들</button>
+              <button
+                onClick={() => {
+                  router.push('/setting/people')
+                }}
+                className="body-lg-regular flex cursor-pointer items-start"
+              >
+                만든 사람들
+              </button>
               <button className="body-lg-regular flex cursor-pointer items-start justify-between">
                 <p>버전 정보</p>
                 <p className="body-lg-regular text-gray-300">2.4.1</p>
