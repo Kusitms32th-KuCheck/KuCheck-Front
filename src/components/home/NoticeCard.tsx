@@ -1,5 +1,6 @@
 import Tag from '@/components/common/Tag'
 import { ChevronRightIcon, NoticeIcon } from '@/assets/svgComponents'
+import Link from 'next/link'
 
 export default function NoticeCard() {
   return (
@@ -9,7 +10,9 @@ export default function NoticeCard() {
           <NoticeIcon width={20} height={20} />
           <p className="body-lg-semibold">공지사항</p>
         </div>
-        <ChevronRightIcon width={24} height={24} />
+        <Link href={'/notice/1'}>
+          <ChevronRightIcon width={24} height={24} />
+        </Link>
       </div>
 
       <div className="flex flex-col">
