@@ -1,5 +1,6 @@
 import { CalendarIcon, ProfileIcon } from '@/assets/svgComponents'
 import Tag from '@/components/common/Tag'
+import Link from 'next/link'
 
 export default function ProfileCard() {
   return (
@@ -21,12 +22,18 @@ export default function ProfileCard() {
         </div>
       </section>
       <section className="flex gap-x-[7px] px-[12px]">
-        <button className="bg-primary-500 body-sm-medium h-[44px] w-full rounded-[10px] text-white">
+        <Link
+          href={'/attendance-check'}
+          className="bg-primary-500 body-sm-medium flex h-[44px] w-full items-center justify-center rounded-[10px] text-white"
+        >
           내 출석 확인하기
-        </button>
-        <button className="body-sm-medium h-[44px] w-full rounded-[10px] bg-gray-700 text-white">
+        </Link>
+        <Link
+          href={'/reason-for-absence'}
+          className="body-sm-medium flex h-[44px] w-full items-center justify-center rounded-[10px] bg-gray-700 text-white"
+        >
           불참 사유서 제출하기
-        </button>
+        </Link>
       </section>
     </div>
   )

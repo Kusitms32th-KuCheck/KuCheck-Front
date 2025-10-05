@@ -7,10 +7,11 @@ import { useRouter } from 'next/navigation'
 interface HeaderProps {
   title?: string
   headerType?: 'default' | 'dynamic'
+  headerColor?: string
   onBack?: () => void
 }
 
-const Header = ({ title, headerType = 'default', onBack }: HeaderProps) => {
+const Header = ({ title, headerType = 'default', onBack, headerColor = 'bg-white' }: HeaderProps) => {
   const router = useRouter()
   const renderHeaderType = (headerType: 'default' | 'dynamic') => {
     switch (headerType) {
@@ -47,7 +48,7 @@ const Header = ({ title, headerType = 'default', onBack }: HeaderProps) => {
 
   return (
     <header
-      className={`${headerType === 'default' ? 'bg-background2' : 'bg-white'} desktop:w-[375px] fixed z-50 w-full pt-[54px]`}
+      className={`${headerType === 'default' ? 'bg-background2' : headerColor} desktop:w-[375px] fixed z-50 w-full pt-[54px]`}
     >
       {renderHeaderType(headerType)}
     </header>
