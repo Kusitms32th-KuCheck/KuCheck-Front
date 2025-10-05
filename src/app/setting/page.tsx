@@ -1,9 +1,15 @@
+'use client'
+
 import Header from '@/components/common/Header'
 import { CameraIcon, ProfileIcon } from '@/assets/svgComponents'
+import { useState } from 'react'
+import LogoutModal from '@/components/modal/LogoutModal'
 
 export default function SettingPage() {
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   return (
     <main className="flex items-center justify-center bg-gray-100">
+      {isLogoutModalOpen && <LogoutModal setIsLogoutModalOpen={setIsLogoutModalOpen} />}
       <div className="desktop:w-[375px] min-h-screen bg-white">
         <Header headerType="dynamic" title={'설정'} />
         <div className="h-[116px]" />
@@ -27,7 +33,14 @@ export default function SettingPage() {
           <section className="flex flex-col gap-y-[18px] border-b border-gray-100 px-5 py-[18px]">
             <p className="caption-sm-semibold">계정설정</p>
             <div className="flex flex-col gap-y-[18px]">
-              <button className="body-lg-regular flex cursor-pointer items-start">로그아웃</button>
+              <button
+                onClick={() => {
+                  setIsLogoutModalOpen(!isLogoutModalOpen)
+                }}
+                className="body-lg-regular flex cursor-pointer items-start"
+              >
+                로그아웃
+              </button>
               <button className="body-lg-regular flex cursor-pointer items-start">탈퇴하기</button>
             </div>
           </section>
