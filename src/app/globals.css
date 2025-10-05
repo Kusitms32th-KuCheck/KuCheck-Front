@@ -32,19 +32,19 @@
 /* tailwindCSS에서 해당 color들을 사용할 수 있도록 변경 */
 /* :root에 선언된 애들을 사용하고 있어서 그대로 뒀습니다. 아래와 같이 @theme에 선언해주면 tailwindcss처럼 사용할 수 있어서 @theme도 만들었습니다. */
 @theme {
-  --color-primary-50: #EAEFFF;
+  --color-primary-50: #EEF2FF;
   --color-primary-100: #D4DFFF;
   --color-primary-200: #B4C7FF;
   --color-primary-300: #94AEFF;
   --color-primary-400: #5F86FF;
-  --color-primary-500: #2A5EFF;
+  --color-primary-500: #326BFF;
   --color-primary-600: #2655E6;
   --color-primary-700: #224BCC;
   --color-primary-800: #1538A1;
   --color-primary-900: #0C2369;
 
   --color-gray-50: #FCFDFF;
-  --color-gray-100: #F2F4F5;
+  --color-gray-100: #F2F2F9;
   --color-gray-200: #D7D7E3;
   --color-gray-300: #C4C6D3;
   --color-gray-400: #A9AABE;
@@ -54,12 +54,16 @@
   --color-gray-800: #262A34;
   --color-gray-900: #353744;
 
+  --color-background1: #FAFAFA;
+  --color-background2: #EDEDF4;
+
   --color-sub-red: #EA1B1B;
   --color-sub-red-accent: #D80516;
   --color-sub-red-light: #FFE9E9;
   --color-sub-green: #00C400;
   --color-sub-green-light: #DBF1DB;
-  --color-dim: #00000066;
+  --color-opacity-40: #00000066;
+  --color-opacity-20: #00000033;
 
   --color-white: #ffffff;
   --color-black: #000000;
@@ -472,6 +476,40 @@ body {
   font-weight: 400;
   line-height: 24px; /* 150% */
 }
+
+@utility body-md-bold {
+  /* Body/md/bold */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 160% */
+}
+@utility body-md-semibold {
+  /* Body/md/semibold */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 160% */
+}
+@utility body-md-medium {
+  /* Body/md/medium */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 160% */
+}
+@utility body-md-regular {
+  /* Body/md/regular */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+}
+
 @utility body-sm-bold {
   /* Body/sm/bold */
   font-family: Pretendard;
