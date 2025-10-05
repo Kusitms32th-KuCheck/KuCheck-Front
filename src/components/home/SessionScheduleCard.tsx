@@ -1,4 +1,5 @@
 import { BarIcon, ChevronRightIcon, ScheduleIcon } from '@/assets/svgComponents'
+import Link from 'next/link'
 
 export default function SessionScheduleCard() {
   return (
@@ -8,7 +9,9 @@ export default function SessionScheduleCard() {
           <ScheduleIcon width={14} height={14} />
         </div>
         <p className="body-lg-semibold pl-[5px]">아이디어 발제 및 커피챗</p>
-        <ChevronRightIcon className="ml-[19px]" width={24} height={24} />
+        <Link href={'/session'}>
+          <ChevronRightIcon className="ml-[19px]" width={24} height={24} />
+        </Link>
       </div>
       <div className="flex flex-col gap-y-[3px] pl-[6px]">
         <p className="caption-sm-medium text-gray-700">마루 180 이벤트 홀</p>
