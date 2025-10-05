@@ -1,6 +1,7 @@
 export { default as QrIcon } from './QrIcon'
 export { default as BarIcon } from './BarIcon'
 export { default as CalendarIcon } from './CalendarIcon'
+export { default as CameraIcon } from './CameraIcon'
 export { default as ChevronLeftBlackIcon } from './ChevronLeftBlackIcon'
 export { default as ChevronRightIcon } from './ChevronRightIcon'
 export { default as HomeLogoIcon } from './HomeLogoIcon'
