@@ -4,7 +4,7 @@ import { PenaltyPointIcon, RewardPointIcon, SessionNoticeBlueIcon } from '@/asse
 export default function AlarmPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
-      <div className="desktop:w-[375px] min-h-screen bg-white">
+      <div className="desktop:w-[375px] min-h-screen w-full bg-white">
         <Header headerType="dynamic" title={'알림'} />
         <div className="h-[116px] border" />
         <div className="flex flex-col px-5">

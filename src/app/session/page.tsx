@@ -19,7 +19,7 @@ export default function SessionPage() {
 
   return (
     <main className="flex items-center justify-center bg-gray-100">
-      <div className="desktop:w-[375px] bg-background1 min-h-screen">
+      <div className="desktop:w-[375px] bg-background1 min-h-screen w-full">
         <Header headerType="dynamic" title={'전체 세션 일정'} headerColor={'bg-background1'} />
         <div className="h-[116px]" />
         <div className="mr-[27px] ml-[29px] flex flex-col gap-y-[10px]">

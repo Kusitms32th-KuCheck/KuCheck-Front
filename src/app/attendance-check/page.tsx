@@ -4,7 +4,7 @@ import { PenaltyPointIcon, RewardPointIcon } from '@/assets/svgComponents'
 export default function AttendanceCheckPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
-      <div className="desktop:w-[375px] bg-background1 relative min-h-screen">
+      <div className="desktop:w-[375px] bg-background1 relative min-h-screen w-full overflow-y-scroll">
         <Header headerType="dynamic" title={'나의 출석'} headerColor={'bg-background1'} />
         <div className="h-[116px]" />
         <section className="px-5">
@@ -91,10 +91,50 @@ export default function AttendanceCheckPage() {
               </div>
               <p className="body-sm-semibold text-gray-700">0</p>
             </section>
+
+            <section className="flex justify-between">
+              <div className="flex gap-x-[21px]">
+                <p className="body-sm-medium text-gray-500">08/23</p>
+                <div className="flex flex-col">
+                  <p className="body-sm-semibold text-gray-700">출석</p>
+                  <div className="flex gap-x-[6px]">
+                    <p className="caption-sm-medium text-gray-500">큐적큐적</p>
+                    <p className="caption-sm-medium text-gray-500">12:52</p>
+                  </div>
+                </div>
+              </div>
+              <p className="body-sm-semibold text-gray-700">0</p>
+            </section>
+            <section className="flex justify-between">
+              <div className="flex gap-x-[21px]">
+                <p className="body-sm-medium text-gray-500">08/23</p>
+                <div className="flex flex-col">
+                  <p className="body-sm-semibold text-gray-700">출석</p>
+                  <div className="flex gap-x-[6px]">
+                    <p className="caption-sm-medium text-gray-500">큐적큐적</p>
+                    <p className="caption-sm-medium text-gray-500">12:52</p>
+                  </div>
+                </div>
+              </div>
+              <p className="body-sm-semibold text-gray-700">0</p>
+            </section>
+            <section className="flex justify-between">
+              <div className="flex gap-x-[21px]">
+                <p className="body-sm-medium text-gray-500">08/23</p>
+                <div className="flex flex-col">
+                  <p className="body-sm-semibold text-gray-700">출석</p>
+                  <div className="flex gap-x-[6px]">
+                    <p className="caption-sm-medium text-gray-500">큐적큐적</p>
+                    <p className="caption-sm-medium text-gray-500">12:52</p>
+                  </div>
+                </div>
+              </div>
+              <p className="body-sm-semibold text-gray-700">0</p>
+            </section>
           </section>
         </section>
 
-        <section className="absolute bottom-0 flex h-[100px] w-full items-center justify-center bg-white px-5">
+        <section className="desktop:absolute ios:fixed android:fixed bottom-0 flex h-[100px] w-full items-center justify-center bg-white px-5">
           <button className="bg-primary-500 body-lg-semibold h-[48px] w-full rounded-[10px] text-white">
             큐픽 제출하기{' '}
           </button>
