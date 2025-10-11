@@ -16,7 +16,7 @@ const sizeStyles = {
   sm: 'body-sm-medium h-[36px] rounded-[4px]',
 }
 
-export interface Button1Props {
+export interface ManagerButtonProps {
   children: ReactNode
   onClick: () => void
   styleType?: 'primary' | 'gray'
@@ -40,7 +40,7 @@ const ManagerButton = ({
   disabled = false,
   rightIcon,
   leftIcon,
-}: Button1Props) => {
+}: ManagerButtonProps) => {
   const base = 'flex items-center justify-center w-full gap-x-2'
   const variantClass = variantStyles[styleType][styleStatus]
   const sizeClass = sizeStyles[styleSize]

@@ -15,7 +15,7 @@ const sizeStyles = {
   sm: 'body-sm-medium h-[44px] rounded-[12px]',
 }
 
-export interface Button1Props {
+export interface MemberButtonProps {
   onClick: () => void
   children: ReactNode
   styleType?: 'primary' | 'gray'
@@ -28,7 +28,7 @@ export interface Button1Props {
   leftIcon?: ReactNode
 }
 
-const Button1 = ({
+const MemberButton = ({
   styleType = 'primary',
   styleStatus = 'default',
   styleSize = 'lg',
@@ -39,7 +39,7 @@ const Button1 = ({
   disabled = false,
   rightIcon,
   leftIcon,
-}: Button1Props) => {
+}: MemberButtonProps) => {
   const base = 'flex items-center justify-center w-full gap-x-2'
   const variantClass = variantStyles[styleType][styleStatus]
   const sizeClass = sizeStyles[styleSize]
@@ -54,4 +54,4 @@ const Button1 = ({
   )
 }
 
-export default Button1
+export default MemberButton

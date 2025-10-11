@@ -6,7 +6,7 @@ const inputBoxStyles = {
   disabled: 'border-primary-400 text-gray-400 cursor-not-allowed',
 }
 
-interface InputProps {
+interface MemberInputProps {
   inputBoxStyle: 'default' | 'error' | 'disabled'
   value?: string | number
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
@@ -33,7 +33,7 @@ const MemberInput = ({
   type = 'text',
   customClassName,
   onClick,
-}: InputProps) => {
+}: MemberInputProps) => {
   const inputBoxBase =
     'border py-[14px] px-[12px] body-md-regular placeholder:text-gray-400 flex gap-x-2 rounded-[12px] items-center bg-white'
   const inputFieldBase = 'button desktop:body-md w-full outline-none bg-white'
