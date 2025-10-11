@@ -1,29 +1,29 @@
 import { ChangeEvent } from 'react'
 
 const inputBoxStyles = {
-  default: 'border-gray2 placeholder:text-gray4 text-black',
-  error: 'border-error text-black',
-  disabled: 'border-gray2 text-gray4 cursor-not-allowed',
+  default: 'border-gray-200 placeholder:text-gray-400 focus-within:border-primary-400 text-black cursor-pointer',
+  error: 'border-sub-red text-black cursor-pointer',
+  disabled: 'border-primary-400 text-gray-400 cursor-not-allowed',
 }
 
 interface InputProps {
-  value: string | number
-  setValue?: (e: ChangeEvent<HTMLInputElement>) => void
   inputBoxStyle: 'default' | 'error' | 'disabled'
+  value?: string | number
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void
+  onClick?: () => void
   textCount?: number
   totalCount?: number
   rightIcon?: React.ReactNode
   leftIcon?: React.ReactNode
   placeholder?: string
-  type?: 'text' | 'password' | 'email' | 'tel' | 'date' | 'number'
+  type?: 'text' | 'password' | 'email' | 'tel' | 'date' | 'number' | 'time'
   customClassName?: string
-  onKeyPress?: (e: React.KeyboardEvent) => void
-  onClick?: () => void
+  readonly?: boolean
 }
 
-const Input = ({
+const MemberInput = ({
   value,
-  setValue,
+  onChange,
   inputBoxStyle,
   textCount,
   totalCount,
@@ -34,7 +34,8 @@ const Input = ({
   customClassName,
   onClick,
 }: InputProps) => {
-  const inputBoxBase = 'border flex gap-x-2 desktop:p-4 px-4 py-3 rounded-[16px] items-center bg-white'
+  const inputBoxBase =
+    'border py-[14px] px-[12px] body-md-regular placeholder:text-gray-400 flex gap-x-2 rounded-[12px] items-center bg-white'
   const inputFieldBase = 'button desktop:body-md w-full outline-none bg-white'
 
   const inputBoxStyleClassName = inputBoxStyles[inputBoxStyle]
@@ -46,7 +47,7 @@ const Input = ({
         <input
           onClick={onClick}
           value={value}
-          onChange={setValue ?? (() => {})}
+          onChange={onChange ?? (() => {})}
           type={type}
           disabled={inputBoxStyle === 'disabled'}
           className={`${inputFieldBase} ${inputBoxStyle === 'disabled' ? 'cursor-not-allowed' : ''}`}
@@ -62,4 +63,4 @@ const Input = ({
     </div>
   )
 }
-export default Input
+export default MemberInput

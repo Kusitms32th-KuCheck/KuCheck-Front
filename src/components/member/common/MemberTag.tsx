@@ -25,7 +25,7 @@ interface TagProps {
   children: ReactNode
 }
 
-export default function Tag({ type = 'primary', status = 'default', children }: TagProps) {
+export default function MemberTag({ type = 'primary', status = 'default', children }: TagProps) {
   const base = 'flex items-center justify-center px-1 py-[2px] rounded-[4px] caption-sm-semibold h-fit'
   const style = buttonType[type][status]
 

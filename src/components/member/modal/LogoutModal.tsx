@@ -1,4 +1,4 @@
-import Modal from '@/components/common/Modal'
+import MemberModal from '@/components/member/common/MemberModal'
 import { Dispatch, SetStateAction } from 'react'
 
 interface LogoutModalProps {
@@ -7,13 +7,13 @@ interface LogoutModalProps {
 
 export default function LogoutModal({ setIsLogoutModalOpen }: LogoutModalProps) {
   return (
-    <Modal>
-      <Modal.Content>
+    <MemberModal>
+      <MemberModal.Content>
         <div className="body-lg-regular flex w-full items-center justify-center text-gray-700">
           정말 로그아웃할까요?
         </div>
-      </Modal.Content>
-      <Modal.BottomButton>
+      </MemberModal.Content>
+      <MemberModal.BottomButton>
         <div className="flex gap-x-2">
           <button
             onClick={() => {
@@ -32,7 +32,7 @@ export default function LogoutModal({ setIsLogoutModalOpen }: LogoutModalProps) 
             취소
           </button>
         </div>
-      </Modal.BottomButton>
-    </Modal>
+      </MemberModal.BottomButton>
+    </MemberModal>
   )
 }

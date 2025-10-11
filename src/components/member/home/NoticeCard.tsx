@@ -1,4 +1,4 @@
-import Tag from '@/components/common/Tag'
+import MemberTag from '@/components/member/common/MemberTag'
 import { ChevronRightIcon, NoticeIcon } from '@/assets/svgComponents'
 import Link from 'next/link'
 
@@ -19,29 +19,29 @@ export default function NoticeCard() {
         <div className="flex flex-col gap-y-[6px] border-b border-gray-100 px-5 pt-[14px] pb-[18px]">
           <p className="body-sm-medium">📢 밋업 프로젝트 팀 빌딩 공지</p>
           <div className="flex gap-x-1">
-            <Tag status={'default'} type={'round'}>
+            <MemberTag status={'default'} type={'round'}>
               밋업프로젝트
-            </Tag>
-            <Tag status={'default'} type={'round'}>
+            </MemberTag>
+            <MemberTag status={'default'} type={'round'}>
               자기소개서
-            </Tag>
+            </MemberTag>
           </div>
         </div>
         <div className="flex flex-col gap-y-[6px] px-5 pt-[14px] pb-[18px]">
           <p className="body-sm-medium">🔥 1차 스프린트 안내 🔥</p>
           <div className="flex gap-x-1">
-            <Tag status={'default'} type={'round'}>
+            <MemberTag status={'default'} type={'round'}>
               밋업프로젝트
-            </Tag>
-            <Tag status={'default'} type={'round'}>
+            </MemberTag>
+            <MemberTag status={'default'} type={'round'}>
               유의사항
-            </Tag>
-            <Tag status={'default'} type={'round'}>
+            </MemberTag>
+            <MemberTag status={'default'} type={'round'}>
               제출방법
-            </Tag>
-            <Tag status={'default'} type={'round'}>
+            </MemberTag>
+            <MemberTag status={'default'} type={'round'}>
               제출방법
-            </Tag>
+            </MemberTag>
           </div>
         </div>
       </div>

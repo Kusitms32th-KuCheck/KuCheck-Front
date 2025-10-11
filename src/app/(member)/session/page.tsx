@@ -1,5 +1,5 @@
-import Header from '@/components/common/Header'
-import Tag from '@/components/common/Tag'
+import MemberHeader from '@/components/member/common/MemberHeader'
+import MemberTag from '@/components/member/common/MemberTag'
 
 export default function SessionPage() {
   const sessionData = [
@@ -20,7 +20,7 @@ export default function SessionPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] bg-background1 min-h-screen w-full">
-        <Header headerType="dynamic" title={'전체 세션 일정'} headerColor={'bg-background1'} />
+        <MemberHeader headerType="dynamic" title={'전체 세션 일정'} headerColor={'bg-background1'} />
         <div className="h-[116px]" />
         <div className="mr-[27px] ml-[29px] flex flex-col gap-y-[10px]">
           {sessionData.map((session, index) => {
@@ -42,9 +42,9 @@ export default function SessionPage() {
                 <section className="flex w-full flex-col gap-y-2 rounded-[12px] bg-white px-[26px] py-[17px]">
                   <div className="flex items-center gap-x-2">
                     <p className="body-lg-bold">{session.date}</p>
-                    <Tag type={'secondary'} status={'default'}>
+                    <MemberTag type={'secondary'} status={'default'}>
                       {session.tag}
-                    </Tag>
+                    </MemberTag>
                   </div>
                   <p className="body-md-regular">{session.description}</p>
                 </section>

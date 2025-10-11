@@ -1,5 +1,5 @@
 import { CalendarIcon, ProfileIcon } from '@/assets/svgComponents'
-import Tag from '@/components/common/Tag'
+import MemberTag from '@/components/member/common/MemberTag'
 import Link from 'next/link'
 
 export default function ProfileCard() {
@@ -11,9 +11,9 @@ export default function ProfileCard() {
         <div className="flex flex-col">
           <div className="flex items-center gap-x-2">
             <p className="heading-md-semibold">이현진</p>
-            <Tag type={'primary'} status={'default'}>
+            <MemberTag type={'primary'} status={'default'}>
               프론트엔드 • 32기
-            </Tag>
+            </MemberTag>
           </div>
           <div className="flex gap-x-2">
             <p className="body-sm-semibold text-gray-600">상벌점</p>

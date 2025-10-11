@@ -11,7 +11,7 @@ interface HeaderProps {
   onBack?: () => void
 }
 
-const Header = ({ title, headerType = 'default', onBack, headerColor = 'bg-white' }: HeaderProps) => {
+const MemberHeader = ({ title, headerType = 'default', onBack, headerColor = 'bg-white' }: HeaderProps) => {
   const router = useRouter()
   const renderHeaderType = (headerType: 'default' | 'dynamic') => {
     switch (headerType) {
@@ -30,7 +30,7 @@ const Header = ({ title, headerType = 'default', onBack, headerColor = 'bg-white
       default:
         return (
           <div className="bg-background2 flex items-center justify-between px-5 pt-4 pb-[3px]">
-            <Link href={'/'}>
+            <Link href={'/public'}>
               <HomeLogoIcon width={35} height={28} />
             </Link>
             <div className="flex items-center gap-x-[22px]">
@@ -54,4 +54,4 @@ const Header = ({ title, headerType = 'default', onBack, headerColor = 'bg-white
     </header>
   )
 }
-export default Header
+export default MemberHeader
