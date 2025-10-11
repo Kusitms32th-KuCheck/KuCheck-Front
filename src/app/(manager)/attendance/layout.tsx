@@ -1,3 +1,5 @@
+import React from 'react'
+
 export default function AttendanceLayout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>
+  return <>{children}</>
 }
