@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export default function Modal({ children, customClassName }: { children: ReactNode; customClassName?: string }) {
+export default function MemberModal({ children, customClassName }: { children: ReactNode; customClassName?: string }) {
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
       <section
@@ -20,5 +20,5 @@ function BottomButton({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-Modal.BottomButton = BottomButton
-Modal.Content = Content
+MemberModal.BottomButton = BottomButton
+MemberModal.Content = Content

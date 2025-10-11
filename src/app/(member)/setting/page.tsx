@@ -1,9 +1,9 @@
 'use client'
 
-import Header from '@/components/common/Header'
+import MemberHeader from '@/components/member/common/MemberHeader'
 import { CameraIcon, ProfileIcon } from '@/assets/svgComponents'
 import { useState } from 'react'
-import LogoutModal from '@/components/modal/LogoutModal'
+import LogoutModal from '@/components/member/modal/LogoutModal'
 import { useRouter } from 'next/navigation'
 
 export default function SettingPage() {
@@ -13,7 +13,7 @@ export default function SettingPage() {
     <main className="flex items-center justify-center bg-gray-100">
       {isLogoutModalOpen && <LogoutModal setIsLogoutModalOpen={setIsLogoutModalOpen} />}
       <div className="desktop:w-[375px] min-h-screen w-full bg-white">
-        <Header headerType="dynamic" title={'설정'} />
+        <MemberHeader headerType="dynamic" title={'설정'} />
         <div className="h-[116px]" />
         <div className="mt-3">
           <section className="flex flex-col items-center gap-y-3">

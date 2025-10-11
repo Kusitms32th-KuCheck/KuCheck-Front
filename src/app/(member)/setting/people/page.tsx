@@ -1,10 +1,10 @@
-import Header from '@/components/common/Header'
+import MemberHeader from '@/components/member/common/MemberHeader'
 
 export default function People() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen bg-white">
-        <Header headerType="dynamic" title={'만든 사람들'} />
+        <MemberHeader headerType="dynamic" title={'만든 사람들'} />
         <div className="h-[116px]" />
         <div className="flex flex-col">
           <section className="flex flex-col gap-y-[28px] border-b border-gray-100 px-5 py-[32px]">

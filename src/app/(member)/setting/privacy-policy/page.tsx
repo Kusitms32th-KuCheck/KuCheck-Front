@@ -1,10 +1,10 @@
-import Header from '@/components/common/Header'
+import MemberHeader from '@/components/member/common/MemberHeader'
 
 export default function PrivacyPolicy() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen bg-white">
-        <Header headerType="dynamic" title={'개인정보 처리 방침'} />
+        <MemberHeader headerType="dynamic" title={'개인정보 처리 방침'} />
         <div className="h-[116px]" />
         <div className="mt-[22px] px-5">
           <p className="body-md-regular text-gray-700">

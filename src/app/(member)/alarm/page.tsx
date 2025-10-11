@@ -1,11 +1,11 @@
-import Header from '@/components/common/Header'
+import MemberHeader from '@/components/member/common/MemberHeader'
 import { PenaltyPointIcon, RewardPointIcon, SessionNoticeBlueIcon } from '@/assets/svgComponents'
 
 export default function AlarmPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen w-full bg-white">
-        <Header headerType="dynamic" title={'알림'} />
+        <MemberHeader headerType="dynamic" title={'알림'} />
         <div className="h-[116px] border" />
         <div className="flex flex-col px-5">
           <section className="flex items-center gap-x-[21px] py-[14px]">

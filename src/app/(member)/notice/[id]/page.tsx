@@ -1,10 +1,10 @@
-import Header from '@/components/common/Header'
+import MemberHeader from '@/components/member/common/MemberHeader'
 
 export default function NoticeDetailPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen bg-white">
-        <Header headerType="dynamic" title={'세션 공지'} />
+        <MemberHeader headerType="dynamic" title={'세션 공지'} />
         <div className="h-[116px]" />
         <div className="px-5 pb-[145px]">
           <section className="flex flex-col gap-y-[3px] border-b border-gray-100 pt-[10px] pb-[8px]">
