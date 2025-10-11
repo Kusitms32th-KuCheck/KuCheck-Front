@@ -68,7 +68,7 @@ interface ManagerSidebarProps {
 
 export default function ManagerSidebar({ currentPath }: ManagerSidebarProps) {
   return (
-    <aside className="w-[240px] bg-white p-[24px]">
+    <aside className="w-[240px] bg-white p-[24px] shadow-lg">
       <nav className="h-[52px] w-[192px]">
         {managerSidebarItems.map((item) => {
           const isActive = currentPath === item.href
