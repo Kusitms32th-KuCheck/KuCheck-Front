@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 import {
   ManagerOnIcon,
@@ -77,7 +76,7 @@ export default function ManagerSidebar({ currentPath }: ManagerSidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-[8px] rounded-[8px] px-[12px] py-[14px] transition-colors ${
+              className={`hover:bg-background1 flex items-center gap-[8px] rounded-[8px] px-[12px] py-[14px] transition-colors ${
                 isActive ? 'bg-primary-50 text-primary-500' : 'text-gray-500'
               }`}
             >

@@ -1,6 +1,9 @@
-import React from 'react'
+'use client'
+import { useState } from 'react'
 import AbsenceTableHeader from './AbsenceTableHeader'
 import AbsenceTableRow, { type AbsenceRecord } from './AbsenceTableRow'
+import Dropdown from '../common/ManagerdropDown'
+import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 
 interface AbsenceTableProps {
   records: AbsenceRecord[]
@@ -8,6 +11,7 @@ interface AbsenceTableProps {
 }
 
 export default function AbsenceTable({ records, totalCount }: AbsenceTableProps) {
+  const [selectedDate, setSelectedDate] = useState('09/20')
   return (
     <div className="flex flex-col rounded-[12px] bg-white py-7">
       <div className="flex flex-col gap-6">
@@ -18,18 +22,27 @@ export default function AbsenceTable({ records, totalCount }: AbsenceTableProps)
               {totalCount}
             </p>
           </div>
-          <select className="appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-10 text-sm focus:border-blue-500 focus:outline-none">
-            <option>09/20</option>
-            <option>08/16</option>
-            <option>08/23</option>
-            <option>08/30</option>
-          </select>
+          <Dropdown
+            size="lg"
+            options={[
+              { label: '09/20', value: '09/20' },
+              { label: '08/16', value: '08/16' },
+              { label: '08/23', value: '08/23' },
+              { label: '08/30', value: '08/30' },
+            ]}
+            selected={selectedDate}
+            onChange={setSelectedDate}
+            placeholder="09/20"
+            leftIcon={<CalendarIcon width={24} height={24} />}
+            leftIconActive={<CalendarOnIcon width={24} height={24} />}
+            rightIcon={<DownIcon width={24} height={24} />}
+            rightIconActive={<UpIcon width={24} height={24} />}
+          />
         </div>
 
         <AbsenceTableHeader />
       </div>
 
-      {/* 테이블 바디 */}
       <div>
         {records.map((record, index) => (
           <AbsenceTableRow key={index} record={record} isEven={index % 2 === 0} />

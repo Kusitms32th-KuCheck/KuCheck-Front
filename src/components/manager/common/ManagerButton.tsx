@@ -41,7 +41,7 @@ const ManagerButton = ({
   rightIcon,
   leftIcon,
 }: ManagerButtonProps) => {
-  const base = 'flex items-center justify-center gap-x-2 py-[12px] px-[15.5px]'
+  const base = 'flex items-center justify-center gap-x-2 py-[12px] px-[15.5px] hover:bg-primary-700'
   const variantClass = variantStyles[styleType][styleStatus]
   const sizeClass = sizeStyles[styleSize]
   const className = [base, variantClass, sizeClass].join(' ')

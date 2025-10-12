@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { usePathname } from 'next/navigation'
 import ManagerHeader from '@/components/manager/common/ManagerHeader'
 import ManagerSidebar from '@/components/manager/common/ManagerSidebar'

@@ -1,5 +1,8 @@
-import React from 'react'
+'use client'
+import { useState } from 'react'
 import { gridTemplate } from './AbsenceTableHeader'
+import Dropdown from '../common/ManagerdropDown'
+import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 
 interface AbsenceRecord {
   name: string
@@ -17,6 +20,8 @@ interface AbsenceTableRowProps {
 }
 
 export default function AbsenceTableRow({ record, isEven }: AbsenceTableRowProps) {
+  const [selectedScore, setSelectedScore] = useState('')
+
   return (
     <div
       className={`body-lg-regular grid items-center gap-[50px] border-b border-gray-100 px-6 py-[22px] ${
@@ -36,20 +41,23 @@ export default function AbsenceTableRow({ record, isEven }: AbsenceTableRowProps
         </a>
       </p>
       <div className="flex items-center">
-        <div className="relative w-20">
-          <select
-            className="w-full appearance-none rounded border border-gray-300 bg-white px-3 py-1 pr-8 text-center text-sm focus:border-blue-500 focus:outline-none"
-            defaultValue="0"
-          >
-            <option value="-3">-3</option>
-            <option value="-2">-2</option>
-            <option value="-1">-1</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
-        </div>
+        <Dropdown
+          size="md"
+          options={[
+            { label: '-3', value: '-3' },
+            { label: '-2', value: '-2' },
+            { label: '-1', value: '-1' },
+            { label: '0', value: '0' },
+            { label: '1', value: '1' },
+            { label: '2', value: '2' },
+            { label: '3', value: '3' },
+          ]}
+          selected={selectedScore}
+          onChange={setSelectedScore}
+          placeholder="선택"
+          rightIcon={<DownIcon width={24} height={24} />}
+          rightIconActive={<UpIcon width={24} height={24} />}
+        />
       </div>
     </div>
   )
