@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgNoticeOnIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 16 16" {...props}><path fill="#326BFF" d="M13.327 12.636c.371 0 .673.305.673.681a.68.68 0 0 1-.673.683H9.521a.68.68 0 0 1-.674-.683c0-.376.302-.681.674-.681zM8.161 2.638c.608-.781 1.67-.853 2.526-.172l.983.781c.403.315.672.731.765 1.168.106.48-.008.954-.327 1.362l-5.857 7.575a1.4 1.4 0 0 1-1.089.544l-2.335.03a.27.27 0 0 1-.262-.208l-.53-2.301c-.092-.423 0-.86.269-1.196l4.152-5.375c.07-.086.198-.1.283-.036L8.486 6.2a.56.56 0 0 0 .432.121.63.63 0 0 0 .545-.694.7.7 0 0 0-.219-.423L7.546 3.842a.253.253 0 0 1-.043-.35z" /></svg>;
+export default SvgNoticeOnIcon;

@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 const variantStyles = {
   primary: {
-    default: 'bg-primary-500 text-white hover:bg-primary-700 cursor-pointer',
+    default: 'bg-primary-500 text-white cursor-pointer',
     disabled: 'bg-gray-100 text-gray-500 cursor-not-allowed',
   },
   gray: {
@@ -41,7 +41,7 @@ const ManagerButton = ({
   rightIcon,
   leftIcon,
 }: ManagerButtonProps) => {
-  const base = 'flex items-center justify-center w-full gap-x-2'
+  const base = 'flex items-center justify-center gap-x-2 py-[12px] px-[15.5px] hover:bg-primary-700'
   const variantClass = variantStyles[styleType][styleStatus]
   const sizeClass = sizeStyles[styleSize]
   const className = [base, variantClass, sizeClass].join(' ')
