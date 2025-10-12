@@ -7,6 +7,7 @@ import clsx from 'clsx'
 interface DropdownOption {
   label: string
   value: string
+  displayValue?: string
   icon?: React.ReactNode
 }
 
@@ -23,6 +24,7 @@ interface DropdownProps {
   size?: 'sm' | 'md' | 'lg'
   type?: 'default' | 'icon-list' | 'date'
   customWidth?: string
+  showValueInsteadOfLabel?: boolean
 }
 
 export default function Dropdown({
@@ -37,10 +39,17 @@ export default function Dropdown({
   rightIconActive,
   size = 'md',
   customWidth,
+  showValueInsteadOfLabel = false,
 }: DropdownProps) {
   const [open, setOpen] = useState(false)
 
-  const selectedLabel = options.find((o) => o.value === selected)?.value ?? placeholder
+  const selectedOption = options.find((o) => o.value === selected)
+
+  const selectedLabel = selectedOption
+    ? showValueInsteadOfLabel
+      ? (selectedOption.displayValue ?? selectedOption.value)
+      : selectedOption.label
+    : placeholder
 
   const sizeClass = {
     sm: 'h-[36px] text-sm px-3 py-2',
@@ -87,7 +96,7 @@ export default function Dropdown({
       >
         {options.map((option) => (
           <DropdownMenuItem
-            key={option.label}
+            key={option.value}
             onSelect={() => onChange(option.value)}
             className={clsx(
               'flex cursor-pointer items-center gap-2 rounded-[4px] p-[10px] hover:bg-gray-100 focus:outline-none',
