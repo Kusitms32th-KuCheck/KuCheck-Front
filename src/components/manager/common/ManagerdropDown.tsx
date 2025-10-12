@@ -40,7 +40,7 @@ export default function Dropdown({
 }: DropdownProps) {
   const [open, setOpen] = useState(false)
 
-  const selectedLabel = options.find((o) => o.value === selected)?.label ?? placeholder
+  const selectedLabel = options.find((o) => o.value === selected)?.value ?? placeholder
 
   const sizeClass = {
     sm: 'h-[36px] text-sm px-3 py-2',
@@ -87,7 +87,7 @@ export default function Dropdown({
       >
         {options.map((option) => (
           <DropdownMenuItem
-            key={option.value}
+            key={option.label}
             onSelect={() => onChange(option.value)}
             className={clsx(
               'flex cursor-pointer items-center gap-2 rounded-[4px] p-[10px] hover:bg-gray-100 focus:outline-none',

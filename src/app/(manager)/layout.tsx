@@ -1,8 +1,8 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import ManagerHeader from '@/components/manager/common/ManagerHeader'
 import ManagerSidebar from '@/components/manager/common/ManagerSidebar'
+import { usePathname } from 'next/navigation'
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()

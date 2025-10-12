@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { ProfileIcon } from '@/assets/svgComponents'
 import { LogoIcon } from '@/assets/svgComponents/manager'
@@ -31,7 +31,6 @@ export default function ManagerHeader() {
         </div>
       </header>
 
-      {/* 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 z-40" onClick={handleCloseModal}>
           <div onClick={(e) => e.stopPropagation()}>

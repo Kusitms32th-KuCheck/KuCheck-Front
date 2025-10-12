@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ManagerButton from '../common/ManagerButton'
 
 interface SessionInfoProps {
@@ -16,12 +16,7 @@ export default function SessionInfo({ location, time }: SessionInfoProps) {
       if (!mainContent) return
 
       const currentScroll = mainContent.scrollTop
-
-      if (currentScroll > 0 && currentScroll < 160) {
-        setShowStickyHeader(true)
-      } else {
-        setShowStickyHeader(false)
-      }
+      setShowStickyHeader(currentScroll > 0 && currentScroll < 160)
     }
 
     const mainContent = document.querySelector('main')
@@ -30,6 +25,15 @@ export default function SessionInfo({ location, time }: SessionInfoProps) {
       return () => mainContent.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  const HeaderContent = () => (
+    <>
+      <p className="heading-1xl-semibold">집중협업시간</p>
+      <ManagerButton customClassName="w-[160px]" styleSize="md" onClick={() => console.log('출석체크 시작하기 클릭됨')}>
+        출석체크 시작하기
+      </ManagerButton>
+    </>
+  )
 
   return (
     <>
@@ -40,27 +44,13 @@ export default function SessionInfo({ location, time }: SessionInfoProps) {
             boxShadow: '4px 4px 13px -6px rgba(0, 0, 0, 0.1)',
           }}
         >
-          <p className="heading-1xl-semibold">집중협업시간</p>
-          <ManagerButton
-            customClassName="w-[160px]"
-            styleSize="md"
-            onClick={() => console.log('출석체크 시작하기 클릭됨')}
-          >
-            출석체크 시작하기
-          </ManagerButton>
+          <HeaderContent />
         </div>
       )}
 
       <div className="rounded-[12px] bg-white px-[30px] py-[24px]">
         <div className="flex h-[62px] w-full items-start justify-between">
-          <p className="heading-1xl-semibold">집중협업시간</p>
-          <ManagerButton
-            customClassName="w-[160px]"
-            styleSize="md"
-            onClick={() => console.log('출석체크 시작하기 클릭됨')}
-          >
-            출석체크 시작하기
-          </ManagerButton>
+          <HeaderContent />
         </div>
         <div className="body-lg-medium text-gray-500">
           <div className="flex h-[62px] w-full flex-col items-start justify-between py-1">

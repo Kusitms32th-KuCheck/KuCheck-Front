@@ -32,17 +32,14 @@ export default function AbsenceTable({ records, totalCount }: AbsenceTableProps)
             ]}
             selected={selectedDate}
             onChange={setSelectedDate}
-            placeholder="09/20"
             leftIcon={<CalendarIcon width={24} height={24} />}
             leftIconActive={<CalendarOnIcon width={24} height={24} />}
             rightIcon={<DownIcon width={24} height={24} />}
             rightIconActive={<UpIcon width={24} height={24} />}
           />
         </div>
-
         <AbsenceTableHeader />
       </div>
-
       <div>
         {records.map((record, index) => (
           <AbsenceTableRow key={index} record={record} isEven={index % 2 === 0} />

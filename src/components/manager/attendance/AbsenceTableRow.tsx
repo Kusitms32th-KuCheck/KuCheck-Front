@@ -29,31 +29,29 @@ export default function AbsenceTableRow({ record, isEven }: AbsenceTableRowProps
       }`}
       style={{ gridTemplateColumns: gridTemplate }}
     >
-      <p className="m-0 p-0">{record.name}</p>
-      <p className="m-0 p-0">{record.part}</p>
-      <p className="m-0 p-0">{record.sessionDate}</p>
-      <p className="m-0 p-0">{record.attendanceStatus}</p>
-      <p className="m-0 p-0">{record.time}</p>
-      <p className="m-0 p-0">{record.reason}</p>
-      <p className="m-0 p-0">
+      <p>{record.name}</p>
+      <p>{record.part}</p>
+      <p>{record.sessionDate}</p>
+      <p>{record.attendanceStatus}</p>
+      <p>{record.time}</p>
+      <p>{record.reason}</p>
+      <p>
         <a href="#" className="hover:underline">
           {record.documentStatus}
         </a>
       </p>
-      <div className="flex items-center">
+      <div className="">
         <Dropdown
-          size="md"
           options={[
-            { label: '결석(인정)', value: '결석(인정)' },
-            { label: '결석(사유 -1)', value: '결석(사유 -1)' },
-            { label: '결석(무단 -2)', value: '결석(무단 -2)' },
-            { label: '결석(미제출 -3)', value: '결석(미제출 -3)' },
-            { label: '지각(-1)', value: '지각(-1)' },
-            { label: '조퇴(-1)', value: '조퇴(-1)' },
+            { label: '결석(인정)', value: '0' },
+            { label: '결석(사유 -1)', value: '-1' },
+            { label: '결석(무단 -2)', value: '-2' },
+            { label: '결석(미제출 -3)', value: '-3' },
+            { label: '지각(-1)', value: '-1' },
+            { label: '조퇴(-1)', value: '-1' },
           ]}
           selected={selectedScore}
           onChange={setSelectedScore}
-          placeholder="선택"
           rightIcon={<DownIcon width={24} height={24} />}
           rightIconActive={<UpIcon width={24} height={24} />}
         />
