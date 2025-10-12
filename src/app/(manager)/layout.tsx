@@ -1,17 +1,12 @@
-'use client'
-
 import ManagerHeader from '@/components/manager/common/ManagerHeader'
 import ManagerSidebar from '@/components/manager/common/ManagerSidebar'
-import { usePathname } from 'next/navigation'
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-
   return (
     <div className="bg-background2 flex h-screen flex-col">
       <ManagerHeader />
       <div className="flex flex-1 overflow-hidden">
-        <ManagerSidebar currentPath={pathname} />
+        <ManagerSidebar />
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
     </div>
