@@ -44,13 +44,12 @@ export default function AbsenceTableRow({ record, isEven }: AbsenceTableRowProps
         <Dropdown
           size="md"
           options={[
-            { label: '-3', value: '-3' },
-            { label: '-2', value: '-2' },
-            { label: '-1', value: '-1' },
-            { label: '0', value: '0' },
-            { label: '1', value: '1' },
-            { label: '2', value: '2' },
-            { label: '3', value: '3' },
+            { label: '결석(인정)', value: '결석(인정)' },
+            { label: '결석(사유 -1)', value: '결석(사유 -1)' },
+            { label: '결석(무단 -2)', value: '결석(무단 -2)' },
+            { label: '결석(미제출 -3)', value: '결석(미제출 -3)' },
+            { label: '지각(-1)', value: '지각(-1)' },
+            { label: '조퇴(-1)', value: '조퇴(-1)' },
           ]}
           selected={selectedScore}
           onChange={setSelectedScore}

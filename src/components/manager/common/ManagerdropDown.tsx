@@ -75,9 +75,14 @@ export default function Dropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
+        side="bottom"
+        align="start"
         className={clsx(
-          'z-50 mt-2 rounded-[8px] border border-gray-200 bg-white shadow-[4px_4px_10px_rgba(0,0,0,0.08)]',
-          customWidth ?? 'w-[160px]'
+          'z-50 mt-1 rounded-[8px] bg-white p-[6px] shadow-[0px_0px_12px_rgba(0,0,0,0.15)]',
+          size === 'lg' && 'scrollbar-hide max-h-[222px] w-[216px] overflow-y-auto',
+          size === 'md' && 'w-[140px]',
+          size === 'sm' && 'w-[160px]',
+          customWidth && customWidth
         )}
       >
         {options.map((option) => (
@@ -85,8 +90,10 @@ export default function Dropdown({
             key={option.value}
             onSelect={() => onChange(option.value)}
             className={clsx(
-              'flex cursor-pointer items-center gap-2 rounded-[6px] px-4 py-2 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none',
-              selected === option.value && 'bg-gray-100'
+              'flex cursor-pointer items-center gap-2 rounded-[4px] p-[10px] hover:bg-gray-100 focus:outline-none',
+              selected === option.value && 'bg-gray-200',
+              size === 'lg' && 'body-lg-regular',
+              size === 'md' && 'body-md-medium'
             )}
           >
             {option.icon && <span>{option.icon}</span>}
