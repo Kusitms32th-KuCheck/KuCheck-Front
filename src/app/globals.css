@@ -20,6 +20,7 @@
   --breakpoint-android: 360px;
 }
 
+
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */

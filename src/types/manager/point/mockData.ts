@@ -1,8 +1,8 @@
 import { PointMemberStatus } from './types'
-import { allDates } from './constants'
+import { allDates } from '@/constants/manager/point'
 
 // 월별 점수를 계산하는 함수
-export const calculateMonthlyScores = (sessions: Record<string, string>) => {
+const calculateMonthlyScores = (sessions: Record<string, string>) => {
   const monthlyScores = {
     august: 0,
     september: 0,
@@ -29,7 +29,32 @@ export const calculateMonthlyScores = (sessions: Record<string, string>) => {
 
 // 새로운 더미 데이터 생성 함수
 export const generateMockData = (): PointMemberStatus[] => {
-  const names = ['강민서', '김민지', '김민서', '김민지', '박서연', '이주희', '최유진', '한소영', '정다은', '윤서연']
+  const names = [
+    '진채정',
+    '김민지',
+    '한인우',
+    '황유림',
+    '이현진',
+    '박소정',
+    '강주언',
+    '김영록',
+    '진채정',
+    '김민지',
+    '한인우',
+    '황유림',
+    '이현진',
+    '박소정',
+    '강주언',
+    '김영록',
+    '진채정',
+    '김민지',
+    '한인우',
+    '황유림',
+    '이현진',
+    '박소정',
+    '강주언',
+    '김영록',
+  ]
   const parts = ['기획', '디자인', '프론트엔드', '백엔드']
   const schools = ['서울대학교', '연세대학교', '고려대학교', '한양대학교', '중앙대학교']
   const majors = ['컴퓨터공학과', '경영학과', '디자인학과', '심리학과', '경제학과']
