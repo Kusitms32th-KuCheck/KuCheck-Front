@@ -97,9 +97,9 @@ const sampleAbsenceRecords = [
 
 export default function AttendancePage() {
   return (
-    <div className="flex flex-col gap-6">
+    <main className="flex flex-col gap-6 p-6">
       <SessionInfo location="마루180 이벤트홀 지하 1층" time="9/22 13:00 - 17:00" />
       <AbsenceTable records={sampleAbsenceRecords} totalCount={5} />
-    </div>
+    </main>
   )
 }

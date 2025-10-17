@@ -25,6 +25,8 @@ interface DropdownProps {
   type?: 'default' | 'icon-list' | 'date'
   customWidth?: string
   showValueInsteadOfLabel?: boolean
+  unstyled?: boolean
+  triggerClassName?: string
 }
 
 export default function Dropdown({
@@ -37,9 +39,11 @@ export default function Dropdown({
   leftIconActive,
   rightIcon,
   rightIconActive,
-  size = 'md',
+  size = 'sm',
   customWidth,
   showValueInsteadOfLabel = false,
+  unstyled = false,
+  triggerClassName = '',
 }: DropdownProps) {
   const [open, setOpen] = useState(false)
 
@@ -52,8 +56,8 @@ export default function Dropdown({
     : placeholder
 
   const sizeClass = {
-    sm: 'h-[36px] text-sm px-3 py-2',
-    md: 'h-[36px] w-[140px] px-3 py-2 body-md-medium',
+    sm: 'h-[36px] w-[140px] px-3 py-2 body-md-medium',
+    md: 'h-[36px] px-[13px] gap-3',
     lg: 'h-[40px] w-[216px] px-3 py-2 body-sm-medium',
   }[size]
 
@@ -62,9 +66,17 @@ export default function Dropdown({
       <DropdownMenuTrigger asChild>
         <button
           className={clsx(
-            'flex items-center justify-between rounded-[8px] border bg-white hover:border-gray-500 focus:outline-none',
+            unstyled
+              ? 'flex items-center justify-between border-0 bg-transparent p-0 focus:outline-none'
+              : 'flex items-center justify-between rounded-[8px] border bg-white hover:border-gray-500 focus:outline-none',
             sizeClass,
-            open ? 'border-black text-black' : 'border-gray-300 text-gray-500'
+            unstyled
+              ? open
+                ? clsx(triggerClassName, 'text-black')
+                : triggerClassName
+              : open
+                ? 'border-black text-black'
+                : 'border-gray-300 text-gray-500'
           )}
         >
           <div className="flex items-center gap-2">
@@ -85,12 +97,12 @@ export default function Dropdown({
 
       <DropdownMenuContent
         side="bottom"
-        align="start"
+        align="end"
         className={clsx(
           'z-50 mt-1 rounded-[8px] bg-white p-[6px] shadow-[0px_0px_12px_rgba(0,0,0,0.15)]',
           size === 'lg' && 'scrollbar-hide max-h-[222px] w-[216px] overflow-y-auto',
-          size === 'md' && 'w-[140px]',
-          size === 'sm' && 'w-[160px]',
+          size === 'md' && 'w-[210px]',
+          size === 'sm' && 'w-[140px]',
           customWidth && customWidth
         )}
       >
@@ -102,7 +114,7 @@ export default function Dropdown({
               'flex cursor-pointer items-center gap-2 rounded-[4px] p-[10px] hover:bg-gray-100 focus:outline-none',
               selected === option.value && 'bg-gray-200',
               size === 'lg' && 'body-lg-regular',
-              size === 'md' && 'body-md-medium'
+              size === 'sm' && 'body-md-medium'
             )}
           >
             {option.icon && <span>{option.icon}</span>}

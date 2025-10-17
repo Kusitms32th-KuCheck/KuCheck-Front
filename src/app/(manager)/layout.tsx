@@ -7,7 +7,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
       <ManagerHeader />
       <div className="flex flex-1 overflow-hidden">
         <ManagerSidebar />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>
   )
