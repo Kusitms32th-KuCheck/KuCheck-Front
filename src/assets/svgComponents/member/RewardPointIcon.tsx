@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgRewardPointIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" {...props}><rect width={23.333} height={23.333} x={0.083} y={0.333} fill="#D4DFFF" rx={11.667} /><path fill="#5F86FF" d="M10.769 5.608c.445-.81 1.517-.81 1.963 0l1.483 2.694c.168.307.448.52.77.586l2.83.585c.901.186 1.248 1.402.604 2.12l-1.863 2.075a1.34 1.34 0 0 0-.32 1.037l.324 2.88c.109.964-.775 1.693-1.588 1.312L12.2 17.598a1.05 1.05 0 0 0-.901 0l-2.772 1.3c-.813.38-1.697-.35-1.588-1.312l.325-2.88a1.34 1.34 0 0 0-.321-1.038l-1.863-2.076c-.644-.717-.297-1.933.605-2.119l2.83-.585c.32-.066.6-.28.77-.586z" /></svg>;
+export default SvgRewardPointIcon;
