@@ -16,7 +16,7 @@ export default function SessionInfo({ location, time }: SessionInfoProps) {
       if (!mainContent) return
 
       const currentScroll = mainContent.scrollTop
-      setShowStickyHeader(currentScroll > 0 && currentScroll < 160)
+      setShowStickyHeader(currentScroll > 0 && currentScroll < 600)
     }
 
     const mainContent = document.querySelector('main')

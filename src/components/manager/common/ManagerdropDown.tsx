@@ -27,6 +27,7 @@ interface DropdownProps {
   showValueInsteadOfLabel?: boolean
   unstyled?: boolean
   triggerClassName?: string
+  trigger?: React.ReactNode
 }
 
 export default function Dropdown({
@@ -44,6 +45,7 @@ export default function Dropdown({
   showValueInsteadOfLabel = false,
   unstyled = false,
   triggerClassName = '',
+  trigger,
 }: DropdownProps) {
   const [open, setOpen] = useState(false)
 
@@ -64,35 +66,39 @@ export default function Dropdown({
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <button
-          className={clsx(
-            unstyled
-              ? 'flex items-center justify-between border-0 bg-transparent p-0 focus:outline-none'
-              : 'flex items-center justify-between rounded-[8px] border bg-white hover:border-gray-500 focus:outline-none',
-            sizeClass,
-            unstyled
-              ? open
-                ? clsx(triggerClassName, 'text-black')
-                : triggerClassName
-              : open
-                ? 'border-black text-black'
-                : 'border-gray-300 text-gray-500'
-          )}
-        >
-          <div className="flex items-center gap-2">
-            {(leftIcon || leftIconActive || icon) && (
+        {trigger ? (
+          trigger
+        ) : (
+          <button
+            className={clsx(
+              unstyled
+                ? 'flex items-center justify-between border-0 bg-transparent p-0 focus:outline-none'
+                : 'flex items-center justify-between rounded-[8px] border bg-white hover:border-gray-500 focus:outline-none',
+              sizeClass,
+              unstyled
+                ? open
+                  ? clsx(triggerClassName, 'text-black')
+                  : triggerClassName
+                : open
+                  ? 'border-black text-black'
+                  : 'border-gray-300 text-gray-500'
+            )}
+          >
+            <div className="flex items-center gap-2">
+              {(leftIcon || leftIconActive || icon) && (
+                <span className={open ? 'text-black' : 'text-gray-500'}>
+                  {open && leftIconActive ? leftIconActive : leftIcon || icon}
+                </span>
+              )}
+              <span>{selectedLabel}</span>
+            </div>
+            {(rightIcon || rightIconActive) && (
               <span className={open ? 'text-black' : 'text-gray-500'}>
-                {open && leftIconActive ? leftIconActive : leftIcon || icon}
+                {open && rightIconActive ? rightIconActive : rightIcon}
               </span>
             )}
-            <span>{selectedLabel}</span>
-          </div>
-          {(rightIcon || rightIconActive) && (
-            <span className={open ? 'text-black' : 'text-gray-500'}>
-              {open && rightIconActive ? rightIconActive : rightIcon}
-            </span>
-          )}
-        </button>
+          </button>
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

@@ -22,7 +22,7 @@ export default function PointTableHeader({
 }: Props) {
   return (
     <div
-      className={`mx-[38px] mt-[29px] flex rounded-t-[12px] bg-white ${isScrolled ? 'z-20 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
+      className={`mx-6 mt-[29px] flex rounded-t-[12px] bg-white ${isScrolled ? 'z-20 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
     >
       <div ref={headerScrollRef} className="scrollbar-hide overflow-x-auto">
         <div style={{ minWidth: contentMinWidth }}>

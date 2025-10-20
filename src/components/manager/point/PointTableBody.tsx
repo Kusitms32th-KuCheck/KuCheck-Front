@@ -101,7 +101,7 @@ export default function PointTableBody({ containerRef }: Props) {
   }
 
   return (
-    <div className="mx-[38px] mb-6 min-h-0 flex-1">
+    <div className="mx-6 mb-6 min-h-0 flex-1">
       {showToastOnce && <BottomToast message={DEFAULT_SHIFT_WHEEL_MESSAGE} duration={3000} />}
       <div ref={containerRef} className="scrollbar-custom h-full overflow-auto rounded-b-[12px] bg-white">
         <div style={{ minWidth: contentMinWidth }}>
