@@ -57,12 +57,7 @@ export default function CheckTable({ records, totalCount }: CheckTableProps) {
       )}
 
       <div className="flex items-center justify-between px-6">
-        <div className="flex items-center gap-2">
-          <p className="heading-md-semibold m-0 p-0">{selectedMonth} 큐픽</p>
-          <p className="body-lg-semibold m-0 flex h-6 w-[30px] items-center justify-center rounded-full bg-black p-0 text-white">
-            {totalCount}
-          </p>
-        </div>
+        <HeaderContent />
         <Dropdown
           size="lg"
           options={[
