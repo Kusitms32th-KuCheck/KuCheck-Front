@@ -32,6 +32,37 @@ export default function ImageModal({
 
   if (!images || images.length === 0) return null
 
+  const NavButton = ({
+    direction,
+    disabled,
+    onClick,
+  }: {
+    direction: 'left' | 'right'
+    disabled: boolean
+    onClick: () => void
+  }) => {
+    if (images.length <= 1) return <div className="h-[48px] w-[48px]" />
+
+    if (disabled)
+      return (
+        <button
+          aria-hidden="true"
+          tabIndex={-1}
+          className="pointer-events-none flex h-[48px] w-[48px] items-center justify-center opacity-0"
+        />
+      )
+
+    return (
+      <button
+        aria-label={direction === 'left' ? '이전' : '다음'}
+        onClick={onClick}
+        className="flex h-[48px] w-[48px] items-center justify-center text-4xl text-gray-700 hover:bg-white/20"
+      >
+        {direction === 'left' ? <LeftIcon width={32} height={32} /> : <RightIcon width={32} height={32} />}
+      </button>
+    )
+  }
+
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
       <section
@@ -48,7 +79,6 @@ export default function ImageModal({
               ? titles[index]
               : title || (index === 0 ? '신청 사진' : index === 1 ? '시청 사진' : '')}
           </p>
-
           <button
             aria-label="닫기"
             onClick={() => onClose?.()}
@@ -59,26 +89,7 @@ export default function ImageModal({
         </div>
 
         <div className="mx-auto flex w-full max-w-[90vw] items-center justify-between">
-          {images.length > 1 ? (
-            index > 0 ? (
-              <button
-                aria-label="이전"
-                onClick={() => setIndex((i) => Math.max(i - 1, 0))}
-                className="flex h-[48px] w-[48px] items-center justify-center text-4xl text-gray-700 hover:bg-white/20"
-              >
-                <LeftIcon width={32} height={32} />
-              </button>
-            ) : (
-              <button
-                aria-hidden="true"
-                tabIndex={-1}
-                className="pointer-events-none flex h-[48px] w-[48px] items-center justify-center opacity-0"
-              />
-            )
-          ) : (
-            <div className="h-[48px] w-[48px]" />
-          )}
-
+          <NavButton direction="left" disabled={index <= 0} onClick={() => setIndex((i) => Math.max(i - 1, 0))} />
           <div className="flex flex-col">
             <img
               src={images[index]}
@@ -87,25 +98,11 @@ export default function ImageModal({
             />
             {footerText && <div className="mt-4 px-[70px] text-end text-gray-500">{footerText}</div>}
           </div>
-          {images.length > 1 ? (
-            index < images.length - 1 ? (
-              <button
-                aria-label="다음"
-                onClick={() => setIndex((i) => Math.min(i + 1, images.length - 1))}
-                className="flex h-[48px] w-[48px] items-center justify-center text-4xl text-gray-700 hover:bg-white/20"
-              >
-                <RightIcon width={32} height={32} />
-              </button>
-            ) : (
-              <button
-                aria-hidden="true"
-                tabIndex={-1}
-                className="pointer-events-none flex h-[48px] w-[48px] items-center justify-center opacity-0"
-              />
-            )
-          ) : (
-            <div className="h-[48px] w-[48px]" />
-          )}
+          <NavButton
+            direction="right"
+            disabled={index >= images.length - 1}
+            onClick={() => setIndex((i) => Math.min(i + 1, images.length - 1))}
+          />
         </div>
       </section>
     </div>
