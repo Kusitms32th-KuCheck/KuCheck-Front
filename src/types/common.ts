@@ -1,11 +1,18 @@
 export interface ApiResponse<T> {
   code: number
+  isSuccess: boolean
   message: string
   result: T
-  isSuccess: boolean
 }
+
+export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
 export interface UserType {
-  status: 'PENDING'
+  status: UserStatus
   memberId: number
-  role: string
+  role: UserRole
 }
+
+export type UserStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+
+export type UserRole = 'GUEST' | 'USER' | 'ADMIN' | 'MANAGEMENT'
