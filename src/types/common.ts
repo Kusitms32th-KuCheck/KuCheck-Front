@@ -5,6 +5,12 @@ export interface ApiResponse<T> {
   result: T
 }
 
+export interface ApiCallResult<T = never> {
+  success: boolean
+  data?: T
+  error?: string
+}
+
 export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
 export interface UserType {

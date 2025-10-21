@@ -1,44 +1,47 @@
-// lib/auth.ts
-import { ApiResponse, UserType } from '@/types/common'
+/**
+ * common.ts - 클라이언트 유틸 함수 모음
+ *
+ * 이 파일의 모든 함수는 클라이언트 컴포넌트에서 사용 가능합니다.
+ * 서버 전용 패키지(next/headers 등)를 import하지 않습니다.
+ */
 
-export const postAuthKaKao = async (code: string | null) => {
+import { SignUpDataType } from '@/types/sign-up'
+
+/**
+ * 온보딩 정보 제출 (클라이언트에서 호출)
+ *
+ * ✅ 클라이언트 컴포넌트에서만 사용
+ * 내부적으로 /api/members/onboarding API 라우트를 호출
+ * API 라우트는 서버에서 실행되어 백엔드 API를 호출
+ *
+ * 흐름:
+ * 1. 클라이언트 컴포넌트에서 postMembersOnboarding() 호출
+ * 2. fetch로 /api/members/onboarding에 요청
+ * 3. API 라우트가 서버에서 실행
+ * 4. apiCallServer()로 백엔드 /v1/members/onboarding에 요청
+ * 5. 결과를 클라이언트로 반환
+ *
+ * @param signUpData 온보딩 정보
+ */
+export const postMembersOnboarding = async (signUpData: SignUpDataType | undefined) => {
   try {
-    if (!code) {
-      throw new Error('Authorization code not provided')
-    }
-
-    // 백엔드 서버에 code를 전달하여 JWT 토큰 요청
-    const jwtResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/v1/auth/kakao`, {
+    const response = await fetch('/api/members/onboarding', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ code }),
-      cache: 'no-store',
+      body: JSON.stringify(signUpData),
+      credentials: 'include', // 쿠키 자동 포함 (httpOnly)
     })
 
-    if (!jwtResponse.ok) {
-      const errorData = await jwtResponse.text()
-      console.error('JWT Response error:', errorData)
-      throw new Error(`Failed to get JWT token: ${jwtResponse.status}`)
+    if (!response.ok) {
+      const error = await response.json()
+      return { success: false, error: error.error || 'Failed to submit' }
     }
 
-    const jwtResponseData: ApiResponse<UserType> = await jwtResponse.json()
-
-    // 헤더에서 토큰 추출
-    const accessToken = jwtResponse.headers.get('authorization')
-    const { status, role } = jwtResponseData.result
-
-    if (!accessToken) {
-      throw new Error('Tokens not found in response headers')
-    }
-
-    console.log('✅ Authentication successful:', { accessToken, status, role })
-
-    // ✅ 데이터만 반환 (리다이렉트는 페이지에서 처리)
-    return { success: true, accessToken, status, role }
+    const data = await response.json()
+    return { success: true, data }
   } catch (error) {
-    console.error('Kakao login error:', error)
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
