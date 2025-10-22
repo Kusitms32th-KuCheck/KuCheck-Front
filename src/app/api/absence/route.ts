@@ -5,20 +5,20 @@
  * 서버에서 백엔드 API를 호출
  */
 import { apiCallServer } from '@/lib/api.server'
-import { SignUpDataType } from '@/types/sign-up'
+import { AbsenceDataType } from '@/types/member/absence'
 
 export async function POST(request: Request) {
   try {
-    const signUpData: SignUpDataType = await request.json()
+    const absenceData: AbsenceDataType = await request.json()
 
-    if (!signUpData) {
+    if (!absenceData) {
       return Response.json({ error: 'Sign up data is required' }, { status: 400 })
     }
 
     // 서버에서 백엔드 API 호출
     const { data, error } = await apiCallServer('/v1/absence', {
       method: 'POST',
-      body: JSON.stringify(signUpData),
+      body: JSON.stringify(absenceData),
     })
 
     if (error) {
