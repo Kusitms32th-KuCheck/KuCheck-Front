@@ -8,6 +8,7 @@ import FinalCheckField from '@/components/member/reason-for-absence/FinalCheckFi
 import SubmissionComplete from '@/components/member/reason-for-absence/SubmissionComplete'
 
 import { getSessionAbsenceServer } from '@/lib/member/session'
+
 import { SessionDataType } from '@/types/member/session'
 import { SearchParams } from '@/types/common'
 
