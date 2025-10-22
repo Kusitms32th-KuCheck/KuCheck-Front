@@ -1,33 +1,38 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
 import MemberButton from '@/components/member/common/MemberButton'
 
-type StepType = '1' | '2' | '3' | '4' | '5' | '6'
+import { BlueHomeLogoIcon } from '@/assets/svgComponents/member'
+
+import { useAbsenceStore } from '@/store/member/absenceStore'
 
 export default function SubmissionComplete() {
   const router = useRouter()
-  const pathname = usePathname()
+  const setState = useAbsenceStore((state) => state.setState)
 
-  const handleStepClick = (step: StepType) => {
-    // URL 업데이트 → 서버 컴포넌트 재렌더링
-    router.push(`${pathname}?step=${encodeURIComponent(step)}`)
+  const handleStepClick = () => {
+    router.push('/reason-for-absence')
   }
 
+  useEffect(() => {
+    //언마운트시 클린업
+    return () => {
+      setState({ absenceData: undefined, file: undefined, selectedSessionContent: undefined })
+    }
+  }, [])
+
   return (
-    <div>
-      <section className="px-5 pt-[32px]">
-        <h2 className="body-lg-semibold">세션 일시</h2>
+    <div className="flex flex-1 flex-col items-center justify-center">
+      <section className="flex flex-col gap-y-[40px] px-5 pt-[32px]">
+        <BlueHomeLogoIcon width={117} height={97} />
+        <p className="heading-sm-semibold text-primary-500">제출이 완료되었어요</p>
       </section>
 
       <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
-        <MemberButton
-          onClick={() => {
-            handleStepClick('2')
-          }}
-        >
-          다음
-        </MemberButton>
+        <MemberButton onClick={handleStepClick}>확인</MemberButton>
       </section>
     </div>
   )
