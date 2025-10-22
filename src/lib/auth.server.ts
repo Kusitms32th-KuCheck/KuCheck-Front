@@ -12,6 +12,12 @@
 
 import { cookies } from 'next/headers'
 import { ApiResponse, UserType } from '@/types/common'
+
+interface AuthTokens {
+  accessToken: string | undefined
+  refreshToken?: string | null | undefined
+}
+
 interface AuthCallResult {
   success: boolean
   accessToken?: string
@@ -65,6 +71,37 @@ export const getRefreshTokenServer = async (): Promise<string | undefined> => {
   } catch (error) {
     console.error('Error reading refreshToken from cookies:', error)
     return undefined
+  }
+}
+
+/**
+ * 서버 사이드에서 쿠키 설정
+ * 백엔드에서 Set-Cookie로 자동 설정되므로 직접 호출할 필요 없음
+ * 필요시 추가 쿠키 설정용
+ *
+ * @param tokens - 저장할 토큰 정보
+ */
+export const setAuthCookiesServer = async (tokens: AuthTokens) => {
+  try {
+    const cookieStore = await cookies()
+
+    const cookieOptions = {
+      maxAge: 7 * 24 * 60 * 60, // 7일
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict' as const,
+    }
+    if (tokens.accessToken) {
+      cookieStore.set('accessToken', tokens.accessToken, cookieOptions)
+    }
+
+    if (tokens.refreshToken) {
+      cookieStore.set('refreshToken', tokens.refreshToken, cookieOptions)
+    }
+
+    console.log('✅ Auth cookies set successfully on server')
+  } catch (error) {
+    console.error('Error setting cookies on server:', error)
   }
 }
 
@@ -133,6 +170,9 @@ export const refreshAccessTokenServer = async (): Promise<AuthCallResult> => {
     if (!newAccessToken) {
       throw new Error('New access token not found in response')
     }
+
+    await clearAuthCookiesServer()
+    await setAuthCookiesServer({ accessToken: newAccessToken, refreshToken: newRefreshToken })
 
     return {
       success: true,
