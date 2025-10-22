@@ -32,11 +32,11 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
 
   /**
    * session 선택 제어 헨들러
-   * @param content 세션 이름
+   * @param title 세션 제목
    * @param sessionId 세션 Id
    */
-  const handleSelectedSession = (content: string, sessionId: number) => {
-    setSelectedSessionContent(content)
+  const handleSelectedSession = (title: string, sessionId: number) => {
+    setSelectedSessionContent(title)
     setAbsenceState({ ...absenceData, absenceData: { ...absenceData, sessionId: sessionId } })
     handleDropDownOpen()
   }
