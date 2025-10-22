@@ -7,6 +7,7 @@ import MemberButton from '@/components/member/common/MemberButton'
 import { AbsenceType } from '@/types/member/absence'
 
 import { useAbsenceStore } from '@/store/member/absenceStore'
+import { convertTimeToISODateTime } from '@/utils/common'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -43,30 +44,6 @@ export default function AttendanceTypeSelector() {
         leaveDateTime: undefined,
       },
     })
-  }
-
-  /**
-   * input 에 입력된 시간을 ISO 8601 형식으로 변환하는 함수
-   * 예: "17:47" → "2025-10-22T17:47:00.000Z"
-   */
-  const convertTimeToISODateTime = (timeInput: string): string => {
-    if (!timeInput) return ''
-
-    const now = new Date()
-    const [hours, minutes] = timeInput.split(':')
-
-    // 오늘 날짜에 입력된 시간을 설정
-    const dateTime = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      parseInt(hours),
-      parseInt(minutes),
-      0,
-      0
-    )
-
-    return dateTime.toISOString()
   }
 
   /**
