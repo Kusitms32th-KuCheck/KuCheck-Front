@@ -20,7 +20,7 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
   const [isDropDownOpen, setIsDropDownOpen] = useState<boolean>(false)
   const setAbsenceState = useAbsenceStore((state) => state.setState)
   const absenceData = useAbsenceStore((state) => state.absenceData)
-  const [selectedSessionContent, setSelectedSessionContent] = useState<string | undefined>()
+  const selectedSessionContent = useAbsenceStore((state) => state.selectedSessionContent)
 
   const router = useRouter()
   const pathname = usePathname()
@@ -32,12 +32,15 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
 
   /**
    * session 선택 제어 헨들러
-   * @param title 세션 제목
+   * @param title 주차 + 세션 제목
    * @param sessionId 세션 Id
    */
   const handleSelectedSession = (title: string, sessionId: number) => {
-    setSelectedSessionContent(title)
-    setAbsenceState({ ...absenceData, absenceData: { ...absenceData, sessionId: sessionId } })
+    setAbsenceState({
+      ...absenceData,
+      absenceData: { ...absenceData, sessionId: sessionId },
+      selectedSessionContent: title,
+    })
     handleDropDownOpen()
   }
 
@@ -66,6 +69,10 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
       {/* bottom button */}
       <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
         <MemberButton
+          disabled={!absenceData?.sessionId}
+          styleType={'primary'}
+          styleSize={'lg'}
+          styleStatus={absenceData?.sessionId ? 'default' : 'disabled'}
           onClick={() => {
             handleStepClick('2')
           }}
