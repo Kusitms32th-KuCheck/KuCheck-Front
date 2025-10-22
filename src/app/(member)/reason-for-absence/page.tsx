@@ -1,10 +1,20 @@
 import ReasonForAbsenceItem from '@/components/member/reason-for-absence/ReasonForAbsenceItem'
 import MemberButton from '@/components/member/common/MemberButton'
 import Link from 'next/link'
+import MemberHeader from '@/components/member/common/MemberHeader'
+import { HelpCircleIcon } from '@/assets/svgComponents/member'
 
 export default async function ReasonForAbsencePage() {
   return (
     <main>
+      <MemberHeader
+        headerType={'dynamic'}
+        title={'불참 사유서'}
+        rightElement={<HelpCircleIcon className="absolute right-5" width={20} height={20} />}
+      />
+      {/* 헤더의 높이만큼 공간 확보 */}
+      <div className="h-[117px]" />
+
       {/* 불참사유서 제출 기록 */}
       <section className="px-5">
         <ReasonForAbsenceItem />
