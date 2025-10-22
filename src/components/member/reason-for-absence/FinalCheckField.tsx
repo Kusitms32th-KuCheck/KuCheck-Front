@@ -1,6 +1,16 @@
 'use client'
+
 import { usePathname, useRouter } from 'next/navigation'
+
 import MemberButton from '@/components/member/common/MemberButton'
+
+import { useAbsenceStore } from '@/store/member/absenceStore'
+
+import { AbsenceDataType, AbsenceType } from '@/types/member/absence'
+
+import { convertISODateTimeToTime } from '@/utils/common'
+import { postAbsence } from '@/lib/member/reason-for-absence'
+import { useFileUpload } from '@/hooks/useFileUpload'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -8,24 +18,131 @@ export default function FinalCheckField() {
   const router = useRouter()
   const pathname = usePathname()
 
+  // post data
+  const absenceData = useAbsenceStore((state) => state.absenceData)
+  const selectedSessionContent = useAbsenceStore((state) => state.selectedSessionContent)
+
+  // file upload
+  const { uploadFile } = useFileUpload()
+  const file = useAbsenceStore((state) => state.file)
+
   const handleStepClick = (step: StepType) => {
     // URL 업데이트 → 서버 컴포넌트 재렌더링
     router.push(`${pathname}?step=${encodeURIComponent(step)}`)
   }
 
+  /**
+   * 참석 유형을 Enum -> Content 으로 변경
+   * @param absenceType 'ABSENT': 결석 | 'LATE' : 지각 | 'EARLY_LEAVE' : 조퇴
+   */
+  const changeAbsenceToContent = (absenceType: AbsenceType | undefined) => {
+    switch (absenceType) {
+      case 'EARLY_LEAVE':
+        return '조퇴'
+      case 'ABSENT':
+        return '결석'
+      case 'LATE':
+        return '지각'
+      default:
+        return ''
+    }
+  }
+
+  // 참석 유형 content, (유형 + 시간)
+  const absenceContent = `${changeAbsenceToContent(absenceData?.absenceType)} ${absenceData?.absenceType === 'LATE' ? (absenceData.lateDateTime ? convertISODateTimeToTime(absenceData.lateDateTime) : '') : absenceData?.absenceType === 'EARLY_LEAVE' ? (absenceData?.leaveDateTime ? convertISODateTimeToTime(absenceData.leaveDateTime) : '') : null}`
+
+  // 제출 핸들러
+  const handleSubmit = async (absenceData: AbsenceDataType | undefined) => {
+    try {
+      if (!absenceData) {
+        console.error('불참 정보를 입력해주세요')
+        return
+      }
+
+      if (file) {
+        const uploadResult = await uploadFile(file, { folderName: 'absence' })
+        console.log('📁 사진 업로드 결과:', uploadResult)
+
+        if (!uploadResult.success) {
+          console.error('❌ 파일 업로드 실패:', uploadResult.error)
+          return
+        }
+
+        // 2️⃣ presignedUrl을 absenceData의 fileName에 추가
+        const updatedAbsenceData = {
+          ...absenceData,
+          fileName: uploadResult.preSignedUrl, // ✅ presignedUrl 추가
+        }
+
+        // 3️⃣ 불참 정보 제출
+        const response = await postAbsence(updatedAbsenceData)
+        console.log('✅ postAbsence 결과:', response)
+
+        if (response.success) {
+          handleStepClick('6')
+        } else {
+          console.error('❌ 불참 정보 제출 실패:', response.error)
+        }
+      }
+      // 1️⃣ 파일 업로드
+    } catch (error) {
+      console.error('❌ 제출 중 오류 발생:', error)
+      // toast 또는 alert으로 사용자에게 알림
+    }
+  }
+
   return (
     <div>
-      <section className="px-5 pt-[32px]">
-        <h2 className="body-lg-semibold">세션 일시</h2>
+      <section className="flex flex-col gap-y-[24px] px-5 pt-[32px]">
+        {/* 세션 일시 */}
+        <section className="flex flex-col gap-y-3">
+          <h2 className="body-lg-semibold">세션 일시</h2>
+          <div className="bg-background1 body-lg-medium h-[48px] rounded-[12px] border border-gray-300 px-[14px] py-3 outline-none">
+            {selectedSessionContent}
+          </div>
+        </section>
+
+        {/* 참석 구분 */}
+        <section className="flex flex-col gap-y-3">
+          <h2 className="body-lg-semibold">참석 구분</h2>
+          <div className="bg-background1 body-lg-medium h-[48px] rounded-[12px] border border-gray-300 px-[14px] py-3 outline-none">
+            {absenceContent}
+          </div>
+        </section>
+
+        {/* 사유 */}
+        <section className="flex flex-col gap-y-3">
+          <h2 className="body-lg-semibold">사유</h2>
+          <div className="bg-background1 body-lg-medium h-[122px] rounded-[12px] border border-gray-300 px-[14px] py-3 outline-none">
+            {absenceData?.reason}
+          </div>
+        </section>
+
+        {/* 증빙 서류 */}
+        {file && (
+          <section className="flex flex-col gap-y-3">
+            <h2 className="body-lg-semibold">증빙 서류</h2>
+            <div className="bg-background1 body-lg-medium flex h-[48px] gap-x-1 rounded-[12px] border border-gray-300 px-[14px] py-3 outline-none">
+              <p>{file?.name}</p>
+              <p className="text-gray-500">{`(${(file.size / 1024 / 1024).toFixed(2)}MB)`}</p>
+            </div>
+          </section>
+        )}
       </section>
 
+      {/* bottom button 크기만큼 h 조절 */}
+      <div className="h-[100px]" />
+
+      {/* bottom button */}
       <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
         <MemberButton
-          onClick={() => {
-            handleStepClick('2')
-          }}
+          styleSize={'lg'}
+          styleStatus={'default'}
+          styleType={'primary'}
+          buttonType={'submit'}
+          onClick={() => handleSubmit(absenceData)}
         >
-          다음
+          제출하기
         </MemberButton>
       </section>
     </div>
