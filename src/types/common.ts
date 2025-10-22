@@ -19,6 +19,11 @@ export interface PaginationResultType<T> {
 
 export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
+export interface PreSignedUrlResponseType {
+  preSignedUrl: string
+  key: string
+}
+
 export interface UserType {
   status: UserStatusType
   memberId: number
