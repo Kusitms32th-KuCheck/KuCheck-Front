@@ -4,11 +4,17 @@ export interface ApiResponse<T> {
   message: string
   result: T
 }
-
+//api.ts의 parseJsonResponse 타입 (프론트 BFF 구조시 불러오는 responseType)
 export interface ApiCallResult<T = never> {
   success: boolean
   data?: T
   error?: string
+}
+
+export interface PaginationResultType<T> {
+  data: T[]
+  totalPages: number
+  isLastPage: boolean
 }
 
 export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
