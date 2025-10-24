@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 const buttonType: {
   primary: { default: string; disabled: string }
@@ -23,14 +24,15 @@ interface TagProps {
   type: 'primary' | 'secondary' | 'round'
   status: 'default' | 'disabled'
   children: ReactNode
+  customClassName?: string
 }
 
-export default function MemberTag({ type = 'primary', status = 'default', children }: TagProps) {
-  const base = 'flex items-center justify-center px-1 py-[2px] rounded-[4px] caption-sm-semibold h-fit'
+export default function MemberTag({ type = 'primary', status = 'default', children, customClassName }: TagProps) {
+  const base = 'flex items-center justify-center px-1 py-[2px] rounded-[4px] caption-sm-semibold h-fit w-fit'
   const style = buttonType[type][status]
 
   return (
-    <div className={`${base} ${style}`}>
+    <div className={twMerge(`${base} ${style}`, customClassName)}>
       <p>{children}</p>
     </div>
   )
