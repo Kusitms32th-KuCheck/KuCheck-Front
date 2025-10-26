@@ -37,7 +37,7 @@ export default function SessionCell({
         <div className={`flex h-[52px] w-full items-center justify-start pr-[1px]`}>
           <Dropdown
             unstyled
-            triggerClassName={isModified ? 'body-lg-semibold text-primary-500 ' : 'text-gray-900 body-lg-medium '}
+            triggerClassName={isModified ? 'body-lg-regular text-primary-500 ' : 'text-gray-900 body-lg-regular '}
             options={MEMBER_OPTIONS}
             selected={selectedLocal}
             placeholder={value || '선택'}
@@ -48,7 +48,7 @@ export default function SessionCell({
           />
         </div>
       ) : (
-        <p className={`body-lg-medium flex h-[52px] w-full items-center justify-start`}>{value || ''}</p>
+        <p className={`body-lg-medium flex h-[52px] w-full items-center justify-start pl-2`}>{value || ''}</p>
       )}
     </div>
   )
