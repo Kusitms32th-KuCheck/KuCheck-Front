@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     if (status === 'APPROVED') {
       // 승인됨 - 역할에 따라 분기
       if (role === 'USER') {
-        return redirect('/member')
+        return redirect('/home')
       } else if (role === 'ADMIN') {
         return redirect('/manager')
       } else {

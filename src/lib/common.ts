@@ -6,6 +6,7 @@
  */
 
 import { SignUpDataType } from '@/types/sign-up'
+import { ApiCallResult, PreSignedUrlResponseType } from '@/types/common'
 
 /**
  * 온보딩 정보 제출 (클라이언트에서 호출)
@@ -31,6 +32,39 @@ export const postMembersOnboarding = async (signUpData: SignUpDataType | undefin
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(signUpData),
+      credentials: 'include', // 쿠키 자동 포함 (httpOnly)
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      return { success: false, error: error.error || 'Failed to submit' }
+    }
+
+    const data = await response.json()
+    return { success: true, data }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+/**
+ * s3 업로드
+ * @param folderName 폴더 이름, 불참 사유서: absence, 이렇게 프론트측에서 임의로 지정하면 됩니다.
+ * @param fileName 업로드된 파일 명을 작성하면 됩니다.
+ */
+export const getS3PostUrl = async (
+  folderName: string,
+  fileName: string
+): Promise<ApiCallResult<ApiCallResult<PreSignedUrlResponseType>>> => {
+  try {
+    const response = await fetch(`/api/s3/postUrl?folderName=${folderName}&fileName=${fileName}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       credentials: 'include', // 쿠키 자동 포함 (httpOnly)
     })
 
