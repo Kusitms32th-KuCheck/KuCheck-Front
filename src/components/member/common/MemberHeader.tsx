@@ -9,9 +9,16 @@ interface HeaderProps {
   headerType?: 'default' | 'dynamic'
   headerColor?: string
   onBack?: () => void
+  rightElement?: React.ReactNode
 }
 
-const MemberHeader = ({ title, headerType = 'default', onBack, headerColor = 'bg-white' }: HeaderProps) => {
+const MemberHeader = ({
+  title,
+  headerType = 'default',
+  onBack,
+  headerColor = 'bg-white',
+  rightElement,
+}: HeaderProps) => {
   const router = useRouter()
   const renderHeaderType = (headerType: 'default' | 'dynamic') => {
     switch (headerType) {
@@ -25,6 +32,7 @@ const MemberHeader = ({ title, headerType = 'default', onBack, headerColor = 'bg
               className="cursor-pointer"
             />
             <p className="body-lg-semibold absolute left-1/2 -translate-x-1/2 whitespace-nowrap">{title}</p>
+            {rightElement ? rightElement : <div className="h-[36px] w-[36px]" />}
           </div>
         )
       default:
