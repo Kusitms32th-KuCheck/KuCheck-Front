@@ -14,5 +14,6 @@ export interface ImageModalProps {
   footerText?: string
   initialIndex?: number
   onClose?: () => void
+  imageClassName?: string
   customClassName?: string
 }

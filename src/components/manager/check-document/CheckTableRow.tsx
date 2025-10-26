@@ -77,6 +77,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
           footerText={`${record.name}  ${record.sessionDate}`}
           initialIndex={modalIndex}
           onClose={() => setModalOpen(false)}
+          imageClassName="px-0 m-0"
         />
       )}
     </>
