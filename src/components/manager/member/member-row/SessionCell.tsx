@@ -34,7 +34,7 @@ export default function SessionCell({
   return (
     <div className={className}>
       {isEditMode ? (
-        <div className={`flex h-[52px] w-full items-center justify-start pr-[15px]`}>
+        <div className={`flex h-[52px] w-full items-center justify-start pr-[1px]`}>
           <Dropdown
             unstyled
             triggerClassName={isModified ? 'body-lg-semibold text-primary-500 ' : 'text-gray-900 body-lg-medium '}

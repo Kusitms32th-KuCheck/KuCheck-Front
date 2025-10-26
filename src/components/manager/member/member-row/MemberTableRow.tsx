@@ -102,7 +102,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-6 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-3 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
         >
           <SessionCell
             isEditMode={isEditMode}
