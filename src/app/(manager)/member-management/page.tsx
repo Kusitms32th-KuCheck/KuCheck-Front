@@ -1,3 +1,11 @@
+import MemberHeader from '@/components/manager/member/MemberHeader'
+import MemberTable from '@/components/manager/member/MemberTable'
+
 export default function MemberManagementPage() {
-  return <div>운영진관리</div>
+  return (
+    <main className="flex h-full flex-col overflow-visible">
+      <MemberHeader />
+      <MemberTable />
+    </main>
+  )
 }

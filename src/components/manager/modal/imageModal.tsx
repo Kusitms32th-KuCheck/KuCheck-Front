@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CancleIcon, RightIcon, LeftIcon } from '@/assets/svgComponents/manager'
+import { CancleIcon, RightIcon, LeftIcon, ModalXIcon } from '@/assets/svgComponents/manager'
 import { ImageModalProps } from '@/types/manager/check-document/types'
 
 export default function ImageModal({
@@ -63,6 +63,40 @@ export default function ImageModal({
     )
   }
 
+  const showNav = Boolean(titles)
+
+  if (!showNav) {
+    return (
+      <div className="fixed inset-0 z-60 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+        <section
+          className={['relative inline-flex flex-col rounded-[20px] bg-white p-[32px] shadow-lg', customClassName]
+            .filter(Boolean)
+            .join(' ')}
+        >
+          <div className="relative flex items-center justify-center">
+            <p className="heading-lg-medium text-center">{title}</p>
+            <button
+              aria-label="닫기"
+              onClick={() => onClose?.()}
+              className="absolute top-[-4] right-[-40px] text-gray-500 hover:text-gray-700"
+            >
+              <ModalXIcon width={32} height={32} />
+            </button>
+          </div>
+
+          <div className="flex flex-col">
+            <img
+              src={images[index]}
+              alt={title || `image-${index}`}
+              className={['max-h-[70vh] object-contain'].filter(Boolean).join(' ')}
+            />
+            {footerText && <div className="body-2xl-regular mt-4 text-end text-gray-500">{footerText}</div>}
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
       <section
@@ -74,7 +108,7 @@ export default function ImageModal({
           .join(' ')}
       >
         <div className="relative mb-[32px] flex items-center justify-center">
-          <p className="heading-md-semibold text-center">
+          <p className={showNav ? 'heading-md-semibold text-center' : 'heading-lg-medium text-center'}>
             {titles && titles[index]
               ? titles[index]
               : title || (index === 0 ? '신청 사진' : index === 1 ? '시청 사진' : '')}
@@ -88,21 +122,37 @@ export default function ImageModal({
           </button>
         </div>
 
-        <div className="mx-auto flex w-full max-w-[90vw] items-center justify-between">
-          <NavButton direction="left" disabled={index <= 0} onClick={() => setIndex((i) => Math.max(i - 1, 0))} />
+        <div
+          className={`mx-auto flex w-full max-w-[90vw] items-center ${showNav ? 'justify-between' : 'justify-center'}`}
+        >
+          {showNav && (
+            <NavButton direction="left" disabled={index <= 0} onClick={() => setIndex((i) => Math.max(i - 1, 0))} />
+          )}
           <div className="flex flex-col">
             <img
               src={images[index]}
               alt={titles && titles[index] ? titles[index] : title || `image-${index}`}
-              className="max-h-[70vh] flex-1 object-contain px-[70px]"
+              className={['max-h-[70vh] flex-1 object-contain px-[70px]'].filter(Boolean).join(' ')}
             />
-            {footerText && <div className="mt-4 px-[70px] text-end text-gray-500">{footerText}</div>}
+            {footerText && (
+              <div
+                className={
+                  showNav
+                    ? 'mt-4 px-[70px] text-end text-gray-500'
+                    : 'body-2xl-regular mt-4 px-[70px] text-end text-gray-500'
+                }
+              >
+                {footerText}
+              </div>
+            )}
           </div>
-          <NavButton
-            direction="right"
-            disabled={index >= images.length - 1}
-            onClick={() => setIndex((i) => Math.min(i + 1, images.length - 1))}
-          />
+          {showNav && (
+            <NavButton
+              direction="right"
+              disabled={index >= images.length - 1}
+              onClick={() => setIndex((i) => Math.min(i + 1, images.length - 1))}
+            />
+          )}
         </div>
       </section>
     </div>
