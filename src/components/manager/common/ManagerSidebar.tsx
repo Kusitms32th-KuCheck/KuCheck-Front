@@ -31,6 +31,7 @@ const managerSidebarItems = [
 
 export default function ManagerSidebar() {
   const pathname = usePathname()
+  if (pathname && pathname.startsWith('/attendance/qr')) return null
 
   return (
     <aside className="w-[240px] bg-white p-[24px] shadow-lg">

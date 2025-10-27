@@ -1,5 +1,6 @@
 const headers = ['이름', '파트', '제출일시', '불참여부', '시간', '사유', '증빙서류', '벌점']
-const gridTemplate = '0.59fr 0.59fr 0.59fr 0.59fr 0.59fr 3fr 1fr 1.28fr'
+const gridTemplate =
+  'minmax(80px,0.59fr) minmax(80px,0.59fr) minmax(100px,0.59fr) minmax(80px,0.59fr) minmax(80px,0.59fr) minmax(160px,3fr) minmax(80px,1fr) minmax(90px,1.28fr)'
 
 export default function AbsenceTableHeader() {
   return (

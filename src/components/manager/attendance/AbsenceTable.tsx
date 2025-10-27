@@ -38,12 +38,17 @@ export default function AbsenceTable({ records, totalCount }: AbsenceTableProps)
             rightIconActive={<UpIcon width={24} height={24} />}
           />
         </div>
-        <AbsenceTableHeader />
       </div>
-      <div>
-        {records.map((record, index) => (
-          <AbsenceTableRow key={index} record={record} isEven={index % 2 === 0} />
-        ))}
+
+      <div className="w-full overflow-x-auto">
+        <div className="min-w-[960px]">
+          <AbsenceTableHeader />
+          <div>
+            {records.map((record, index) => (
+              <AbsenceTableRow key={index} record={record} isEven={index % 2 === 0} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
