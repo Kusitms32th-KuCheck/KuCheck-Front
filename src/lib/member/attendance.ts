@@ -12,10 +12,10 @@ export const getPointsHistory = async (
         'Content-Type': 'application/json',
       },
       credentials: 'include', // 쿠키 자동 포함 (httpOnly)
-      // next: {
-      //   revalidate: 604800, // 1주일 - 나의 출석은 1주일마다 갱신되므로 캐시처리
-      //   tags: ['points-history'], // 캐시 태그
-      // },
+      next: {
+        revalidate: 604800, // 1주일 - 나의 출석은 1주일마다 갱신되므로 캐시처리
+        tags: ['points-history'], // 캐시 태그
+      },
     })
 
     if (!response.ok) {
