@@ -1,3 +1,5 @@
+import { PartType } from '@/types/common'
+
 export interface AttendanceCheckResponseType {
   memberId: number
   name: string
@@ -43,3 +45,12 @@ export type AttendanceContentType =
   | '결석(사유서 제출, -2점)'
   | '지각(-1점)'
   | '조퇴(-1점)'
+
+export interface AttendanceTokenResponseType {
+  token: string
+  expAt: string
+  name: string
+  part: PartType
+  school: string
+  profileImageUrl: string
+}
