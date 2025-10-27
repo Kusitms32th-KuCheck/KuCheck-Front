@@ -1,4 +1,6 @@
 // 전화번호 포맷팅 함수
+import { PartType } from '@/types/common'
+
 export const formatPhoneNumber = (value: string) => {
   // 숫자만 추출
   const numbers = value.replace(/[^\d]/g, '')
@@ -54,5 +56,17 @@ export const convertISODateTimeToTime = (isoDateTime: string): string => {
   } catch (error) {
     console.error('Invalid ISO datetime:', error)
     return ''
+  }
+}
+export const changePartEnumToContent = (part: PartType) => {
+  switch (part) {
+    case 'BACKEND':
+      return '백엔드'
+    case 'DESIGN':
+      return '디자인'
+    case 'FRONTEND':
+      return '프론트엔드'
+    default:
+      return '기획'
   }
 }
