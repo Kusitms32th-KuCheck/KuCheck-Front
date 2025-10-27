@@ -11,8 +11,14 @@ export interface ApiCallResult<T = never> {
   error?: string
 }
 
-export interface PaginationResultType<T> {
+export interface PaginationResultListType<T> {
   data: T[]
+  totalPages: number
+  isLastPage: boolean
+}
+
+export interface PaginationResultType<T> {
+  data: T
   totalPages: number
   isLastPage: boolean
 }
