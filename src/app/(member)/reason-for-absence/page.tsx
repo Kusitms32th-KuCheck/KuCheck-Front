@@ -1,7 +1,9 @@
+import Link from 'next/link'
+
 import ReasonForAbsenceItem from '@/components/member/reason-for-absence/ReasonForAbsenceItem'
 import MemberButton from '@/components/member/common/MemberButton'
-import Link from 'next/link'
 import MemberHeader from '@/components/member/common/MemberHeader'
+
 import { HelpCircleIcon } from '@/assets/svgComponents/member'
 
 export default async function ReasonForAbsencePage() {
