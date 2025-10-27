@@ -11,6 +11,7 @@ type ManagerModalProps = {
   transientMessage?: ReactNode | null
   transientDuration?: number
   onTransientClose?: () => void
+  confirmLabel?: string
 }
 
 export default function ManagerModal({
@@ -22,6 +23,7 @@ export default function ManagerModal({
   transientMessage = null,
   transientDuration = 10000,
   onTransientClose,
+  confirmLabel = '저장',
 }: ManagerModalProps) {
   const [transientVisible, setTransientVisible] = useState(false)
 
@@ -43,7 +45,7 @@ export default function ManagerModal({
   const isTransient = transientVisible && transientMessage
 
   return (
-    <div className="fixed inset-0 z-3000 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+    <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
       <section
         className={`${customClassName} flex ${isTransient ? 'align-center rounded-[12px]' : 'h-[196px] justify-between rounded-[20px] px-[41px] pt-[44px] pb-6'} w-full max-w-[418px] flex-col bg-white`}
       >
@@ -65,7 +67,7 @@ export default function ManagerModal({
                 onClick={onConfirm}
                 className="bg-primary-500 body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] text-white"
               >
-                저장
+                {confirmLabel}
               </button>
             </div>
           </>

@@ -89,7 +89,7 @@ export default function PointTableRow({
               value={value}
               isModified={isModified}
               onChange={(v) => onSessionChange(memberIndex, date, v)}
-              className={`w-full border-r border-gray-200 group-hover:bg-gray-100 ${baseBg} px-[1px]`}
+              className={`w-full border-r border-gray-200 group-hover:bg-gray-100 ${baseBg} px-[13px]`}
             />
           </div>
         )
