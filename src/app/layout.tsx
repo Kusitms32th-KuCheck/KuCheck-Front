@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
+import QueryClientComponent from '@/components/member/common/QueryClient'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,7 +34,7 @@ export default function RootLayout({
     <html lang="en" className={pretendard.className}>
       <head></head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${pretendard.variable} antialiased`}>
-        {children}
+        <QueryClientComponent> {children}</QueryClientComponent>
       </body>
     </html>
   )
