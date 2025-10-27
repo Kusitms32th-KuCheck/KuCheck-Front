@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgHelpCircleIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 20 20" {...props}><g stroke="#7E83A1" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.667} clipPath="url(#help-circle-icon_svg__a)"><path d="M10 18.334a8.333 8.333 0 1 0 0-16.667 8.333 8.333 0 0 0 0 16.667" /><path d="M7.575 7.498a2.5 2.5 0 0 1 4.858.833c0 1.667-2.5 2.5-2.5 2.5M10 14.167h.009" /></g><defs><clipPath id="help-circle-icon_svg__a"><path fill="#fff" d="M0 0h20v20H0z" /></clipPath></defs></svg>;
+export default SvgHelpCircleIcon;

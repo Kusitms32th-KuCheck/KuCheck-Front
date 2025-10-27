@@ -1,3 +1,3 @@
 export default function ReasonForAbsenceLayout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>
+  return <div className="flex min-h-screen flex-col">{children}</div>
 }

@@ -10,7 +10,7 @@ export default function NoticeCard() {
           <NoticeIcon width={20} height={20} />
           <p className="body-lg-semibold">공지사항</p>
         </div>
-        <Link href={'/notice/1'}>
+        <Link href={'/notice'}>
           <ChevronRightIcon width={24} height={24} />
         </Link>
       </div>

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import ManagerButton from '../common/ManagerButton'
 
 interface SessionInfoProps {
@@ -9,6 +10,7 @@ interface SessionInfoProps {
 
 export default function SessionInfo({ location, time }: SessionInfoProps) {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +31,7 @@ export default function SessionInfo({ location, time }: SessionInfoProps) {
   const HeaderContent = () => (
     <>
       <p className="heading-1xl-semibold">집중협업시간</p>
-      <ManagerButton customClassName="w-[160px]" styleSize="md" onClick={() => console.log('출석체크 시작하기 클릭됨')}>
+      <ManagerButton customClassName="w-[160px]" styleSize="md" onClick={() => router.push('/attendance/qr')}>
         출석체크 시작하기
       </ManagerButton>
     </>

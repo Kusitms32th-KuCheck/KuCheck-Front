@@ -14,8 +14,8 @@
 @theme {
   --breakpoint-*: initial;
   --breakpoint-desktop: 1440px;
-  --breakpoint-laptop: 1025px;
-  --breakpoint-tablet: 766px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-tablet: 768px;
   --breakpoint-ios: 375px;
   --breakpoint-android: 360px;
 }

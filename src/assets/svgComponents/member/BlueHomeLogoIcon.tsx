@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgBlueHomeLogoIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 117 97" {...props}><rect width={25.497} height={25.497} x={84.95} y={17.663} fill="#2C60FF" rx={12.748} transform="rotate(-43.844 84.95 17.663)" /><path fill="#326BFF" fillRule="evenodd" d="M66.418 28.92c6.111-4.393 14.628-3 19.02 3.111 4.393 6.112 3 14.628-3.112 19.02l-58.459 42.02q-.62.445-1.271.81a13.58 13.58 0 0 1-8.968 3.368C6.102 97.249 0 91.147 0 83.62V41.688C0 34.162 6.102 28.06 13.628 28.06s13.628 6.102 13.628 13.628v15.38z" clipRule="evenodd" /><path fill="#fff" d="m13.666 67.09 13.628-10.484v21.247z" /><path fill="#326BFF" d="M27.293 79.667c-1.49 10.429-4.927 8.386-11.006 8.386S5.28 83.36 5.28 77.57s-1.792-10.483 8.386-10.483c7.338 0 14.676 5.241 13.627 12.58" /></svg>;
+export default SvgBlueHomeLogoIcon;

@@ -16,7 +16,7 @@ const sizeStyles = {
 }
 
 export interface MemberButtonProps {
-  onClick: () => void
+  onClick?: () => void
   children: ReactNode
   styleType?: 'primary' | 'gray'
   styleStatus?: 'default' | 'disabled'

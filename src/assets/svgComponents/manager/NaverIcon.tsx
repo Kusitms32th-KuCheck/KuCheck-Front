@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgNaverIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 20 20" {...props}><rect width={20} height={20} fill="#FEE500" rx={10} /><g clipPath="url(#naver-icon_svg__a)"><path fill="#000" fillRule="evenodd" d="M10 5.852c-2.456 0-4.445 1.537-4.445 3.433 0 1.179.77 2.218 1.941 2.837l-.493 1.8c-.043.16.139.287.278.195l2.162-1.427q.273.027.556.028c2.455 0 4.445-1.537 4.445-3.433s-1.99-3.433-4.445-3.433" clipRule="evenodd" /></g><defs><clipPath id="naver-icon_svg__a"><path fill="#fff" d="M5.555 5.555h8.889v8.889h-8.89z" /></clipPath></defs></svg>;
+export default SvgNaverIcon;
