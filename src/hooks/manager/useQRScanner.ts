@@ -27,8 +27,8 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
 
   useEffect(() => {
     let stream: MediaStream | null = null
-
     const MASK_PADDING = 0
+
     const updateMask = () => {
       const container = containerRef.current
       const guide = guideRef.current
@@ -36,15 +36,10 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
       const crect = container.getBoundingClientRect()
       const grect = guide.getBoundingClientRect()
 
-      const rawX = grect.left - crect.left - MASK_PADDING
-      const rawY = grect.top - crect.top - MASK_PADDING
-      const rawW = grect.width + MASK_PADDING * 2
-      const rawH = grect.height + MASK_PADDING * 2
-
-      const x = Math.max(0, Math.round(rawX))
-      const y = Math.max(0, Math.round(rawY))
-      const w = Math.max(0, Math.round(Math.min(rawW, crect.width - x)))
-      const h = Math.max(0, Math.round(Math.min(rawH, crect.height - y)))
+      const x = Math.max(0, Math.round(grect.left - crect.left - MASK_PADDING))
+      const y = Math.max(0, Math.round(grect.top - crect.top - MASK_PADDING))
+      const w = Math.max(0, Math.round(Math.min(grect.width + MASK_PADDING * 2, crect.width - x)))
+      const h = Math.max(0, Math.round(Math.min(grect.height + MASK_PADDING * 2, crect.height - y)))
 
       setMaskRect({
         cw: Math.round(crect.width),
@@ -70,74 +65,67 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
         await video.play()
         setScanning(true)
         setTimeout(updateMask, 50)
+
         const canvas = canvasRef.current
-        if (canvas) {
-          const ctx = canvas.getContext('2d', { willReadFrequently: true })
-          const scanIntervalMs = 300
-          intervalRef.current = window.setInterval(() => {
-            try {
-              if (pausedRef.current) return
+        if (!canvas) return
+        const ctx = canvas.getContext('2d', { willReadFrequently: true })
+        if (!ctx) return
 
-              const c = containerRef.current
-              const g = guideRef.current
-              if (!c || !g || !video || !ctx) return
+        intervalRef.current = window.setInterval(() => {
+          if (!video || !ctx) return
+          const c = containerRef.current
+          const g = guideRef.current
+          if (!c || !g) return
 
-              const crect = c.getBoundingClientRect()
-              const grect = g.getBoundingClientRect()
+          const crect = c.getBoundingClientRect()
+          const grect = g.getBoundingClientRect()
+          const vw = video.videoWidth || 0
+          const vh = video.videoHeight || 0
+          if (vw === 0 || vh === 0) return
 
-              const vw = video.videoWidth || 0
-              const vh = video.videoHeight || 0
-              if (vw === 0 || vh === 0) return
+          const scaleX = vw / crect.width
+          const scaleY = vh / crect.height
 
-              const scaleX = vw / crect.width
-              const scaleY = vh / crect.height
+          const sx = Math.max(0, Math.floor((grect.left - crect.left) * scaleX))
+          const sy = Math.max(0, Math.floor((grect.top - crect.top) * scaleY))
+          const sw = Math.max(16, Math.floor(grect.width * scaleX))
+          const sh = Math.max(16, Math.floor(grect.height * scaleY))
 
-              const pad = MASK_PADDING
-              const paddedLeft = Math.max(crect.left, grect.left - pad)
-              const paddedTop = Math.max(crect.top, grect.top - pad)
-              const paddedRight = Math.min(crect.right, grect.right + pad)
-              const paddedBottom = Math.min(crect.bottom, grect.bottom + pad)
+          // 항상 그리기 → 화면 유지
+          canvas.width = sw
+          canvas.height = sh
+          ctx.drawImage(video, sx, sy, sw, sh, 0, 0, sw, sh)
 
-              const sx = Math.max(0, Math.floor((paddedLeft - crect.left) * scaleX))
-              const sy = Math.max(0, Math.floor((paddedTop - crect.top) * scaleY))
-              const sw = Math.max(16, Math.floor((paddedRight - paddedLeft) * scaleX))
-              const sh = Math.max(16, Math.floor((paddedBottom - paddedTop) * scaleY))
+          if (pausedRef.current) return // QR 디코딩만 잠시 멈춤
 
-              canvas.width = sw
-              canvas.height = sh
-              ctx.drawImage(video, sx, sy, sw, sh, 0, 0, sw, sh)
-              let imageData: ImageData | null = null
-              try {
-                imageData = ctx.getImageData(0, 0, sw, sh)
-              } catch {
-                imageData = null
-              }
-              if (!imageData) return
+          const win = window as Window & { jsQR?: JsQrFunc }
+          const jsQR = win.jsQR
+          if (!jsQR) return
 
-              const win = window as Window & { jsQR?: JsQrFunc }
-              const jsQR = win.jsQR
-              if (!jsQR) return
+          let imageData: ImageData | null = null
+          try {
+            imageData = ctx.getImageData(0, 0, sw, sh)
+          } catch {
+            imageData = null
+          }
+          if (!imageData) return
 
-              try {
-                const code = jsQR(imageData.data, imageData.width, imageData.height)
-                if (code && code.data) {
-                  setGuideState('detected')
-                  pausedRef.current = true
-                  if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current)
-                  pauseTimeoutRef.current = window.setTimeout(() => {
-                    pausedRef.current = false
-                    setGuideState('idle')
-                  }, 1500)
-                  if (onDetect) onDetect(code.data)
-                }
-              } catch {
-                // ignore decode errors
-              }
-            } catch {
-              // guard
+          try {
+            const code = jsQR(imageData.data, imageData.width, imageData.height)
+            if (code && code.data) {
+              setGuideState('detected')
+              pausedRef.current = true // 1.5초 동안 중복 방지
+              if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current)
+              pauseTimeoutRef.current = window.setTimeout(() => {
+                pausedRef.current = false
+                setGuideState('idle')
+              }, 1500)
+              if (onDetect) onDetect(code.data)
             }
-          }, scanIntervalMs)
-        }
+          } catch {
+            // ignore decode errors
+          }
+        }, 300)
       } catch {
         setError('카메라 접근 권한이 필요합니다.')
       }
@@ -147,8 +135,8 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
     return () => {
       stream?.getTracks().forEach((t) => t.stop())
       if (intervalRef.current) clearInterval(intervalRef.current)
-      window.removeEventListener('resize', updateMask)
       if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current)
+      window.removeEventListener('resize', updateMask)
     }
   }, [onDetect])
 

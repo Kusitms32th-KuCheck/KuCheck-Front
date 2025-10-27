@@ -25,9 +25,7 @@ export default function AttendanceSuccess({
         </div>
       </div>
       <div className="flex flex-col text-left leading-tight">
-        <span className="font-medium">
-          {isSuccess ? `${name}님의 출석체크가 완료되었어요` : `${name}님은 출석 처리에 오류가 있습니다`}
-        </span>
+        <span className="font-medium">{isSuccess && `${name}님의 출석체크가 완료되었어요`}</span>
         {!isSuccess && errorMessage ? <span className="text-xs text-red-600">{errorMessage}</span> : null}
       </div>
     </div>
