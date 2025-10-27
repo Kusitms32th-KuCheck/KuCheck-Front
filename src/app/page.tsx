@@ -1,5 +1,6 @@
-import { AppleLogoIcon, HomeLogo, KakaoLogoIcon } from '@/assets/svgComponents/member'
 import Link from 'next/link'
+
+import { AppleLogoIcon, HomeLogo, KakaoLogoIcon } from '@/assets/svgComponents/member'
 import { LogoIcon } from '@/assets/svgComponents/manager'
 
 export default function Home() {
