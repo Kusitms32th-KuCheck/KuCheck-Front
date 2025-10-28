@@ -25,7 +25,6 @@ export default function MemberTableRow({
   editedValues?: Partial<Member>
   onEdit?: (patch: Partial<Member>) => void
 }) {
-  const baseBg = index % 2 === 0 ? 'bg-white' : 'bg-background1'
   const [modalOpen, setModalOpen] = useState(false)
   const [modalIndex, setModalIndex] = useState(0)
   const [name, setName] = useState(editedValues?.name ?? member.name)
@@ -65,11 +64,11 @@ export default function MemberTableRow({
   return (
     <>
       <div
-        className={`group grid cursor-default items-center gap-0`}
+        className={`group even:bg-background1 grid cursor-default items-center gap-0`}
         style={{ gridTemplateColumns: gridTemplate ?? '200px repeat(3,1fr) 200px 220px' }}
       >
         <div
-          className={`body-lg-medium flex h-[68px] items-center border-r border-gray-200 px-[24px] text-start text-gray-900 ${baseBg} focus-within:border-primary-500 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center border-r border-gray-200 px-[24px] text-start text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -83,9 +82,7 @@ export default function MemberTableRow({
           />
         </div>
 
-        <div
-          className={`flex h-[68px] items-center border-r border-gray-200 px-[24px] ${baseBg} group-hover:bg-gray-100`}
-        >
+        <div className={`flex h-[68px] items-center border-r border-gray-200 px-[24px] group-hover:bg-gray-100`}>
           <button
             type="button"
             onClick={() => {
@@ -103,7 +100,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-3 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-3 text-gray-900 group-hover:bg-gray-100`}
         >
           <SessionCell
             isEditMode={isEditMode}
@@ -118,7 +115,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 ${baseBg} focus-within:border-primary-500 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -133,7 +130,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 ${baseBg} focus-within:border-primary-500 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -148,7 +145,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 ${baseBg} focus-within:border-primary-500 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -163,7 +160,7 @@ export default function MemberTableRow({
         </div>
 
         <p
-          className={`body-lg-medium flex h-[68px] items-center justify-between gap-2 px-6 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+          className={`body-lg-medium flex h-[68px] items-center justify-between gap-2 px-6 text-gray-900 group-hover:bg-gray-100`}
         >
           <div className="flex items-center gap-2">
             <AppleIcon width={20} height={20} />

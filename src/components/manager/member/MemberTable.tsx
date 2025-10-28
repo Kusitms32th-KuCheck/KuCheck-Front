@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import MemberTableRow from './member-row/MemberTableRow'
 import { generateMockMembers } from '@/types/manager/member/mockData'
 import { useMemberStore } from '@/store/manager/useMemberStore'
@@ -28,7 +28,7 @@ export default function MemberTable() {
   const [prevEdit, setPrevEdit] = useState<boolean>(isEditMode)
   const [revertToken, setRevertToken] = useState<number>(0)
   const { containerRef, headerScrollRef, isScrolled } = useScrollSync()
-  const feedbackTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { feedbackMessage, setFeedbackMessage } = useMemberTableStore()
 
   const gridTemplate = '120px 171px 143px 181px 423px 173px 409px'
