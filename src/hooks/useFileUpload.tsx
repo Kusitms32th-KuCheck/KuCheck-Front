@@ -2,11 +2,10 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { getS3PostUrl } from '@/lib/common'
 import { FileInfoType } from '@/types/common'
 
 export interface UploadOptions {
-  folderName: string
+  preSignedUrl: string
   onProgress?: (progress: number) => void
   onError?: (error: string) => void
 }
@@ -27,7 +26,7 @@ export const useFileUpload = () => {
    * FileInfoType을 File 객체로 변환하여 업로드
    */
   const uploadFile = useCallback(async (fileInfo: FileInfoType, options: UploadOptions): Promise<UploadResult> => {
-    const { folderName, onProgress, onError } = options
+    const { preSignedUrl, onProgress, onError } = options
 
     try {
       setIsLoading(true)
@@ -47,26 +46,26 @@ export const useFileUpload = () => {
         throw new Error('유효하지 않은 파일 형식')
       }
 
-      // 2. Presigned URL 요청
-      const presignedResponse = await getS3PostUrl(folderName, fileInfo.name)
-      console.log('presignedResponse', presignedResponse)
-
-      if (!presignedResponse.success || !presignedResponse.data) {
-        const errorMsg = 'Presigned URL 생성 실패'
-        onError?.(errorMsg)
-        return { success: false, error: errorMsg }
-      }
-
-      // ✅ presignedResponse.data.data 구조 처리
-      const presignedData = presignedResponse.data.data
-
-      if (!presignedData) {
-        const errorMsg = 'Presigned URL 데이터 없음'
-        onError?.(errorMsg)
-        return { success: false, error: errorMsg }
-      }
-
-      const { preSignedUrl, key } = presignedData
+      // // 2. Presigned URL 요청
+      // const presignedResponse = await getS3PostUrl(folderName, fileInfo.name)
+      // console.log('presignedResponse', presignedResponse)
+      //
+      // if (!presignedResponse.success || !presignedResponse.data) {
+      //   const errorMsg = 'Presigned URL 생성 실패'
+      //   onError?.(errorMsg)
+      //   return { success: false, error: errorMsg }
+      // }
+      //
+      // // ✅ presignedResponse.data.data 구조 처리
+      // const presignedData = presignedResponse.data.data
+      //
+      // if (!presignedData) {
+      //   const errorMsg = 'Presigned URL 데이터 없음'
+      //   onError?.(errorMsg)
+      //   return { success: false, error: errorMsg }
+      // }
+      //
+      // const { preSignedUrl, key } = presignedData
 
       // 3. S3에 파일 업로드 (presigned URL 사용)
       const uploadResponse = await fetch(preSignedUrl, {
@@ -88,13 +87,11 @@ export const useFileUpload = () => {
       console.log('✅ 파일 업로드 성공:', {
         fileName: fileInfo.name,
         fileId: fileInfo.id,
-        key,
         size: fileInfo.size,
       })
 
       return {
         success: true,
-        key,
         preSignedUrl,
       }
     } catch (error) {
@@ -112,11 +109,11 @@ export const useFileUpload = () => {
    * 여러 파일 병렬 업로드
    */
   const uploadMultipleFiles = useCallback(
-    async (fileInfoList: FileInfoType[], folderName: string): Promise<UploadResult[]> => {
+    async (fileInfoList: FileInfoType[], preSignedUrl: string): Promise<UploadResult[]> => {
       try {
         setIsLoading(true)
 
-        const uploadPromises = fileInfoList.map((fileInfo) => uploadFile(fileInfo, { folderName }))
+        const uploadPromises = fileInfoList.map((fileInfo) => uploadFile(fileInfo, { preSignedUrl }))
 
         const results = await Promise.all(uploadPromises)
 

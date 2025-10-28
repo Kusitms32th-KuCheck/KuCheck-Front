@@ -67,3 +67,58 @@ export const isValidFile = (file: File): { valid: boolean; error?: string } => {
 
   return { valid: true }
 }
+/**
+ * URL에서 파일 확장자를 추출
+ * 예: "https://example.com/file.pdf?v=1" → "pdf"
+ * 예: "data:application/pdf;base64,JVBERi0xLjQK..." → "pdf" (mime 타입으로 추론)
+ */
+export const extractFileExtension = (url: string | ArrayBuffer | null): string => {
+  if (!url || typeof url !== 'string') return ''
+
+  try {
+    // Base64 data URL인 경우 처리
+    if (url.startsWith('data:')) {
+      const mimeType = url.split(';')[0].replace('data:', '')
+      return getMimeTypeExtension(mimeType)
+    }
+
+    // 일반 URL에서 경로 추출 (쿼리 파라미터 제거)
+    const urlWithoutQuery = url.split('?')[0]
+
+    // 마지막 슬래시 이후의 파일명 추출
+    const fileName = urlWithoutQuery.split('/').pop() || ''
+
+    // 파일명에서 확장자 추출 (마지막 점 이후)
+    const extension = fileName.split('.').pop() || ''
+
+    // 확장자가 너무 길면 유효하지 않은 것으로 판단
+    return extension.length > 10 ? '' : extension.toLowerCase()
+  } catch (error) {
+    console.error('Failed to extract extension:', error)
+    return ''
+  }
+}
+/**
+ * MIME 타입을 파일 확장자로 변환
+ * 예: "application/pdf" → "pdf"
+ */
+const getMimeTypeExtension = (mimeType: string): string => {
+  const mimeToExtension: Record<string, string> = {
+    'application/pdf': 'pdf',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg',
+    'image/png': 'png',
+    'image/gif': 'gif',
+    'image/webp': 'webp',
+    'application/msword': 'doc',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+    'application/vnd.ms-excel': 'xls',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+    'text/plain': 'txt',
+    'text/csv': 'csv',
+    'application/zip': 'zip',
+    'application/json': 'json',
+  }
+
+  return mimeToExtension[mimeType] || ''
+}
