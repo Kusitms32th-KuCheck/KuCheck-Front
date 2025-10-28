@@ -21,7 +21,7 @@ export default function MemberDropDown({
         onClick={setIsDropDownOpen}
         className="flex w-full justify-between rounded-[12px] border border-gray-300 px-[14px] py-3 pr-[17.5px]"
       >
-        <p className={`${placeHolder ? 'text-gray-500' : 'text-black'} body-lg-medium`}>
+        <p className={`${selectedContent ? 'text-black' : 'text-gray-500'} body-lg-medium`}>
           {selectedContent ? selectedContent : placeHolder}
         </p>
         {isDropDownOpen ? <ChevronUpIcon width={24} height={24} /> : <ChevronDownIcon width={24} height={24} />}
