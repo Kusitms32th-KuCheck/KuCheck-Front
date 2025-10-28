@@ -12,7 +12,11 @@ export default async function ReasonForAbsencePage() {
       <MemberHeader
         headerType={'dynamic'}
         title={'불참 사유서'}
-        rightElement={<HelpCircleIcon className="absolute right-5" width={20} height={20} />}
+        rightElement={
+          <Link href={'/reason-for-absence/guide'}>
+            <HelpCircleIcon className="absolute right-5" width={20} height={20}></HelpCircleIcon>
+          </Link>
+        }
       />
       {/* 헤더의 높이만큼 공간 확보 */}
       <div className="h-[117px]" />

@@ -9,3 +9,19 @@ export interface AbsenceDataType {
 }
 
 export type AbsenceType = 'ABSENT' | 'LATE' | 'EARLY_LEAVE'
+
+export interface GuideSection {
+  id: string
+  title: string
+  description: string
+  content?: GuideItem[]
+}
+
+export interface GuideItem {
+  id?: string
+  label?: string
+  text: string
+  point?: number
+  pointType?: 'penalty' | 'reward'
+  examples?: string[]
+}
