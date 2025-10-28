@@ -3,9 +3,10 @@ import { Dispatch, SetStateAction } from 'react'
 
 interface LogoutModalProps {
   setIsLogoutModalOpen: Dispatch<SetStateAction<boolean>>
+  onLogoutClick: () => Promise<void>
 }
 
-export default function LogoutModal({ setIsLogoutModalOpen }: LogoutModalProps) {
+export default function LogoutModal({ setIsLogoutModalOpen, onLogoutClick }: LogoutModalProps) {
   return (
     <MemberModal>
       <MemberModal.Content>
@@ -16,7 +17,8 @@ export default function LogoutModal({ setIsLogoutModalOpen }: LogoutModalProps) 
       <MemberModal.BottomButton>
         <div className="flex gap-x-2">
           <button
-            onClick={() => {
+            onClick={async () => {
+              await onLogoutClick()
               setIsLogoutModalOpen(false)
             }}
             className="bg-primary-500 body-sm-semibold h-[44px] w-full rounded-[10px] text-white"
