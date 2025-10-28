@@ -9,7 +9,7 @@ import { useAbsenceStore } from '@/store/member/absenceStore'
 import { AbsenceDataType, AbsenceType } from '@/types/member/absence'
 
 import { convertISODateTimeToTime } from '@/utils/common'
-import { postAbsence } from '@/lib/member/reason-for-absence'
+import { postAbsence } from '@/lib/member/client/reason-for-absence'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { extractFileExtension } from '@/utils/upload'
 

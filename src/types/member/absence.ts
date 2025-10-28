@@ -25,3 +25,13 @@ export interface GuideItem {
   pointType?: 'penalty' | 'reward'
   examples?: string[]
 }
+export interface SubmitAbsenceType {
+  absenceReportId: number
+  absenceType: AbsenceType
+  absenceReportApproval: AbsenceReportApprovalType
+  submitDateTime: string
+  sessionTitle: string
+  sessionStartDate: string
+}
+
+export type AbsenceReportApprovalType = 'SUBMIT' | 'APPROVED'

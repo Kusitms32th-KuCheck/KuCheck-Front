@@ -71,6 +71,18 @@ export const formatToMonthDay = (dateString: string): string => {
   return `${month}/${day}`
 }
 
+/**
+ * ISO 8601 타임스탬프에서 MM/DD 형식으로 추출
+ * @param timestamp - ISO 8601 형식의 타임스탬프 (예: 2025-10-28T11:36:11.668882)
+ * @returns MM/DD 형식의 문자열 (예: 10/28)
+ */
+export function formatMonthDay(timestamp: string): string {
+  const date = new Date(timestamp)
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${month}/${day}`
+}
+
 export const changePartEnumToContent = (part: PartType) => {
   switch (part) {
     case 'BACKEND':
