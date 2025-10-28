@@ -6,6 +6,7 @@ import EditableTextCell from './EditableTextCell'
 import SessionCell from './SessionCell'
 import type { Member } from '@/types/manager/member/mockData'
 import { AppleIcon } from '@/assets/svgComponents/manager'
+import { useMemberTableStore } from '@/store/manager/useMemberTableStore'
 
 export default function MemberTableRow({
   member,
@@ -162,11 +163,25 @@ export default function MemberTableRow({
         </div>
 
         <p
-          className={`body-lg-medium flex h-[68px] items-center justify-start gap-2 px-6 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+          className={`body-lg-medium flex h-[68px] items-center justify-between gap-2 px-6 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
         >
-          <AppleIcon width={20} height={20} />
-
-          {member.social}
+          <div className="flex items-center gap-2">
+            <AppleIcon width={20} height={20} />
+            <span className="truncate">{member.social}</span>
+          </div>
+          {isEditMode && (
+            <button
+              type="button"
+              onClick={() => {
+                const { setPendingDeleteIndex, setIsDeleteModalOpen } = useMemberTableStore.getState()
+                setPendingDeleteIndex(index)
+                setIsDeleteModalOpen(true)
+              }}
+              className="text-primary-500 body-sm-semibold bg-primary-50 w-[73px] rounded-[4px] py-2"
+            >
+              삭제
+            </button>
+          )}
         </p>
       </div>
       {modalOpen && (
