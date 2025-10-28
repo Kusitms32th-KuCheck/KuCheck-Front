@@ -58,6 +58,19 @@ export const convertISODateTimeToTime = (isoDateTime: string): string => {
     return ''
   }
 }
+
+/**
+ * YYYY-MM-DD 형식을 MM/DD로 변환
+ * @param dateString - "2025-11-11" 형식의 날짜 문자열
+ * @returns "11/11" 형식의 문자열
+ */
+export const formatToMonthDay = (dateString: string): string => {
+  if (!dateString) return ''
+
+  const [, month, day] = dateString.split('-')
+  return `${month}/${day}`
+}
+
 export const changePartEnumToContent = (part: PartType) => {
   switch (part) {
     case 'BACKEND':
