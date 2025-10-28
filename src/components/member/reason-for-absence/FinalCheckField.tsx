@@ -11,6 +11,7 @@ import { AbsenceDataType, AbsenceType } from '@/types/member/absence'
 import { convertISODateTimeToTime } from '@/utils/common'
 import { postAbsence } from '@/lib/member/reason-for-absence'
 import { useFileUpload } from '@/hooks/useFileUpload'
+import { extractFileExtension } from '@/utils/upload'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -49,7 +50,7 @@ export default function FinalCheckField() {
   }
 
   // 참석 유형 content, (유형 + 시간)
-  const absenceContent = `${changeAbsenceToContent(absenceData?.absenceType)} ${absenceData?.absenceType === 'LATE' ? (absenceData.lateDateTime ? convertISODateTimeToTime(absenceData.lateDateTime) : '') : absenceData?.absenceType === 'EARLY_LEAVE' ? (absenceData?.leaveDateTime ? convertISODateTimeToTime(absenceData.leaveDateTime) : '') : null}`
+  const absenceContent = `${changeAbsenceToContent(absenceData?.absenceType)} ${absenceData?.absenceType === 'LATE' ? (absenceData.lateDateTime ? convertISODateTimeToTime(absenceData.lateDateTime) : '') : absenceData?.absenceType === 'EARLY_LEAVE' ? (absenceData?.leaveDateTime ? convertISODateTimeToTime(absenceData.leaveDateTime) : '') : ''}`
 
   // 제출 핸들러
   const handleSubmit = async (absenceData: AbsenceDataType | undefined) => {
@@ -60,23 +61,22 @@ export default function FinalCheckField() {
       }
 
       if (file) {
-        const uploadResult = await uploadFile(file, { folderName: 'absence' })
+        const updatedAbsenceData = {
+          ...absenceData,
+          fileName: `absence.${extractFileExtension(file.url)}`,
+        }
+
+        // 3️⃣ 불참 정보 제출
+        const response = await postAbsence(updatedAbsenceData)
+        console.log('✅ postAbsence 결과:', response)
+
+        const uploadResult = await uploadFile(file, { preSignedUrl: response.data.data.preSignedUrl })
         console.log('📁 사진 업로드 결과:', uploadResult)
 
         if (!uploadResult.success) {
           console.error('❌ 파일 업로드 실패:', uploadResult.error)
           return
         }
-
-        // 2️⃣ presignedUrl을 absenceData의 fileName에 추가
-        const updatedAbsenceData = {
-          ...absenceData,
-          fileName: uploadResult.preSignedUrl, // ✅ presignedUrl 추가
-        }
-
-        // 3️⃣ 불참 정보 제출
-        const response = await postAbsence(updatedAbsenceData)
-        console.log('✅ postAbsence 결과:', response)
 
         if (response.success) {
           handleStepClick('6')
@@ -122,8 +122,8 @@ export default function FinalCheckField() {
         {file && (
           <section className="flex flex-col gap-y-3">
             <h2 className="body-lg-semibold">증빙 서류</h2>
-            <div className="bg-background1 body-lg-medium flex h-[48px] gap-x-1 rounded-[12px] border border-gray-300 px-[14px] py-3 outline-none">
-              <p>{file?.name}</p>
+            <div className="bg-background1 body-lg-medium flex h-[48px] w-full gap-x-1 overflow-hidden rounded-[12px] border border-gray-300 px-[14px] py-3 outline-none">
+              <p className="line-clamp-1">{file?.name}</p>
               <p className="text-gray-500">{`(${(file.size / 1024 / 1024).toFixed(2)}MB)`}</p>
             </div>
           </section>
