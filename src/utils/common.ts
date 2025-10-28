@@ -36,23 +36,23 @@ export const convertTimeToISODateTime = (timeInput: string): string => {
 
 /**
  * ISO 8601 형식의 DateTime을 time input 형식으로 변환 (오전/오후 포함)
- * 예: "2025-10-22T17:47:00.000Z" → "오후 5:47"
+ * 한국 시간대(KST, UTC+9) 기준
  */
 export const convertISODateTimeToTime = (isoDateTime: string): string => {
   if (!isoDateTime) return ''
 
   try {
     const date = new Date(isoDateTime)
-    const hours = date.getUTCHours()
-    const minutes = String(date.getUTCMinutes()).padStart(2, '0')
 
-    // 오전/오후 구분
-    const period = hours >= 12 ? '오후' : '오전'
+    // toLocaleString을 사용하여 한국 시간대로 변환
+    const koreaTime = date.toLocaleString('ko-KR', {
+      timeZone: 'Asia/Seoul',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
 
-    // 12시간 형식으로 변환
-    const displayHours = hours % 12 === 0 ? 12 : hours % 12
-
-    return `${period} ${displayHours}:${minutes}`
+    return koreaTime
   } catch (error) {
     console.error('Invalid ISO datetime:', error)
     return ''

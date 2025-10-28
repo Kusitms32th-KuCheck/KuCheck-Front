@@ -1,13 +1,15 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 import MemberButton from '@/components/member/common/MemberButton'
 
 import { AbsenceType } from '@/types/member/absence'
 
 import { useAbsenceStore } from '@/store/member/absenceStore'
-import { convertTimeToISODateTime } from '@/utils/common'
+import { convertISODateTimeToTime, convertTimeToISODateTime } from '@/utils/common'
+import { DrawerContent, DrawerHeader, DrawerTitle, Drawer, DrawerClose } from '@/components/ui/drawer'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -20,37 +22,42 @@ const attendanceTypeList: { title: string; enum: AbsenceType }[] = [
 export default function AttendanceTypeSelector() {
   const router = useRouter()
   const pathname = usePathname()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   // post data
   const setAbsenceState = useAbsenceStore((state) => state.setState)
   const absenceData = useAbsenceStore((state) => state.absenceData)
 
   const handleStepClick = (step: StepType) => {
-    // URL 업데이트 → 서버 컴포넌트 재렌더링
     router.push(`${pathname}?step=${encodeURIComponent(step)}`)
   }
 
-  /**
-   * 참석 유형 제어 핸들러
-   * @param attendanceType  'ABSENT': 결석 | 'LATE': 지각 | 'EARLY_LEAVE': 조퇴
-   */
   const handleAttendanceTypeClick = (attendanceType: AbsenceType) => {
+    // 새로운 타입 선택
     setAbsenceState({
       ...absenceData,
       absenceData: {
         ...absenceData,
-        absenceType: attendanceType === absenceData?.absenceType ? undefined : attendanceType,
+        absenceType: attendanceType,
         lateDateTime: undefined,
         leaveDateTime: undefined,
       },
     })
   }
 
-  /**
-   * absenceData 의 leaveDateTime 과 lateDateTime 를 변경하는 함수
-   * @param key 'leaveDateTime': '조퇴', 'lateDateTime': '지각'
-   * @param value input 입력값
-   */
+  const handleDrawerOpen = (attendanceType: AbsenceType) => {
+    // 이미 선택된 타입을 다시 클릭하면 Drawer 열기
+    if (attendanceType === absenceData?.absenceType) {
+      setIsDrawerOpen(true)
+      return
+    }
+
+    // 지각 또는 조퇴 선택 시 Drawer 열기
+    if (attendanceType !== 'ABSENT') {
+      setIsDrawerOpen(true)
+    }
+  }
+
   const onChangeValue = (key: 'leaveDateTime' | 'lateDateTime', value: string) => {
     const isoDateTime = convertTimeToISODateTime(value)
 
@@ -63,18 +70,26 @@ export default function AttendanceTypeSelector() {
     })
   }
 
-  /**
-   * AbsenceType 에 따라서 시간을 선택하는 UI 컴포넌트 제어
-   */
-  const handleAbsenceUISwitcher = (absenceType: AbsenceType | undefined) => {
-    switch (absenceType) {
-      case 'LATE':
-        return <LateDateTimeSelector onChangeValue={onChangeValue} />
-      case 'EARLY_LEAVE':
-        return <LeaveDateTimeSelector onChangeValue={onChangeValue} />
-      default:
-        return <div></div>
+  const handleDrawerClose = () => {
+    // 시간이 선택되지 않았으면 타입 초기화
+    const hasTimeSelected =
+      absenceData?.absenceType === 'LATE'
+        ? absenceData?.lateDateTime
+        : absenceData?.absenceType === 'EARLY_LEAVE'
+          ? absenceData?.leaveDateTime
+          : true
+
+    if (!hasTimeSelected) {
+      setAbsenceState({
+        ...absenceData,
+        absenceData: {
+          ...absenceData,
+          absenceType: undefined,
+        },
+      })
     }
+
+    setIsDrawerOpen(false)
   }
 
   return (
@@ -85,23 +100,79 @@ export default function AttendanceTypeSelector() {
           {attendanceTypeList.map((attendanceType) => (
             <button
               key={attendanceType.enum}
-              className={`${attendanceType.enum === absenceData?.absenceType ? 'bg-primary-50 border-primary-500 border' : 'bg-background1 border border-gray-200'} rounded-[8px] border px-6 py-3`}
-              type={'button'}
               onClick={() => handleAttendanceTypeClick(attendanceType.enum)}
+              className={`${
+                attendanceType.enum === absenceData?.absenceType
+                  ? 'bg-primary-50 border-primary-500 border'
+                  : 'bg-background1 border border-gray-200'
+              } rounded-[8px] border px-6 py-3 transition-colors`}
+              type="button"
             >
               {attendanceType.title}
             </button>
           ))}
         </div>
-        {handleAbsenceUISwitcher(absenceData?.absenceType)}
+        {absenceData?.absenceType === 'LATE' ? (
+          <div className="flex flex-col gap-y-1">
+            <h1 className="body-2xl-semibold">지각 시간</h1>
+            <div className="flex items-center justify-between">
+              {absenceData.lateDateTime ? (
+                <p>{convertISODateTimeToTime(absenceData?.lateDateTime)}</p>
+              ) : (
+                <p className="body-lg-medium text-gray-400">시간을 선택해주세요</p>
+              )}
+              <button
+                onClick={() => handleDrawerOpen('LATE')}
+                className="bg-primary-50 text-primary-500 caption-sm-medium w-[48px] rounded-[8px] py-[8px]"
+              >
+                선택
+              </button>
+            </div>
+          </div>
+        ) : absenceData?.absenceType === 'EARLY_LEAVE' ? (
+          <div className="flex flex-col gap-y-1">
+            <h1 className="body-2xl-semibold">조퇴 시간</h1>
+            <div className="flex items-center justify-between">
+              {absenceData.leaveDateTime ? (
+                <p>{convertISODateTimeToTime(absenceData?.leaveDateTime)}</p>
+              ) : (
+                <p className="body-lg-medium text-gray-400">시간을 선택해주세요</p>
+              )}
+              <button
+                onClick={() => handleDrawerOpen('EARLY_LEAVE')}
+                className="bg-primary-50 text-primary-500 caption-sm-medium w-[48px] rounded-[8px] py-[8px]"
+              >
+                선택
+              </button>
+            </div>
+          </div>
+        ) : null}
       </section>
+
+      {/* Drawer */}
+      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>{absenceData?.absenceType === 'LATE' ? '지각 시간' : '조퇴 시간'}</DrawerTitle>
+          </DrawerHeader>
+
+          <div className="px-4 pb-8">
+            {absenceData?.absenceType === 'LATE' && (
+              <LateDateTimeSelector onChangeValue={onChangeValue} onClose={handleDrawerClose} />
+            )}
+            {absenceData?.absenceType === 'EARLY_LEAVE' && (
+              <LeaveDateTimeSelector onChangeValue={onChangeValue} onClose={handleDrawerClose} />
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
 
       {/* bottom button */}
       <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
         <MemberButton
           disabled={!absenceData?.absenceType}
-          styleType={'primary'}
-          styleSize={'lg'}
+          styleType="primary"
+          styleSize="lg"
           styleStatus={absenceData?.absenceType ? 'default' : 'disabled'}
           onClick={() => {
             handleStepClick('3')
@@ -114,50 +185,60 @@ export default function AttendanceTypeSelector() {
   )
 }
 
-//지각
+// 지각
 function LateDateTimeSelector({
   onChangeValue,
+  onClose,
 }: {
   onChangeValue: (key: 'leaveDateTime' | 'lateDateTime', value: string) => void
+  onClose: () => void
 }) {
   return (
-    <div className="flex flex-col gap-y-2">
-      <h1 className="body-2xl-semibold">지각 시간</h1>
-      <section className="flex items-center justify-between">
-        <input
-          onChange={(e) => onChangeValue('lateDateTime', e.target.value)}
-          placeholder={'시간을 선택해 주세요'}
-          className="body-lg-medium placeholder:text-gray-400"
-          type={'time'}
-        />
-        {/*<button className="bg-primary-50 caption-sm-medium text-primary-500 w-[48px] rounded-[8px] py-[8px]">*/}
-        {/*  선택*/}
-        {/*</button>*/}
-      </section>
+    <div className="flex flex-col gap-y-4 gap-y-[100px]">
+      <input
+        onChange={(e) => onChangeValue('lateDateTime', e.target.value)}
+        placeholder="시간을 선택해 주세요"
+        className="body-lg-medium rounded-[8px] border border-gray-200 px-4 py-3 placeholder:text-gray-400"
+        type="time"
+      />
+      <DrawerClose asChild>
+        <button
+          className="bg-primary-500 w-full rounded-[8px] px-6 py-3 font-semibold text-white"
+          type="button"
+          onClick={onClose}
+        >
+          완료
+        </button>
+      </DrawerClose>
     </div>
   )
 }
 
-//조퇴
+// 조퇴
 function LeaveDateTimeSelector({
   onChangeValue,
+  onClose,
 }: {
   onChangeValue: (key: 'leaveDateTime' | 'lateDateTime', value: string) => void
+  onClose: () => void
 }) {
   return (
-    <div className="flex flex-col gap-y-2">
-      <h1 className="body-2xl-semibold">조퇴 시간</h1>
-      <section className="flex items-center justify-between">
-        <input
-          onChange={(e) => onChangeValue('leaveDateTime', e.target.value)}
-          placeholder={'시간을 선택해 주세요'}
-          className="body-lg-medium placeholder:text-gray-400"
-          type={'time'}
-        />
-        {/*<button className="bg-primary-50 caption-sm-medium text-primary-500 w-[48px] rounded-[8px] py-[8px]">*/}
-        {/*  선택*/}
-        {/*</button>*/}
-      </section>
+    <div className="flex flex-col gap-y-4 gap-y-[100px]">
+      <input
+        onChange={(e) => onChangeValue('leaveDateTime', e.target.value)}
+        placeholder="시간을 선택해 주세요"
+        className="body-lg-medium rounded-[8px] border border-gray-200 px-4 py-3 placeholder:text-gray-400"
+        type="time"
+      />
+      <DrawerClose asChild>
+        <button
+          className="bg-primary-500 rounded-[8px] px-6 py-3 font-semibold text-white"
+          type="button"
+          onClick={onClose}
+        >
+          완료
+        </button>
+      </DrawerClose>
     </div>
   )
 }
