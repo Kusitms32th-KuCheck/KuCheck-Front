@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import Dropdown from '../../common/ManagerdropDown'
 import { PointupIcon, PointdownIcon } from '@/assets/svgComponents/manager'
 import { ATTENDANCE_OPTIONS } from '@/constants/manager/point'

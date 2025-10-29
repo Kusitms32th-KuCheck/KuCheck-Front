@@ -14,6 +14,10 @@ type MemberTableState = {
   applyEditBuffer: () => void
   isManagerModalOpen: boolean
   setIsManagerModalOpen: (open: boolean) => void
+  pendingDeleteIndex: number | null
+  setPendingDeleteIndex: (idx: number | null) => void
+  isDeleteModalOpen: boolean
+  setIsDeleteModalOpen: (open: boolean) => void
   feedbackMessage: React.ReactNode | null
   setFeedbackMessage: (v: React.ReactNode | null) => void
 }
@@ -56,6 +60,10 @@ export const useMemberTableStore = create<MemberTableState>((set) => ({
 
   isManagerModalOpen: false,
   setIsManagerModalOpen: (open) => set({ isManagerModalOpen: open }),
+  pendingDeleteIndex: null,
+  setPendingDeleteIndex: (idx) => set({ pendingDeleteIndex: idx }),
+  isDeleteModalOpen: false,
+  setIsDeleteModalOpen: (open) => set({ isDeleteModalOpen: open }),
   feedbackMessage: null,
   setFeedbackMessage: (v) => set({ feedbackMessage: v }),
 }))

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import MemberTableRow from './member-row/MemberTableRow'
 import { generateMockMembers } from '@/types/manager/member/mockData'
 import { useMemberStore } from '@/store/manager/useMemberStore'
@@ -19,12 +19,16 @@ export default function MemberTable() {
     applyEditBuffer,
     isManagerModalOpen,
     setIsManagerModalOpen,
+    pendingDeleteIndex,
+    setPendingDeleteIndex,
+    isDeleteModalOpen,
+    setIsDeleteModalOpen,
   } = useMemberTableStore()
   const initialMembers = generateMockMembers()
   const [prevEdit, setPrevEdit] = useState<boolean>(isEditMode)
   const [revertToken, setRevertToken] = useState<number>(0)
   const { containerRef, headerScrollRef, isScrolled } = useScrollSync()
-  const feedbackTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { feedbackMessage, setFeedbackMessage } = useMemberTableStore()
 
   const gridTemplate = '120px 171px 143px 181px 423px 173px 409px'
@@ -92,11 +96,33 @@ export default function MemberTable() {
           feedbackTimerRef.current = setTimeout(() => setFeedbackMessage(null), 1200)
         }}
       />
+      <ManagerModal
+        open={isDeleteModalOpen}
+        message={
+          typeof pendingDeleteIndex === 'number' && members[pendingDeleteIndex]
+            ? `${members[pendingDeleteIndex].name} 학회원을 삭제할까요?`
+            : '삭제하시겠어요?'
+        }
+        onCancel={() => {
+          setPendingDeleteIndex(null)
+          setIsDeleteModalOpen(false)
+        }}
+        onConfirm={() => {
+          if (typeof pendingDeleteIndex === 'number') {
+            setMembers((prev) => prev.filter((_, idx) => idx !== pendingDeleteIndex))
+          }
+          setPendingDeleteIndex(null)
+          setIsDeleteModalOpen(false)
+          setFeedbackMessage(<span className="text-primary-500">삭제되었습니다</span>)
+        }}
+        confirmLabel={'삭제하기'}
+      />
       {feedbackMessage && (
         <ManagerModal
-          open={true}
+          open={false}
           transientMessage={feedbackMessage}
-          onTransientClose={() => {}}
+          transientDuration={1200}
+          onTransientClose={() => setFeedbackMessage(null)}
           onCancel={() => {}}
           onConfirm={() => {}}
         />
