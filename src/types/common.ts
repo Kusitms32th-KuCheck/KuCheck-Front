@@ -11,8 +11,14 @@ export interface ApiCallResult<T = never> {
   error?: string
 }
 
-export interface PaginationResultType<T> {
+export interface PaginationResultListType<T> {
   data: T[]
+  totalPages: number
+  isLastPage: boolean
+}
+
+export interface PaginationResultType<T> {
+  data: T
   totalPages: number
   isLastPage: boolean
 }
@@ -29,8 +35,10 @@ export interface UserType {
   memberId: number
   role: UserRoleType
 }
+
 export type UserStatusType = 'PENDING' | 'APPROVED' | 'REJECTED'
 export type UserRoleType = 'GUEST' | 'USER' | 'ADMIN' | 'MANAGEMENT'
+export type PartType = 'BACKEND' | 'FRONTEND' | 'DESIGN' | 'PLANNING'
 
 export interface FileInfoType {
   name: string
