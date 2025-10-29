@@ -1,5 +1,6 @@
 export { default as QrIcon } from './QrIcon'
 export { default as AppleLogoIcon } from './AppleLogoIcon'
+export { default as ArrowRotateLeftIcon } from './ArrowRotateLeftIcon'
 export { default as BarIcon } from './BarIcon'
 export { default as BlueHomeLogoIcon } from './BlueHomeLogoIcon'
 export { default as CalendarIcon } from './CalendarIcon'
