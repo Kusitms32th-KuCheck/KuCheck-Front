@@ -4,4 +4,5 @@ export interface UserSummaryType {
   name: string
   part: PartType
   totalPoints: number
+  profileImage: string
 }
