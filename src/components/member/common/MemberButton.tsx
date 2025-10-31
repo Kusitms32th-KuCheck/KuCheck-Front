@@ -17,6 +17,7 @@ const sizeStyles = {
 
 export interface MemberButtonProps {
   onClick?: () => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   children: ReactNode
   styleType?: 'primary' | 'gray'
   styleStatus?: 'default' | 'disabled'
@@ -35,6 +36,7 @@ const MemberButton = ({
   children,
   customClassName,
   onClick,
+  onChange,
   buttonType = 'button',
   disabled = false,
   rightIcon,
@@ -46,7 +48,13 @@ const MemberButton = ({
   const className = [base, variantClass, sizeClass].join(' ')
 
   return (
-    <button disabled={disabled} type={buttonType} onClick={onClick} className={`${className} ${customClassName}`}>
+    <button
+      disabled={disabled}
+      type={buttonType}
+      onClick={onClick}
+      onChange={() => onChange}
+      className={`${className} ${customClassName}`}
+    >
       {leftIcon ? leftIcon : null}
       {children}
       {rightIcon ? rightIcon : null}

@@ -26,7 +26,7 @@ export default function SubmissionComplete() {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
-      <section className="flex flex-col gap-y-[40px] px-5 pt-[32px]">
+      <section className="flex flex-col items-center gap-y-[40px] px-5 pt-[32px]">
         <BlueHomeLogoIcon width={117} height={97} />
         <p className="heading-sm-semibold text-primary-500">제출이 완료되었어요</p>
       </section>
