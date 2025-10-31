@@ -3,6 +3,8 @@ import { getKuPickMy } from '@/lib/member/server/ku-pick'
 import MemberHeader from '@/components/member/common/MemberHeader'
 import ViewImageUploader from '@/components/member/ku-pick/ViewImageUploader'
 
+export const dynamic = 'force-dynamic'
+
 export default async function KuPickViewPage() {
   const myKuPickResponseData = await getKuPickMy()
   const myKuPickData = myKuPickResponseData?.data

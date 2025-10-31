@@ -1,7 +1,7 @@
 import MemberHeader from '@/components/member/common/MemberHeader'
 import SubmitCard from '@/components/member/ku-pick/SubmitCard'
 import { getKuPickMy } from '@/lib/member/server/ku-pick'
-
+export const dynamic = 'force-dynamic'
 export default async function QPickPage() {
   const myKuPickResponseData = await getKuPickMy()
   const myKuPickData = myKuPickResponseData?.data

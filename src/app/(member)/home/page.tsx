@@ -6,6 +6,8 @@ import AttendanceQRCard from '@/components/member/home/AttendanceQRCard'
 import NoticeCard from '@/components/member/home/NoticeCard'
 import Banner from '@/components/member/home/Banner'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const result = await getProfileSummary()
   const userData = result.data
