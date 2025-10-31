@@ -75,6 +75,8 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
         const ctx = canvas.getContext('2d', { willReadFrequently: true })
         if (!ctx) return
 
+        const SCAN_INTERVAL = 600
+
         intervalRef.current = window.setInterval(() => {
           if (!video || !ctx) return
           const c = containerRef.current
@@ -99,7 +101,6 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
           canvas.height = sh
           ctx.drawImage(video, sx, sy, sw, sh, 0, 0, sw, sh)
 
-          // ✅ 디코딩 일시 중지 상태 확인
           if (pausedRef.current) return
 
           const win = window as Window & { jsQR?: JsQrFunc }
@@ -127,7 +128,7 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
           } catch {
             // ignore decode errors
           }
-        }, 300)
+        }, SCAN_INTERVAL)
       } catch {
         setError('카메라 접근 권한이 필요합니다.')
       }
