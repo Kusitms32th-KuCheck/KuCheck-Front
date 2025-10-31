@@ -1,3 +1,11 @@
+export interface AttendanceScanResponseType {
+  memberId: number
+  memberName: string
+  sessionId: number
+  state: string
+  scannedAt: string
+}
+
 export interface CheckDocumentRecord {
   name: string
   part: string

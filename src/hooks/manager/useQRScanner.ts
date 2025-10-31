@@ -18,38 +18,42 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const guideRef = useRef<HTMLDivElement | null>(null)
   const intervalRef = useRef<number | null>(null)
-  const pauseTimeoutRef = useRef<number | null>(null)
   const [scanning, setScanning] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [maskRect, setMaskRect] = useState<MaskRect | null>(null)
   const [guideState, setGuideState] = useState<'idle' | 'detected' | 'success'>('idle')
+
   const pausedRef = useRef(false)
+  const resumeDecoding = () => {
+    pausedRef.current = false
+  }
+
+  const updateMask = () => {
+    const container = containerRef.current
+    const guide = guideRef.current
+    const MASK_PADDING = 0
+
+    if (!container || !guide) return
+    const crect = container.getBoundingClientRect()
+    const grect = guide.getBoundingClientRect()
+
+    const x = Math.max(0, Math.round(grect.left - crect.left - MASK_PADDING))
+    const y = Math.max(0, Math.round(grect.top - crect.top - MASK_PADDING))
+    const w = Math.max(0, Math.round(Math.min(grect.width + MASK_PADDING * 2, crect.width - x)))
+    const h = Math.max(0, Math.round(Math.min(grect.height + MASK_PADDING * 2, crect.height - y)))
+
+    setMaskRect({
+      cw: Math.round(crect.width),
+      ch: Math.round(crect.height),
+      x,
+      y,
+      w,
+      h,
+    })
+  }
 
   useEffect(() => {
     let stream: MediaStream | null = null
-    const MASK_PADDING = 0
-
-    const updateMask = () => {
-      const container = containerRef.current
-      const guide = guideRef.current
-      if (!container || !guide) return
-      const crect = container.getBoundingClientRect()
-      const grect = guide.getBoundingClientRect()
-
-      const x = Math.max(0, Math.round(grect.left - crect.left - MASK_PADDING))
-      const y = Math.max(0, Math.round(grect.top - crect.top - MASK_PADDING))
-      const w = Math.max(0, Math.round(Math.min(grect.width + MASK_PADDING * 2, crect.width - x)))
-      const h = Math.max(0, Math.round(Math.min(grect.height + MASK_PADDING * 2, crect.height - y)))
-
-      setMaskRect({
-        cw: Math.round(crect.width),
-        ch: Math.round(crect.height),
-        x,
-        y,
-        w,
-        h,
-      })
-    }
 
     window.addEventListener('resize', updateMask)
 
@@ -91,12 +95,12 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
           const sw = Math.max(16, Math.floor(grect.width * scaleX))
           const sh = Math.max(16, Math.floor(grect.height * scaleY))
 
-          // 항상 그리기 → 화면 유지
           canvas.width = sw
           canvas.height = sh
           ctx.drawImage(video, sx, sy, sw, sh, 0, 0, sw, sh)
 
-          if (pausedRef.current) return // QR 디코딩만 잠시 멈춤
+          // ✅ 디코딩 일시 중지 상태 확인
+          if (pausedRef.current) return
 
           const win = window as Window & { jsQR?: JsQrFunc }
           const jsQR = win.jsQR
@@ -114,13 +118,11 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
             const code = jsQR(imageData.data, imageData.width, imageData.height)
             if (code && code.data) {
               setGuideState('detected')
-              pausedRef.current = true // 1.5초 동안 중복 방지
-              if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current)
-              pauseTimeoutRef.current = window.setTimeout(() => {
-                pausedRef.current = false
-                setGuideState('idle')
-              }, 1500)
+              pausedRef.current = true
+
               if (onDetect) onDetect(code.data)
+            } else {
+              setGuideState((s) => (s === 'detected' ? 'idle' : s))
             }
           } catch {
             // ignore decode errors
@@ -135,7 +137,6 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
     return () => {
       stream?.getTracks().forEach((t) => t.stop())
       if (intervalRef.current) clearInterval(intervalRef.current)
-      if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current)
       window.removeEventListener('resize', updateMask)
     }
   }, [onDetect])
@@ -150,5 +151,6 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
     maskRect,
     guideState,
     setGuideState,
+    resumeDecoding,
   }
 }

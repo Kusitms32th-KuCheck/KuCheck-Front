@@ -8,7 +8,7 @@ interface QRScannerProps {
   successPulseUntil?: number | null
   pulseStatus?: 'success' | 'error' | null
   resultPayload?: { name: string; avatarUrl?: string } | null
-  errorMessage?: string | null
+  errorMessage: string | null
 }
 
 export default function QRScanner({
@@ -18,11 +18,28 @@ export default function QRScanner({
   resultPayload = null,
   errorMessage = null,
 }: QRScannerProps) {
-  const { videoRef, canvasRef, containerRef, guideRef, scanning, error, maskRect, guideState, setGuideState } =
-    useQRScanner(onDetect)
+  const {
+    videoRef,
+    canvasRef,
+    containerRef,
+    guideRef,
+    scanning,
+    error,
+    maskRect,
+    guideState,
+    setGuideState,
+    resumeDecoding,
+  } = useQRScanner(onDetect)
 
   const cornerColor =
-    guideState === 'detected' ? 'bg-yellow-400' : guideState === 'success' ? 'bg-green-500' : 'bg-white'
+    pulseStatus === 'error'
+      ? 'bg-red-500'
+      : guideState === 'detected'
+        ? 'bg-yellow-400'
+        : guideState === 'success'
+          ? 'bg-green-500'
+          : 'bg-white'
+
   const borderClass =
     pulseStatus === 'error'
       ? 'border-red-300'
@@ -39,8 +56,8 @@ export default function QRScanner({
   ] as const
 
   const prevSuccessPulseRef = useRef<number | null>(null)
+
   useEffect(() => {
-    if (!successPulseUntil) return
     let raf = 0
     const tick = () => {
       const now = Date.now()
@@ -52,7 +69,13 @@ export default function QRScanner({
         if (raf) cancelAnimationFrame(raf)
       }
     }
-    tick()
+
+    if (successPulseUntil) {
+      tick()
+    } else {
+      setGuideState((s) => (s === 'success' ? 'idle' : s))
+    }
+
     return () => {
       if (raf) cancelAnimationFrame(raf)
     }
@@ -61,10 +84,10 @@ export default function QRScanner({
   useEffect(() => {
     const prev = prevSuccessPulseRef.current
     if (prev && !successPulseUntil) {
-      setGuideState('idle')
+      resumeDecoding()
     }
     prevSuccessPulseRef.current = successPulseUntil ?? null
-  }, [successPulseUntil, setGuideState])
+  }, [successPulseUntil, resumeDecoding])
 
   return (
     <div className="relative w-full max-w-[1260px] overflow-hidden rounded-[12px] bg-black shadow-md">
