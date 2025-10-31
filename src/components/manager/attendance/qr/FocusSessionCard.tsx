@@ -2,8 +2,9 @@
 import { useState } from 'react'
 import ManagerModal from '@/components/manager/common/ManagerModal'
 import { useRouter } from 'next/navigation'
+import { AttendanceSummaryType } from '@/types/manager/check-document/types'
 
-export default function FocusSessionCard() {
+export default function FocusSessionCard({ summary }: { summary: AttendanceSummaryType | null }) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
@@ -38,19 +39,19 @@ export default function FocusSessionCard() {
         </div>
       </div>
       <div className="flex h-[120px] items-center justify-center">
-        <Stat label="출석" value="50" highlight />
+        <Stat label="출석" value={summary?.present} highlight />
         <div className="h-[80px] border border-gray-100"></div>
-        <Stat label="조퇴" value="0" />
+        <Stat label="조퇴" value={summary?.earlyLeave} />
         <div className="h-[80px] border border-gray-100"></div>
-        <Stat label="지각" value="4" />
+        <Stat label="지각" value={summary?.late} />
         <div className="h-[80px] border border-gray-100"></div>
-        <Stat label="결석" value="3" />
+        <Stat label="결석" value={summary?.absent} />
       </div>
     </div>
   )
 }
 
-function Stat({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
+function Stat({ label, value, highlight = false }: { label: string; value?: number | null; highlight?: boolean }) {
   return (
     <div className="flex w-[192px] flex-col items-center">
       <span className="body-lg-regular text-gray-500">{label}</span>
