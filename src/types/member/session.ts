@@ -15,3 +15,12 @@ export interface ThisWeekSessionDataType {
   startTime: string
   endTime: string
 }
+
+export interface SessionDataType {
+  sessionId: number
+  sessionCategory: SessionCategoryType
+  title: string
+  startDate: string
+}
+
+export type SessionCategoryType = 'CORPORATE_PROJECT' | 'MEETUP_PROJECT' | 'NETWORKING' | 'HOLIDAY' | 'REST'
