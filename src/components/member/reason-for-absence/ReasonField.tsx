@@ -37,7 +37,7 @@ export default function ReasonField() {
           value={absenceData?.reason}
           maxLength={100}
           onChange={(e) => onChangeReason(e.target.value)}
-          className="border-primary-400 bg-background1 body-lg-medium h-[124px] w-full rounded-[12px] border p-[14px] outline-none"
+          className="bg-background1 body-lg-medium outline-primary-400 h-[124px] w-full rounded-[12px] border border-gray-300 p-[14px]"
         />
         <div className="flex w-full justify-end">
           <p className="caption-sm-medium text-gray-400">{absenceData?.reason ? absenceData?.reason.length : 0}/100</p>

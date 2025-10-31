@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import MemberButton from '@/components/member/common/MemberButton'
 import MemberDropDown from '@/components/member/common/MemberDropDown'
@@ -9,6 +9,7 @@ import MemberDropDown from '@/components/member/common/MemberDropDown'
 import { useAbsenceStore } from '@/store/member/absenceStore'
 
 import { SessionDataType } from '@/types/member/session'
+import { formatToMonthDay } from '@/utils/common'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -91,19 +92,19 @@ function MemberDropDownContent({
   sessionList: SessionDataType[] | undefined
   onClick: (content: string, sessionId: number) => void
 }) {
+  console.log('드롭다운', sessionList)
   return (
     <>
       {sessionList?.map((session) => (
         <button
           type={'button'}
-          disabled={session.active}
+          disabled={!session.active}
           onClick={() => onClick(`${session.week}주차 ${session.title}`, session.sessionId)}
           key={session.sessionId}
-          className={`${session.active ? 'cursor-not-allowed text-gray-300' : 'text-black'} flex items-center gap-x-1 px-[10px] py-4`}
+          className={`${!session.active ? 'cursor-not-allowed text-gray-300' : 'text-black'} flex items-center gap-x-1 px-[10px] py-[16px]`}
         >
-          <p className="body-lg-regular">{session.week}</p>
           <p className="body-lg-regular">
-            {session.week}주차 {session.title}
+            {formatToMonthDay(session.startDate)} {session.week}주차 {session.title}
           </p>
         </button>
       ))}

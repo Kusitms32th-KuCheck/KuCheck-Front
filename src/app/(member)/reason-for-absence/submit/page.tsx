@@ -43,6 +43,8 @@ export default async function ReasonForAbsenceSubmitPage({ searchParams }: { sea
   const step = (params.step as StepType) || '1' // 기본값
   const sessionDataResponse = await getSessionAbsenceServer()
 
+  console.log('sessionDataResponse', sessionDataResponse)
+
   return (
     <main className="flex flex-1 flex-col pb-30">
       {/* 2. 'step'에 의존하는 부분을 Suspense로 감싸줌. */}
@@ -56,7 +58,7 @@ export default async function ReasonForAbsenceSubmitPage({ searchParams }: { sea
           </>
         )}
         <AbsenceHeader />
-        <ReasonForAbsenceSubmitStepSwitcher step={step} sessionList={sessionDataResponse.data?.data} />
+        <ReasonForAbsenceSubmitStepSwitcher step={step} sessionList={sessionDataResponse.data} />
       </Suspense>
     </main>
   )

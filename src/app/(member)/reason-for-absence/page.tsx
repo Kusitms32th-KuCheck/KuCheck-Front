@@ -5,24 +5,35 @@ import MemberButton from '@/components/member/common/MemberButton'
 import MemberHeader from '@/components/member/common/MemberHeader'
 
 import { HelpCircleIcon } from '@/assets/svgComponents/member'
+import { getAbsence } from '@/lib/member/server/reason-for-absence'
 
 export default async function ReasonForAbsencePage() {
+  const result = await getAbsence(1, 30)
+  const reasonForAbsenceList = result.data?.data
+
   return (
     <main>
       <MemberHeader
         headerType={'dynamic'}
         title={'불참 사유서'}
-        rightElement={<HelpCircleIcon className="absolute right-5" width={20} height={20} />}
+        rightElement={
+          <Link href={'/reason-for-absence/guide'}>
+            <HelpCircleIcon className="absolute right-5" width={20} height={20}></HelpCircleIcon>
+          </Link>
+        }
       />
       {/* 헤더의 높이만큼 공간 확보 */}
       <div className="h-[117px]" />
 
       {/* 불참사유서 제출 기록 */}
       <section className="px-5">
-        <ReasonForAbsenceItem />
-        <ReasonForAbsenceItem />
-        <ReasonForAbsenceItem />
-        <ReasonForAbsenceItem isLastIndex={true} />
+        {reasonForAbsenceList?.map((reasonForAbsence, index) => (
+          <ReasonForAbsenceItem
+            key={reasonForAbsence.absenceReportId}
+            {...reasonForAbsence}
+            isLastIndex={reasonForAbsenceList?.length - 1 === index}
+          />
+        ))}
       </section>
 
       {/* bottom button */}

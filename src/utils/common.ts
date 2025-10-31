@@ -36,28 +36,53 @@ export const convertTimeToISODateTime = (timeInput: string): string => {
 
 /**
  * ISO 8601 형식의 DateTime을 time input 형식으로 변환 (오전/오후 포함)
- * 예: "2025-10-22T17:47:00.000Z" → "오후 5:47"
+ * 한국 시간대(KST, UTC+9) 기준
  */
 export const convertISODateTimeToTime = (isoDateTime: string): string => {
   if (!isoDateTime) return ''
 
   try {
     const date = new Date(isoDateTime)
-    const hours = date.getUTCHours()
-    const minutes = String(date.getUTCMinutes()).padStart(2, '0')
 
-    // 오전/오후 구분
-    const period = hours >= 12 ? '오후' : '오전'
+    // toLocaleString을 사용하여 한국 시간대로 변환
+    const koreaTime = date.toLocaleString('ko-KR', {
+      timeZone: 'Asia/Seoul',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
 
-    // 12시간 형식으로 변환
-    const displayHours = hours % 12 === 0 ? 12 : hours % 12
-
-    return `${period} ${displayHours}:${minutes}`
+    return koreaTime
   } catch (error) {
     console.error('Invalid ISO datetime:', error)
     return ''
   }
 }
+
+/**
+ * YYYY-MM-DD 형식을 MM/DD로 변환
+ * @param dateString - "2025-11-11" 형식의 날짜 문자열
+ * @returns "11/11" 형식의 문자열
+ */
+export const formatToMonthDay = (dateString: string): string => {
+  if (!dateString) return ''
+
+  const [, month, day] = dateString.split('-')
+  return `${month}/${day}`
+}
+
+/**
+ * ISO 8601 타임스탬프에서 MM/DD 형식으로 추출
+ * @param timestamp - ISO 8601 형식의 타임스탬프 (예: 2025-10-28T11:36:11.668882)
+ * @returns MM/DD 형식의 문자열 (예: 10/28)
+ */
+export function formatMonthDay(timestamp: string): string {
+  const date = new Date(timestamp)
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${month}/${day}`
+}
+
 export const changePartEnumToContent = (part: PartType) => {
   switch (part) {
     case 'BACKEND':

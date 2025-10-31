@@ -3,4 +3,5 @@ export interface SessionDataType {
   title: string
   week: number
   active: boolean
+  startDate: string
 }
