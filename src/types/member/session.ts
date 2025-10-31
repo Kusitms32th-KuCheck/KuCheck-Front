@@ -1,4 +1,4 @@
-export interface SessionDataType {
+export interface AbsenceSessionDataType {
   sessionId: number
   title: string
   week: number

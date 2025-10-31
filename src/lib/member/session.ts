@@ -1,11 +1,11 @@
 import { apiCallServer } from '@/lib/api.server'
 import { ApiCallResult } from '@/types/common'
-import { SessionDataType } from '@/types/member/session'
+import { AbsenceSessionDataType } from '@/types/member/session'
 
 /**
  * 불참사유서 Server Component에서 호출 가능 (apiCallServer 사용)
  */
-export const getSessionAbsenceServer = async (): Promise<ApiCallResult<SessionDataType[]>> => {
+export const getSessionAbsenceServer = async (): Promise<ApiCallResult<AbsenceSessionDataType[]>> => {
   try {
     const { data, error } = await apiCallServer('/v1/session/absence', {
       method: 'GET',
