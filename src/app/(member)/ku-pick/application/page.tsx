@@ -14,7 +14,7 @@ export default async function KuPickApplicationPage() {
       <MemberHeader headerType={'dynamic'} title={'신청 사진 업로드'} />
       <div className="h-[116px]" />
       <div className="flex flex-col gap-y-[32px]">
-        <div className="">
+        <div className="px-5">
           <p className="body-lg-semibold text-primary-500">STEP 1</p>
           <div>
             <h1 className="heading-sm-semibold">신청 사진을 업로드해주세요</h1>

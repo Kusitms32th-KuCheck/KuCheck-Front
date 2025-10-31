@@ -87,6 +87,7 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
 
       console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       if (uploadResult.success) {
+        setState({ viewFile: undefined })
         setIsSubmitSuccessOpen(true)
       }
     } catch (error) {
