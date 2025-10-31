@@ -9,12 +9,15 @@ import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
 
 interface CheckTableProps {
   records: CheckDocumentRecord[]
-  totalCount: number
 }
 
-export default function CheckTable({ records, totalCount }: CheckTableProps) {
-  const [selectedMonth, setSelectedMonth] = useState('12월')
+export default function CheckTable({ records }: CheckTableProps) {
+  const fixedMonths = [8, 9, 10, 11]
+  const currentMonth = new Date().getMonth() + 1
+  const defaultMonth = fixedMonths.includes(currentMonth) ? `${currentMonth}월` : '10월'
+  const [selectedMonth, setSelectedMonth] = useState(defaultMonth)
   const [showStickyHeader, setShowStickyHeader] = useState(false)
+  console.log('CheckTable records:', records)
   const gridTemplate =
     'minmax(100px,140px) minmax(120px,641px) minmax(100px,202px) minmax(120px,227px) minmax(120px,227px) minmax(120px,1fr)'
 
@@ -39,11 +42,22 @@ export default function CheckTable({ records, totalCount }: CheckTableProps) {
       <div className="flex items-center gap-2">
         <p className="heading-md-semibold m-0 p-0">{selectedMonth} 큐픽</p>
         <p className="body-lg-semibold m-0 flex h-6 w-[30px] items-center justify-center rounded-full bg-black p-0 text-white">
-          {totalCount}
+          {visibleCount}
         </p>
       </div>
     </>
   )
+
+  const selectedMonthNumber = Number(selectedMonth.replace('월', ''))
+  const visibleRecords = records.filter((r) => {
+    try {
+      const m = Number(r.submitDate?.split?.('-')?.[1] ?? NaN)
+      return Number.isFinite(m) && m === selectedMonthNumber
+    } catch {
+      return false
+    }
+  })
+  const visibleCount = visibleRecords.length
 
   return (
     <div className="flex min-h-[calc(100vh-176px)] flex-col gap-6 rounded-[12px] bg-white pt-7 pb-6">
@@ -61,7 +75,6 @@ export default function CheckTable({ records, totalCount }: CheckTableProps) {
         <Dropdown
           size="lg"
           options={[
-            { label: '12월', value: '12월' },
             { label: '11월', value: '11월' },
             { label: '10월', value: '10월' },
             { label: '9월', value: '9월' },
@@ -78,7 +91,7 @@ export default function CheckTable({ records, totalCount }: CheckTableProps) {
 
       <div className="overflow-x-auto">
         <CheckTableHeader gridTemplate={gridTemplate} />
-        {records.map((record, index) => (
+        {visibleRecords.map((record, index) => (
           <CheckTableRow key={index} record={record} isEven={index % 2 === 0} gridTemplate={gridTemplate} />
         ))}
       </div>
