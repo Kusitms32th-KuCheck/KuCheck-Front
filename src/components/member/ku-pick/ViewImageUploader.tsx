@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useKuPickStore } from '@/store/member/kuPickStore'
 
@@ -31,6 +31,12 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
   const [isSubmitSuccessOpen, setIsSubmitSuccessOpen] = useState(false)
 
   const { uploadFile } = useFileUpload()
+
+  useEffect(() => {
+    return () => {
+      setState({ viewFile: undefined })
+    }
+  }, [])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.currentTarget.files?.[0]
