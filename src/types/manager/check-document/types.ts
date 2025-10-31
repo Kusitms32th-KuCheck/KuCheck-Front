@@ -8,6 +8,11 @@ export interface CheckDocumentRecord {
   approval: boolean
 }
 
+export interface KupicData {
+  kupickId: number
+  approval: boolean
+}
+
 export interface ImageModalProps {
   title?: string
   titles?: string[]

@@ -21,31 +21,3 @@ export const getKupicServer = async (year?: number, month?: number): Promise<Api
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
   }
 }
-
-export const getKupicGroupedMonths = async (
-  year: number,
-  months: number[]
-): Promise<ApiCallResult<Record<number, CheckDocumentRecord[]>>> => {
-  try {
-    const calls = months.map((m) => {
-      const endpoint = `/v1/kupick/manage/update?year=${year}&month=${m}`
-      return apiCallServer<CheckDocumentRecord[]>(endpoint, { method: 'GET' }).then((r) => ({ month: m, result: r }))
-    })
-
-    const results = await Promise.all(calls)
-    const grouped: Record<number, CheckDocumentRecord[]> = {}
-
-    for (const { month, result } of results) {
-      if (result.error) {
-        return { success: false, error: result.error }
-      }
-
-      grouped[month] = result.data ?? []
-    }
-
-    return { success: true, data: grouped }
-  } catch (error) {
-    console.error('Failed to fetch grouped kupic records:', error)
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
-  }
-}

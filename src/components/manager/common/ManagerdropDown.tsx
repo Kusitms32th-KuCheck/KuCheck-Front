@@ -27,6 +27,7 @@ interface DropdownProps {
   showValueInsteadOfLabel?: boolean
   unstyled?: boolean
   triggerClassName?: string
+  disabled?: boolean
 }
 
 export default function Dropdown({
@@ -44,8 +45,17 @@ export default function Dropdown({
   showValueInsteadOfLabel = false,
   unstyled = false,
   triggerClassName = '',
+  disabled = false,
 }: DropdownProps) {
   const [open, setOpen] = useState(false)
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (disabled) {
+      setOpen(false)
+      return
+    }
+    setOpen(newOpen)
+  }
 
   const selectedOption = options.find((o) => o.value === selected)
 
@@ -57,12 +67,12 @@ export default function Dropdown({
 
   const sizeClass = {
     sm: 'h-[36px] w-[140px] px-3 py-2 body-lg-regular',
-    md: 'h-[36px]  gap-3',
+    md: 'h-[36px] gap-3',
     lg: 'h-[40px] w-[216px] px-3 py-2 body-sm-medium',
   }[size]
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger asChild>
         <button
           className={clsx(
@@ -76,8 +86,10 @@ export default function Dropdown({
                 : triggerClassName
               : open
                 ? 'border-black text-black'
-                : 'border-gray-300 text-gray-500'
+                : 'border-gray-300 text-gray-500',
+            disabled && 'pointer-events-none cursor-not-allowed bg-gray-100 opacity-60'
           )}
+          disabled={disabled}
         >
           <div className="flex items-center gap-2">
             {(leftIcon || leftIconActive || icon) && (
@@ -110,11 +122,13 @@ export default function Dropdown({
           <DropdownMenuItem
             key={option.value}
             onSelect={() => onChange(option.value)}
+            disabled={disabled}
             className={clsx(
               'flex cursor-pointer items-center gap-2 rounded-[4px] p-[10px] hover:bg-gray-100 focus:outline-none',
               selected === option.value && 'bg-gray-200',
               size === 'lg' && 'body-lg-regular',
-              size === 'sm' && 'body-md-medium'
+              size === 'sm' && 'body-md-medium',
+              disabled && 'cursor-not-allowed opacity-60'
             )}
           >
             {option.icon && <span>{option.icon}</span>}

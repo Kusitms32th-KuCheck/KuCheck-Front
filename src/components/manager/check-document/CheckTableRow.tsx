@@ -3,7 +3,9 @@ import { useState } from 'react'
 import Dropdown from '../common/ManagerdropDown'
 import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 import ImageModal from '../modal/imageModal'
-import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
+import { useRouter } from 'next/navigation'
+import { postKupicClient } from '@/lib/manager/client/kupic'
+import type { CheckDocumentRecord, KupicData } from '@/types/manager/check-document/types'
 
 interface AbsenceTableRowProps {
   record: CheckDocumentRecord
@@ -29,8 +31,10 @@ const getFileNameFromUrl = (url: string) => {
 }
 
 export default function AbsenceTableRow({ record, isEven, gridTemplate }: AbsenceTableRowProps) {
+  const router = useRouter()
   const initialApprovalValue = record.approval === true ? 'approved' : 'rejected'
   const [selectedScore, setSelectedScore] = useState(initialApprovalValue)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modalIndex, setModalIndex] = useState(0)
@@ -42,6 +46,36 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
   const toImageUrl = (val: string) => {
     if (val && (val.startsWith('http') || val.startsWith('/'))) return val
     return '/png/mock-image-default.png'
+  }
+
+  const handleApprovalChange = async (newValue: string) => {
+    const isApproved = newValue === 'approved'
+    const originalValue = selectedScore
+    setSelectedScore(newValue)
+    setIsLoading(true)
+
+    const kupicData: KupicData = {
+      kupickId: record.kupickId,
+      approval: isApproved,
+    }
+
+    try {
+      const result = await postKupicClient(kupicData)
+      if (!result.success) {
+        console.error('Approval update failed:', result.error)
+        alert(`승인 처리 실패: ${result.error || '알 수 없는 오류'}`)
+        setSelectedScore(originalValue)
+      } else {
+        console.log('Approval updated successfully:', result.data)
+        router.refresh()
+      }
+    } catch (error) {
+      console.error('Network or processing error during approval:', error)
+      alert('네트워크 오류로 승인 처리에 실패했습니다.')
+      setSelectedScore(originalValue)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -93,7 +127,8 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
           <Dropdown
             options={ATTENDANCE_SCORE_OPTIONS}
             selected={selectedScore}
-            onChange={setSelectedScore}
+            onChange={handleApprovalChange}
+            disabled={isLoading}
             rightIcon={<DownIcon width={24} height={24} />}
             rightIconActive={<UpIcon width={24} height={24} />}
             showValueInsteadOfLabel={true}
