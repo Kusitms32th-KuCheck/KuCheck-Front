@@ -1,10 +1,11 @@
 export interface CheckDocumentRecord {
   name: string
   part: string
-  sessionDate: string
-  applicationImage: string
-  viewingImage: string
-  documentStatus?: string
+  kupickId: number
+  submitDate: string
+  applicationUrl: string
+  viewUrl: string
+  approval: boolean
 }
 
 export interface ImageModalProps {

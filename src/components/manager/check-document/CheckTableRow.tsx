@@ -16,18 +16,32 @@ const ATTENDANCE_SCORE_OPTIONS = [
   { label: '미승인', value: 'rejected', displayValue: '미승인' },
 ]
 
+const getFileNameFromUrl = (url: string) => {
+  if (!url) return ''
+  const parts = url.split('/')
+  const fileNameWithQuery = parts[parts.length - 1]
+  if (!fileNameWithQuery) return ''
+  const queryIndex = fileNameWithQuery.indexOf('?')
+  if (queryIndex !== -1) {
+    return fileNameWithQuery.substring(0, queryIndex)
+  }
+  return fileNameWithQuery
+}
+
 export default function AbsenceTableRow({ record, isEven, gridTemplate }: AbsenceTableRowProps) {
-  const [selectedScore, setSelectedScore] = useState('')
+  const initialApprovalValue = record.approval === true ? 'approved' : 'rejected'
+  const [selectedScore, setSelectedScore] = useState(initialApprovalValue)
+
   const [modalOpen, setModalOpen] = useState(false)
   const [modalIndex, setModalIndex] = useState(0)
 
-  const cellData = [record.name, record.part, record.sessionDate, record.applicationImage, record.viewingImage]
+  const formattedSubmitDate = record.submitDate ? record.submitDate.substring(0, 10) : ''
 
-  const toImageUrl = (val: string, seed = 100) => {
-    if (!val) return `/png/mock-image-${seed}.png`
-    if (val.startsWith('http')) return val
-    if (val.startsWith('/')) return val
-    return `/png/mock-image-${seed}.png`
+  const cellData = [record.name, record.part, formattedSubmitDate, record.applicationUrl, record.viewUrl]
+
+  const toImageUrl = (val: string) => {
+    if (val && (val.startsWith('http') || val.startsWith('/'))) return val
+    return '/png/mock-image-default.png'
   }
 
   return (
@@ -41,22 +55,38 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
         {cellData.map((data, index) => {
           if (index === 3 || index === 4) {
             const openIndex = index === 3 ? 0 : 1
+            const fileUrl = data as string
+            const fileName = getFileNameFromUrl(fileUrl)
+
+            const displayFileName = fileName || '미제출'
+            const isSubmitted = !!fileName
+
             return (
               <button
                 key={index}
                 type="button"
                 onClick={() => {
-                  setModalIndex(openIndex)
-                  setModalOpen(true)
+                  if (isSubmitted) {
+                    setModalIndex(openIndex)
+                    setModalOpen(true)
+                  }
                 }}
-                className="body-lg-regular py-[22px] text-start whitespace-nowrap text-gray-800 hover:underline"
+                className={`body-lg-regular overflow-hidden py-[22px] text-start text-ellipsis whitespace-nowrap ${
+                  isSubmitted ? 'text-gray-800 hover:underline' : 'cursor-default text-gray-500'
+                }`}
+                disabled={!isSubmitted}
               >
-                {data}
+                <span className="inline-block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                  {displayFileName}
+                </span>
               </button>
             )
           }
-
-          return <p key={index}>{data}</p>
+          return (
+            <p key={index} className="py-[22px] text-start whitespace-nowrap">
+              {data}
+            </p>
+          )
         })}
 
         <div className="flex items-center justify-between">
@@ -73,8 +103,8 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
       {modalOpen && (
         <ImageModal
           titles={['신청 사진', '시청 사진']}
-          images={[toImageUrl(record.applicationImage, 1), toImageUrl(record.viewingImage, 2)]}
-          footerText={`${record.name}  ${record.sessionDate}`}
+          images={[toImageUrl(record.applicationUrl), toImageUrl(record.viewUrl)]}
+          footerText={`${record.name}  ${formattedSubmitDate}`}
           initialIndex={modalIndex}
           onClose={() => setModalOpen(false)}
           imageClassName="px-0 m-0"
