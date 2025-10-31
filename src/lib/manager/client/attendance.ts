@@ -3,7 +3,7 @@ import { ApiCallResult } from '@/types/common'
 
 export const postClientAttendanceScan = async (token: string): Promise<ApiCallResult<AttendanceScanResponseType>> => {
   try {
-    const response = await fetch('/api/attendance/scan', {
+    const response = await fetch('/api/attendance/manage/scan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

@@ -91,7 +91,7 @@ export default function QRScanner({
 
   return (
     <div className="relative w-full max-w-[1260px] overflow-hidden rounded-[12px] bg-black shadow-md">
-      <video ref={videoRef} className="h-[581px] w-full object-cover" />
+      <video ref={videoRef} className="h-full w-full object-cover" />
 
       <div ref={containerRef} className="pointer-events-none absolute inset-0">
         {maskRect ? (
@@ -128,7 +128,7 @@ export default function QRScanner({
         )}
       </div>
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div ref={guideRef} className="relative h-[360px] w-[360px]">
+        <div ref={guideRef} className="relative h-[450px] w-[450px]">
           {cornerPositions.map(([vpos, hpos]) => (
             <div key={`${vpos}-${hpos}`} className={`absolute ${vpos}-0 ${hpos}-0 h-12 w-12`}>
               <div className={`absolute ${vpos}-0 ${hpos}-0 h-[5px] w-9 ${cornerColor}`} />
