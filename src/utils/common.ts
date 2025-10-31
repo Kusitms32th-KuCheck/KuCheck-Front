@@ -83,6 +83,22 @@ export function formatMonthDay(timestamp: string): string {
   return `${month}/${day}`
 }
 
+/**
+ * ISO 8601 형식의 타임스탬프를 "M/D HH:mm" 형식으로 변환
+ * @param isoString - ISO 8601 형식의 날짜 문자열 (예: "2025-11-01T03:18:38.482258")
+ * @returns 포맷된 날짜 문자열 (예: "11/1 03:18")
+ */
+export const formatDateTime = (isoString: string): string => {
+  const date = new Date(isoString)
+
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+
+  return `${month}/${day} ${hours}:${minutes}`
+}
+
 export const changePartEnumToContent = (part: PartType) => {
   switch (part) {
     case 'BACKEND':

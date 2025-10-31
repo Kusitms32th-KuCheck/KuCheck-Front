@@ -3,6 +3,8 @@ import UserSummaryCard from '@/components/member/attendance/UserSummaryCard'
 
 import { postServerAttendanceToken } from '@/lib/member/server/attendance'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AttendanceCheckPage() {
   const result = await postServerAttendanceToken()
 

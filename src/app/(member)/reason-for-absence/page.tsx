@@ -7,6 +7,8 @@ import MemberHeader from '@/components/member/common/MemberHeader'
 import { HelpCircleIcon } from '@/assets/svgComponents/member'
 import { getAbsence } from '@/lib/member/server/reason-for-absence'
 
+export const dynamic = 'force-dynamic'
+
 export default async function ReasonForAbsencePage() {
   const result = await getAbsence(1, 30)
   const reasonForAbsenceList = result.data?.data
