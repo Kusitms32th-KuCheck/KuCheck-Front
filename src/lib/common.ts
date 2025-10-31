@@ -6,7 +6,6 @@
  */
 
 import { SignUpDataType } from '@/types/sign-up'
-import { ApiCallResult, PreSignedUrlResponseType } from '@/types/common'
 
 /**
  * 온보딩 정보 제출 (클라이언트에서 호출)

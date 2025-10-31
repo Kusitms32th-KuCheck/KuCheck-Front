@@ -10,7 +10,7 @@
  * // 'use client' 컴포넌트에서 import
  */
 
-import { getAccessTokenServer, refreshAccessTokenServer, clearAuthCookiesServer } from './auth.server'
+import { getAccessTokenServer, refreshAccessTokenServer } from './auth.server'
 import { parseJsonResponse } from './api'
 import { ApiCallResult } from '@/types/common'
 
@@ -73,8 +73,14 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
         cache: 'no-store',
       })
     } else {
-      // 토큰 갱신 실패 - 쿠키 삭제 및 에러 반환
-      await clearAuthCookiesServer()
+      // 토큰 갱신 실패 - Route Handler로 쿠키 삭제
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/cookies`, {
+          method: 'DELETE',
+        })
+      } catch (error) {
+        console.error('Failed to clear cookies:', error)
+      }
     }
   }
 
