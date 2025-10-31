@@ -1,6 +1,6 @@
 'use server'
 
-import { postAuthLogout } from '@/lib/member/client/auth'
+import { postAuthLogout, postAuthWithDraw } from '@/lib/member/client/auth'
 import { clearAuthCookiesServer, getRefreshTokenServer } from '@/lib/auth.server'
 import { redirect } from 'next/navigation'
 
@@ -14,6 +14,20 @@ export async function handleLogoutAction() {
     redirect('/')
   } catch (error) {
     console.error('로그아웃 실패:', error)
+    throw error
+  }
+}
+
+export async function handleWithDrawAction() {
+  try {
+    const refreshToken = await getRefreshTokenServer()
+    const result = await postAuthWithDraw(refreshToken)
+    console.log('탈퇴 response:', result)
+
+    await clearAuthCookiesServer()
+    redirect('/')
+  } catch (error) {
+    console.error('탈퇴 실패:', error)
     throw error
   }
 }

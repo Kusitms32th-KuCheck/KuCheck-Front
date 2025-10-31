@@ -5,6 +5,7 @@ import { useState } from 'react'
 import LogoutModal from '@/components/member/modal/LogoutModal'
 
 import { handleLogoutAction } from '@/lib/member/actions/auth'
+import Link from 'next/link'
 
 export default function AccountSettingContainer() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
@@ -35,7 +36,9 @@ export default function AccountSettingContainer() {
           >
             {isLoading ? '로그아웃 중...' : '로그아웃'}
           </button>
-          <button className="body-lg-regular flex cursor-pointer items-start">탈퇴하기</button>
+          <Link href={'/setting/withdraw'} className="body-lg-regular flex cursor-pointer items-start">
+            탈퇴하기
+          </Link>
         </div>
       </section>
     </>
