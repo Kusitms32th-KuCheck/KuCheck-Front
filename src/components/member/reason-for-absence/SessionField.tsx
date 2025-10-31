@@ -8,13 +8,13 @@ import MemberDropDown from '@/components/member/common/MemberDropDown'
 
 import { useAbsenceStore } from '@/store/member/absenceStore'
 
-import { SessionDataType } from '@/types/member/session'
+import { AbsenceSessionDataType } from '@/types/member/session'
 import { formatToMonthDay } from '@/utils/common'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
 interface SessionFieldProps {
-  sessionList: SessionDataType[] | undefined
+  sessionList: AbsenceSessionDataType[] | undefined
 }
 
 export default function SessionField({ sessionList }: SessionFieldProps) {
@@ -89,7 +89,7 @@ function MemberDropDownContent({
   sessionList,
   onClick,
 }: {
-  sessionList: SessionDataType[] | undefined
+  sessionList: AbsenceSessionDataType[] | undefined
   onClick: (content: string, sessionId: number) => void
 }) {
   console.log('드롭다운', sessionList)

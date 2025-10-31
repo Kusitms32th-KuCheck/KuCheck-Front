@@ -5,12 +5,16 @@ import SessionScheduleCard from '@/components/member/home/SessionScheduleCard'
 import AttendanceQRCard from '@/components/member/home/AttendanceQRCard'
 import NoticeCard from '@/components/member/home/NoticeCard'
 import Banner from '@/components/member/home/Banner'
+import { getSessionThisWeek } from '@/lib/member/server/session'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const result = await getProfileSummary()
-  const userData = result.data
+  const profileSummaryResult = await getProfileSummary()
+  const sessionResult = await getSessionThisWeek()
+
+  const userData = profileSummaryResult.data
+  const sessionData = sessionResult.data
 
   if (!userData) {
     return (
@@ -31,7 +35,7 @@ export default async function HomePage() {
         part={userData?.part}
       />
       <div className="flex gap-x-[10px]">
-        <SessionScheduleCard />
+        <SessionScheduleCard sessionData={sessionData ? sessionData[0] : undefined} />
         <AttendanceQRCard />
       </div>
       <NoticeCard />

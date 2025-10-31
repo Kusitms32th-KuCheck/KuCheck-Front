@@ -11,7 +11,7 @@ import AbsenceHeader from '@/components/member/reason-for-absence/AbsenceHeader'
 
 import { getSessionAbsenceServer } from '@/lib/member/session'
 
-import { SessionDataType } from '@/types/member/session'
+import { AbsenceSessionDataType } from '@/types/member/session'
 import { SearchParams } from '@/types/common'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
@@ -25,7 +25,7 @@ function ReasonForAbsenceSubmitStepSwitcher({
   sessionList,
 }: {
   step: StepType
-  sessionList: SessionDataType[] | undefined
+  sessionList: AbsenceSessionDataType[] | undefined
 }) {
   if (step === '1') return <SessionField sessionList={sessionList} />
   if (step === '2') return <AttendanceTypeSelector />

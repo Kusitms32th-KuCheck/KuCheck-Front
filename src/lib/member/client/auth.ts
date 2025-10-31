@@ -1,6 +1,6 @@
 import { ApiCallResult, ApiResponse } from '@/types/common'
 
-export const postAuthLogout = async (refreshToken: string | undefined): Promise<ApiCallResult<ApiResponse<string>>> => {
+export const postAuthLogout = async (refreshToken: string | null): Promise<ApiCallResult<ApiResponse<string>>> => {
   try {
     const response = await fetch(`/api/auth/logout?refreshToken=${refreshToken}`, {
       method: 'POST',
@@ -27,9 +27,7 @@ export const postAuthLogout = async (refreshToken: string | undefined): Promise<
     }
   }
 }
-export const postAuthWithDraw = async (
-  refreshToken: string | undefined
-): Promise<ApiCallResult<ApiResponse<string>>> => {
+export const postAuthWithDraw = async (refreshToken: string | null): Promise<ApiCallResult<ApiResponse<string>>> => {
   try {
     const response = await fetch(`/api/auth/withdraw?refreshToken=${refreshToken}`, {
       method: 'POST',
