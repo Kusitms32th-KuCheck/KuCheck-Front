@@ -2,7 +2,7 @@ import { ApiCallResult } from '@/types/common'
 
 export const getMembersProfileImageUrl = async (
   fileName: string | undefined
-): Promise<ApiCallResult<ApiCallResult<{ preSignedUrl: string }>>> => {
+): Promise<ApiCallResult<ApiCallResult<{ newUrl: string; oldUrl: string }>>> => {
   try {
     const response = await fetch(`/api/members/profile/image/url?fileName=${fileName}`, {
       method: 'GET',

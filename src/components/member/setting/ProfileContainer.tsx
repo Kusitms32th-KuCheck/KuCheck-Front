@@ -48,7 +48,7 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
           const extension = extractFileExtension(selectedFile.name)
           console.log(`profile.${extension}`)
           const presignedResponse = await getMembersProfileImageUrl(`profile.${extension}`)
-          console.log('presignedResponse', presignedResponse.data?.data?.preSignedUrl)
+          console.log('presignedResponse', presignedResponse.data?.data?.newUrl)
 
           if (!presignedResponse.success) {
             throw new Error('프리사인드 URL 요청 실패')
@@ -56,10 +56,10 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
 
           console.log('fileInfo', fileInfo)
           // 3. S3에 파일 업로드
-          if (selectedFile && presignedResponse.data?.data?.preSignedUrl) {
+          if (selectedFile && presignedResponse.data?.data?.newUrl) {
             console.log('통과')
             const uploadResult = await uploadFile(fileInfo, {
-              preSignedUrl: presignedResponse?.data?.data?.preSignedUrl,
+              preSignedUrl: presignedResponse?.data?.data?.newUrl,
             })
             if (!uploadResult.success) {
               throw new Error('파일 업로드 실패')

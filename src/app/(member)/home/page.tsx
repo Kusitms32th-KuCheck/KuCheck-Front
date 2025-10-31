@@ -22,7 +22,12 @@ export default async function HomePage() {
 
   return (
     <div className="mt-[24px] flex flex-col gap-y-[10px] px-5 pb-[40px]">
-      <ProfileCard name={userData?.name} totalPoints={userData?.totalPoints} part={userData?.part} />
+      <ProfileCard
+        profileImage={userData.profileImage}
+        name={userData?.name}
+        totalPoints={userData?.totalPoints}
+        part={userData?.part}
+      />
       <div className="flex gap-x-[10px]">
         <SessionScheduleCard />
         <AttendanceQRCard />
