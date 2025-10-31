@@ -23,11 +23,14 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
 
   return (
     <div className="flex w-full flex-col justify-between gap-y-[29px] rounded-[16px] bg-white px-[14px] pt-[17px] pb-[10px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]">
-      <div className="flex items-start">
-        <div className="flex h-[24px] w-[24px] items-center justify-center">
-          <ScheduleIcon width={14} height={14} />
+      <div className="flex items-start justify-between">
+        <div className="flex items-start">
+          <div className="flex h-[24px] w-[24px] items-center justify-center">
+            <ScheduleIcon width={14} height={14} />
+          </div>
+          <p className="body-lg-semibold pl-[5px]">{sessionData?.title}</p>
         </div>
-        <p className="body-lg-semibold pl-[5px]">{sessionData?.title}</p>
+
         <Link href={'/session'}>
           <ChevronRightIcon className="ml-[19px]" width={24} height={24} />
         </Link>
