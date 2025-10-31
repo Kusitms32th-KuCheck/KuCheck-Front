@@ -1,17 +1,18 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { PenaltyPointIcon, RewardPointIcon } from '@/assets/svgComponents'
-
 import MemberButton from '@/components/member/common/MemberButton'
-import AttendanceItem from '@/components/member/attendance/AttendanceItem'
 
+import AttendanceItem from '@/components/member/attendance/AttendanceItem'
 import { getPointsHistory } from '@/lib/member/client/attendance'
 
 export default function MyAttendancePage() {
   const observerTarget = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useInfiniteQuery({
     queryKey: ['pointsHistory'],
@@ -133,7 +134,15 @@ export default function MyAttendancePage() {
       <div className="h-[100px]" />
 
       <section className="desktop:absolute ios:fixed android:fixed bg-background1 bottom-0 z-10 flex h-[100px] w-full items-center justify-center px-5">
-        <MemberButton buttonType={'button'} styleType={'primary'} styleSize={'lg'} styleStatus={'default'}>
+        <MemberButton
+          onClick={() => {
+            router.push('/ku-pick')
+          }}
+          buttonType={'button'}
+          styleType={'primary'}
+          styleSize={'lg'}
+          styleStatus={'default'}
+        >
           큐픽 제출하기
         </MemberButton>
       </section>
