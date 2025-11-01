@@ -168,7 +168,7 @@ export default function AttendanceTypeSelector() {
       </Drawer>
 
       {/* bottom button */}
-      <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
+      <section className="fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <MemberButton
           disabled={!absenceData?.absenceType}
           styleType="primary"
@@ -203,7 +203,7 @@ function LateDateTimeSelector({
       />
       <DrawerClose asChild>
         <button
-          className="bg-primary-500 w-full rounded-[8px] px-6 py-3 font-semibold text-white"
+          className="bg-primary-500 w-full rounded-[8px] px-6 pt-3 pb-[36px] font-semibold text-white"
           type="button"
           onClick={onClose}
         >
@@ -232,7 +232,7 @@ function LeaveDateTimeSelector({
       />
       <DrawerClose asChild>
         <button
-          className="bg-primary-500 rounded-[8px] px-6 py-3 font-semibold text-white"
+          className="bg-primary-500 rounded-[8px] px-6 pt-3 pb-[36px] font-semibold text-white"
           type="button"
           onClick={onClose}
         >

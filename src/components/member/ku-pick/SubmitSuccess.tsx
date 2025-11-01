@@ -20,7 +20,7 @@ export default function SubmitSuccess({ setIsSubmitSuccessOpen }: SubmitSuccessP
         <p className="heading-sm-semibold text-primary-500">제출이 완료되었어요</p>
       </section>
 
-      <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
+      <section className="fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <MemberButton
           onClick={() => {
             setIsSubmitSuccessOpen(false)

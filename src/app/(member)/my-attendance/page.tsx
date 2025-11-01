@@ -133,7 +133,7 @@ export default function MyAttendancePage() {
 
       <div className="h-[100px]" />
 
-      <section className="desktop:absolute ios:fixed android:fixed bg-background1 bottom-0 z-10 flex h-[100px] w-full items-center justify-center px-5">
+      <section className="desktop:absolute ios:fixed android:fixed bg-background1 bottom-0 z-10 flex w-full items-center justify-center bg-white px-5 pb-[36px]">
         <MemberButton
           onClick={() => {
             router.push('/ku-pick')

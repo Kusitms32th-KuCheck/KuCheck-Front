@@ -46,7 +46,7 @@ export default function MajorField() {
       </section>
 
       {/* bottom button */}
-      <section className="fixed bottom-[24px] w-full bg-white px-5">
+      <section className="fixed bottom-[36px] w-full bg-white px-5">
         <MemberButton
           styleSize={'lg'}
           buttonType={'button'}

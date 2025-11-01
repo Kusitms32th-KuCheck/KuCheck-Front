@@ -43,7 +43,7 @@ export default function WithDrawPage() {
           </li>
         </ul>
       </ul>
-      <div className="fixed bottom-[24px] flex w-full gap-x-[10px] bg-white px-5">
+      <div className="fixed bottom-[36px] flex w-full gap-x-[10px] bg-white px-5">
         <button
           onClick={() => {
             router.back()

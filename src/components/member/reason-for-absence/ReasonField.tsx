@@ -45,7 +45,7 @@ export default function ReasonField() {
       </section>
 
       {/* bottom button */}
-      <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
+      <section className="fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <MemberButton
           disabled={!absenceData?.reason}
           styleSize={'lg'}
