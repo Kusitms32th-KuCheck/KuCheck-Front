@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
       // 승인됨 - 역할에 따라 분기
       if (role === 'USER') {
         return redirect('/home')
-      } else if (role === 'ADMIN') {
+      } else if (role === 'MANAGEMENT') {
         return redirect('/manager')
       } else {
         console.warn('Unexpected role:', role)

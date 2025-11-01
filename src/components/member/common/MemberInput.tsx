@@ -19,6 +19,7 @@ interface MemberInputProps {
   type?: 'text' | 'password' | 'email' | 'tel' | 'date' | 'number' | 'time'
   customClassName?: string
   readonly?: boolean
+  onFocus?: () => void
 }
 
 const MemberInput = ({
@@ -33,6 +34,7 @@ const MemberInput = ({
   type = 'text',
   customClassName,
   onClick,
+  onFocus,
 }: MemberInputProps) => {
   const inputBoxBase =
     'border py-[14px] px-[12px] body-md-regular placeholder:text-gray-400 flex gap-x-2 rounded-[12px] items-center bg-white'
