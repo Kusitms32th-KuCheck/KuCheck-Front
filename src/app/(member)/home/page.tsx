@@ -14,20 +14,10 @@ export default async function HomePage() {
   const userData = profileSummaryResult.data
   const sessionData = sessionResult.data
 
-  if (!userData) {
-    return (
-      <div className="mt-[24px] flex flex-col gap-y-[10px] px-5 pb-[40px]">
-        <div className="flex justify-center py-4">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="mt-[24px] flex flex-col gap-y-[10px] px-5 pb-[40px]">
       <ProfileCard
-        profileImage={userData.profileImage}
+        profileImage={userData?.profileImage}
         name={userData?.name}
         totalPoints={userData?.totalPoints}
         part={userData?.part}

@@ -1,8 +1,8 @@
 import { PartType } from '@/types/common'
 
 export interface UserSummaryType {
-  name: string
-  part: PartType
-  totalPoints: number
-  profileImage: string
+  name: string | undefined
+  part: PartType | undefined
+  totalPoints: number | undefined
+  profileImage: string | undefined
 }

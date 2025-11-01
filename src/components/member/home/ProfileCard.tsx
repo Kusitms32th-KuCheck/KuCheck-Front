@@ -1,9 +1,6 @@
 import Link from 'next/link'
 
-import { CalendarIcon } from '@/assets/svgComponents'
-
 import MemberTag from '@/components/member/common/MemberTag'
-import MemberButton from '@/components/member/common/MemberButton'
 
 import { UserSummaryType } from '@/types/member/user'
 
@@ -16,15 +13,19 @@ export default function ProfileCard({ name, part, totalPoints, profileImage }: P
   return (
     <div className="relative flex flex-col gap-y-2 rounded-[16px] bg-white py-[11px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]">
       <section className="flex items-center gap-x-[14px] px-[18px] py-[10px]">
-        <div className="relative h-[85px] w-[85px]">
-          <Image src={profileImage} alt={'프로필사진'} fill className="rounded-full object-cover"></Image>
-        </div>
+        {profileImage && (
+          <div className="relative h-[85px] w-[85px]">
+            <Image src={profileImage} alt={'프로필사진'} fill className="rounded-full object-cover"></Image>
+          </div>
+        )}
         <div className="flex flex-col">
           <div className="flex items-center gap-x-2">
             <p className="heading-md-semibold">{name}</p>
-            <MemberTag type={'primary'} status={'default'}>
-              {changePartEnumToContent(part)}
-            </MemberTag>
+            {part && (
+              <MemberTag type={'primary'} status={'default'}>
+                {changePartEnumToContent(part)}
+              </MemberTag>
+            )}
           </div>
           <div className="flex gap-x-2">
             <p className="body-sm-semibold text-gray-600">상벌점</p>
