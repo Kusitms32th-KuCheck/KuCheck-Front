@@ -45,10 +45,10 @@ const MemberHeader = ({
             </Link>
             <div className="flex items-center gap-x-[22px]">
               <Link href={'/alarm'} className="flex h-[24px] w-[24px] items-center justify-center">
-                <NotificationIcon width={17} height={20}></NotificationIcon>
+                <NotificationIcon width={32} height={32}></NotificationIcon>
               </Link>
               <Link href={'/setting'} className="flex h-[24px] w-[24px] items-center justify-center">
-                <SettingIcon width={17} height={19}></SettingIcon>
+                <SettingIcon width={32} height={32}></SettingIcon>
               </Link>
             </div>
           </div>
