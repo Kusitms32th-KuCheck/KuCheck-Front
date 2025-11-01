@@ -45,7 +45,7 @@ const MemberHeader = ({
             </Link>
             <div className="flex items-center gap-x-[22px]">
               <Link href={'/alarm'} className="flex h-[24px] w-[24px] items-center justify-center">
-                <NotificationIcon width={29} height={29}></NotificationIcon>
+                <NotificationIcon width={26} height={26}></NotificationIcon>
               </Link>
               <Link href={'/setting'} className="flex h-[24px] w-[24px] items-center justify-center">
                 <SettingIcon width={32} height={32}></SettingIcon>
