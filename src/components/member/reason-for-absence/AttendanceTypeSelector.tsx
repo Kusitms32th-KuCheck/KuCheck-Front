@@ -198,7 +198,7 @@ function LateDateTimeSelector({
       <input
         onChange={(e) => onChangeValue('lateDateTime', e.target.value)}
         placeholder="시간을 선택해 주세요"
-        className="body-lg-medium rounded-[8px] border border-gray-200 px-4 py-3 placeholder:text-gray-400"
+        className="heading-md-medium rounded-[8px] border border-gray-200 px-4 py-4 placeholder:text-gray-400"
         type="time"
       />
       <DrawerClose asChild>
@@ -227,7 +227,7 @@ function LeaveDateTimeSelector({
       <input
         onChange={(e) => onChangeValue('leaveDateTime', e.target.value)}
         placeholder="시간을 선택해 주세요"
-        className="body-lg-medium rounded-[8px] border border-gray-200 px-4 py-3 placeholder:text-gray-400"
+        className="heading-md-medium rounded-[8px] border border-gray-200 px-4 py-4 placeholder:text-gray-400"
         type="time"
       />
       <DrawerClose asChild>

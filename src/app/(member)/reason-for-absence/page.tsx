@@ -61,9 +61,9 @@ export default async function ReasonForAbsencePage() {
       </section>
 
       {/* bottom button */}
-      <section className="fixed bottom-0 w-full border-t border-gray-200 bg-white px-5 pb-[24px]">
+      <section className="fixed bottom-0 w-full bg-white px-5 pb-[24px]">
         <Link
-          className="bg-primary-500 body-lg-semibold flex h-[48px] w-full items-center justify-center rounded-[14px]"
+          className="bg-primary-500 body-lg-semibold flex h-[48px] w-full items-center justify-center rounded-[14px] text-white"
           href={'/reason-for-absence/submit'}
         >
           불참 사유서 제출하기
