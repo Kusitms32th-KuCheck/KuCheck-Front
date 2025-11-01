@@ -1,7 +1,6 @@
 import Link from 'next/link'
 
 import ReasonForAbsenceItem from '@/components/member/reason-for-absence/ReasonForAbsenceItem'
-import MemberButton from '@/components/member/common/MemberButton'
 import MemberHeader from '@/components/member/common/MemberHeader'
 
 import { HelpCircleIcon } from '@/assets/svgComponents/member'
@@ -63,9 +62,12 @@ export default async function ReasonForAbsencePage() {
 
       {/* bottom button */}
       <section className="fixed bottom-0 w-full border-t border-gray-200 bg-white px-5 pb-[24px]">
-        <MemberButton styleType={'primary'} buttonType={'button'} styleSize={'lg'} styleStatus={'default'}>
-          <Link href={'/reason-for-absence/submit'}>불참 사유서 제출하기</Link>
-        </MemberButton>
+        <Link
+          className="bg-primary-500 body-lg-semibold flex h-[48px] w-full items-center justify-center rounded-[14px]"
+          href={'/reason-for-absence/submit'}
+        >
+          불참 사유서 제출하기
+        </Link>
       </section>
     </main>
   )
