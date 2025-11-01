@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import MemberButton from '@/components/member/common/MemberButton'
 import MemberDropDown from '@/components/member/common/MemberDropDown'
