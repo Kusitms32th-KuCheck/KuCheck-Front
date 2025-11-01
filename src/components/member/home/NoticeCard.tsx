@@ -7,7 +7,7 @@ export default function NoticeCard() {
     <div className="flex flex-col gap-y-[6px] rounded-[16px] bg-white pt-[15px] pb-[5px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]">
       <div className="flex justify-between px-4">
         <div className="flex items-center gap-x-2">
-          <NoticeIcon width={20} height={20} />
+          <NoticeIcon width={21} height={21} />
           <p className="body-lg-semibold">공지사항</p>
         </div>
         <Link href={'/notice'}>

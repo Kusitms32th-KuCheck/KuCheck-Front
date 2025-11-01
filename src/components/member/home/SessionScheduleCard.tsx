@@ -26,7 +26,7 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
       <div className="flex items-start justify-between">
         <div className="flex items-start">
           <div className="flex h-[24px] w-[24px] items-center justify-center">
-            <ScheduleIcon width={14} height={14} />
+            <ScheduleIcon width={15} height={15} />
           </div>
           <p className="body-lg-semibold pl-[5px]">{sessionData?.title}</p>
         </div>
