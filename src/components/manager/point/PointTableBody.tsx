@@ -10,9 +10,10 @@ import type { PointMemberStatus } from '@/types/manager/point/types'
 
 type Props = {
   containerRef?: React.RefObject<HTMLDivElement | null>
+  isHorizScrolled?: boolean
 }
 
-export default function PointTableBody({ containerRef }: Props) {
+export default function PointTableBody({ containerRef, isHorizScrolled }: Props) {
   const {
     members,
     setMembers,
@@ -48,6 +49,7 @@ export default function PointTableBody({ containerRef }: Props) {
     handleTfChange,
     handleQpickChange,
     handleSessionChange,
+    handleNoteChange,
     handleSave,
   } = handlers
 
@@ -101,7 +103,7 @@ export default function PointTableBody({ containerRef }: Props) {
   }
 
   return (
-    <div className="mx-[38px] mb-6 min-h-0 flex-1">
+    <div className="mx-[24px] mb-6 min-h-0 flex-1">
       {showToastOnce && <BottomToast message={DEFAULT_SHIFT_WHEEL_MESSAGE} duration={3000} />}
       <div ref={containerRef} className="scrollbar-custom h-full overflow-auto rounded-b-[12px] bg-white">
         <div style={{ minWidth: contentMinWidth }}>
@@ -117,9 +119,11 @@ export default function PointTableBody({ containerRef }: Props) {
               onSessionChange={handleSessionChange(isEditMode)}
               onTfChange={handleTfChange}
               onQpickChange={handleQpickChange}
+              onNoteChange={handleNoteChange}
               modifiedCells={modifiedCells}
               gridTemplate={gridTemplate}
               collapsedMonths={collapsedMonths}
+              isHorizScrolled={isHorizScrolled}
             />
           ))}
         </div>

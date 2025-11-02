@@ -23,6 +23,8 @@ export interface PointMemberStatus {
   phone: string
   school: string
   major: string
+  // 비고
+  note?: string
 }
 
 export interface VisibleDate {

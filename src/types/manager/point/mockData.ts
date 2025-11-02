@@ -84,13 +84,14 @@ export const generateMockData = (): PointMemberStatus[] => {
       qpick_september: Math.random() > 0.3 ? '참여' : '-',
       qpick_october: Math.random() > 0.3 ? '참여' : '-',
       qpick_november: Math.random() > 0.3 ? '참여' : '-',
-      tf: Math.random() > 0.5 ? '2' : '-',
+      tf: Math.random() > 0.5 ? '2' : '0',
       study: Math.random() > 0.6 ? '1' : '-',
       qporters: Math.random() > 0.7 ? '1' : '-',
       is_manager: index < 3,
       phone: `010-${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}`,
       school: schools[index % schools.length],
       major: majors[index % majors.length],
+      note: '',
     }
   })
 }

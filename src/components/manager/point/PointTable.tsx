@@ -11,7 +11,7 @@ import useScrollSync from '@/utils/manager/useScrollSync'
 export default function PointTable() {
   const { collapsedMonths, toggleCollapsedMonth } = usePointTableStore()
   const setMembers = usePointTableStore((s) => s.setMembers)
-  const { containerRef, headerScrollRef, isScrolled } = useScrollSync()
+  const { containerRef, headerScrollRef, isScrolled, isHorizScrolled } = useScrollSync()
   const visibleDates = computeVisibleDates(collapsedMonths)
   const gridTemplate = computeGridTemplate(visibleDates)
   const contentMinWidth = computeMinWidth(gridTemplate)
@@ -31,11 +31,12 @@ export default function PointTable() {
           onToggleMonth={toggleMonth}
           gridTemplate={gridTemplate}
           isScrolled={isScrolled}
+          isHorizScrolled={isHorizScrolled}
           contentMinWidth={contentMinWidth}
           headerScrollRef={headerScrollRef}
         />
 
-        <PointTableBody containerRef={containerRef} />
+        <PointTableBody containerRef={containerRef} isHorizScrolled={isHorizScrolled} />
       </div>
     </div>
   )

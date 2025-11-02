@@ -16,8 +16,10 @@ interface PointTableRowProps {
   modifiedCells: Record<string, boolean>
   onTfChange?: (memberIndex: number, checked: boolean) => void
   onQpickChange?: (memberIndex: number, monthKey: 'september' | 'october' | 'november', checked: boolean) => void
+  onNoteChange?: (memberIndex: number, value: string) => void
   gridTemplate: string
   collapsedMonths: Set<string>
+  isHorizScrolled?: boolean
 }
 
 export default function PointTableRow({
@@ -31,19 +33,30 @@ export default function PointTableRow({
   modifiedCells,
   onTfChange,
   onQpickChange,
+  onNoteChange,
   gridTemplate,
   collapsedMonths,
+  isHorizScrolled,
 }: PointTableRowProps) {
   const baseBg = memberIndex % 2 === 0 ? 'bg-white' : 'bg-background1'
   const isStudyModified = Boolean(modifiedCells && modifiedCells[`${memberIndex}-study`])
   const isQportersModified = Boolean(modifiedCells && modifiedCells[`${memberIndex}-qporters`])
+  const isNoteModified = Boolean(modifiedCells && modifiedCells[`${memberIndex}-note`])
   return (
     <div className={`group grid cursor-default items-center gap-0`} style={{ gridTemplateColumns: gridTemplate }}>
-      <p
-        className={`body-lg-medium flex h-[52px] items-center border-r border-gray-200 px-[30px] text-start text-gray-900 ${baseBg} group-hover:bg-gray-100`}
-      >
-        {member.name}
-      </p>
+      <div className={`relative sticky left-0 z-10 h-[52px]`}>
+        <p
+          className={`body-lg-medium flex h-[52px] items-center border-r border-gray-200 px-[30px] text-start text-gray-900 ${
+            baseBg
+          } group-hover:bg-gray-100 ${
+            isHorizScrolled
+              ? 'after:pointer-events-none after:absolute after:top-0 after:-right-[20px] after:bottom-0 after:w-[20px] after:bg-gradient-to-r after:from-black/10 after:to-transparent'
+              : ''
+          }`}
+        >
+          {member.name}
+        </p>
+      </div>
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >
@@ -54,7 +67,6 @@ export default function PointTableRow({
       >
         {member.part}
       </p>
-
       {visibleDates.map((item, dateIndex) => {
         if (item.month) {
           let monthScore = 0
@@ -89,12 +101,11 @@ export default function PointTableRow({
               value={value}
               isModified={isModified}
               onChange={(v) => onSessionChange(memberIndex, date, v)}
-              className={`w-full border-r border-gray-200 group-hover:bg-gray-100 ${baseBg} px-[13px]`}
+              className={`w-full border-r border-gray-200 group-hover:bg-gray-100 ${baseBg} `}
             />
           </div>
         )
       })}
-
       {(
         [
           { key: 'qpick_september', value: member.qpick_september, type: 'qpick', month: 'september' },
@@ -146,6 +157,14 @@ export default function PointTableRow({
       >
         {member.is_manager ? '운영진(1)' : '학회원'}
       </p>
+      <EditableTextCell
+        key={`note-${memberIndex}`}
+        isEditMode={isEditMode}
+        value={member.note ?? ''}
+        isModified={isNoteModified}
+        onChange={(v) => onNoteChange && onNoteChange(memberIndex, v)}
+        className={`body-lg-medium flex h-[52px] w-[340px] items-center justify-end border-r border-gray-200 px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+      />
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >

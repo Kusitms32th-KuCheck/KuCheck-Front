@@ -30,6 +30,10 @@ export default function usePointStatusHandlers({
     updateMember(memberIndex, { qporters: value }, `${memberIndex}-qporters`)
   }
 
+  const handleNoteChange = (memberIndex: number, value: string) => {
+    updateMember(memberIndex, { note: value }, `${memberIndex}-note`)
+  }
+
   const handleTfChange = (memberIndex: number, checked: boolean) => {
     updateMember(memberIndex, { tf: checked ? '2' : '-' }, `${memberIndex}-tf`)
   }
@@ -58,6 +62,7 @@ export default function usePointStatusHandlers({
   return {
     handleStudyChange,
     handleQportersChange,
+    handleNoteChange,
     handleTfChange,
     handleQpickChange,
     handleSessionChange,

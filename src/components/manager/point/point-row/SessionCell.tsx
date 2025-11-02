@@ -36,7 +36,7 @@ export default function SessionCell({
           />
         </div>
       ) : (
-        <p className={`body-lg-medium flex h-[52px] w-full items-center justify-end`}>{value || ''}</p>
+        <p className={`body-lg-medium flex h-[52px] w-full items-center justify-end px-[13px]`}>{value || ''}</p>
       )}
     </div>
   )

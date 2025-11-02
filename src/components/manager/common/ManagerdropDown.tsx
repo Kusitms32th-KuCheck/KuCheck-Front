@@ -67,7 +67,7 @@ export default function Dropdown({
 
   const sizeClass = {
     sm: 'h-[36px] w-[140px] px-3 py-2 body-lg-regular',
-    md: 'h-[36px] gap-3',
+    md: 'h-[36px] gap-3 px-[13px]',
     lg: 'h-[40px] w-[216px] px-3 py-2 body-sm-medium',
   }[size]
 
