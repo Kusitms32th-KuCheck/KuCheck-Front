@@ -22,7 +22,7 @@ export default function SessionCell({
   return (
     <div className={className}>
       {isEditMode ? (
-        <div className={`flex h-[52px] w-full items-center justify-end`}>
+        <div className={`flex h-[52px] w-full items-center justify-end pl-[13px]`}>
           <Dropdown
             unstyled
             triggerClassName={isModified ? 'body-lg-semibold text-primary-500 ' : 'text-gray-900 body-lg-medium '}
@@ -30,13 +30,13 @@ export default function SessionCell({
             selected={value}
             placeholder={value || '선택'}
             onChange={(v) => onChange && onChange(v)}
-            size="md"
+            size="lg"
             rightIcon={<PointdownIcon width={10} height={8} />}
             rightIconActive={<PointupIcon width={10} height={8} />}
           />
         </div>
       ) : (
-        <p className={`body-lg-medium flex h-[52px] w-full items-center justify-end`}>{value || ''}</p>
+        <p className={`body-lg-medium flex h-[52px] w-full items-center justify-end text-gray-700`}>{value || ''}</p>
       )}
     </div>
   )

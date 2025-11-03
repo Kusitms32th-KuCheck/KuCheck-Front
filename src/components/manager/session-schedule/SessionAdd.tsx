@@ -14,7 +14,7 @@ export default function SessionAdd() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] w-full items-stretch justify-center gap-6 px-6 pt-7">
+    <div className="flex w-full justify-center gap-6 px-6 pt-7 pb-6">
       <SessionAddForm initialDate={firstDate} onGenerate={handleGenerate} />
       <SessionAddTable weeks={weeks} firstDate={firstDate} />
     </div>

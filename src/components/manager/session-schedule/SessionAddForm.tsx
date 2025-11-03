@@ -68,7 +68,7 @@ export default function SessionAddForm({ initialWeeks, initialDate = '', onGener
         />
       </div>
 
-      <div className="px-3 pb-4 md:px-6">
+      <div className="px-3 pb-4">
         <ManagerButton onClick={handleConfirm} styleSize="sm">
           확인
         </ManagerButton>

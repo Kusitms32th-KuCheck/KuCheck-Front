@@ -8,7 +8,7 @@ export default function WriteHeader() {
   const router = useRouter()
   const isEditMode = false
   return (
-    <div className="align-center flex h-[110px] flex-col gap-4 bg-white px-[30px] pt-[12px]">
+    <div className="align-center sticky top-0 flex h-[110px] flex-col gap-4 bg-white px-[30px] pt-[12px]">
       <button
         className="flex w-full cursor-pointer items-center justify-start gap-1"
         type="button"

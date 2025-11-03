@@ -1,9 +1,9 @@
 import SessionNone from '@/components/manager/session-schedule/SessionNone'
 
-export default function SessionPage() {
+export default function SessionSchedulePage() {
   return (
-    <main className="flex h-full flex-col overflow-visible">
+    <div className="flex flex-col" style={{ height: 'calc(100% - 68px)' }}>
       <SessionNone />
-    </main>
+    </div>
   )
 }
