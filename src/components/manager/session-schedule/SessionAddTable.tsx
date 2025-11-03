@@ -3,12 +3,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import SessionTable from './session-table/SessionTable'
 
-type Row = {
-  weekLabel: string
-  date: string
-  name: string
-  type: string
-}
+type Row = { weekLabel: string; date: string; name: string; type: string }
 
 type Props = {
   weeks: number | null
@@ -27,42 +22,22 @@ export default function SessionAddTable({ weeks, firstDate }: Props) {
   const generated = useMemo(() => {
     if (!firstDate || weeks == null || weeks <= 0) return []
     const d0 = new Date(firstDate)
-    const arr: Row[] = []
-    for (let i = 0; i < weeks; i++) {
+    return Array.from({ length: weeks }, (_, i) => {
       const d = new Date(d0)
       d.setDate(d0.getDate() + i * 7)
-      arr.push({ weekLabel: `${i + 1}주차`, date: formatMMDD(d), name: '', type: '선택' })
-    }
-    return arr
+      return { weekLabel: `${i + 1}주차`, date: formatMMDD(d), name: '', type: '선택' }
+    })
   }, [weeks, firstDate])
 
-  useEffect(() => {
-    setRows(generated)
-  }, [generated])
-
-  const handleNameChange = (idx: number, v: string) => {
-    setRows((s) => {
-      const copy = [...s]
-      copy[idx] = { ...copy[idx], name: v }
-      return copy
-    })
-  }
-
-  const handleTypeChange = (idx: number, v: string) => {
-    setRows((s) => {
-      const copy = [...s]
-      copy[idx] = { ...copy[idx], type: v }
-      return copy
-    })
-  }
+  useEffect(() => setRows(generated), [generated])
 
   return (
     <SessionTable
-      rows={rows.length ? rows : generated}
-      gridCols="grid-cols-[147px_145px_312px_193px]"
-      customClass="min-w-[650px] max-w-[797px]"
-      onNameChange={handleNameChange}
-      onTypeChange={handleTypeChange}
+      rows={rows}
+      mode="edit"
+      showViewButton={false}
+      onNameChange={(i, v) => setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, name: v } : r)))}
+      onTypeChange={(i, v) => setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, type: v } : r)))}
     />
   )
 }

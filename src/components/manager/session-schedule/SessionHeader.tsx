@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import WriteHeader from '../common/WriteHeader'
 import ManagerButton from '../common/ManagerButton'
+import { useSessionEdit } from './SessionEditContext'
 
 export default function SessionHeader() {
   const pathname = usePathname() || ''
@@ -13,7 +14,7 @@ export default function SessionHeader() {
     return <WriteHeader />
   }
 
-  const isEditMode = false
+  const { isEditing, toggleEdit } = useSessionEdit()
   const [showStickyHeader, setShowStickyHeader] = useState(false)
 
   useEffect(() => {
@@ -35,8 +36,8 @@ export default function SessionHeader() {
   const HeaderContent = () => (
     <>
       <p className="heading-lg-medium">세션 일정</p>
-      <ManagerButton onClick={() => {}} styleSize="sm">
-        {isEditMode ? '저장하기' : '수정하기'}
+      <ManagerButton onClick={() => toggleEdit()} styleSize="sm">
+        {isEditing ? '저장하기' : '수정하기'}
       </ManagerButton>
     </>
   )
