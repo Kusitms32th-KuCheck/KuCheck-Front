@@ -1,4 +1,5 @@
 export { default as AppleIcon } from './AppleIcon'
+export { default as ArrowLeftIcon } from './ArrowLeftIcon'
 export { default as AttendanceIcon } from './AttendanceIcon'
 export { default as AttendanceOnIcon } from './AttendanceOnIcon'
 export { default as CalendarIcon } from './CalendarIcon'
