@@ -21,35 +21,40 @@ export default function usePointStatusHandlers({
     setMembers(next)
     setModifiedCells((prev) => ({ ...prev, [cellKey]: true }))
   }
-
   const handleStudyChange = (memberIndex: number, value: string) => {
-    updateMember(memberIndex, { study: value }, `${memberIndex}-study`)
+    const num = value === '' ? 0 : Number(value) || 0
+    updateMember(memberIndex, { studyPoints: num }, `${memberIndex}-study`)
   }
 
   const handleQportersChange = (memberIndex: number, value: string) => {
-    updateMember(memberIndex, { qporters: value }, `${memberIndex}-qporters`)
+    const num = value === '' ? 0 : Number(value) || 0
+    updateMember(memberIndex, { kuportersPoints: num }, `${memberIndex}-qporters`)
   }
 
   const handleNoteChange = (memberIndex: number, value: string) => {
-    updateMember(memberIndex, { note: value }, `${memberIndex}-note`)
+    updateMember(memberIndex, { memo: value }, `${memberIndex}-note`)
   }
 
   const handleTfChange = (memberIndex: number, checked: boolean) => {
-    updateMember(memberIndex, { tf: checked ? '2' : '-' }, `${memberIndex}-tf`)
+    updateMember(memberIndex, { isTf: checked }, `${memberIndex}-tf`)
   }
 
   const handleQpickChange = (memberIndex: number, monthKey: 'september' | 'october' | 'november', checked: boolean) => {
-    const field = `qpick_${monthKey}` as 'qpick_september' | 'qpick_october' | 'qpick_november'
-    updateMember(memberIndex, { [field]: checked ? '참여' : '-' }, `${memberIndex}-qpick-${monthKey}`)
+    const monthMap: Record<string, number> = { september: 9, october: 10, november: 11 }
+    const monthNum = monthMap[monthKey]
+    const prev = members[memberIndex].kupickParticipation || { 8: false, 9: false, 10: false, 11: false, 12: false }
+    const nextKupick = { ...prev, [monthNum]: checked }
+    updateMember(memberIndex, { kupickParticipation: nextKupick }, `${memberIndex}-qpick-${monthKey}`)
   }
 
   const handleSessionChange = (isEditMode: boolean) => (memberIndex: number, date: string, value: string) => {
     if (!isEditMode) return
     const next = [...members]
+    const prevSessions = next[memberIndex].sessions ?? {}
     next[memberIndex] = {
       ...next[memberIndex],
       sessions: {
-        ...next[memberIndex].sessions,
+        ...prevSessions,
         [date]: value,
       },
     }

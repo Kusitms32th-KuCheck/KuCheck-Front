@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useRef } from 'react'
 import PointTableRow from './point-row/PointTableRow'
 import BottomToast, { DEFAULT_SHIFT_WHEEL_MESSAGE } from '@/components/manager/common/BottomToast'
@@ -58,7 +60,7 @@ export default function PointTableBody({ containerRef, isHorizScrolled }: Props)
 
   useEffect(() => {
     if (!prevEditRef.current && isEditMode) {
-      originalMembersRef.current = members.map((m) => ({ ...m, sessions: { ...m.sessions } }))
+      originalMembersRef.current = members.map((m) => ({ ...m }))
     }
 
     if (prevEditRef.current && !isEditMode) {

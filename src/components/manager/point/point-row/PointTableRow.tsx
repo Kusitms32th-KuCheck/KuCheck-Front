@@ -60,7 +60,13 @@ export default function PointTableRow({
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >
-        {member.point}
+        {(() => {
+          const monthly = member.attendanceMonthlyTotals || ({} as Record<number, number>)
+          const monthlySum = [8, 9, 10, 11, 12].reduce((s, m) => s + (monthly[m as keyof typeof monthly] || 0), 0)
+          const study = member.studyPoints ?? 0
+          const kuporters = member.kuportersPoints ?? 0
+          return monthlySum + study + kuporters
+        })()}
       </p>
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-gray-900 ${baseBg} group-hover:bg-gray-100`}
@@ -69,12 +75,15 @@ export default function PointTableRow({
       </p>
       {visibleDates.map((item, dateIndex) => {
         if (item.month) {
-          let monthScore = 0
-          if (item.month === '8월') monthScore = member.score.august
-          else if (item.month === '9월') monthScore = member.score.september
-          else if (item.month === '10월') monthScore = member.score.october
-          else if (item.month === '11월') monthScore = member.score.november
-          else if (item.month === '12월') monthScore = member.score.december
+          const monthMap: Record<string, 8 | 9 | 10 | 11 | 12> = {
+            '8월': 8,
+            '9월': 9,
+            '10월': 10,
+            '11월': 11,
+            '12월': 12,
+          }
+          const monthKey = monthMap[item.month]
+          const monthScore = monthKey ? (member.attendanceMonthlyTotals[monthKey] ?? 0) : 0
 
           const isCollapsed = collapsedMonths.has(item.month)
           return (
@@ -89,7 +98,8 @@ export default function PointTableRow({
         }
 
         const date = item.date
-        const value = member.sessions[date]
+        const sessions = member.sessions
+        const value = sessions?.[date] ?? ''
 
         const keyId = `${memberIndex}-${date}`
         const isModified = Boolean((modifiedCells && modifiedCells[keyId]) || false)
@@ -108,22 +118,22 @@ export default function PointTableRow({
       })}
       {(
         [
-          { key: 'qpick_september', value: member.qpick_september, type: 'qpick', month: 'september' },
-          { key: 'qpick_october', value: member.qpick_october, type: 'qpick', month: 'october' },
-          { key: 'qpick_november', value: member.qpick_november, type: 'qpick', month: 'november' },
-          { key: 'tf', value: member.tf, type: 'tf' },
+          { key: 'qpick_september', value: member.kupickParticipation?.[9], type: 'qpick', month: 'september' },
+          { key: 'qpick_october', value: member.kupickParticipation?.[10], type: 'qpick', month: 'october' },
+          { key: 'qpick_november', value: member.kupickParticipation?.[11], type: 'qpick', month: 'november' },
+          { key: 'tf', value: member.isTf, type: 'tf' },
         ] as const
       ).map((col) => (
         <CheckboxCell
           key={col.key}
           isEditMode={isEditMode}
-          checked={col.type === 'qpick' ? col.value === '참여' : col.value === '2'}
+          checked={Boolean(col.value)}
           onChange={(checked) =>
             col.type === 'qpick'
               ? onQpickChange && onQpickChange(memberIndex, col.month as 'september' | 'october' | 'november', checked)
               : onTfChange && onTfChange(memberIndex, checked)
           }
-          display={col.value}
+          display={col.type === 'qpick' ? (col.value ? '참여' : '미참여') : col.value ? 'TF' : ''}
           className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
         />
       ))}
@@ -131,13 +141,13 @@ export default function PointTableRow({
         [
           {
             key: 'study',
-            value: member.study,
+            value: member.studyPoints ? String(member.studyPoints) : '',
             isModified: isStudyModified,
             onChange: (v: string) => onStudyChange(memberIndex, v),
           },
           {
             key: 'qporters',
-            value: member.qporters,
+            value: member.kuportersPoints ? String(member.kuportersPoints) : '',
             isModified: isQportersModified,
             onChange: (v: string) => onQportersChange(memberIndex, v),
           },
@@ -155,12 +165,12 @@ export default function PointTableRow({
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >
-        {member.is_manager ? '운영진(1)' : '학회원'}
+        {member.isStaff ? '운영진(1)' : '학회원'}
       </p>
       <EditableTextCell
         key={`note-${memberIndex}`}
         isEditMode={isEditMode}
-        value={member.note ?? ''}
+        value={member.memo ?? ''}
         isModified={isNoteModified}
         onChange={(v) => onNoteChange && onNoteChange(memberIndex, v)}
         className={`body-lg-medium flex h-[52px] w-[340px] items-center justify-end border-r border-gray-200 px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
@@ -168,7 +178,7 @@ export default function PointTableRow({
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >
-        {member.phone}
+        {member.phoneNumber}
       </p>
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
