@@ -1,4 +1,3 @@
-// /app/redirect/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { postAuthKaKao } from '@/lib/auth'
@@ -10,12 +9,10 @@ export async function GET(request: NextRequest) {
 
   const baseUrl = request.nextUrl.origin
 
-  // Helper 함수: NextResponse.redirect를 사용하여 리다이렉트 응답을 반환합니다.
   const redirect = (pathname: string) => {
     return NextResponse.redirect(new URL(pathname, baseUrl))
   }
 
-  // 1. 에러 파라미터 처리
   if (errorParam) {
     console.error('Auth error:', errorParam)
     return redirect(`/login?error=${encodeURIComponent(errorParam)}`)
@@ -27,7 +24,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // 2. 카카오 인증 API 호출
     const result = await postAuthKaKao(code, baseUrl === 'http://localhost:3000' ? 'LOCAL' : 'DEV')
     console.log('카톡 로그인 결과', result)
 
@@ -55,10 +51,14 @@ export async function GET(request: NextRequest) {
       cookieStore.set('refreshToken', refreshToken, cookieOptions)
     }
 
-    // 4. 사용자 상태에 따른 리다이렉트 (주석 해제)
+    // 4. 사용자 상태에 따른 리다이렉트
     if (status === 'PENDING') {
-      // 승인 대기 중 - 회원가입 정보 입력 페이지로
-      return redirect('/sign-up')
+      if (hasInfo) {
+        // 승인 대기 중 - 회원가입 정보 입력 페이지로
+        return redirect('/sign-up?step=7')
+      } else {
+        return redirect('/sign-up')
+      }
     }
 
     if (status === 'APPROVED') {
@@ -66,11 +66,7 @@ export async function GET(request: NextRequest) {
       if (role === 'USER' || role === 'MANAGEMENT' || role === 'STAFF' || role === 'EXECUTIVE') {
         return redirect('/home')
       } else if (role === 'GUEST') {
-        if (hasInfo) {
-          return redirect('/sign-up?step=7')
-        } else {
-          return redirect('/sign-up')
-        }
+        return redirect('/sign-up')
       }
     }
 
