@@ -4,5 +4,7 @@ export interface SignUpDataType {
   major?: string
   part?: PartType
   phoneNumber?: string
+  fcmToken?: string
+  profileImage?: string
 }
 export type PartType = 'BACKEND' | 'FRONTEND' | 'DESIGN' | 'PLANNING'

@@ -1,26 +1,19 @@
 'use client'
 
-import MemberButton from '@/components/member/common/MemberButton'
-import { useSignUpStore } from '@/store/signUpStore'
-import { postMembersOnboarding } from '@/lib/common'
+import ImageUploader from '@/components/common/sign-up/ImageUploader'
 
 export default function StudentCardUploadField() {
-  const signUpData = useSignUpStore((state) => state.signUpData)
   return (
     <div>
-      <div className="fixed bottom-[36px] w-full bg-white px-5">
-        <MemberButton
-          styleSize={'lg'}
-          buttonType={'button'}
-          styleType={'primary'}
-          styleStatus={'disabled'}
-          onClick={async () => {
-            const response = await postMembersOnboarding(signUpData)
-            console.log('response', response)
-          }}
-        >
-          다음
-        </MemberButton>
+      <div className="flex flex-col gap-y-[72px]">
+        <section className="flex flex-col gap-y-4 px-5">
+          <h1 className="heading-lg-semibold">사진을 업로드 해주세요</h1>
+          <p className="body-lg-regular text-gray-500">
+            얼굴이 잘 보이는 사진을 등록해 주세요 <br />
+            출석 시 본인 확인 용도로만 사용돼요
+          </p>
+        </section>
+        <ImageUploader />
       </div>
     </div>
   )
