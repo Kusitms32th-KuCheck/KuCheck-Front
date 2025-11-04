@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { usePointTableStore } from '@/store/manager/usePointTableStore'
-import { generateMockData } from '@/types/manager/point/mockData'
+import { getOverviewClient } from '@/lib/manager/client/points'
 import PointTableHeader from './PointTableHeader'
 import PointTableBody from './PointTableBody'
 import { computeVisibleDates, computeGridTemplate, computeMinWidth } from '../../../utils/manager/computePointTable'
@@ -19,7 +19,30 @@ export default function PointTable() {
   const toggleMonth = (month: string) => toggleCollapsedMonth(month)
 
   useEffect(() => {
-    setMembers(() => generateMockData())
+    const fetchData = async () => {
+      const res = await getOverviewClient()
+      if (res.success && res.data) {
+        setMembers(
+          res.data?.map((d) => ({
+            memberId: d.memberId,
+            name: d.name,
+            part: d.part,
+            phoneNumber: d.phoneNumber,
+            school: d.school,
+            major: d.major,
+            isTf: d.isTf,
+            isStaff: d.isStaff,
+            attendanceMonthlyTotals: d.attendanceMonthlyTotals,
+            kupickParticipation: d.kupickParticipation,
+            studyPoints: d.studyPoints,
+            kuportersPoints: d.kuportersPoints,
+            memo: d.memo,
+          }))
+        )
+      }
+    }
+
+    fetchData()
   }, [setMembers])
 
   return (
