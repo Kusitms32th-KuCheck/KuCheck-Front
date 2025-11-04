@@ -5,6 +5,7 @@ interface AuthCallResult {
   refreshToken?: string | null
   status?: string
   role?: string
+  hasInfo?: boolean
   error?: string
 }
 
@@ -12,11 +13,12 @@ interface AuthCallResult {
  * 카카오 인증 - code를 받아 JWT 토큰 발급
  * PENDING 상태일 때는 accessToken만, APPROVED 상태일 때는 refreshToken도 반환
  * @param code - 카카오에서 받은 인증 코드
+ * @param env - 개발 환경일경우 (localhost3000-> LOCAL, 배포 url 일 경우 'DEV')
  *
  * 주의: 이 함수는 API 응답만 처리합니다.
  * 쿠키 설정은 백엔드의 Set-Cookie 헤더로 자동 처리됩니다.
  */
-export const postAuthKaKao = async (code: string | null): Promise<AuthCallResult> => {
+export const postAuthKaKao = async (code: string | null, env: 'LOCAL' | 'DEV'): Promise<AuthCallResult> => {
   try {
     if (!code) {
       throw new Error('Authorization code not provided')
@@ -27,7 +29,7 @@ export const postAuthKaKao = async (code: string | null): Promise<AuthCallResult
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code: code, env: env }),
       cache: 'no-store',
     })
 
@@ -44,7 +46,7 @@ export const postAuthKaKao = async (code: string | null): Promise<AuthCallResult
       throw new Error(jwtResponseData.message || 'Authentication failed')
     }
 
-    const { status, role } = jwtResponseData.result
+    const { status, role, hasInfo } = jwtResponseData.result
 
     // 헤더에서 토큰 추출
     // Set-Cookie 헤더: 백엔드에서 이미 httpOnly로 설정됨
@@ -63,6 +65,7 @@ export const postAuthKaKao = async (code: string | null): Promise<AuthCallResult
       refreshToken,
       status,
       role,
+      hasInfo,
     }
   } catch (error) {
     console.error('Kakao authentication error:', error)

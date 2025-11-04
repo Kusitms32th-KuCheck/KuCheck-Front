@@ -5,7 +5,7 @@ import MemberButton from '@/components/member/common/MemberButton'
 import { useSignUpStore } from '@/store/signUpStore'
 import MemberInput from '@/components/member/common/MemberInput'
 
-type StepType = '1' | '2' | '3' | '4' | '5' | '6'
+type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function NameField() {
   const setSignUpState = useSignUpStore((state) => state.setState)

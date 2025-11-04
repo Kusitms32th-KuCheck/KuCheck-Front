@@ -34,10 +34,11 @@ export interface UserType {
   status: UserStatusType
   memberId: number
   role: UserRoleType
+  hasInfo: boolean
 }
 
 export type UserStatusType = 'PENDING' | 'APPROVED' | 'REJECTED'
-export type UserRoleType = 'GUEST' | 'USER' | 'ADMIN' | 'MANAGEMENT'
+export type UserRoleType = 'EXECUTIVE' | 'GUEST' | 'USER' | 'STAFF' | 'MANAGEMENT' //EXECUTIVE(회장단) > MANAGEMENT(경총) > STAFF(운영진) > USER(학회원) > GUEST(온보딩)
 export type PartType = 'BACKEND' | 'FRONTEND' | 'DESIGN' | 'PLANNING'
 
 export interface FileInfoType {
