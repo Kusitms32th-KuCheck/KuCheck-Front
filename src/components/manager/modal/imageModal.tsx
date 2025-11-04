@@ -98,7 +98,7 @@ export default function ImageModal({
   }
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+    <div className="fixed inset-0 z-1000 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
       <section
         className={[
           'relative inline-flex max-h-[90vh] max-w-[1200px] min-w-[600px] flex-col rounded-[20px] bg-white p-[32px] shadow-lg',

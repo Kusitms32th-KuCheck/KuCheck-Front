@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import DropDownCell from './DropDownCell'
 import EditableTextCell from './EditableTextCell'
 
@@ -34,6 +34,7 @@ export default function SessionTable({
 }: Props) {
   const isEditing = mode === 'edit'
   const router = useRouter()
+  const pathname = usePathname() || ''
   const gridCols = showViewButton ? 'grid-cols-[147px_145px_312px_193px_150px]' : 'grid-cols-[147px_145px_312px_193px]'
 
   return (
@@ -122,7 +123,10 @@ export default function SessionTable({
                       const disabledClass =
                         'border-gray-200 rounded-[4px] px-3 py-[6px]  body-sm-medium text-gray-400 border bg-white cursor-not-allowed'
                       if (!canView && mode === 'edit') {
-                        const target = `/detail-add`
+                        const cleaned = pathname.replace(/\/$/, '')
+                        const target = cleaned.includes('/edit')
+                          ? cleaned.replace(/\/edit(\/|$)/, '/detail-add$1')
+                          : `${cleaned}/detail-add`
                         return (
                           <button onClick={() => router.push(target)} className={isFilledClass}>
                             세션 정보 입력
