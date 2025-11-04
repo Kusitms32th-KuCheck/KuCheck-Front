@@ -45,8 +45,8 @@ export default function NoticeDetailPage() {
             있으시면 자유롭게 발제자께 질문해주세요!
           </p>
           <div className="mt-[23px] flex flex-col gap-y-2">
-            <div className="h-[335px] w-[335px] rounded-[16px] bg-gray-100"></div>
-            <div className="h-[335px] w-[335px] rounded-[16px] bg-gray-100"></div>
+            <div className="h-[335px] w-full rounded-[16px] bg-gray-100"></div>
+            <div className="h-[188px] w-full rounded-[16px] bg-gray-100"></div>
           </div>
         </div>
       </div>
