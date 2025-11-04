@@ -10,7 +10,7 @@ export default function WithDrawModal({ setIsWithDrawModalOpen, onWithDrawClick 
   return (
     <MemberModal>
       <MemberModal.Content>
-        <div className="body-lg-regular flex w-full items-center justify-center text-gray-700">
+        <div className="body-lg-medium flex w-full items-center justify-center text-gray-700">
           정말 회원 탈퇴하시겠어요?
         </div>
       </MemberModal.Content>

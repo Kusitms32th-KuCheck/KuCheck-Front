@@ -10,9 +10,7 @@ export default function LogoutModal({ setIsLogoutModalOpen, onLogoutClick }: Log
   return (
     <MemberModal>
       <MemberModal.Content>
-        <div className="body-lg-regular flex w-full items-center justify-center text-gray-700">
-          정말 로그아웃할까요?
-        </div>
+        <div className="body-lg-medium flex w-full items-center justify-center text-gray-700">정말 로그아웃할까요?</div>
       </MemberModal.Content>
       <MemberModal.BottomButton>
         <div className="flex gap-x-2">
