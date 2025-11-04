@@ -4,7 +4,7 @@ import MemberButton from '@/components/member/common/MemberButton'
 import MemberInput from '@/components/member/common/MemberInput'
 import { useSignUpStore } from '@/store/signUpStore'
 
-type StepType = '1' | '2' | '3' | '4' | '5' | '6'
+type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function MajorField() {
   const setSignUpState = useSignUpStore((state) => state.setState)

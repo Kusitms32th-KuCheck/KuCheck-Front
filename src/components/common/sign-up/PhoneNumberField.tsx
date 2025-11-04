@@ -6,7 +6,7 @@ import MemberInput from '@/components/member/common/MemberInput'
 import { useSignUpStore } from '@/store/signUpStore'
 import { formatPhoneNumber } from '@/utils/common'
 
-type StepType = '1' | '2' | '3' | '4' | '5' | '6'
+type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function PhoneNumberField() {
   const setSignUpState = useSignUpStore((state) => state.setState)

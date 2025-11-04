@@ -7,7 +7,7 @@ import { useSignUpStore } from '@/store/signUpStore'
 import MemberInput from '@/components/member/common/MemberInput'
 import { universityList } from '@/utils/sign-up'
 
-type StepType = '1' | '2' | '3' | '4' | '5' | '6'
+type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function SchoolField() {
   const router = useRouter()
