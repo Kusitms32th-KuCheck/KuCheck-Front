@@ -106,7 +106,8 @@ export default function SchoolField() {
           styleSize={'lg'}
           buttonType={'button'}
           styleType={'primary'}
-          styleStatus={'default'}
+          styleStatus={signUpData?.school ? 'default' : 'disabled'}
+          disabled={!signUpData?.school}
           onClick={handleNext}
         >
           다음
