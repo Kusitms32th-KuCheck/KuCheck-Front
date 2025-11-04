@@ -4,10 +4,10 @@ export default function NoticeDetailPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen bg-white">
-        <MemberHeader headerType="dynamic" title={'세션 공지'} />
+        <MemberHeader headerType="dynamic" title={'세션 공지'} isBottomBorder={true} headerColor={'bg-white'} />
         <div className="h-[116px]" />
         <div className="px-5 pb-[145px]">
-          <section className="flex flex-col gap-y-[3px] border-b border-gray-100 pt-[10px] pb-[8px]">
+          <section className="flex flex-col gap-y-[3px] pt-[10px] pb-[8px]">
             <p className="heading-sm-semibold">🔊 아이디어 발표 & 커피챗 세션 ☕</p>
             <p className="body-sm-regular text-gray-400">9월 22일 19:00</p>
           </section>

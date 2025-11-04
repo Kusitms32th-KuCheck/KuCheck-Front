@@ -12,6 +12,7 @@ interface HeaderProps {
   headerColor?: string
   onBack?: () => void
   rightElement?: React.ReactNode
+  isBottomBorder?: boolean
 }
 
 const MemberHeader = ({
@@ -20,13 +21,14 @@ const MemberHeader = ({
   onBack,
   headerColor = 'bg-white',
   rightElement,
+  isBottomBorder = false,
 }: HeaderProps) => {
   const router = useRouter()
   const renderHeaderType = (headerType: 'default' | 'dynamic') => {
     switch (headerType) {
       case 'dynamic':
         return (
-          <div className="relative flex h-[62px] items-center px-[7px]">
+          <div className={`${headerColor} relative flex h-[62px] items-center px-[7px]`}>
             <ChevronLeftBlackIcon
               onClick={onBack ? onBack : () => router.back()}
               width={36}
@@ -58,7 +60,8 @@ const MemberHeader = ({
 
   return (
     <header
-      className={`${headerType === 'default' ? 'bg-background2' : headerColor} desktop:w-[375px] fixed z-50 w-full pt-[54px]`}
+      className={`${isBottomBorder ? 'border-b border-gray-100' : headerType === 'default' ? 'bg-background2' : headerColor} desktop:w-[375px] fixed top-0 z-50 w-full ${headerColor}`}
+      style={{ paddingTop: '54px' }}
     >
       {renderHeaderType(headerType)}
     </header>
