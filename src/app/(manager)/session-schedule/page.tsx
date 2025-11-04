@@ -1,3 +1,9 @@
-export default function SchedulePage() {
-  return <div>세션 일정</div>
+import SessionNone from '@/components/manager/session-schedule/SessionNone'
+
+export default function SessionSchedulePage() {
+  return (
+    <div className="flex flex-col" style={{ height: 'calc(100% - 68px)' }}>
+      <SessionNone />
+    </div>
+  )
 }
