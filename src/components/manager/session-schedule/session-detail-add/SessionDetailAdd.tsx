@@ -1,5 +1,5 @@
-import AddBody from '../common/add-post/AddBody'
-import AddHeader from '../common/add-post/AddHeader'
+import AddBody from '../../common/add-post/AddBody'
+import AddHeader from '../../common/add-post/AddHeader'
 
 export default function SessionDetailAdd() {
   return (

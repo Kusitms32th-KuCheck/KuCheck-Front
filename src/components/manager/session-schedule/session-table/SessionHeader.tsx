@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import ManagerButton from '../../common/ManagerButton'
-import { useSessionEdit } from '../session-table/SessionEditContext'
+import { useSessionEdit } from './SessionEditContext'
 import ManagerModal from '@/components/manager/common/ManagerModal'
 import { useRouter } from 'next/navigation'
 

@@ -1,4 +1,4 @@
-import SessionDetail from '@/components/manager/session-schedule/SessionDetail'
+import SessionDetail from '@/components/manager/session-schedule/session-detail/SessionDetail'
 
 export default function SessionAddPage() {
   return (

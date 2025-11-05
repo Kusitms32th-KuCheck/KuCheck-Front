@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { SessionNoneIcon } from '@/assets/svgComponents/manager'
-import SessionHeader from './SessionHeader'
+import SessionHeader from './session-table/SessionHeader'
 
 export default function SessionNone() {
   const router = useRouter()

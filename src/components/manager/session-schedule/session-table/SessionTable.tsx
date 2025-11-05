@@ -12,6 +12,7 @@ type Row = {
   filled?: boolean
   isEditing?: boolean
   isHoliday?: boolean
+  sessionDetailId?: number | null
 }
 
 type Props = {
@@ -46,6 +47,7 @@ export default function SessionTable({
     <div className="shadow-middlemodal flex flex-col overflow-hidden rounded-[12px] bg-white">
       <div className="align-center flex w-full overflow-x-auto">
         <div className="min-w-[797px]">
+          {/* 헤더 */}
           <div
             className={`grid ${gridCols} body-lg-semibold items-center gap-0 border-b border-gray-100 py-[14px] text-gray-500`}
           >
@@ -57,6 +59,7 @@ export default function SessionTable({
             {showViewButton && <div />}
           </div>
 
+          {/* 본문 */}
           {rows.length === 0 ? (
             <div className="flex h-[80vh] flex-col items-center justify-center text-gray-700">
               <p className="body-md-regular text-gray-500">전체 주차와 첫 세션 일시를 입력한 후</p>
@@ -70,12 +73,13 @@ export default function SessionTable({
                   i % 2 === 1 ? 'bg-background1' : ''
                 }`}
               >
+                {/* 주차 & 일자 */}
                 <div className="body-lg border-r border-gray-200 py-[22px] pl-[34px] text-gray-800">{r.weekLabel}</div>
                 <div className="border-r border-gray-200 px-[20px] py-[22px] text-gray-800">{r.date}</div>
 
+                {/* 세션명 / 종류 / 공휴일 */}
                 {(() => {
                   const filled = typeof isRowFilled === 'function' ? isRowFilled(i, r) : r.name.trim().length > 0
-
                   const canEditRow = isEditing && (filled || !showViewButton)
 
                   if (canEditRow) {
@@ -109,12 +113,16 @@ export default function SessionTable({
                   return (
                     <>
                       <div
-                        className={`border-r border-gray-200 px-[20px] py-[22px] ${filled ? 'text-gray-800' : 'text-gray-400'}`}
+                        className={`border-r border-gray-200 px-[20px] py-[22px] ${
+                          filled ? 'text-gray-800' : 'text-gray-400'
+                        }`}
                       >
                         {filled ? r.name : '-'}
                       </div>
                       <div
-                        className={`border-r border-gray-200 px-[20px] py-[22px] ${filled ? 'text-gray-800' : 'text-gray-400'}`}
+                        className={`border-r border-gray-200 px-[20px] py-[22px] ${
+                          filled ? 'text-gray-800' : 'text-gray-400'
+                        }`}
                       >
                         {filled ? r.type : '-'}
                       </div>
@@ -132,21 +140,22 @@ export default function SessionTable({
                 {showViewButton && (
                   <div className="flex justify-center">
                     {(() => {
-                      const canView = typeof r.isEditing === 'boolean' ? r.isEditing : true
-                      const isFilledClass =
-                        'border-gray-700 rounded-[4px] px-3 py-[6px]  body-sm-medium text-white border bg-gray-700 '
+                      const hasDetail = r.sessionDetailId !== null && r.sessionDetailId !== undefined
 
+                      const inputClass =
+                        'border-gray-700 rounded-[4px] px-3 py-[6px] body-sm-medium text-white border bg-gray-700'
                       const enabledClass =
-                        'border-primary-200 rounded-[4px] px-3 py-[6px]  body-sm-medium text-primary-500 border bg-white '
+                        'border-primary-200 rounded-[4px] px-3 py-[6px] body-sm-medium text-primary-500 border bg-white'
                       const disabledClass =
-                        'border-gray-200 rounded-[4px] px-3 py-[6px]  body-sm-medium text-gray-400 border bg-white cursor-not-allowed'
-                      if (!canView && mode === 'edit') {
+                        'border-gray-200 rounded-[4px] px-3 py-[6px] body-sm-medium text-gray-400 border bg-white cursor-not-allowed'
+
+                      if (!hasDetail && mode === 'edit') {
                         const cleaned = pathname.replace(/\/$/, '')
                         const target = cleaned.includes('/edit')
                           ? cleaned.replace(/\/edit(\/|$)/, '/detail-add$1')
                           : `${cleaned}/detail-add`
                         return (
-                          <button onClick={() => router.push(target)} className={isFilledClass}>
+                          <button onClick={() => router.push(target)} className={inputClass}>
                             세션 정보 입력
                           </button>
                         )
@@ -154,9 +163,9 @@ export default function SessionTable({
 
                       return (
                         <button
-                          onClick={() => canView && onViewClick?.(i)}
-                          disabled={!canView}
-                          className={canView ? enabledClass : disabledClass}
+                          onClick={() => hasDetail && onViewClick?.(i)}
+                          disabled={!hasDetail}
+                          className={hasDetail ? enabledClass : disabledClass}
                         >
                           세션 정보 보기
                         </button>

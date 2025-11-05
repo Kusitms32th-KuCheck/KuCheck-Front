@@ -1,6 +1,7 @@
 import { apiCallServer } from '@/lib/api.server'
-import { SessionScheduleRequest } from '@/types/manager/session/type'
+import { SessionScheduleRequest, SessionScheduleResponse } from '@/types/manager/session/type'
 
+//세션 일정 저장
 export async function POST(request: Request) {
   try {
     const sessionData: SessionScheduleRequest = await request.json()
@@ -20,6 +21,24 @@ export async function POST(request: Request) {
 
     return Response.json({ success: true, data })
   } catch (error) {
+    return Response.json({ error: error instanceof Error ? error.message : 'Internal server error' }, { status: 500 })
+  }
+}
+
+//세션 정보 불러오기
+export async function GET() {
+  try {
+    const { data, error } = await apiCallServer<SessionScheduleResponse>('/v1/session/staff', {
+      method: 'GET',
+    })
+
+    if (error) {
+      return Response.json({ error }, { status: 400 })
+    }
+
+    return Response.json({ success: true, data })
+  } catch (error) {
+    console.error('Server error:', error)
     return Response.json({ error: error instanceof Error ? error.message : 'Internal server error' }, { status: 500 })
   }
 }

@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useSessionEdit } from '../session-table/SessionEditContext'
 import SessionTable from '../session-table/SessionTable'
 import { SessionScheduleRequest } from '@/types/manager/session/type'
-import { postClientAttendanceScan } from '@/lib/manager/client/session'
+import { postClientSessionSchedule } from '@/lib/manager/client/session'
 
 type Row = { weekLabel: string; date: string; name: string; type: string; isHoliday?: boolean }
 
@@ -78,7 +78,7 @@ export default function SessionAddTable({ weeks, firstDate }: Props) {
     })
 
     try {
-      const res = await postClientAttendanceScan(payload)
+      const res = await postClientSessionSchedule(payload)
       if (res.success) {
         return true
       } else {
