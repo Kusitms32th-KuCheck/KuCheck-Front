@@ -33,13 +33,11 @@ export default function WithDrawPage() {
         <ul className="flex flex-col gap-y-[20px]">
           <li className="body-md-regular mx-3 list-disc">
             탈퇴 시 앱 내 활동 기록 및 저장된 정보가 삭제되며, 동일 계정으로 재가입 시 일부 데이터는 복구되지 않을 수
-            있습니다
+            있어요
           </li>
+          <li className="body-md-regular mx-3 list-disc">학회 정관에 따라 필요한 정보는 일정 기간 보관 후 파기돼요</li>
           <li className="body-md-regular mx-3 list-disc">
-            학회 정관에 따라 필요한 정보는 일정 기간 보관 후 파기됩니다
-          </li>
-          <li className="body-md-regular mx-3 list-disc">
-            탈퇴가 원활하지 않거나 별도 확인이 필요한 경우, 운영진(학회 이메일)으로 문의해주세요.
+            탈퇴가 원활하지 않거나 별도 확인이 필요한 경우, 운영진(학회 이메일)으로 문의해 주세요
           </li>
         </ul>
       </ul>
