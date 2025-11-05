@@ -72,7 +72,7 @@ export default function PointTableHeader({
               '스터디',
               '큐포터즈',
               '운영진',
-              '비고',
+              '메모',
               '전화번호',
               '학교',
               '학과',

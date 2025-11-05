@@ -57,7 +57,44 @@ export interface AttendanceMonthlyResult {
   members: MemberData[]
 }
 
-//
+//상벌점 수정 reques body
+export interface StudyModification {
+  memberId: number
+  studyPoints: number
+}
+export interface MemoModification {
+  memberId: number
+  memo: string | null
+}
+export interface kupportersModification {
+  memberId: number
+  kuportersPoints: number
+}
+export interface kupickModification {
+  memberId: number
+}
+export interface tfModification {
+  memberId: number
+}
+export interface staffModification {
+  memberId: number
+}
+//이번달 큐픽 승인 토글 응답
+export interface KupickToggleResponse {
+  memberId: number
+  kupickId: number
+  isKupick: boolean
+}
+//TF 토글 응답
+export interface TfToggleResponse {
+  memberId: number
+  isTf: boolean
+}
+//스태프 토글 응답
+export interface StaffToggleResponse {
+  memberId: number
+  isStaff: boolean
+}
 
 export interface VisibleDate {
   month?: string

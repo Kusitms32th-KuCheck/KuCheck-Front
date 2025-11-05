@@ -3,7 +3,7 @@ import { PointMemberStatus } from '@/types/manager/point/types'
 
 type HandlersParams = {
   members: PointMemberStatus[]
-  setMembers: (members: PointMemberStatus[]) => void
+  setMembers: Dispatch<SetStateAction<PointMemberStatus[]>>
   modifiedCells: Record<string, boolean>
   setModifiedCells: Dispatch<SetStateAction<Record<string, boolean>>>
   setIsManagerModalOpen: (open: boolean) => void
@@ -16,9 +16,11 @@ export default function usePointStatusHandlers({
   setIsManagerModalOpen,
 }: HandlersParams) {
   const updateMember = (memberIndex: number, updates: Partial<PointMemberStatus>, cellKey: string) => {
-    const next = [...members]
-    next[memberIndex] = { ...next[memberIndex], ...updates }
-    setMembers(next)
+    setMembers((prev) => {
+      const next = [...prev]
+      next[memberIndex] = { ...next[memberIndex], ...updates }
+      return next
+    })
     setModifiedCells((prev) => ({ ...prev, [cellKey]: true }))
   }
   const handleStudyChange = (memberIndex: number, value: string) => {
@@ -39,6 +41,10 @@ export default function usePointStatusHandlers({
     updateMember(memberIndex, { isTf: checked }, `${memberIndex}-tf`)
   }
 
+  const handleStaffChange = (memberIndex: number, checked: boolean) => {
+    updateMember(memberIndex, { isStaff: checked }, `${memberIndex}-staff`)
+  }
+
   const handleQpickChange = (memberIndex: number, monthKey: 'september' | 'october' | 'november', checked: boolean) => {
     const monthMap: Record<string, number> = { september: 9, october: 10, november: 11 }
     const monthNum = monthMap[monthKey]
@@ -49,16 +55,18 @@ export default function usePointStatusHandlers({
 
   const handleSessionChange = (isEditMode: boolean) => (memberIndex: number, date: string, value: string) => {
     if (!isEditMode) return
-    const next = [...members]
-    const prevSessions = next[memberIndex].sessions ?? {}
-    next[memberIndex] = {
-      ...next[memberIndex],
-      sessions: {
-        ...prevSessions,
-        [date]: value,
-      },
-    }
-    setMembers(next)
+    setMembers((prev) => {
+      const next = [...prev]
+      const prevSessions = next[memberIndex].sessions ?? {}
+      next[memberIndex] = {
+        ...next[memberIndex],
+        sessions: {
+          ...prevSessions,
+          [date]: value,
+        },
+      }
+      return next
+    })
     setModifiedCells((prev) => ({ ...prev, [`${memberIndex}-${date}`]: true }))
   }
 
@@ -69,6 +77,7 @@ export default function usePointStatusHandlers({
     handleQportersChange,
     handleNoteChange,
     handleTfChange,
+    handleStaffChange,
     handleQpickChange,
     handleSessionChange,
     handleSave,
