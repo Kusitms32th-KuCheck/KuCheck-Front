@@ -38,17 +38,25 @@ export async function GET(request: NextRequest) {
     const cookieStore = await cookies()
     const cookieOptions = {
       maxAge: 7 * 24 * 60 * 60, // 7일
-      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict' as const,
       path: '/',
     }
 
+    // accessToken, refreshToken은 httpOnly 유지
+    const secureTokenOptions = {
+      ...cookieOptions,
+      httpOnly: true,
+    }
+
     if (accessToken) {
-      cookieStore.set('accessToken', accessToken, cookieOptions)
+      cookieStore.set('accessToken', accessToken, secureTokenOptions)
     }
     if (refreshToken) {
-      cookieStore.set('refreshToken', refreshToken, cookieOptions)
+      cookieStore.set('refreshToken', refreshToken, secureTokenOptions)
+    }
+    if (role) {
+      cookieStore.set('role', role, cookieOptions)
     }
 
     // 4. 사용자 상태에 따른 리다이렉트

@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { ChevronLeftBlackIcon, HomeLogoIcon, NotificationIcon, SettingIcon } from '@/assets/svgComponents'
+import DeviceSwitch from '@/components/member/common/DeviceSwitch'
+import Cookies from 'js-cookie'
+import { useEffect, useState } from 'react'
 
 interface HeaderProps {
   title?: string
@@ -24,6 +27,20 @@ const MemberHeader = ({
   isBottomBorder = false,
 }: HeaderProps) => {
   const router = useRouter()
+  const [role, setRole] = useState<string | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    try {
+      const roleFromCookie = Cookies.get('role')
+      setRole(roleFromCookie)
+    } catch (error) {
+      setRole('USER')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   const renderHeaderType = (headerType: 'default' | 'dynamic') => {
     switch (headerType) {
       case 'dynamic':
@@ -46,6 +63,9 @@ const MemberHeader = ({
               <HomeLogoIcon width={35} height={28} />
             </Link>
             <div className="flex items-center gap-x-[22px]">
+              {(!isLoading && role === 'EXECUTIVE') || role === 'STAFF' || role === 'MANAGEMENT' ? (
+                <DeviceSwitch />
+              ) : null}
               <Link href={'/alarm'} className="flex h-[24px] w-[24px] items-center justify-center">
                 <NotificationIcon width={25} height={25}></NotificationIcon>
               </Link>
