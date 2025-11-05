@@ -7,8 +7,9 @@ import SchoolField from '@/components/common/sign-up/SchoolField'
 import MajorField from '@/components/common/sign-up/MajorField'
 import PartField from '@/components/common/sign-up/PartField'
 import StudentCardUploadField from '@/components/common/sign-up/StudentCardUploadField'
+import SignUpDataSubmitModal from '@/components/common/sign-up/SignUpDataSubmitModal'
 
-type StepType = '1' | '2' | '3' | '4' | '5' | '6'
+type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 /**
  * 'step'에 따라 올바른 컴포넌트를 반환하는 스위처 컴포넌트
@@ -21,6 +22,7 @@ function SignUpStepSwitcher({ step }: { step: StepType }) {
   if (step === '4') return <MajorField />
   if (step === '5') return <PartField />
   if (step === '6') return <StudentCardUploadField />
+  if (step === '7') return <SignUpDataSubmitModal />
 
   // 'step' 값이 유효하지 않을 경우 기본값으로 1단계 표시
   return <NameField />

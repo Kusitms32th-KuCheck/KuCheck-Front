@@ -5,7 +5,7 @@ import MemberButton from '@/components/member/common/MemberButton'
 import { PartType } from '@/types/sign-up'
 import { useSignUpStore } from '@/store/signUpStore'
 
-type StepType = '1' | '2' | '3' | '4' | '5' | '6'
+type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function PartField() {
   const setSignUpState = useSignUpStore((state) => state.setState)

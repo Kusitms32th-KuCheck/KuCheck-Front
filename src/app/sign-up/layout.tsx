@@ -1,6 +1,5 @@
-import { Suspense } from 'react' // 1. Suspense import
-import MemberHeader from '@/components/member/common/MemberHeader'
-import SignUpStepIndicator from '@/components/common/sign-up/SignUpStepIndicator'
+import { Suspense } from 'react'
+import SignUpHeaderContainer from '@/components/common/sign-up/SignUpHeaderContainer'
 
 interface SignUpLayoutProps {
   children: React.ReactNode
@@ -19,7 +18,7 @@ export default async function SignUpLayout({ children }: SignUpLayoutProps) {
     <div>
       {/* 훅을 사용하는 컴포넌트를 포함한 MemberHeader를 Suspense로 감싼다. */}
       <Suspense fallback={<HeaderFallback />}>
-        <MemberHeader headerType={'dynamic'} rightElement={<SignUpStepIndicator />} />
+        <SignUpHeaderContainer />
       </Suspense>
 
       {/* 헤더의 높이만큼 공간 확보 */}

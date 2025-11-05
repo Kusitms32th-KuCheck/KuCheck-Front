@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // 2. 카카오 인증 API 호출
-    const result = await postAuthKaKao(code)
+    const result = await postAuthKaKao(code, baseUrl === 'http://localhost:3000' ? 'LOCAL' : 'DEV')
     console.log('카톡 로그인 결과', result)
 
     if (!result.success) {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       return redirect(`/login?error=${encodeURIComponent(result.error || 'Authentication failed')}`)
     }
 
-    const { status, role, accessToken, refreshToken } = result
+    const { status, role, accessToken, refreshToken, hasInfo } = result
 
     // 3. 쿠키 설정
     const cookieStore = await cookies()
@@ -63,13 +63,14 @@ export async function GET(request: NextRequest) {
 
     if (status === 'APPROVED') {
       // 승인됨 - 역할에 따라 분기
-      if (role === 'USER') {
+      if (role === 'USER' || role === 'MANAGEMENT' || role === 'STAFF' || role === 'EXECUTIVE') {
         return redirect('/home')
-      } else if (role === 'MANAGEMENT') {
-        return redirect('/manager')
-      } else {
-        console.warn('Unexpected role:', role)
-        return redirect('/login?error=unexpected_role')
+      } else if (role === 'GUEST') {
+        if (hasInfo) {
+          return redirect('/sign-up?step=7')
+        } else {
+          return redirect('/sign-up')
+        }
       }
     }
 

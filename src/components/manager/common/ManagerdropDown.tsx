@@ -21,7 +21,7 @@ interface DropdownProps {
   leftIconActive?: React.ReactNode
   rightIcon?: React.ReactNode
   rightIconActive?: React.ReactNode
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'add'
   type?: 'default' | 'icon-list' | 'date'
   customWidth?: string
   showValueInsteadOfLabel?: boolean
@@ -67,9 +67,26 @@ export default function Dropdown({
 
   const sizeClass = {
     sm: 'h-[36px] w-[140px] px-3 py-2 body-lg-regular',
-    md: 'h-[36px] gap-3 px-[13px]',
-    lg: 'h-[40px] w-[216px] px-3 py-2 body-sm-medium',
+
+    md: 'h-[36px] w-[193px] px-6 ',
+    lg: 'h-[40px] gap-2 py-2 body-lg-medium',
+    add: 'h-[40px] w-[66px] body-lg-medium px-3 ',
+
   }[size]
+  const resolvedTriggerClassWhenOpen = (() => {
+    if (!triggerClassName) return 'text-primary-500'
+    const parts = triggerClassName.split(/\s+/)
+    const replaced = parts.map((p) => (p.startsWith('text-') ? 'text-primary-500' : p))
+    return Array.from(new Set(replaced)).join(' ')
+  })()
+
+  const triggerClasses = (() => {
+    if (unstyled) return open ? resolvedTriggerClassWhenOpen : triggerClassName
+    if (triggerClassName) {
+      return open ? `${resolvedTriggerClassWhenOpen} border-primary-500` : `${triggerClassName} border-gray-300`
+    }
+    return open ? 'border-black text-black' : 'border-gray-300 text-gray-500'
+  })()
 
   return (
     <DropdownMenu open={open} onOpenChange={handleOpenChange}>
@@ -80,15 +97,10 @@ export default function Dropdown({
               ? 'flex items-center justify-between border-0 bg-transparent p-0 focus:outline-none'
               : 'flex items-center justify-between rounded-[8px] border bg-white hover:border-gray-500 focus:outline-none',
             sizeClass,
-            unstyled
-              ? open
-                ? clsx(triggerClassName, 'text-black')
-                : triggerClassName
-              : open
-                ? 'border-black text-black'
-                : 'border-gray-300 text-gray-500',
+            triggerClasses,
             disabled && 'pointer-events-none cursor-not-allowed bg-gray-100 opacity-60'
           )}
+          style={size === 'md' && !selectedOption ? { color: '#4B5563' } : undefined}
           disabled={disabled}
         >
           <div className="flex items-center gap-2">
@@ -113,8 +125,9 @@ export default function Dropdown({
         className={clsx(
           'z-50 mt-1 rounded-[8px] bg-white p-[6px] shadow-[0px_0px_12px_rgba(0,0,0,0.15)]',
           size === 'lg' && 'scrollbar-hide max-h-[222px] w-[216px] overflow-y-auto',
-          size === 'md' && 'w-[210px]',
+          size === 'md' && 'w-[193px]',
           size === 'sm' && 'w-[140px]',
+          size === 'add' && '] w-[66px]',
           customWidth && customWidth
         )}
       >
@@ -126,8 +139,9 @@ export default function Dropdown({
             className={clsx(
               'flex cursor-pointer items-center gap-2 rounded-[4px] p-[10px] hover:bg-gray-100 focus:outline-none',
               selected === option.value && 'bg-gray-200',
-              size === 'lg' && 'body-lg-regular',
+              size === 'lg' && 'body-lg-medium',
               size === 'sm' && 'body-md-medium',
+              size === 'add' && 'body-lg-medium h-[32px] justify-center',
               disabled && 'cursor-not-allowed opacity-60'
             )}
           >
