@@ -19,7 +19,7 @@ const MemberHeader = ({
   title,
   headerType = 'default',
   onBack,
-  headerColor = 'bg-white',
+  headerColor,
   rightElement,
   isBottomBorder = false,
 }: HeaderProps) => {

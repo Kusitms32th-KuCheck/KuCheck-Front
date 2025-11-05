@@ -5,6 +5,7 @@ const buttonType: {
   primary: { default: string; disabled: string }
   secondary: { default: string; disabled: string }
   round: { default: string; disabled: string }
+  category: { default: string; disabled: string }
 } = {
   primary: {
     default: 'bg-[#E2F2FF] text-primary-400',
@@ -18,10 +19,14 @@ const buttonType: {
     default: 'px-2 h-[22px] rounded-[32px] bg-gray-100 text-gray-500',
     disabled: '',
   },
+  category: {
+    default: 'p-1 rounded-[4px] caption-sm-medium',
+    disabled: '',
+  },
 }
 
 interface TagProps {
-  type: 'primary' | 'secondary' | 'round'
+  type: 'primary' | 'secondary' | 'round' | 'category'
   status: 'default' | 'disabled'
   children: ReactNode
   customClassName?: string

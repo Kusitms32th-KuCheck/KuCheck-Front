@@ -7,18 +7,18 @@ export default function NoticePage() {
   const menuList = ['기프', '밋업', '좋은정보공유', '홍보']
   return (
     <main>
-      <MemberHeader headerType={'dynamic'} title={'공지사항'} />
+      <MemberHeader headerType={'dynamic'} title={'공지사항'} headerColor={'bg-white'} />
       <div className="h-[120px]" />
       <div className="px-5">
         <section className="flex flex-col gap-y-3">
           <SearchBar />
           <div className="flex gap-x-2">
-            <div className="body-sm-semibold flex h-[28px] items-center justify-center rounded-[30px] bg-gray-800 px-3 text-white">
+            <div className="body-sm-medium flex h-[28px] items-center justify-center rounded-[30px] bg-gray-800 px-3 text-white">
               전체
             </div>
             {menuList.map((menu) => (
               <div
-                className="body-sm-semibold flex h-[28px] items-center justify-center rounded-[30px] bg-gray-100 px-3 text-gray-600"
+                className="body-sm-medium flex h-[28px] items-center justify-center rounded-[30px] bg-gray-100 px-3 text-gray-600"
                 key={menu}
               >
                 {menu}
