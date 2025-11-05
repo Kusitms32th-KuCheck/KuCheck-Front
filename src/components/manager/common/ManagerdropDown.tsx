@@ -67,9 +67,11 @@ export default function Dropdown({
 
   const sizeClass = {
     sm: 'h-[36px] w-[140px] px-3 py-2 body-lg-regular',
+
     md: 'h-[36px] w-[193px] px-6 ',
     lg: 'h-[40px] gap-2 py-2 body-lg-medium',
     add: 'h-[40px] w-[66px] body-lg-medium px-3 ',
+
   }[size]
   const resolvedTriggerClassWhenOpen = (() => {
     if (!triggerClassName) return 'text-primary-500'

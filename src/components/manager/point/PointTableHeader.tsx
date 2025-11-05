@@ -7,6 +7,7 @@ type Props = {
   onToggleMonth: (m: string) => void
   gridTemplate: string
   isScrolled: boolean
+  isHorizScrolled?: boolean
   contentMinWidth: string
   headerScrollRef: React.RefObject<HTMLDivElement | null>
 }
@@ -17,22 +18,29 @@ export default function PointTableHeader({
   onToggleMonth,
   gridTemplate,
   isScrolled,
+  isHorizScrolled,
   contentMinWidth,
   headerScrollRef,
 }: Props) {
   return (
     <div
-      className={`mx-[38px] mt-[29px] flex rounded-t-[12px] bg-white ${isScrolled ? 'z-20 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
+      className={`mx-[24px] mt-[28px] flex overflow-hidden rounded-t-[12px] bg-white ${isScrolled ? 'z-20 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
     >
       <div ref={headerScrollRef} className="scrollbar-hide overflow-x-auto">
         <div style={{ minWidth: contentMinWidth }}>
           <div
-            className={`relative z-100 grid items-center py-[14px] transition-shadow duration-200 ${
+            className={`relative z-100 grid h-[52px] items-center justify-center transition-shadow duration-200 ${
               isScrolled ? 'shadow-[0_0_20px_4px_rgba(0,0,0,0.15)]' : 'border-b border-gray-200'
             }`}
             style={{ gridTemplateColumns: gridTemplate, minWidth: 'max-content' }}
           >
-            <p className="body-lg-medium pl-[30px] text-start text-gray-500">이름</p>
+            <p
+              className={`body-lg-medium sticky left-0 flex h-full items-center bg-white pl-[30px] text-start text-gray-500 ${
+                isHorizScrolled ? 'border-r border-gray-200' : ''
+              }`}
+            >
+              이름
+            </p>
             <p className="body-lg-medium px-[13px] text-end text-gray-500">상벌점</p>
             <p className="body-lg-medium px-[13px] text-end text-gray-500">파트</p>
 
@@ -64,6 +72,7 @@ export default function PointTableHeader({
               '스터디',
               '큐포터즈',
               '운영진',
+              '메모',
               '전화번호',
               '학교',
               '학과',

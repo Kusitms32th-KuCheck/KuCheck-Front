@@ -4,6 +4,7 @@ export default function useScrollSync() {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const headerScrollRef = useRef<HTMLDivElement | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isHorizScrolled, setIsHorizScrolled] = useState(false)
 
   useEffect(() => {
     const container = containerRef.current
@@ -13,10 +14,12 @@ export default function useScrollSync() {
     const onContainerScroll = () => {
       if (header.scrollLeft !== container.scrollLeft) header.scrollLeft = container.scrollLeft
       setIsScrolled(container.scrollTop > 0)
+      setIsHorizScrolled(container.scrollLeft > 0)
     }
 
     const onHeaderScroll = () => {
       if (container.scrollLeft !== header.scrollLeft) container.scrollLeft = header.scrollLeft
+      setIsHorizScrolled(header.scrollLeft > 0)
     }
 
     container.addEventListener('scroll', onContainerScroll)
@@ -29,5 +32,5 @@ export default function useScrollSync() {
     }
   }, [])
 
-  return { containerRef, headerScrollRef, isScrolled }
+  return { containerRef, headerScrollRef, isScrolled, isHorizScrolled }
 }
