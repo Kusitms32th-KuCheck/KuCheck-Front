@@ -13,18 +13,18 @@ export default function NoticeDetailPage() {
             <p className="body-sm-regular text-gray-400">9월 22일 19:00</p>
           </section>
 
-          <section className="my-[23px] flex flex-col gap-y-[6px]">
-            <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
-              <p className="body-sm-medium text-primary-500">장소</p>
-              <p className="body-sm-medium">마루 180 이벤트홀 지하 1층</p>
-            </div>
-            <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
-              <p className="body-sm-medium text-primary-500">일시</p>
-              <p className="body-sm-medium">9월 27일(토) 12:00 - 17:10</p>
-            </div>
-          </section>
+          {/*<section className="my-[23px] flex flex-col gap-y-[6px]">*/}
+          {/*  <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">*/}
+          {/*    <p className="body-sm-medium text-primary-500">장소</p>*/}
+          {/*    <p className="body-sm-medium">마루 180 이벤트홀 지하 1층</p>*/}
+          {/*  </div>*/}
+          {/*  <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">*/}
+          {/*    <p className="body-sm-medium text-primary-500">일시</p>*/}
+          {/*    <p className="body-sm-medium">9월 27일(토) 12:00 - 17:10</p>*/}
+          {/*  </div>*/}
+          {/*</section>*/}
 
-          <p className="body-sm-regular text-gray-800">
+          <p className="body-sm-regular mt-[31px] text-gray-800">
             안녕하세요. 학회원 여러분! 교육기획팀입니다.
             <br /> 이번 주 토요일에는 아이디어 발표 & 커피챗 세션이 진행됩니다. 🎤🌟
             <br />
