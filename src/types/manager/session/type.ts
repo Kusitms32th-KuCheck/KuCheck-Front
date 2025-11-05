@@ -19,3 +19,15 @@ export interface SessionScheduleData {
 }
 
 export type SessionScheduleResponse = SessionScheduleData[]
+
+//세션 상세정보 upsert
+export interface SessionDetailRequest {
+  sessionId: number
+  place: string
+  startTime: string
+  endTime: string
+  content: string
+}
+export interface SessionDetailResponse {
+  sessionDetailId: number
+}

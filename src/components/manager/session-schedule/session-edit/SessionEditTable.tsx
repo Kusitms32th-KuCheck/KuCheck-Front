@@ -58,7 +58,10 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
 
     const fetchSessions = async () => {
       const res = await getClientSessionSchedule()
-      console.log(res)
+      console.log('getClientSessionSchedule response:', res)
+      if (res.success && Array.isArray(res.data)) {
+        console.log('First item structure:', res.data[0])
+      }
       if (cancelled) return
       if (res.success && Array.isArray(res.data)) {
         const data = res.data as SessionScheduleResponse
@@ -70,6 +73,7 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
             name: s.title || '',
             type: mapCategoryToLabel(s.category),
             isEditing: true,
+            sessionId: s.sessionId,
             sessionDetailId: s.sessionDetailId ?? null,
           }
         })

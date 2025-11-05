@@ -151,9 +151,14 @@ export default function SessionTable({
 
                       if (!hasDetail && mode === 'edit') {
                         const cleaned = pathname.replace(/\/$/, '')
-                        const target = cleaned.includes('/edit')
+                        const base = cleaned.includes('/edit')
                           ? cleaned.replace(/\/edit(\/|$)/, '/detail-add$1')
                           : `${cleaned}/detail-add`
+                        const sid = (r as Row & { sessionId?: number }).sessionId ?? null
+                        const date = r.date
+                        const baseTarget = sid ? `${base}/${sid}` : base
+                        const target = `${baseTarget}?date=${encodeURIComponent(date)}`
+                        console.log('SessionTable navigate target:', target, 'sid:', sid, 'date:', date)
                         return (
                           <button onClick={() => router.push(target)} className={inputClass}>
                             세션 정보 입력
@@ -163,7 +168,18 @@ export default function SessionTable({
 
                       return (
                         <button
-                          onClick={() => hasDetail && onViewClick?.(i)}
+                          onClick={() => {
+                            if (hasDetail) {
+                              const sessionId = (r as Row & { sessionId?: number }).sessionId
+                              console.log(
+                                '세션 정보 보기 클릭 - sessionId:',
+                                sessionId,
+                                'sessionDetailId:',
+                                r.sessionDetailId
+                              )
+                              onViewClick?.(i)
+                            }
+                          }}
                           disabled={!hasDetail}
                           className={hasDetail ? enabledClass : disabledClass}
                         >
