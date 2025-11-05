@@ -20,22 +20,21 @@ export default function MyAttendancePage() {
       const result = await getPointsHistory(pageParam, 10)
       return result.data
     },
-    // allPages 파라미터 사용 - 현재까지 가져온 총 페이지 수로 다음 페이지 계산
     getNextPageParam: (lastPage, allPages) => {
-      // records가 10개 미만이면 마지막 페이지 (불완전한 페이지)
+      if (!lastPage || !lastPage.data) {
+        return undefined
+      }
       if (lastPage?.data?.records && lastPage?.data?.records?.length < 10) {
         return undefined
       }
-
-      // isLastPage가 true면 마지막 페이지
       if (lastPage?.isLastPage === true) {
         return undefined
       }
-
-      // 다음 페이지 번호 = 현재까지 가져온 페이지 수 + 1
       return allPages.length + 1
     },
     initialPageParam: 1,
+    retry: 1,
+    throwOnError: false,
   })
 
   useEffect(() => {
@@ -43,7 +42,8 @@ export default function MyAttendancePage() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        // ✅ 에러가 없을 때만 다음 페이지 로드
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage && !error) {
           fetchNextPage()
         }
       },
@@ -57,7 +57,7 @@ export default function MyAttendancePage() {
     return () => {
       observer.disconnect()
     }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, error])
 
   if (isLoading) {
     return (
@@ -67,10 +67,17 @@ export default function MyAttendancePage() {
     )
   }
 
-  if (error) {
+  // ✅ 초기 로드 에러 처리
+  if (error && (!data || data.pages.length === 0)) {
     return (
-      <div className="flex justify-center py-4">
+      <div className="flex flex-col items-center justify-center gap-y-4 py-8">
         <p className="text-red-500">데이터를 불러오는데 실패했습니다.</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          다시 시도
+        </button>
       </div>
     )
   }
@@ -84,9 +91,10 @@ export default function MyAttendancePage() {
         .map((record) => [`${record.date}${record.type}`, record]) || []
     ).values()
   )
+
   return (
     <>
-      <section className="px-5">
+      <section className="flex flex-1 flex-col px-5">
         <section className="mt-[30px] flex flex-col items-center justify-center">
           <p className="body-lg-regular text-gray-500">{firstPageData?.name}님의 현재 상벌점</p>
           <p className="heading-3xl-semibold">{firstPageData?.totalPoints}</p>
@@ -105,10 +113,14 @@ export default function MyAttendancePage() {
           </div>
         </section>
 
-        <section className="mt-[44px] flex flex-col gap-y-[24px]">
-          {uniqueRecords.map((record) => (
-            <AttendanceItem key={`${record.date}-${record.type}`} record={record} />
-          ))}
+        <section className="mt-[44px] flex flex-1 flex-col items-center justify-center gap-y-[24px]">
+          {uniqueRecords.length === 0 ? (
+            <div className="flex items-center justify-center">
+              <p className="body-lg-medium text-gray-500">아직 받은 상벌점이 없어요</p>
+            </div>
+          ) : (
+            uniqueRecords.map((record) => <AttendanceItem key={`${record.date}-${record.type}`} record={record} />)
+          )}
 
           <div
             ref={observerTarget}
@@ -123,8 +135,18 @@ export default function MyAttendancePage() {
             )}
           </div>
 
-          {!hasNextPage && uniqueRecords.length > 0 && (
-            <div className="py-4 text-center">
+          {/* ✅ 페이지 로드 에러 처리 */}
+          {error && uniqueRecords.length > 0 && (
+            <div className="flex flex-col items-center gap-y-2 py-4">
+              <p className="text-sm text-red-500">추가 데이터를 불러올 수 없습니다</p>
+              <button onClick={() => fetchNextPage()} className="text-sm text-blue-500 hover:text-blue-600">
+                다시 시도
+              </button>
+            </div>
+          )}
+
+          {!hasNextPage && uniqueRecords.length > 0 && !error && (
+            <div className="py-2 text-center">
               <p className="caption-sm-medium text-gray-500">더 이상 데이터가 없습니다</p>
             </div>
           )}
