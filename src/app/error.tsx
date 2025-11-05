@@ -14,7 +14,7 @@ export default function Error({ error, reset }: ErrorPageProps) {
   }, [error])
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white">
       <h2 className="mb-4 text-2xl font-bold">문제가 발생했습니다!</h2>
       <p className="mb-6 text-gray-600">예상치 못한 오류가 발생했습니다. 다시 시도해 주세요.</p>
       <button

@@ -7,22 +7,11 @@ export default function NoticeDetailPage() {
       <div className="desktop:w-[375px] min-h-screen bg-white">
         <MemberHeader headerType="dynamic" title={'세션 공지'} isBottomBorder={true} headerColor={'bg-white'} />
         <div className="h-[116px]" />
-        <div className="px-5 pb-[145px]">
+        <div className="mt-[23px] px-5 pb-[145px]">
           <section className="flex flex-col gap-y-[3px] pt-[10px] pb-[8px]">
             <p className="heading-sm-semibold">🔊 아이디어 발표 & 커피챗 세션 ☕</p>
             <p className="body-sm-regular text-gray-400">9월 22일 19:00</p>
           </section>
-
-          {/*<section className="my-[23px] flex flex-col gap-y-[6px]">*/}
-          {/*  <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">*/}
-          {/*    <p className="body-sm-medium text-primary-500">장소</p>*/}
-          {/*    <p className="body-sm-medium">마루 180 이벤트홀 지하 1층</p>*/}
-          {/*  </div>*/}
-          {/*  <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">*/}
-          {/*    <p className="body-sm-medium text-primary-500">일시</p>*/}
-          {/*    <p className="body-sm-medium">9월 27일(토) 12:00 - 17:10</p>*/}
-          {/*  </div>*/}
-          {/*</section>*/}
 
           <p className="body-sm-regular mt-[31px] text-gray-800">
             안녕하세요. 학회원 여러분! 교육기획팀입니다.

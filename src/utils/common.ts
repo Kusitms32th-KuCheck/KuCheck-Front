@@ -76,7 +76,8 @@ export const formatToMonthDay = (dateString: string): string => {
  * @param timestamp - ISO 8601 형식의 타임스탬프 (예: 2025-10-28T11:36:11.668882)
  * @returns MM/DD 형식의 문자열 (예: 10/28)
  */
-export function formatMonthDay(timestamp: string): string {
+export function formatMonthDay(timestamp: string | undefined): string {
+  if (!timestamp) return ''
   const date = new Date(timestamp)
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
@@ -97,6 +98,35 @@ export const formatDateTime = (isoString: string): string => {
   const minutes = String(date.getMinutes()).padStart(2, '0')
 
   return `${month}/${day} ${hours}:${minutes}`
+}
+
+/**
+ * HH:MM:SS 형식의 시간을 HH:MM으로 변환
+ * @param time - "14:00:00" 형식의 시간 문자열
+ * @returns "14:00" 형식의 시간 문자열
+ */
+export function formatTimeToHHMM(time: string | undefined): string {
+  if (!time) return ''
+  return time.slice(0, 5)
+}
+
+/**
+ * ISO 8601 형식의 날짜를 한국 날짜 + 요일로 변환
+ * @param isoDate - "2025-11-01T03:18:38.482258" 형식의 ISO 날짜
+ * @returns "11월 1일(토)" 형식의 문자열
+ */
+export function formatToKoreanDate(isoDate: string | undefined): string {
+  if (!isoDate) return ''
+  const date = new Date(isoDate)
+
+  // 한국 표준시(KST) 기준으로 변환
+  const koreanDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }))
+
+  const month = koreanDate.getMonth() + 1
+  const day = koreanDate.getDate()
+  const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][koreanDate.getDay()]
+
+  return `${month}월 ${day}일(${dayOfWeek})`
 }
 
 export const changePartEnumToContent = (part: PartType) => {

@@ -30,7 +30,7 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
   return (
     <div
       onClick={() => {
-        router.push('/session')
+        router.push(`/session/${sessionData?.sessionId}`)
       }}
       className="flex w-full flex-col justify-between gap-y-[29px] rounded-[16px] bg-white px-[14px] pt-[17px] pb-[10px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]"
     >
