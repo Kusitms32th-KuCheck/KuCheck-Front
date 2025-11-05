@@ -30,7 +30,7 @@ export default async function ReasonForAbsencePage() {
   }
 
   return (
-    <main>
+    <main className="desktop:w-[375px] min-h-screen bg-white">
       <MemberHeader
         headerType={'dynamic'}
         title={'불참 사유서'}
@@ -61,7 +61,7 @@ export default async function ReasonForAbsencePage() {
       </section>
 
       {/* bottom button */}
-      <section className="fixed bottom-0 w-full bg-white px-5 pb-[36px]">
+      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <Link
           className="bg-primary-500 body-lg-semibold flex h-[48px] w-full items-center justify-center rounded-[14px] text-white"
           href={'/reason-for-absence/submit'}

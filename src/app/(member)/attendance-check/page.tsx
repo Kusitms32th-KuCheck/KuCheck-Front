@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function AttendanceCheckPage() {
   const result = await postServerAttendanceToken()
-
+  console.log(result)
   return (
     <div className="mt-[40px] flex flex-col items-center justify-center gap-y-[60px] px-5">
       <QRcode expAt={result.data?.expAt} token={result.data?.token} />

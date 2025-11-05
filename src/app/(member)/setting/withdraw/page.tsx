@@ -22,7 +22,7 @@ export default function WithDrawPage() {
   }
 
   return (
-    <main>
+    <main className="desktop:w-[375px] min-h-screen bg-white">
       {isWithDrawModalOpen && (
         <WithDrawModal setIsWithDrawModalOpen={setIsWithDrawModalOpen} onWithDrawClick={onWithdrawClick} />
       )}
@@ -41,7 +41,7 @@ export default function WithDrawPage() {
           </li>
         </ul>
       </ul>
-      <div className="fixed bottom-[36px] flex w-full gap-x-[10px] bg-white px-5">
+      <div className="desktop:w-[375px] fixed bottom-[36px] flex w-full gap-x-[10px] bg-white px-5">
         <button
           onClick={() => {
             router.back()

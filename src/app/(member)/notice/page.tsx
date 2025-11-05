@@ -6,7 +6,7 @@ import { SearchIcon } from '@/assets/svgComponents/member'
 export default function NoticePage() {
   const menuList = ['기프', '밋업', '좋은정보공유', '홍보']
   return (
-    <main>
+    <main className="desktop:w-[375px] min-h-screen bg-white">
       <MemberHeader headerType={'dynamic'} title={'공지사항'} headerColor={'bg-white'} />
       <div className="h-[120px]" />
       <div className="px-5">
