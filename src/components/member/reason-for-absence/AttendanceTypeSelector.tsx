@@ -151,12 +151,14 @@ export default function AttendanceTypeSelector() {
 
       {/* Drawer */}
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>{absenceData?.absenceType === 'LATE' ? '지각 시간' : '조퇴 시간'}</DrawerTitle>
+        <DrawerContent className="desktop:mx-auto desktop:max-w-[375px] desktop:rounded-t-2xl">
+          <DrawerHeader className="">
+            <DrawerTitle className="desktop:text-lg">
+              {absenceData?.absenceType === 'LATE' ? '지각 시간' : '조퇴 시간'}
+            </DrawerTitle>
           </DrawerHeader>
 
-          <div className="px-4 pb-8">
+          <div className="desktop:w-[375px] desktop:px-5 px-4 pb-8">
             {absenceData?.absenceType === 'LATE' && (
               <LateDateTimeSelector onChangeValue={onChangeValue} onClose={handleDrawerClose} />
             )}
@@ -196,14 +198,15 @@ function LateDateTimeSelector({
   return (
     <div className="flex flex-col gap-y-4 gap-y-[100px]">
       <input
+        defaultValue="13:00"
         onChange={(e) => onChangeValue('lateDateTime', e.target.value)}
         placeholder="시간을 선택해 주세요"
-        className="heading-md-medium rounded-[8px] border border-gray-200 px-4 py-4 placeholder:text-gray-400"
+        className="body-2xl-medium text-primary-500 rounded-[8px] border border-gray-200 px-3 py-[10px] placeholder:text-gray-400"
         type="time"
       />
       <DrawerClose asChild>
         <button
-          className="bg-primary-500 w-full rounded-[8px] px-6 pt-3 pb-[36px] font-semibold text-white"
+          className="bg-primary-500 mb-[36px] w-full rounded-[8px] px-6 py-3 font-semibold text-white"
           type="button"
           onClick={onClose}
         >
@@ -225,14 +228,15 @@ function LeaveDateTimeSelector({
   return (
     <div className="flex flex-col gap-y-4 gap-y-[100px]">
       <input
+        defaultValue="13:00"
         onChange={(e) => onChangeValue('leaveDateTime', e.target.value)}
         placeholder="시간을 선택해 주세요"
-        className="heading-md-medium rounded-[8px] border border-gray-200 px-4 py-4 placeholder:text-gray-400"
+        className="body-2xl-medium text-primary-500 rounded-[8px] border border-gray-200 px-3 py-[10px] placeholder:text-gray-400"
         type="time"
       />
       <DrawerClose asChild>
         <button
-          className="bg-primary-500 rounded-[8px] px-6 pt-3 pb-[36px] font-semibold text-white"
+          className="bg-primary-500 mb-[36px] rounded-[8px] px-6 py-3 font-semibold text-white"
           type="button"
           onClick={onClose}
         >

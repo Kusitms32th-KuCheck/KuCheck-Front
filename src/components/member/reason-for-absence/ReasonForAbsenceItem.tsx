@@ -44,7 +44,7 @@ export default function ReasonForAbsenceItem({
         </div>
       </section>
       <div
-        className={`${absenceReportApproval === 'APPROVED' ? 'text-primary-400' : 'text-gray-600'} caption-md-semibold px-[7px] py-2`}
+        className={`${absenceReportApproval === 'APPROVED' ? 'text-primary-400' : 'text-gray-600'} body-sm-semibold px-[7px] py-2`}
       >
         {switchReportApproval(absenceReportApproval)}
       </div>
