@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
-import { useSessionEdit } from './SessionEditContext'
+import { useSessionEdit } from './session-table/SessionEditContext'
 import SessionTable from './session-table/SessionTable'
 
 type Row = { weekLabel: string; date: string; name: string; type: string; filled?: boolean; isEditing?: boolean }

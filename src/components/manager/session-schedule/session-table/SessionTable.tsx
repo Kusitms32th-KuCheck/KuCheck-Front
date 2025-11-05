@@ -11,6 +11,7 @@ type Row = {
   type: string
   filled?: boolean
   isEditing?: boolean
+  isHoliday?: boolean
 }
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
   isRowFilled?: (idx: number, row: Row) => boolean
   onNameChange?: (idx: number, v: string) => void
   onTypeChange?: (idx: number, v: string) => void
+  onHolidayChange?: (idx: number, v: boolean) => void
   onViewClick?: (idx: number) => void
 }
 
@@ -30,18 +32,20 @@ export default function SessionTable({
   isRowFilled,
   onNameChange,
   onTypeChange,
+  onHolidayChange,
   onViewClick,
 }: Props) {
   const isEditing = mode === 'edit'
   const router = useRouter()
   const pathname = usePathname() || ''
-  const gridCols = showViewButton ? 'grid-cols-[147px_145px_312px_193px_150px]' : 'grid-cols-[147px_145px_312px_193px]'
+  const gridCols = showViewButton
+    ? 'grid-cols-[147px_145px_312px_193px_75px_150px]'
+    : 'grid-cols-[147px_145px_312px_193px_75px]'
 
   return (
     <div className="shadow-middlemodal flex flex-col overflow-hidden rounded-[12px] bg-white">
       <div className="align-center flex w-full overflow-x-auto">
         <div className="min-w-[797px]">
-          {/* Header */}
           <div
             className={`grid ${gridCols} body-lg-semibold items-center gap-0 border-b border-gray-100 py-[14px] text-gray-500`}
           >
@@ -49,10 +53,10 @@ export default function SessionTable({
             <div>세션 일자</div>
             <div>세션 이름</div>
             <div>세션 종류</div>
+            <div>공휴일</div>
             {showViewButton && <div />}
           </div>
 
-          {/* Body */}
           {rows.length === 0 ? (
             <div className="flex h-[80vh] flex-col items-center justify-center text-gray-700">
               <p className="body-md-regular text-gray-500">전체 주차와 첫 세션 일시를 입력한 후</p>
@@ -91,6 +95,13 @@ export default function SessionTable({
                           value={r.type}
                           onChange={(v) => onTypeChange?.(i, v)}
                         />
+                        <div className="flex items-center justify-center border-r border-gray-200">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(r.isHoliday)}
+                            onChange={(e) => onHolidayChange && onHolidayChange(i, e.target.checked)}
+                          />
+                        </div>
                       </>
                     )
                   }
@@ -106,6 +117,13 @@ export default function SessionTable({
                         className={`border-r border-gray-200 px-[20px] py-[22px] ${filled ? 'text-gray-800' : 'text-gray-400'}`}
                       >
                         {filled ? r.type : '-'}
+                      </div>
+                      <div
+                        className={`border-r border-gray-200 px-[20px] py-[22px] ${
+                          filled ? 'text-gray-800' : 'text-gray-400'
+                        }`}
+                      >
+                        {r.isHoliday ? 'Y' : '-'}
                       </div>
                     </>
                   )
