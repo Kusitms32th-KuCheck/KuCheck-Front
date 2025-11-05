@@ -1,6 +1,8 @@
 import MemberHeader from '@/components/member/common/MemberHeader'
 import SubmitCard from '@/components/member/ku-pick/SubmitCard'
 import { getKuPickMy } from '@/lib/member/server/ku-pick'
+import { HelpCircleIcon } from '@/assets/svgComponents/member'
+import Link from 'next/link'
 export const dynamic = 'force-dynamic'
 export default async function QPickPage() {
   const myKuPickResponseData = await getKuPickMy()
@@ -8,7 +10,15 @@ export default async function QPickPage() {
 
   return (
     <main>
-      <MemberHeader headerType={'dynamic'} title={'큐픽 제출하기'} />
+      <MemberHeader
+        headerType={'dynamic'}
+        title={'큐픽 제출하기'}
+        rightElement={
+          <Link className="absolute right-5" href={'/ku-pick/guide'}>
+            <HelpCircleIcon width={20} height={20} />
+          </Link>
+        }
+      />
       <div className="h-[116px]" />
       <div className="mt-[20px] flex flex-col gap-y-4 px-5">
         <SubmitCard
