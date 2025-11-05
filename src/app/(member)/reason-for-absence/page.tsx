@@ -14,7 +14,7 @@ export default async function ReasonForAbsencePage() {
   let isError = false
 
   try {
-    const result = await getAbsence(1, 30)
+    const result = await getAbsence()
 
     // ✅ API 응답 구조 확인
     if (result.success && result.data) {

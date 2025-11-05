@@ -38,7 +38,7 @@ export default function AttendanceTypeSelector() {
       ...absenceData,
       absenceData: {
         ...absenceData,
-        absenceType: attendanceType,
+        submitType: attendanceType,
         lateDateTime: undefined,
         leaveDateTime: undefined,
       },
@@ -47,7 +47,7 @@ export default function AttendanceTypeSelector() {
 
   const handleDrawerOpen = (attendanceType: AbsenceType) => {
     // 이미 선택된 타입을 다시 클릭하면 Drawer 열기
-    if (attendanceType === absenceData?.absenceType) {
+    if (attendanceType === absenceData?.submitType) {
       setIsDrawerOpen(true)
       return
     }
@@ -73,9 +73,9 @@ export default function AttendanceTypeSelector() {
   const handleDrawerClose = () => {
     // 시간이 선택되지 않았으면 타입 초기화
     const hasTimeSelected =
-      absenceData?.absenceType === 'LATE'
+      absenceData?.submitType === 'LATE'
         ? absenceData?.lateDateTime
-        : absenceData?.absenceType === 'EARLY_LEAVE'
+        : absenceData?.submitType === 'EARLY_LEAVE'
           ? absenceData?.leaveDateTime
           : true
 
@@ -84,7 +84,7 @@ export default function AttendanceTypeSelector() {
         ...absenceData,
         absenceData: {
           ...absenceData,
-          absenceType: undefined,
+          submitType: undefined,
         },
       })
     }
@@ -102,7 +102,7 @@ export default function AttendanceTypeSelector() {
               key={attendanceType.enum}
               onClick={() => handleAttendanceTypeClick(attendanceType.enum)}
               className={`${
-                attendanceType.enum === absenceData?.absenceType
+                attendanceType.enum === absenceData?.submitType
                   ? 'bg-primary-50 border-primary-500 border'
                   : 'bg-background1 border border-gray-200'
               } rounded-[8px] border px-6 py-3 transition-colors`}
@@ -112,7 +112,7 @@ export default function AttendanceTypeSelector() {
             </button>
           ))}
         </div>
-        {absenceData?.absenceType === 'LATE' ? (
+        {absenceData?.submitType === 'LATE' ? (
           <div className="flex flex-col gap-y-1">
             <h1 className="body-2xl-semibold">지각 시간</h1>
             <div className="flex items-center justify-between">
@@ -129,7 +129,7 @@ export default function AttendanceTypeSelector() {
               </button>
             </div>
           </div>
-        ) : absenceData?.absenceType === 'EARLY_LEAVE' ? (
+        ) : absenceData?.submitType === 'EARLY_LEAVE' ? (
           <div className="flex flex-col gap-y-1">
             <h1 className="body-2xl-semibold">조퇴 시간</h1>
             <div className="flex items-center justify-between">
@@ -154,15 +154,15 @@ export default function AttendanceTypeSelector() {
         <DrawerContent className="desktop:mx-auto desktop:max-w-[375px] desktop:rounded-t-2xl">
           <DrawerHeader className="">
             <DrawerTitle className="desktop:text-lg">
-              {absenceData?.absenceType === 'LATE' ? '지각 시간' : '조퇴 시간'}
+              {absenceData?.submitType === 'LATE' ? '지각 시간' : '조퇴 시간'}
             </DrawerTitle>
           </DrawerHeader>
 
           <div className="desktop:w-[375px] desktop:px-5 px-4 pb-8">
-            {absenceData?.absenceType === 'LATE' && (
+            {absenceData?.submitType === 'LATE' && (
               <LateDateTimeSelector onChangeValue={onChangeValue} onClose={handleDrawerClose} />
             )}
-            {absenceData?.absenceType === 'EARLY_LEAVE' && (
+            {absenceData?.submitType === 'EARLY_LEAVE' && (
               <LeaveDateTimeSelector onChangeValue={onChangeValue} onClose={handleDrawerClose} />
             )}
           </div>
@@ -172,10 +172,10 @@ export default function AttendanceTypeSelector() {
       {/* bottom button */}
       <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <MemberButton
-          disabled={!absenceData?.absenceType}
+          disabled={!absenceData?.submitType}
           styleType="primary"
           styleSize="lg"
-          styleStatus={absenceData?.absenceType ? 'default' : 'disabled'}
+          styleStatus={absenceData?.submitType ? 'default' : 'disabled'}
           onClick={() => {
             handleStepClick('3')
           }}
