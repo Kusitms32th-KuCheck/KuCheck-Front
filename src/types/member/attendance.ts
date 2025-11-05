@@ -54,3 +54,10 @@ export interface AttendanceTokenResponseType {
   school: string
   profileImageUrl: string
 }
+
+export interface AttendanceAvailabilityResponseType {
+  available: boolean
+  reason: AttendanceAvailabilityReasonType
+}
+
+export type AttendanceAvailabilityReasonType = 'NO_OPEN_SESSION' | 'ALREADY_RECORDED'
