@@ -9,6 +9,66 @@ import AddHeader from '../add-post/AddHeader'
 import AddBody from '../add-post/AddBody'
 import Image from 'next/image'
 
+// 세션 이미지 아이템 컴포넌트
+function SessionImageItem({ imageUrl, alt }: { imageUrl: string; alt: string }) {
+  const [imageError, setImageError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const handleImageError = () => {
+    console.error('이미지 로드 실패:', {
+      url: imageUrl,
+      timestamp: new Date().toISOString(),
+      possibleCause: 'presigned URL 만료 또는 권한 부족',
+    })
+    setImageError(true)
+    setIsLoading(false)
+  }
+
+  const handleImageLoad = () => {
+    console.log('이미지 로드 성공:', imageUrl)
+    setIsLoading(false)
+  }
+
+  if (imageError) {
+    return (
+      <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[10px] bg-gray-100">
+        <div className="p-4 text-center">
+          <div className="mb-2 text-sm text-gray-400">📷</div>
+          <div className="text-xs text-gray-500">이미지를 불러올 수 없습니다</div>
+          <button
+            onClick={() => {
+              setImageError(false)
+              setIsLoading(true)
+            }}
+            className="mt-1 text-xs text-blue-500 hover:underline"
+          >
+            다시 시도
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative aspect-square w-full overflow-hidden rounded-[10px] bg-gray-100">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="text-sm text-gray-400">로딩 중...</div>
+        </div>
+      )}
+      <Image
+        src={imageUrl}
+        alt={alt}
+        fill
+        className="object-cover"
+        onError={handleImageError}
+        onLoad={handleImageLoad}
+        onLoadStart={() => setIsLoading(true)}
+      />
+    </div>
+  )
+}
+
 export default function SessionDetail({
   sessionDetail,
   date,
@@ -118,12 +178,17 @@ export default function SessionDetail({
           dangerouslySetInnerHTML={{ __html: initialContent }}
         />
         {sessionImages && sessionImages.length > 0 && (
-          <div className="mt-8 grid grid-cols-3 gap-4">
-            {sessionImages.map((img, idx) => (
-              <div key={idx} className="relative aspect-square w-full overflow-hidden rounded-[10px] bg-gray-100">
-                <Image src={img.url} alt={`세션 이미지 ${idx + 1}`} fill className="object-cover" />
-              </div>
-            ))}
+          <div className="mt-8 space-y-2">
+            <h3 className="text-sm font-medium text-gray-700">첨부 이미지</h3>
+            <div className="grid grid-cols-3 gap-4">
+              {sessionImages.map((img, idx) => (
+                <SessionImageItem
+                  key={img.sessionImageId || idx}
+                  imageUrl={img.sessionImagePreSignedUrl}
+                  alt={`세션 이미지 ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>

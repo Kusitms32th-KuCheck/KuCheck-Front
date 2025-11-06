@@ -33,11 +33,31 @@ export interface SessionDetailResponse {
 }
 
 //세션 detail 상세정보 조회
+interface SessionImage {
+  sessionImageId: number
+  sessionImagePreSignedUrl: string
+}
+
 export interface SessionDetailResponse {
   sessionDetailId: number
   place: string
   startTime: string
   endTime: string
   content: string
-  sessionImages: string[]
+  sessionImages: SessionImage[]
+}
+
+//세션 상세 이미지 업로드
+interface SessionDetailImage {
+  fileName: string
+}
+export interface SessionDetailImageRequest {
+  sessionDetailId: number
+  imageFileName: SessionDetailImage[]
+}
+
+//세션 상세 이미지 업로드 응답
+export interface SessionDetailImageResponse {
+  sessionImageId: number
+  sessionImagePreSignedUrl: string
 }

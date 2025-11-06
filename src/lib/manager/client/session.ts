@@ -1,6 +1,12 @@
 import { ApiCallResult } from '@/types/common'
-import { SessionScheduleRequest, SessionScheduleResponse } from '@/types/manager/session/type'
-import { SessionDetailRequest, SessionDetailResponse } from '@/types/manager/session/type'
+import {
+  SessionScheduleRequest,
+  SessionScheduleResponse,
+  SessionDetailRequest,
+  SessionDetailResponse,
+  SessionDetailImageRequest,
+  SessionDetailImageResponse,
+} from '@/types/manager/session/type'
 
 //세션 일정 저장
 export const postClientSessionSchedule = async (
@@ -90,6 +96,39 @@ export const postClientSessionDetail = async (
     const responseData: SessionDetailResponse = json.data
 
     return { success: true, data: responseData }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//세션 상세정보 이미지 업로드
+export const postDetailImage = async (
+  uploadData: SessionDetailImageRequest | undefined
+): Promise<ApiCallResult<SessionDetailImageResponse[]>> => {
+  try {
+    if (!uploadData) {
+      return { success: false, error: 'Upload data is required' }
+    }
+
+    const response = await fetch('/api/session/staff/detail/image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(uploadData),
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      return { success: false, error: error.error || 'Failed to submit' }
+    }
+
+    const data = await response.json()
+    return { success: true, data: data.data || data.result }
   } catch (error) {
     return {
       success: false,

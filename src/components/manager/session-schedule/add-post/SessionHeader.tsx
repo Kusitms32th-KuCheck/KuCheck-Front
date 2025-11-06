@@ -12,9 +12,19 @@ type SessionHeaderProps = {
   setStartTime: (v: string) => void
   setEndTime: (v: string) => void
   date?: string | null
+  files: File[]
+  setFiles: (files: File[] | ((prev: File[]) => File[])) => void
 }
 
-export default function SessionHeader({ place, setPlace, setStartTime, setEndTime, date }: SessionHeaderProps) {
+export default function SessionHeader({
+  place,
+  setPlace,
+  setStartTime,
+  setEndTime,
+  date,
+  files,
+  setFiles,
+}: SessionHeaderProps) {
   const hourOptions = Array.from({ length: 6 }, (_, i) => ({
     label: String(11 + i).padStart(2, '0'),
     value: String(11 + i).padStart(2, '0'),
@@ -86,7 +96,7 @@ export default function SessionHeader({ place, setPlace, setStartTime, setEndTim
         </div>
       </InputField>
 
-      <ImageUpload />
+      <ImageUpload files={files} setFiles={setFiles} />
     </div>
   )
 }
