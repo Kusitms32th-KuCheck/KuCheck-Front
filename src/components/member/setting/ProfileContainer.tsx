@@ -31,19 +31,6 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
   const handleImagePreview = async (selectedFile: File) => {
     try {
       setIsLoading(true)
-
-      if (!selectedFile) return
-
-      if (!selectedFile.type.startsWith('image/')) {
-        error('이미지 파일만 선택 가능합니다')
-        return
-      }
-
-      if (selectedFile.size > 10 * 1024 * 1024) {
-        error('파일 크기가 10MB를 초과합니다')
-        return
-      }
-
       // 1. 파일 읽기 및 미리보기 설정
       const reader = new FileReader()
 
@@ -108,13 +95,13 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
     if (selectedFile) {
       // 파일 검증 (선택사항)
       if (!selectedFile.type.startsWith('image/')) {
-        console.error('❌ 이미지 파일만 선택 가능합니다')
+        error('이미지 파일만 선택 가능합니다')
         return
       }
 
-      if (selectedFile.size > 5 * 1024 * 1024) {
-        // 5MB 제한
-        console.error('❌ 파일 크기가 5MB를 초과합니다')
+      if (selectedFile.size > 10 * 1024 * 1024) {
+        // 10MB 제한
+        error('파일 크기가 10MB를 초과합니다')
         return
       }
 

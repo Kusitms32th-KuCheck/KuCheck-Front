@@ -9,6 +9,7 @@ import { useSignUpStore } from '@/store/signUpStore'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { getMembersProfileImageUrl } from '@/lib/member/common'
 import { postMembersOnboarding } from '@/lib/common'
+import { useToast } from '@/components/member/common/toast/ToastContext'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
@@ -21,6 +22,8 @@ export default function ImageUploader() {
   const [isLoading, setIsLoading] = useState(false)
 
   const { uploadFile } = useFileUpload()
+
+  const { error } = useToast()
 
   const router = useRouter()
   const pathname = usePathname()
@@ -44,12 +47,12 @@ export default function ImageUploader() {
     if (!selectedFile) return
 
     if (!selectedFile.type.startsWith('image/')) {
-      console.error('❌ 이미지 파일만 선택 가능합니다')
+      error('이미지 파일만 선택 가능합니다')
       return
     }
 
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      console.error('❌ 파일 크기가 5MB를 초과합니다')
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      error('파일 크기가 10MB를 초과합니다')
       return
     }
 
@@ -69,7 +72,7 @@ export default function ImageUploader() {
 
   const handleSubmit = async () => {
     if (!file?.url) {
-      console.error('❌ 업로드할 파일을 선택해주세요')
+      error('업로드할 파일을 선택해주세요')
       return
     }
 
@@ -78,6 +81,10 @@ export default function ImageUploader() {
 
       const extension = extractFileExtension(file.name)
       const presignedResponse = await getMembersProfileImageUrl(`profileImageUrl.${extension}`)
+
+      if (presignedResponse.error) {
+        error(`${presignedResponse.error}`)
+      }
 
       if (!presignedResponse.success || !presignedResponse.data?.data?.newUrl) {
         throw new Error('프리사인드 URL 요청 실패')
@@ -98,6 +105,8 @@ export default function ImageUploader() {
         console.log('response', response)
         if (response.success) {
           handleStepClick('7')
+        } else if (response.error) {
+          error(`${response.error}`)
         }
       }
     } catch (error) {
@@ -155,7 +164,7 @@ export default function ImageUploader() {
           <div className="inset-0 flex items-center justify-center">
             <button
               onClick={() => fileRef.current?.click()}
-              className="caption-sm-medium rounded-[4px] bg-gray-400 px-[10px] py-[6px] text-white transition-colors hover:bg-gray-50"
+              className="caption-sm-medium cursor-pointer rounded-[4px] bg-gray-400 px-[10px] py-[6px] text-white transition-colors"
             >
               다시 선택하기
             </button>
