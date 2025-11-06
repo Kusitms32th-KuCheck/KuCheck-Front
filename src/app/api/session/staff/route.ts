@@ -26,11 +26,20 @@ export async function POST(request: Request) {
 }
 
 //세션 정보 불러오기
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const { data, error } = await apiCallServer<SessionScheduleResponse>('/v1/session/staff', {
-      method: 'GET',
-    })
+    const { searchParams } = new URL(request.url)
+    const page = searchParams.get('page') || '1'
+    const size = searchParams.get('size') || '10'
+
+    console.log('API route - received page:', page, 'size:', size)
+
+    const { data, error } = await apiCallServer<SessionScheduleResponse>(
+      `/v1/session/staff?page=${page}&size=${size}`,
+      {
+        method: 'GET',
+      }
+    )
 
     if (error) {
       return Response.json({ error }, { status: 400 })

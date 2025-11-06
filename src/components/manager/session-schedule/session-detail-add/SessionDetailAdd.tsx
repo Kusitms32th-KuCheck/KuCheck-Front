@@ -44,8 +44,12 @@ export default function SessionDetailAdd() {
 
       if (result.success) {
         console.log('세션 상세 저장 성공!')
+        const sessionDetailId = result.data?.sessionDetailId
+        const dateParam = date ? `?date=${encodeURIComponent(date)}` : ''
+        const targetUrl = `/session-schedule/detail/${sessionDetailId}${dateParam}`
+        console.log('세션 상세 저장 후 이동할 URL:', targetUrl, 'sessionDetailId:', sessionDetailId, 'date:', date)
         setTimeout(() => {
-          router.push(`/session-schedule/detail/${sessionId}`)
+          router.push(targetUrl)
         }, 1000)
         return true
       } else {

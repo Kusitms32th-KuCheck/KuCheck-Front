@@ -37,7 +37,7 @@ export const postClientSessionSchedule = async (
 //세션 정보 보기
 export const getClientSessionSchedule = async (
   page = 1,
-  size = 20
+  size = 40
 ): Promise<ApiCallResult<SessionScheduleResponse>> => {
   try {
     const response = await fetch(`/api/session/staff?page=${page}&size=${size}`, {

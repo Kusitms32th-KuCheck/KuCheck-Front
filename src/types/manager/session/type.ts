@@ -31,3 +31,13 @@ export interface SessionDetailRequest {
 export interface SessionDetailResponse {
   sessionDetailId: number
 }
+
+//세션 detail 상세정보 조회
+export interface SessionDetailResponse {
+  sessionDetailId: number
+  place: string
+  startTime: string
+  endTime: string
+  content: string
+  sessionImages: string[]
+}

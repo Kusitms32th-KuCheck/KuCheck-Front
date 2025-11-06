@@ -171,12 +171,30 @@ export default function SessionTable({
                           onClick={() => {
                             if (hasDetail) {
                               const sessionId = (r as Row & { sessionId?: number }).sessionId
+                              const sessionDetailId = r.sessionDetailId
                               console.log(
                                 '세션 정보 보기 클릭 - sessionId:',
                                 sessionId,
                                 'sessionDetailId:',
-                                r.sessionDetailId
+                                sessionDetailId
                               )
+                              if (sessionDetailId) {
+                                const cleaned = pathname.replace(/\/$/, '')
+                                const base = cleaned.includes('/edit')
+                                  ? cleaned.replace(/\/edit(\/|$)/, '/detail$1')
+                                  : `${cleaned}/detail`
+                                const date = r.date
+                                const target = `${base}/${sessionDetailId}?date=${encodeURIComponent(date)}`
+                                console.log(
+                                  '세션 정보 보기 navigate target:',
+                                  target,
+                                  'sessionDetailId:',
+                                  sessionDetailId,
+                                  'date:',
+                                  date
+                                )
+                                router.push(target)
+                              }
                               onViewClick?.(i)
                             }
                           }}
