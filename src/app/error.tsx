@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { DangerIcon, RefreshCwIcon } from '@/assets/svgComponents/member'
 
 interface ErrorPageProps {
   error: Error & { digest?: string }
@@ -14,16 +15,24 @@ export default function Error({ error, reset }: ErrorPageProps) {
   }, [error])
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white">
-      <h2 className="mb-4 text-2xl font-bold">문제가 발생했습니다!</h2>
-      <p className="mb-6 text-gray-600">예상치 못한 오류가 발생했습니다. 다시 시도해 주세요.</p>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-y-[25px] bg-white">
+      <div className="flex flex-col items-center justify-center">
+        <DangerIcon width={24} height={24} />
+        <h2 className="body-lg-regular mt-[7px] text-gray-500">문제가 발생했어요!</h2>
+        <p className="caption-sm-medium mt-[8px] text-gray-400">
+          예상치 못한 오류가 발생했습니다. <br />
+          다시 시도해 주세요.
+        </p>
+      </div>
+
       <button
         onClick={
           // 세그먼트를 다시 렌더링하여 복구를 시도합니다.
           () => reset()
         }
-        className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        className="caption-sm-semibold flex gap-x-2 rounded-full border border-gray-300 px-3 py-2 text-gray-400"
       >
+        <RefreshCwIcon width={16} height={16} />
         다시 시도
       </button>
     </div>
