@@ -6,7 +6,6 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { PenaltyPointIcon, RewardPointIcon } from '@/assets/svgComponents'
 import MemberButton from '@/components/member/common/MemberButton'
-
 import AttendanceItem from '@/components/member/attendance/AttendanceItem'
 import { getPointsHistory } from '@/lib/member/client/attendance'
 
@@ -17,14 +16,11 @@ export default function MyAttendancePage() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useInfiniteQuery({
     queryKey: ['pointsHistory'],
     queryFn: async ({ pageParam = 1 }) => {
-      const result = await getPointsHistory(pageParam, 10)
+      const result = await getPointsHistory(pageParam, 20)
       return result.data
     },
     getNextPageParam: (lastPage, allPages) => {
-      if (!lastPage || !lastPage.data) {
-        return undefined
-      }
-      if (lastPage?.data?.records && lastPage?.data?.records?.length < 10) {
+      if (!lastPage?.data?.records || lastPage.data.records.length < 20) {
         return undefined
       }
       if (lastPage?.isLastPage === true) {
@@ -42,7 +38,6 @@ export default function MyAttendancePage() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // ✅ 에러가 없을 때만 다음 페이지 로드
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage && !error) {
           fetchNextPage()
         }
@@ -54,9 +49,7 @@ export default function MyAttendancePage() {
 
     observer.observe(observerTarget.current)
 
-    return () => {
-      observer.disconnect()
-    }
+    return () => observer.disconnect()
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, error])
 
   if (isLoading) {
@@ -67,7 +60,6 @@ export default function MyAttendancePage() {
     )
   }
 
-  // ✅ 초기 로드 에러 처리
   if (error && (!data || data.pages.length === 0)) {
     return (
       <div className="flex flex-col items-center justify-center gap-y-4 py-8">
@@ -84,13 +76,7 @@ export default function MyAttendancePage() {
 
   const firstPageData = data?.pages[0]?.data
 
-  const uniqueRecords = Array.from(
-    new Map(
-      data?.pages
-        .flatMap((page) => page?.data?.records || [])
-        .map((record) => [`${record.date}${record.type}`, record]) || []
-    ).values()
-  )
+  const allRecords = data?.pages.flatMap((page) => page?.data?.records || []) || []
 
   return (
     <>
@@ -114,12 +100,14 @@ export default function MyAttendancePage() {
         </section>
 
         <section className="mt-[44px] flex w-full flex-1 flex-col items-center justify-center gap-y-[24px]">
-          {uniqueRecords.length === 0 ? (
+          {allRecords.length === 0 ? (
             <div className="flex items-center justify-center">
               <p className="body-lg-medium text-gray-500">아직 받은 상벌점이 없어요</p>
             </div>
           ) : (
-            uniqueRecords.map((record) => <AttendanceItem key={`${record.date}-${record.type}`} record={record} />)
+            allRecords.map((record, index) => (
+              <AttendanceItem key={`${record.date}-${record.type}-${index}`} record={record} />
+            ))
           )}
 
           <div
@@ -135,8 +123,7 @@ export default function MyAttendancePage() {
             )}
           </div>
 
-          {/* ✅ 페이지 로드 에러 처리 */}
-          {error && uniqueRecords.length > 0 && (
+          {error && allRecords.length > 0 && (
             <div className="flex flex-col items-center gap-y-2 py-4">
               <p className="text-sm text-red-500">추가 데이터를 불러올 수 없습니다</p>
               <button onClick={() => fetchNextPage()} className="text-sm text-blue-500 hover:text-blue-600">
@@ -145,7 +132,7 @@ export default function MyAttendancePage() {
             </div>
           )}
 
-          {!hasNextPage && uniqueRecords.length > 0 && !error && (
+          {!hasNextPage && allRecords.length > 0 && !error && (
             <div className="py-2 text-center">
               <p className="caption-sm-medium text-gray-500">더 이상 데이터가 없습니다</p>
             </div>
@@ -157,9 +144,7 @@ export default function MyAttendancePage() {
 
       <section className="desktop:absolute ios:fixed android:fixed bg-background1 bottom-0 z-10 flex w-full items-center justify-center bg-white px-5 pb-[36px]">
         <MemberButton
-          onClick={() => {
-            router.push('/ku-pick')
-          }}
+          onClick={() => router.push('/ku-pick')}
           buttonType={'button'}
           styleType={'primary'}
           styleSize={'lg'}
