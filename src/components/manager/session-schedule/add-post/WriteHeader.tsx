@@ -9,15 +9,15 @@ import { useSessionEdit } from '@/components/manager/session-schedule/session-ta
 export default function WriteHeader() {
   const router = useRouter()
   const pathname = usePathname()
-  const { runSaveHandlers } = useSessionEdit()
+  const { runSaveHandlers, isEditing, setEditing } = useSessionEdit()
   const [saving, setSaving] = useState(false)
 
   const isDetailAddPage = pathname?.includes('/detail-add')
-  const [isEditMode, setIsEditMode] = useState(isDetailAddPage || false)
+  const isEditMode = isDetailAddPage || isEditing
 
   const handleButtonClick = async () => {
     if (!isEditMode) {
-      setIsEditMode(true)
+      setEditing(true)
       return
     }
 
@@ -27,7 +27,7 @@ export default function WriteHeader() {
       if (ok) {
         console.log('WriteHeader: 저장 성공!')
         if (!isDetailAddPage) {
-          setIsEditMode(false)
+          setEditing(false)
         }
       } else {
         console.log('WriteHeader: 저장 실패')
