@@ -17,6 +17,7 @@ import { formatDateTime } from '@/utils/common'
 import { extractFileExtension, generateId } from '@/utils/upload'
 import { postKuPickView } from '@/lib/member/client/ku-pick'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/member/common/toast/ToastContext'
 
 interface ViewImageUploaderProps {
   myKuPickData: KuPickResponseType | undefined
@@ -34,6 +35,8 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
 
   const { uploadFile } = useFileUpload()
 
+  const { error } = useToast()
+
   useEffect(() => {
     return () => {
       setState({ viewFile: undefined })
@@ -46,12 +49,12 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
     if (!selectedFile) return
 
     if (!selectedFile.type.startsWith('image/')) {
-      console.error('❌ 이미지 파일만 선택 가능합니다')
+      error('이미지 파일만 선택 가능합니다')
       return
     }
 
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      console.error('❌ 파일 크기가 5MB를 초과합니다')
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      error('파일 크기가 10MB를 초과합니다')
       return
     }
 
@@ -71,7 +74,7 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
 
   const handleSubmit = async () => {
     if (!file?.url) {
-      console.error('❌ 업로드할 파일을 선택해주세요')
+      error('업로드할 파일을 선택해주세요')
       return
     }
 
@@ -80,6 +83,10 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
 
       const extension = extractFileExtension(file.name)
       const presignedResponse = await postKuPickView(`kuPickView.${extension}`)
+
+      if (presignedResponse.error) {
+        error(`${presignedResponse.error}`)
+      }
 
       if (!presignedResponse.success || !presignedResponse.data?.data?.newUrl) {
         throw new Error('프리사인드 URL 요청 실패')
@@ -98,8 +105,9 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
         setState({ viewFile: undefined })
         router.push('/ku-pick/success')
       }
-    } catch (error) {
-      console.error('❌ 업로드 중 오류:', error)
+    } catch (errorMessage) {
+      // error('업로드 중 오류가 발생하였습니다')
+      console.error('❌ :', errorMessage)
     } finally {
       setIsLoading(false)
     }

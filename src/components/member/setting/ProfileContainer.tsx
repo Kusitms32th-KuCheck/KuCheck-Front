@@ -8,6 +8,7 @@ import { extractFileExtension, generateId } from '@/utils/upload'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { getMembersProfileImageUrl } from '@/lib/member/client/setting'
 import { UserSummaryType } from '@/types/member/user'
+import { useToast } from '@/components/member/common/toast/ToastContext'
 
 interface ProfileContainerProps {
   userData: UserSummaryType | undefined
@@ -22,12 +23,26 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
 
   const { uploadFile } = useFileUpload()
 
+  const { error, success } = useToast()
+
   /**
    * 이미지 미리보기 및 업로드
    */
   const handleImagePreview = async (selectedFile: File) => {
     try {
       setIsLoading(true)
+
+      if (!selectedFile) return
+
+      if (!selectedFile.type.startsWith('image/')) {
+        error('이미지 파일만 선택 가능합니다')
+        return
+      }
+
+      if (selectedFile.size > 10 * 1024 * 1024) {
+        error('파일 크기가 10MB를 초과합니다')
+        return
+      }
 
       // 1. 파일 읽기 및 미리보기 설정
       const reader = new FileReader()
@@ -50,6 +65,10 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
           const presignedResponse = await getMembersProfileImageUrl(`profile.${extension}`)
           console.log('presignedResponse', presignedResponse.data?.data?.newUrl)
 
+          if (presignedResponse.error) {
+            error(`${presignedResponse.error}`)
+          }
+
           if (!presignedResponse.success) {
             throw new Error('프리사인드 URL 요청 실패')
           }
@@ -57,14 +76,14 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
           console.log('fileInfo', fileInfo)
           // 3. S3에 파일 업로드
           if (selectedFile && presignedResponse.data?.data?.newUrl) {
-            console.log('통과')
             const uploadResult = await uploadFile(fileInfo, {
               preSignedUrl: presignedResponse?.data?.data?.newUrl,
             })
             if (!uploadResult.success) {
+              error(`파일 업로드 실패하였습니다`)
               throw new Error('파일 업로드 실패')
             }
-
+            success('프로필 이미지 업로드 성공하였습니다.')
             console.log('✅ 프로필 이미지 업로드 성공:', uploadResult)
           }
 
