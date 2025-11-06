@@ -184,7 +184,7 @@ export default function SessionDetailAdd() {
 
       // Step 3: 완료 후 페이지 이동
       const dateParam = date ? `?date=${encodeURIComponent(date)}` : ''
-      const targetUrl = `/session-schedule/detail/${sessionDetailId}${dateParam}`
+      const targetUrl = `/session-schedule/detail/${sessionId}${dateParam}`
       console.log('저장 완료! 이동할 URL:', targetUrl)
 
       setTimeout(() => {

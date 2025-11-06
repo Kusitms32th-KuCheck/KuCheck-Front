@@ -184,7 +184,8 @@ export default function SessionTable({
                                   ? cleaned.replace(/\/edit(\/|$)/, '/detail$1')
                                   : `${cleaned}/detail`
                                 const date = r.date
-                                const target = `${base}/${sessionDetailId}?date=${encodeURIComponent(date)}`
+                                const sessionIdParam = sessionId ? `&sessionId=${sessionId}` : ''
+                                const target = `${base}/${sessionDetailId}?date=${encodeURIComponent(date)}${sessionIdParam}`
                                 console.log(
                                   '세션 정보 보기 navigate target:',
                                   target,

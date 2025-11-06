@@ -50,9 +50,9 @@ function SessionImageItem({ imageUrl, alt }: { imageUrl: string; alt: string }) 
   }
 
   return (
-    <div className="relative aspect-square w-full overflow-hidden rounded-[10px] bg-gray-100">
+    <div className="relative aspect-square w-full overflow-hidden rounded-[10px]">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+        <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-sm text-gray-400">로딩 중...</div>
         </div>
       )}
@@ -72,9 +72,11 @@ function SessionImageItem({ imageUrl, alt }: { imageUrl: string; alt: string }) 
 export default function SessionDetail({
   sessionDetail,
   date,
+  sessionId,
 }: {
   sessionDetail: SessionDetailResponse
   date?: string | null
+  sessionId?: number
 }) {
   const router = useRouter()
   const { isEditing, registerSaveHandler } = useSessionEdit()
@@ -99,7 +101,7 @@ export default function SessionDetail({
     }
 
     const detailData = {
-      sessionId: sessionDetail.sessionDetailId, // 임시로 sessionDetailId 사용
+      sessionId: sessionId || sessionDetail.sessionDetailId, // sessionId 우선, 없으면 sessionDetailId 사용
       place,
       startTime,
       endTime,
@@ -139,7 +141,7 @@ export default function SessionDetail({
   // 수정 모드일 때는 편집 가능한 폼을 보여줌
   if (isEditing) {
     return (
-      <div className="mt-6 mb-6 w-[854px] space-y-6">
+      <div className="mx-auto mt-6 mb-6 w-[854px] space-y-6">
         <AddHeader
           type="session"
           place={place}
@@ -179,7 +181,6 @@ export default function SessionDetail({
         />
         {sessionImages && sessionImages.length > 0 && (
           <div className="mt-8 space-y-2">
-            <h3 className="text-sm font-medium text-gray-700">첨부 이미지</h3>
             <div className="grid grid-cols-3 gap-4">
               {sessionImages.map((img, idx) => (
                 <SessionImageItem

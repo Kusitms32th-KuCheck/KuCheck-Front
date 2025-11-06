@@ -6,12 +6,19 @@ export default async function SessionAddPage({
   searchParams,
 }: {
   params: Promise<{ sessionId: string }>
-  searchParams: Promise<{ date?: string }>
+  searchParams: Promise<{ date?: string; sessionId?: string }>
 }) {
-  const { sessionId } = await params
-  const { date } = await searchParams
-  console.log('SessionAddPage - received sessionId (actually sessionDetailId):', sessionId, 'date:', date)
-  const sessionDetailId = Number(sessionId)
+  const { sessionId: sessionDetailIdParam } = await params
+  const { date, sessionId } = await searchParams
+  console.log(
+    'SessionAddPage - received sessionDetailId:',
+    sessionDetailIdParam,
+    'sessionId:',
+    sessionId,
+    'date:',
+    date
+  )
+  const sessionDetailId = Number(sessionDetailIdParam)
   const result = await getSessionDetailServer(sessionDetailId)
   console.log('SessionAddPage - API result:', result)
   const { data: sessionDetail } = result
@@ -26,7 +33,7 @@ export default async function SessionAddPage({
 
   return (
     <main className="flex h-full flex-col overflow-visible">
-      <SessionDetail sessionDetail={sessionDetail} date={date} />
+      <SessionDetail sessionDetail={sessionDetail} date={date} sessionId={sessionId ? Number(sessionId) : undefined} />
     </main>
   )
 }
