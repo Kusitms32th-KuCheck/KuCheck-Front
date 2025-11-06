@@ -33,7 +33,7 @@ export default async function SignUpPage({ searchParams }: { searchParams: Searc
   const step = (params.step as StepType) || '1' // 기본값
 
   return (
-    <main>
+    <main className="">
       {/* 2. 'step'에 의존하는 부분을 Suspense로 감싸줌. */}
       {/* fallback에는 로딩 중에 보여줄 UI (스피너, 스켈레톤 등)를 넣음. */}
       <Suspense fallback={<div>Loading...</div>}>

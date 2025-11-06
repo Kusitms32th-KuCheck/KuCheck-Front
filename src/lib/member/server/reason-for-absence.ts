@@ -5,12 +5,9 @@ import { SubmitAbsenceType } from '@/types/member/absence'
 /**
  * 내 불참사유서 전체 조회
  */
-export const getAbsence = async (
-  page: number,
-  size: number
-): Promise<ApiCallResult<PaginationResultListType<SubmitAbsenceType>>> => {
+export const getAbsence = async (): Promise<ApiCallResult<PaginationResultListType<SubmitAbsenceType>>> => {
   try {
-    const { data, error } = await apiCallServer(`/v1/absence?page=${page}&size=${size}`, {
+    const { data, error } = await apiCallServer(`/v1/absence`, {
       method: 'GET',
     })
 

@@ -50,7 +50,7 @@ export default function FinalCheckField() {
   }
 
   // 참석 유형 content, (유형 + 시간)
-  const absenceContent = `${changeAbsenceToContent(absenceData?.absenceType)} ${absenceData?.absenceType === 'LATE' ? (absenceData.lateDateTime ? convertISODateTimeToTime(absenceData.lateDateTime) : '') : absenceData?.absenceType === 'EARLY_LEAVE' ? (absenceData?.leaveDateTime ? convertISODateTimeToTime(absenceData.leaveDateTime) : '') : ''}`
+  const absenceContent = `${changeAbsenceToContent(absenceData?.submitType)} ${absenceData?.submitType === 'LATE' ? (absenceData.lateDateTime ? convertISODateTimeToTime(absenceData.lateDateTime) : '') : absenceData?.submitType === 'EARLY_LEAVE' ? (absenceData?.leaveDateTime ? convertISODateTimeToTime(absenceData.leaveDateTime) : '') : ''}`
 
   // 제출 핸들러
   const handleSubmit = async (absenceData: AbsenceDataType | undefined) => {
@@ -134,7 +134,7 @@ export default function FinalCheckField() {
       <div className="h-[100px]" />
 
       {/* bottom button */}
-      <section className="fixed bottom-0 w-full bg-white px-5 pb-[36px]">
+      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <MemberButton
           styleSize={'lg'}
           styleStatus={'default'}

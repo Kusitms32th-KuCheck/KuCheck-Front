@@ -14,7 +14,7 @@ export default async function ReasonForAbsencePage() {
   let isError = false
 
   try {
-    const result = await getAbsence(1, 30)
+    const result = await getAbsence()
 
     // ✅ API 응답 구조 확인
     if (result.success && result.data) {
@@ -30,13 +30,13 @@ export default async function ReasonForAbsencePage() {
   }
 
   return (
-    <main>
+    <main className="desktop:w-[375px] min-h-screen bg-white">
       <MemberHeader
         headerType={'dynamic'}
         title={'불참 사유서'}
         rightElement={
-          <Link href={'/reason-for-absence/guide'}>
-            <HelpCircleIcon className="absolute right-5" width={20} height={20} />
+          <Link className="absolute right-5" href={'/reason-for-absence/guide'}>
+            <HelpCircleIcon width={20} height={20} />
           </Link>
         }
       />
@@ -44,24 +44,26 @@ export default async function ReasonForAbsencePage() {
       <div className="h-[117px]" />
 
       {/* 불참사유서 제출 기록 */}
-      <section className="px-5 pb-[120px]">
+      <section className="flex min-h-[calc(100vh-117px-120px)] flex-col items-center justify-center px-5 pb-[120px]">
         {isError ? (
           <div className="py-10 text-center text-red-500">데이터를 불러올 수 없습니다.</div>
         ) : reasonForAbsenceList && reasonForAbsenceList.length > 0 ? (
-          reasonForAbsenceList.map((reasonForAbsence, index) => (
-            <ReasonForAbsenceItem
-              key={reasonForAbsence.absenceReportId}
-              {...reasonForAbsence}
-              isLastIndex={reasonForAbsenceList.length - 1 === index}
-            />
-          ))
+          <div className="w-full">
+            {reasonForAbsenceList.map((reasonForAbsence, index) => (
+              <ReasonForAbsenceItem
+                key={reasonForAbsence.absenceReportId}
+                {...reasonForAbsence}
+                isLastIndex={reasonForAbsenceList.length - 1 === index}
+              />
+            ))}
+          </div>
         ) : (
           <div className="py-10 text-center text-gray-500">제출된 불참 사유서가 없습니다.</div>
         )}
       </section>
 
       {/* bottom button */}
-      <section className="fixed bottom-0 w-full bg-white px-5 pb-[36px]">
+      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <Link
           className="bg-primary-500 body-lg-semibold flex h-[48px] w-full items-center justify-center rounded-[14px] text-white"
           href={'/reason-for-absence/submit'}

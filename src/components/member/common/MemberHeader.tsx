@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { ChevronLeftBlackIcon, HomeLogoIcon, NotificationIcon, SettingIcon } from '@/assets/svgComponents'
+import DeviceSwitch from '@/components/member/common/DeviceSwitch'
+import Cookies from 'js-cookie'
+import { useEffect, useState } from 'react'
 
 interface HeaderProps {
   title?: string
@@ -12,21 +15,37 @@ interface HeaderProps {
   headerColor?: string
   onBack?: () => void
   rightElement?: React.ReactNode
+  isBottomBorder?: boolean
 }
 
 const MemberHeader = ({
   title,
   headerType = 'default',
   onBack,
-  headerColor = 'bg-white',
+  headerColor,
   rightElement,
+  isBottomBorder = false,
 }: HeaderProps) => {
   const router = useRouter()
+  const [role, setRole] = useState<string | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    try {
+      const roleFromCookie = Cookies.get('role')
+      setRole(roleFromCookie)
+    } catch (error) {
+      setRole('USER')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   const renderHeaderType = (headerType: 'default' | 'dynamic') => {
     switch (headerType) {
       case 'dynamic':
         return (
-          <div className="relative flex h-[62px] items-center px-[7px]">
+          <div className={`${headerColor} relative flex h-[62px] items-center px-[7px]`}>
             <ChevronLeftBlackIcon
               onClick={onBack ? onBack : () => router.back()}
               width={36}
@@ -44,6 +63,9 @@ const MemberHeader = ({
               <HomeLogoIcon width={35} height={28} />
             </Link>
             <div className="flex items-center gap-x-[22px]">
+              {(!isLoading && role === 'EXECUTIVE') || role === 'STAFF' || role === 'MANAGEMENT' ? (
+                <DeviceSwitch />
+              ) : null}
               <Link href={'/alarm'} className="flex h-[24px] w-[24px] items-center justify-center">
                 <NotificationIcon width={25} height={25}></NotificationIcon>
               </Link>
@@ -58,7 +80,8 @@ const MemberHeader = ({
 
   return (
     <header
-      className={`${headerType === 'default' ? 'bg-background2' : headerColor} desktop:w-[375px] fixed z-50 w-full pt-[54px]`}
+      className={`${isBottomBorder ? 'border-b border-gray-100' : headerType === 'default' ? 'bg-background2' : headerColor} desktop:w-[375px] fixed top-0 z-50 w-full ${headerColor}`}
+      style={{ paddingTop: '54px' }}
     >
       {renderHeaderType(headerType)}
     </header>

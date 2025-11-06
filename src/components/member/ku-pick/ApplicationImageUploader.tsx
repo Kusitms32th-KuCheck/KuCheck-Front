@@ -16,12 +16,14 @@ import { useFileUpload } from '@/hooks/useFileUpload'
 import { formatDateTime } from '@/utils/common'
 import { extractFileExtension, generateId } from '@/utils/upload'
 import { postKuPickApplication } from '@/lib/member/client/ku-pick'
+import { useRouter } from 'next/navigation'
 
 interface ApplicationImageUploaderProps {
   myKuPickData: KuPickResponseType | undefined
 }
 
 export default function ApplicationImageUploader({ myKuPickData }: ApplicationImageUploaderProps) {
+  const router = useRouter()
   const fileRef = useRef<HTMLInputElement>(null)
   const file = useKuPickStore((state) => state.applicationFile)
   const setState = useKuPickStore((state) => state.setState)
@@ -94,7 +96,7 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
       console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       if (uploadResult.success) {
         setState({ applicationFile: undefined })
-        setIsSubmitSuccessOpen(true)
+        router.push('/ku-pick/success')
       }
     } catch (error) {
       console.error('❌ 업로드 중 오류:', error)
@@ -168,7 +170,7 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
       </div>
 
       {/* 저장하기 버튼 */}
-      <div className="fixed bottom-[36px] w-full bg-white px-5">
+      <div className="desktop:w-[375px] fixed bottom-[36px] w-full bg-white px-5">
         <MemberButton
           buttonType="button"
           styleStatus={!file?.url || isLoading ? 'disabled' : 'default'}

@@ -47,7 +47,7 @@ export default function ReasonForAbsenceGuidePage() {
       {ATTENDANCE_GUIDE_SECTIONS.map((section) => (
         <section key={section.id} className="border-background2 flex flex-col gap-y-[12px] border-b py-[28px]">
           <h3 className="body-lg-semibold text-gray-700">{section.title}</h3>
-          <p className="caption-md-regular whitespace-pre-line text-gray-600">{section.description}</p>
+          <p className="body-sm-regular whitespace-pre-line text-gray-600">{section.description}</p>
         </section>
       ))}
     </div>

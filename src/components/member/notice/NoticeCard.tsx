@@ -16,15 +16,15 @@ export default function NoticeCard() {
       <section className="flex flex-col">
         <div className="flex flex-col gap-y-[18px]">
           <div className="flex flex-col gap-y-[10px]">
-            <MemberTag status={'default'} type={'secondary'} customClassName="bg-[#EFEAFF] text-[#6B42E0] ">
+            <MemberTag status={'default'} type={'category'} customClassName="bg-[#EFEAFF] text-[#6B42E0] ">
               밋업
             </MemberTag>
-          </div>
-          <div>
-            <p className="body-lg-medium">🔥1차 스프린트 안내🔥</p>
-            <p className="body-sm-regular">
-              📌9/28(일) 12:00 PM(낮 12시, 정오)까지 (미제출 시 팀 임의 배정) 🔗 팀빌딩...
-            </p>
+            <div className="flex flex-col gap-y-[6px]">
+              <p className="body-lg-medium">🔥1차 스프린트 안내🔥</p>
+              <p className="body-sm-regular">
+                📌9/28(일) 12:00 PM(낮 12시, 정오)까지 (미제출 시 팀 임의 배정) 🔗 팀빌딩...
+              </p>
+            </div>
           </div>
 
           <p className="caption-sm-medium text-gray-400">2024/10/01</p>

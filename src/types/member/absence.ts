@@ -1,7 +1,7 @@
 export interface AbsenceDataType {
   absenceReportId?: number
   sessionId?: number
-  absenceType?: AbsenceType
+  submitType?: AbsenceType
   reason?: string
   fileName?: string
   lateDateTime?: string

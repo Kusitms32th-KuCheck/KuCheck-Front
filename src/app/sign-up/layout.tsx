@@ -15,7 +15,7 @@ function HeaderFallback() {
 
 export default async function SignUpLayout({ children }: SignUpLayoutProps) {
   return (
-    <div>
+    <div className="min-h-screen bg-white">
       {/* 훅을 사용하는 컴포넌트를 포함한 MemberHeader를 Suspense로 감싼다. */}
       <Suspense fallback={<HeaderFallback />}>
         <SignUpHeaderContainer />

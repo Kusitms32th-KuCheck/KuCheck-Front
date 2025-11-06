@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgDangerIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 27 24" {...props}><path fill="#7E83A1" fillRule="evenodd" d="m16.636 1.923 9.692 16.82a3.9 3.9 0 0 1 .333 1.334 3.68 3.68 0 0 1-.973 2.696 3.78 3.78 0 0 1-2.6 1.227H3.573a4.2 4.2 0 0 1-1.213-.264c-1.933-.78-2.866-2.973-2.08-4.874L10.037 1.91c.334-.596.84-1.11 1.467-1.44a3.8 3.8 0 0 1 5.132 1.452M14.49 13.008c0 .634-.52 1.164-1.16 1.164a1.18 1.18 0 0 1-1.173-1.164V9.27c0-.636.533-1.15 1.173-1.15s1.16.514 1.16 1.15zm-1.16 5.682a1.18 1.18 0 0 1-1.173-1.163c0-.635.533-1.164 1.173-1.164s1.16.517 1.16 1.15a1.17 1.17 0 0 1-1.16 1.177" clipRule="evenodd" /></svg>;
+export default SvgDangerIcon;

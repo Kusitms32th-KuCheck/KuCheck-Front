@@ -1,8 +1,12 @@
+'use client'
+
 import MemberTag from '@/components/member/common/MemberTag'
 import { ChevronRightIcon, NoticeIcon } from '@/assets/svgComponents'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function NoticeCard() {
+  const router = useRouter()
   return (
     <div className="flex flex-col gap-y-[6px] rounded-[16px] bg-white pt-[15px] pb-[5px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]">
       <div className="flex justify-between px-4">
@@ -16,7 +20,12 @@ export default function NoticeCard() {
       </div>
 
       <div className="flex flex-col">
-        <div className="flex flex-col gap-y-[6px] border-b border-gray-100 px-5 pt-[14px] pb-[18px]">
+        <div
+          onClick={() => {
+            router.push('/notice/1')
+          }}
+          className="flex flex-col gap-y-[6px] border-b border-gray-100 px-5 pt-[14px] pb-[18px]"
+        >
           <p className="body-sm-medium">📢 밋업 프로젝트 팀 빌딩 공지</p>
           <div className="flex gap-x-1">
             <MemberTag status={'default'} type={'round'}>
@@ -27,7 +36,12 @@ export default function NoticeCard() {
             </MemberTag>
           </div>
         </div>
-        <div className="flex flex-col gap-y-[6px] px-5 pt-[14px] pb-[18px]">
+        <div
+          onClick={() => {
+            router.push('/notice/1')
+          }}
+          className="flex flex-col gap-y-[6px] px-5 pt-[14px] pb-[18px]"
+        >
           <p className="body-sm-medium">🔥 1차 스프린트 안내 🔥</p>
           <div className="flex gap-x-1">
             <MemberTag status={'default'} type={'round'}>

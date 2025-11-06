@@ -1,5 +1,4 @@
 import { ApiCallResult } from '@/types/common'
-import { KuPickResponseType } from '@/types/member/ku-pick'
 
 export const postKuPickApplication = async (
   fileName: string | undefined

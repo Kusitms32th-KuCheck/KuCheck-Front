@@ -6,7 +6,7 @@ interface AttendanceItemProps {
 }
 export default function AttendanceItem({ record }: AttendanceItemProps) {
   return (
-    <section className="flex justify-between">
+    <section className="flex w-full justify-between">
       <div className="flex gap-x-[21px]">
         <p className="body-sm-medium text-gray-500">{record.date}</p>
         <div className="flex flex-col">

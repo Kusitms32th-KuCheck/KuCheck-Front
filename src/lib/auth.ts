@@ -53,10 +53,6 @@ export const postAuthKaKao = async (code: string | null, env: 'LOCAL' | 'DEV'): 
     const accessToken = jwtResponse.headers.get('authorization')?.replace('Bearer ', '')
     const refreshToken = jwtResponse.headers.get('X-Refresh-Token')?.replace('Bearer ', '')
 
-    if (!accessToken) {
-      throw new Error('Access token not found in response')
-    }
-
     console.log('✅ Kakao authentication successful')
 
     return {

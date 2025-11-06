@@ -1,6 +1,10 @@
 'use client'
 
-import { AttendanceCheckResponseType, AttendanceTokenResponseType } from '@/types/member/attendance'
+import {
+  AttendanceAvailabilityResponseType,
+  AttendanceCheckResponseType,
+  AttendanceTokenResponseType,
+} from '@/types/member/attendance'
 import { ApiCallResult, PaginationResultType } from '@/types/common'
 
 export const postClientAttendanceToken = async (): Promise<
@@ -48,6 +52,31 @@ export const getPointsHistory = async (
         revalidate: 604800, // 1주일 - 나의 출석은 1주일마다 갱신되므로 캐시처리
         tags: ['points-history'], // 캐시 태그
       },
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      return { success: false, error: error.error || 'Failed to submit' }
+    }
+
+    const data = await response.json()
+    return { success: true, data }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+export const getAvailability = async (): Promise<ApiCallResult<ApiCallResult<AttendanceAvailabilityResponseType>>> => {
+  try {
+    const response = await fetch(`/api/attendance/availability`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
     })
 
     if (!response.ok) {

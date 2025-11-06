@@ -9,30 +9,46 @@ import { UserSummaryType } from '@/types/member/user'
 import { changePartEnumToContent } from '@/utils/common'
 import Image from 'next/image'
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 type ProfileCardProps = UserSummaryType
 
 export default function ProfileCard({ name, part, totalPoints, profileImage }: ProfileCardProps) {
   return (
     <div className="relative flex flex-col gap-y-2 rounded-[16px] bg-white py-[11px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]">
       <section className="flex items-center gap-x-[14px] px-[18px] py-[10px]">
-        {profileImage && (
+        {profileImage ? (
           <div className="relative h-[85px] w-[85px]">
             <Image src={profileImage} alt={'프로필사진'} fill className="rounded-full object-cover"></Image>
           </div>
+        ) : (
+          // <div className="h-[85px] w-[85px]" />
+          <Skeleton circle height={85} width={85} />
         )}
         <div className="flex flex-col">
           <div className="flex items-center gap-x-2">
-            <p className="heading-md-semibold">{name}</p>
-            {part && (
+            {name ? <p className="heading-md-semibold">{name}</p> : <Skeleton width={58} height={26} />}
+
+            {part ? (
               <MemberTag type={'primary'} status={'default'}>
                 {changePartEnumToContent(part)}
               </MemberTag>
+            ) : (
+              <Skeleton width={30} height={26} />
             )}
           </div>
-          <div className="flex gap-x-2">
-            <p className="body-sm-semibold text-gray-600">상벌점</p>
-            <p className="body-sm-semibold text-gray-600">{totalPoints}</p>
-          </div>
+          {totalPoints ? (
+            <div className="flex gap-x-2">
+              <p className="body-sm-semibold text-gray-600">상벌점</p>
+              <p className="body-sm-semibold text-gray-600">{totalPoints}</p>
+            </div>
+          ) : (
+            <div className="flex gap-x-2">
+              <Skeleton width={37} height={20} />
+              <Skeleton width={25} height={20} />
+            </div>
+          )}
         </div>
       </section>
       <section className="flex gap-x-[7px] px-[12px]">
@@ -40,7 +56,7 @@ export default function ProfileCard({ name, part, totalPoints, profileImage }: P
           href={'/my-attendance'}
           className="body-sm-medium flex h-[44px] w-[127px] flex-shrink-0 items-center justify-center rounded-[10px] bg-gray-100 whitespace-nowrap"
         >
-          내 출석 확인하기
+          상벌점 확인하기
         </Link>
         <Link
           className="body-sm-medium bg-primary-50 text-primary-500 flex h-[44px] w-[127px] w-full items-center justify-center rounded-[10px]"

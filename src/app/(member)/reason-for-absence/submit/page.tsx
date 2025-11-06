@@ -46,7 +46,7 @@ export default async function ReasonForAbsenceSubmitPage({ searchParams }: { sea
   console.log('sessionDataResponse', sessionDataResponse)
 
   return (
-    <main className="flex flex-1 flex-col pb-30">
+    <main className="desktop:w-[375px] flex flex-1 flex-col bg-white pb-30">
       {/* 2. 'step'에 의존하는 부분을 Suspense로 감싸줌. */}
       {/* fallback에는 로딩 중에 보여줄 UI (스피너, 스켈레톤 등)를 넣음. */}
       <Suspense fallback={<div>Loading...</div>}>

@@ -23,4 +23,17 @@ export interface SessionDataType {
   startDate: string
 }
 
+export interface SessionDetailType {
+  sessionId: number
+  sessionDetailId: number
+  title: string
+  place: string
+  startDate: string
+  startTime: string
+  endTime: string
+  content: string
+  images: string[]
+  isHoliday: boolean
+}
+
 export type SessionCategoryType = 'CORPORATE_PROJECT' | 'MEETUP_PROJECT' | 'NETWORKING' | 'HOLIDAY' | 'REST'
