@@ -22,7 +22,6 @@ type PointTableState = {
 }
 
 export const usePointTableStore = create<PointTableState>((set) => ({
-  // start empty to avoid SSR vs client random-data mismatch
   members: [] as PointMemberStatus[],
   setMembers: (m) =>
     set((s) => ({
@@ -37,7 +36,7 @@ export const usePointTableStore = create<PointTableState>((set) => ({
           : v,
     })),
 
-  collapsedMonths: new Set<string>(),
+  collapsedMonths: new Set<string>(['8월', '9월', '10월', '11월', '12월']),
   toggleCollapsedMonth: (month: string) =>
     set((s) => {
       const next = new Set(s.collapsedMonths)
