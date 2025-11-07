@@ -2,21 +2,20 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { useKuPickStore } from '@/store/member/kuPickStore'
 
 import { ImageUploaderIcon } from '@/assets/svgComponents/member'
-
 import MemberButton from '@/components/member/common/MemberButton'
+
 import SubmitSuccess from '@/components/member/ku-pick/SubmitSuccess'
 
 import { KuPickResponseType } from '@/types/member/ku-pick'
-
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { formatDateTime } from '@/utils/common'
 import { extractFileExtension, generateId } from '@/utils/upload'
 import { postKuPickView } from '@/lib/member/client/ku-pick'
-import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/member/common/toast/ToastContext'
 
 interface ViewImageUploaderProps {
@@ -35,7 +34,7 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
 
   const { uploadFile } = useFileUpload()
 
-  const { error } = useToast()
+  const { error, info } = useToast()
 
   useEffect(() => {
     return () => {
@@ -102,8 +101,9 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
 
       console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       if (uploadResult.success) {
+        router.push('/ku-pick')
         setState({ viewFile: undefined })
-        router.push('/ku-pick/success')
+        info('저장에 성공했어요')
       }
     } catch (errorMessage) {
       // error('업로드 중 오류가 발생하였습니다')

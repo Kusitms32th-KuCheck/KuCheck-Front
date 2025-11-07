@@ -17,7 +17,7 @@ export default function SessionContent({ content }: SessionContentProps) {
 
   return (
     <div
-      className="body-sm-regular [&_a]:text-primary-500 mt-[31px] text-gray-800 [&_a]:cursor-pointer [&_a]:hover:opacity-80"
+      className="body-lg-regular [&_a]:text-primary-500 mt-[31px] text-gray-800 [&_a]:cursor-pointer [&_a]:hover:opacity-80"
       dangerouslySetInnerHTML={{ __html: sanitizedContent }}
     />
   )
