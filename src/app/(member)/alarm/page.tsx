@@ -5,7 +5,7 @@ export default function AlarmPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen w-full bg-white">
-        <MemberHeader headerType="dynamic" title={'알림'} />
+        <MemberHeader headerType="dynamic" title={'알림'} headerColor={'bg-white'} />
         <div className="h-[116px]" />
         <div className="flex flex-col gap-y-1 px-5">
           <section className="flex items-center gap-x-[21px] py-[14px]">

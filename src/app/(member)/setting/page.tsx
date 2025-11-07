@@ -13,7 +13,7 @@ export default async function SettingPage() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen w-full bg-white">
-        <MemberHeader headerType="dynamic" title={'설정'} />
+        <MemberHeader headerType="dynamic" title={'설정'} headerColor={'bg-white'} />
         <div className="h-[116px]" />
         <div className="mt-3">
           <ProfileContainer userData={userData} />

@@ -33,7 +33,6 @@ export default function AttendanceTypeSelector() {
   }
 
   const handleAttendanceTypeClick = (attendanceType: AbsenceType) => {
-    // 새로운 타입 선택
     setAbsenceState({
       ...absenceData,
       absenceData: {
@@ -46,13 +45,11 @@ export default function AttendanceTypeSelector() {
   }
 
   const handleDrawerOpen = (attendanceType: AbsenceType) => {
-    // 이미 선택된 타입을 다시 클릭하면 Drawer 열기
     if (attendanceType === absenceData?.submitType) {
       setIsDrawerOpen(true)
       return
     }
 
-    // 지각 또는 조퇴 선택 시 Drawer 열기
     if (attendanceType !== 'ABSENT') {
       setIsDrawerOpen(true)
     }
@@ -71,7 +68,6 @@ export default function AttendanceTypeSelector() {
   }
 
   const handleDrawerClose = () => {
-    // 시간이 선택되지 않았으면 타입 초기화
     const hasTimeSelected =
       absenceData?.submitType === 'LATE'
         ? absenceData?.lateDateTime
@@ -91,6 +87,16 @@ export default function AttendanceTypeSelector() {
 
     setIsDrawerOpen(false)
   }
+
+  // 버튼 활성화 조건
+  const isButtonEnabled =
+    absenceData?.submitType === 'ABSENT'
+      ? !!absenceData?.submitType
+      : absenceData?.submitType === 'LATE'
+        ? !!(absenceData?.submitType && absenceData?.lateDateTime)
+        : absenceData?.submitType === 'EARLY_LEAVE'
+          ? !!(absenceData?.submitType && absenceData?.leaveDateTime)
+          : false
 
   return (
     <div>
@@ -172,10 +178,10 @@ export default function AttendanceTypeSelector() {
       {/* bottom button */}
       <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
         <MemberButton
-          disabled={!absenceData?.submitType}
+          disabled={!isButtonEnabled}
           styleType="primary"
           styleSize="lg"
-          styleStatus={absenceData?.submitType ? 'default' : 'disabled'}
+          styleStatus={isButtonEnabled ? 'default' : 'disabled'}
           onClick={() => {
             handleStepClick('3')
           }}
@@ -236,7 +242,7 @@ function LeaveDateTimeSelector({
       />
       <DrawerClose asChild>
         <button
-          className="bg-primary-500 mb-[36px] rounded-[8px] px-6 py-3 font-semibold text-white"
+          className="bg-primary-500 mb-[36px] w-full rounded-[8px] px-6 py-3 font-semibold text-white"
           type="button"
           onClick={onClose}
         >
