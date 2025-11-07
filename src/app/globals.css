@@ -24,7 +24,12 @@
   --breakpoint-android: 360px;
 }
 
-
+:root {
+  --safe-area-inset-bottom: max(0px, env(safe-area-inset-bottom));
+  --safe-area-inset-top: max(0px, env(safe-area-inset-top));
+  --safe-area-inset-left: max(0px, env(safe-area-inset-left));
+  --safe-area-inset-right: max(0px, env(safe-area-inset-right));
+}
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
