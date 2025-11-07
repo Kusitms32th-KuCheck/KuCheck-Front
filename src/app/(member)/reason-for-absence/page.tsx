@@ -7,19 +7,15 @@ import { HelpCircleIcon } from '@/assets/svgComponents/member'
 import { getAbsence } from '@/lib/member/server/reason-for-absence'
 import { SubmitAbsenceType } from '@/types/member/absence'
 
-export const dynamic = 'force-dynamic'
-
 export default async function ReasonForAbsencePage() {
   let reasonForAbsenceList: SubmitAbsenceType[] = []
   let isError = false
 
   try {
     const result = await getAbsence()
-
     // ✅ API 응답 구조 확인
     if (result.success && result.data) {
-      // result.data.data 또는 result.data.result 구조 확인
-      reasonForAbsenceList = result.data?.data || []
+      reasonForAbsenceList = result.data
     } else {
       console.error('API Error:', result.error)
       isError = true
@@ -44,7 +40,9 @@ export default async function ReasonForAbsencePage() {
       <div className="h-[117px]" />
 
       {/* 불참사유서 제출 기록 */}
-      <section className="flex min-h-[calc(100vh-117px-120px)] flex-col items-center justify-center px-5 pb-[120px]">
+      <section
+        className={`${isError ? 'min-h-[calc(100vh-117px-120px)] items-center justify-center' : ''} flex flex-col px-5 pb-[120px]`}
+      >
         {isError ? (
           <div className="py-10 text-center text-red-500">데이터를 불러올 수 없습니다.</div>
         ) : reasonForAbsenceList && reasonForAbsenceList.length > 0 ? (

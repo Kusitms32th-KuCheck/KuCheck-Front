@@ -1,11 +1,11 @@
 import { apiCallServer } from '@/lib/api.server'
-import { ApiCallResult, PaginationResultListType } from '@/types/common'
+import { ApiCallResult } from '@/types/common'
 import { SubmitAbsenceType } from '@/types/member/absence'
 
 /**
  * 내 불참사유서 전체 조회
  */
-export const getAbsence = async (): Promise<ApiCallResult<PaginationResultListType<SubmitAbsenceType>>> => {
+export const getAbsence = async (): Promise<ApiCallResult<SubmitAbsenceType[]>> => {
   try {
     const { data, error } = await apiCallServer(`/v1/absence`, {
       method: 'GET',
