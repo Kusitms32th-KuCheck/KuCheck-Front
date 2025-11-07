@@ -56,7 +56,7 @@ export default function NameField() {
       </section>
 
       {/* bottom button */}
-      <section className="fixed bottom-[42px] w-full bg-white px-5">
+      <section className="fixed bottom-[60px] w-full bg-white px-5">
         <MemberButton
           styleSize={'lg'}
           buttonType={'button'}

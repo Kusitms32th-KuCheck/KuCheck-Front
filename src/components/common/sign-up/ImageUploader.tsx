@@ -167,7 +167,7 @@ export default function ImageUploader() {
       </div>
 
       {/* 저장하기 버튼 */}
-      <div className="fixed bottom-[36px] w-full bg-white px-5">
+      <div className="fixed bottom-[60px] w-full bg-white px-5">
         <MemberButton
           buttonType="button"
           styleStatus={!file?.url || isLoading ? 'disabled' : 'default'}
