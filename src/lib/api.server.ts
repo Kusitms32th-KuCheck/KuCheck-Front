@@ -54,6 +54,7 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
     ...fetchOptions,
     headers,
     cache: 'no-store',
+    credentials: 'include' as const,
   })
 
   // 401 또는 403 에러인 경우 토큰 갱신 시도
@@ -71,6 +72,7 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
         ...fetchOptions,
         headers,
         cache: 'no-store',
+        credentials: 'include' as const,
       })
     } else {
       // 토큰 갱신 실패 - Route Handler로 쿠키 삭제
