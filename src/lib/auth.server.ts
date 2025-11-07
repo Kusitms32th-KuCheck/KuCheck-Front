@@ -48,9 +48,10 @@ export const refreshAccessTokenServer = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-Refresh-Token': `Bearer ${refreshToken}`,
       },
-      body: JSON.stringify({ refreshToken }),
     })
+    console.log('refresh token으로 갱신', response)
 
     if (!response.ok) {
       // 쿠키 삭제 - Route Handler 호출
