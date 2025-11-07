@@ -86,7 +86,7 @@ export default function ProofDocumentUpload() {
           >
             <PlusCircleIcon width={32} height={32} />
             <p className="caption-sm-medium text-gray-400">파일은 최대 10MB 이하까지만 첨부할 수 있어요</p>
-            <div className="relative cursor-pointer">
+            <div className="relative hidden cursor-pointer">
               <input
                 type="file"
                 accept="image/png,image/jpeg,image/jpg,application/pdf,.heic"
