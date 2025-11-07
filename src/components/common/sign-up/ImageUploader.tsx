@@ -9,13 +9,11 @@ import { extractFileExtension, generateId } from '@/utils/upload'
 import { useSignUpStore } from '@/store/signUpStore'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { getMembersProfileImageUrl } from '@/lib/member/common'
-import { postMembersOnboarding } from '@/lib/common'
 import { useToast } from '@/components/member/common/toast/ToastContext'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function ImageUploader() {
-  const signUpData = useSignUpStore((state) => state.signUpData)
   const fileRef = useRef<HTMLInputElement>(null)
   const file = useSignUpStore((state) => state.file)
   const setState = useSignUpStore((state) => state.setState)
@@ -79,7 +77,6 @@ export default function ImageUploader() {
 
     try {
       setIsLoading(true)
-
       const extension = extractFileExtension(file.name)
       const presignedResponse = await getMembersProfileImageUrl(`profileImageUrl.${extension}`)
 
@@ -101,14 +98,10 @@ export default function ImageUploader() {
 
       console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       if (uploadResult.success) {
+        handleStepClick('7')
         setState({ file: undefined })
-        const response = await postMembersOnboarding(signUpData)
-        console.log('response', response)
-        if (response.success) {
-          handleStepClick('7')
-        } else if (response.error) {
-          error(`${response.error}`)
-        }
+      } else if (uploadResult.error) {
+        error(`${uploadResult.error}`)
       }
     } catch (error) {
       console.error('❌ 업로드 중 오류:', error)
@@ -117,7 +110,7 @@ export default function ImageUploader() {
     }
   }
 
-  const profileImageSrc = file?.url || signUpData?.profileImage || ''
+  const profileImageSrc = file?.url || ''
   const isValidImageUrl = profileImageSrc && typeof profileImageSrc === 'string'
 
   return (

@@ -5,6 +5,5 @@ export interface SignUpDataType {
   part?: PartType
   phoneNumber?: string
   fcmToken?: string
-  profileImage?: string
 }
 export type PartType = 'BACKEND' | 'FRONTEND' | 'DESIGN' | 'PLANNING'

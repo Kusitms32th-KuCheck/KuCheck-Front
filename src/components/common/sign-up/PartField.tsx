@@ -4,6 +4,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import MemberButton from '@/components/member/common/MemberButton'
 import { PartType } from '@/types/sign-up'
 import { useSignUpStore } from '@/store/signUpStore'
+import { postMembersOnboarding } from '@/lib/common'
+import { useToast } from '@/components/member/common/toast/ToastContext'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
@@ -13,6 +15,8 @@ export default function PartField() {
 
   const router = useRouter()
   const pathname = usePathname()
+
+  const { error } = useToast()
 
   const handleStepClick = (step: StepType) => {
     // URL 업데이트 → 서버 컴포넌트 재렌더링
@@ -34,6 +38,18 @@ export default function PartField() {
       ...signUpData,
       signUpData: { ...signUpData, part: signUpData?.part === partEnum ? undefined : partEnum },
     })
+  }
+
+  /**
+   * 온보딩 제출
+   */
+  const handleSubmit = async () => {
+    const response = await postMembersOnboarding(signUpData)
+    if (response.success) {
+      handleStepClick('6')
+    } else if (response.error) {
+      error(`${response.error}`)
+    }
   }
 
   return (
@@ -64,9 +80,7 @@ export default function PartField() {
           styleType={'primary'}
           disabled={!signUpData?.part}
           styleStatus={signUpData?.part ? 'default' : 'disabled'}
-          onClick={() => {
-            handleStepClick('6')
-          }}
+          onClick={handleSubmit}
         >
           다음
         </MemberButton>
