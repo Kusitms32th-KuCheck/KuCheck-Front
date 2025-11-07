@@ -44,7 +44,7 @@ export const refreshAccessTokenServer = async () => {
       return { success: false, error: 'No refresh token' }
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/v1/auth/refresh`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/v1/auth/reissue`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
