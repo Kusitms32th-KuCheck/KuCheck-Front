@@ -27,11 +27,17 @@ export default function NoticePage() {
           </div>
         </section>
         <section className="">
-          <NoticeCard />
-          <NoticeCard />
-          <NoticeCard />
-          <NoticeCard />
-          <NoticeCard />
+          <NoticeCard
+            title={'이달의 큐픽'}
+            content={
+              '안녕하세요! 경영총괄팀 사무대관 담당 윤창현입니다\n' +
+              '\n' +
+              '이번 32기의 두 번째 큐픽, 11월의 큐픽이 찾아왔습니다'
+            }
+            date={'25/11/01'}
+            tag={'큐픽'}
+            imageUrlList={['', '']}
+          />
         </section>
       </div>
     </main>
