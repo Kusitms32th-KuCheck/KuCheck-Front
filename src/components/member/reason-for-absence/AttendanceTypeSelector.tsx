@@ -201,7 +201,7 @@ function LateDateTimeSelector({
         defaultValue="13:00"
         onChange={(e) => onChangeValue('lateDateTime', e.target.value)}
         placeholder="시간을 선택해 주세요"
-        className="body-2xl-medium text-primary-500 rounded-[8px] border border-gray-200 px-3 py-[10px] placeholder:text-gray-400"
+        className="body-2xl-medium text-primary-500 w-full rounded-[8px] border border-gray-200 px-3 py-[10px] placeholder:text-gray-400"
         type="time"
       />
       <DrawerClose asChild>
@@ -231,7 +231,7 @@ function LeaveDateTimeSelector({
         defaultValue="13:00"
         onChange={(e) => onChangeValue('leaveDateTime', e.target.value)}
         placeholder="시간을 선택해 주세요"
-        className="body-2xl-medium text-primary-500 rounded-[8px] border border-gray-200 px-3 py-[10px] placeholder:text-gray-400"
+        className="body-2xl-medium text-primary-500 w-full rounded-[8px] border border-gray-200 px-3 py-[10px] placeholder:text-gray-400"
         type="time"
       />
       <DrawerClose asChild>
