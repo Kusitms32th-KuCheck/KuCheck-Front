@@ -81,7 +81,7 @@ export default function MyAttendancePage() {
   return (
     <>
       <section className="flex flex-1 flex-col px-5">
-        <section className="mt-[30px] flex flex-col items-center justify-center">
+        <section className="mt-[15px] flex flex-col items-center justify-center">
           <p className="body-lg-regular text-gray-500">{firstPageData?.name}님의 현재 상벌점</p>
           <p className="heading-3xl-semibold">{firstPageData?.totalPoints}</p>
           <div className="mt-[11px] flex h-[40px] gap-x-[14px] rounded-[20px] border border-gray-100 bg-white px-4 py-2">
@@ -142,7 +142,7 @@ export default function MyAttendancePage() {
 
       <div className="h-[100px]" />
 
-      <section className="desktop:absolute ios:fixed android:fixed bg-background1 bottom-0 z-10 flex w-full items-center justify-center bg-white px-5 pb-[36px]">
+      <section className="desktop:absolute ios:fixed android:fixed bg-background1 bottom-0 z-10 flex w-full items-center justify-center bg-white px-5 pb-[60px]">
         <MemberButton
           onClick={() => router.push('/ku-pick')}
           buttonType={'button'}
