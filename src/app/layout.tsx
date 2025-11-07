@@ -39,11 +39,12 @@ export default function RootLayout({
     <html lang="en" className={pretendard.className}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <Script
-          id="maze-snippet"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function (m, a, z, e) {
+      </head>
+      <Script
+        id="maze-snippet"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `(function (m, a, z, e) {
               var s, t, u, v;
               try {
                 t = m.sessionStorage.getItem('maze-us');
@@ -66,9 +67,8 @@ export default function RootLayout({
               a.getElementsByTagName('head')[0].appendChild(s);
               m.mazeUniversalSnippetApiKey = e;
             })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '${mazeApiKey}');`,
-          }}
-        />
-      </head>
+        }}
+      />
       <body className={`${geistSans.variable} ${geistMono.variable} ${pretendard.variable} antialiased`}>
         <QueryClientComponent>
           <ToastProvider>
