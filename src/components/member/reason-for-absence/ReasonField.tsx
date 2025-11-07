@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import MemberButton from '@/components/member/common/MemberButton'
 
 import { useAbsenceStore } from '@/store/member/absenceStore'
+import { useEffect } from 'react'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -29,10 +30,18 @@ export default function ReasonField() {
     setAbsenceState({ ...absenceData, absenceData: { ...absenceData, reason: value } })
   }
 
+  // 스크롤 완전 차단
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
+
   return (
     <div>
       {/* content */}
-      <section className="px-5 pt-[32px]">
+      <section className="flex flex-col overflow-hidden px-5 pt-[32px]">
         <textarea
           value={absenceData?.reason}
           maxLength={100}
