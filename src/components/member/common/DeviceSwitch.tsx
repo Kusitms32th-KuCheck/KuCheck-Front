@@ -18,16 +18,16 @@ export default function DeviceSwitch() {
     <div className="flex items-center justify-center">
       {/* ✅ 스위치 컨테이너 */}
       <div className="relative flex h-[30px] w-[80px] items-center rounded-full bg-gray-500 p-1 shadow-lg">
-        {/* ✅ 배경 슬라이드 - 텍스트 없음 */}
+        {/* ✅ 배경 슬라이드 */}
         <div
-          className={`absolute h-[24px] w-[38px] rounded-full bg-white transition-all duration-300 ${
-            isWeb ? 'translate-x-[40px]' : 'translate-x-0'
+          className={`absolute h-[24px] w-[42px] rounded-full bg-white transition-all duration-300 ${
+            isWeb ? 'translate-x-[42px]' : 'translate-x-0'
           }`}
         />
 
-        {/* ✅ 모바일 텍스트 - z-10으로 동그라미 위에 표시 */}
+        {/* ✅ 모바일 텍스트 */}
         <div
-          className={`relative z-10 flex flex-1 cursor-pointer items-center justify-center transition-all duration-300 ${
+          className={`relative z-10 flex flex-1 cursor-pointer items-center justify-center pl-[4px] transition-all duration-300 ${
             !isWeb ? 'caption-sm-medium text-black' : 'caption-sm-medium text-white'
           }`}
           onClick={() => handleToggle(false)}
@@ -35,7 +35,7 @@ export default function DeviceSwitch() {
           모바일
         </div>
 
-        {/* ✅ 웹 텍스트 - z-10으로 동그라미 위에 표시 */}
+        {/* ✅ 웹 텍스트 */}
         <div
           className={`relative z-10 flex flex-1 cursor-pointer items-center justify-center transition-all duration-300 ${
             isWeb ? 'caption-sm-medium text-black' : 'caption-sm-medium text-white'
