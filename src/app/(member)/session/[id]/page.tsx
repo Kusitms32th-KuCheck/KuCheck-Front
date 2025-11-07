@@ -33,7 +33,7 @@ export default async function SessionDetailPage({ params }: Props) {
           }
         />
         <div className="h-[116px]" />
-        <div className="mt-[23px] px-5 pb-[145px]">
+        <div className="mt-[12px] px-5 pb-[145px]">
           <section className="flex flex-col gap-y-[3px] pt-[10px] pb-[8px]">
             <p className="heading-sm-semibold">{sessionData?.title}</p>
             {sessionData?.updatedAt ? (

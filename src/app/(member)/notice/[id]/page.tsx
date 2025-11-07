@@ -7,7 +7,7 @@ export default function NoticeDetailPage() {
       <div className="desktop:w-[375px] min-h-screen bg-white">
         <MemberHeader headerType="dynamic" title={'세션 공지'} isBottomBorder={true} headerColor={'bg-white'} />
         <div className="h-[116px]" />
-        <div className="mt-[23px] px-5 pb-[145px]">
+        <div className="mt-[12px] px-5 pb-[145px]">
           <section className="flex flex-col gap-y-[3px] pt-[10px] pb-[8px]">
             <p className="heading-sm-semibold">🔊 아이디어 발표 & 커피챗 세션 ☕</p>
             <p className="body-sm-regular text-gray-400">9월 22일 19:00</p>
