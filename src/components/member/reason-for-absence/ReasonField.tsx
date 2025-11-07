@@ -13,21 +13,17 @@ export default function ReasonField() {
   const router = useRouter()
   const pathname = usePathname()
 
-  // post data
   const setAbsenceState = useAbsenceStore((state) => state.setState)
   const absenceData = useAbsenceStore((state) => state.absenceData)
 
   const handleStepClick = (step: StepType) => {
-    // URL 업데이트 → 서버 컴포넌트 재렌더링
     router.push(`${pathname}?step=${encodeURIComponent(step)}`)
   }
 
-  /**
-   * reason 값 변경 함수
-   * @param value 입력값
-   */
   const onChangeReason = (value: string) => {
-    setAbsenceState({ ...absenceData, absenceData: { ...absenceData, reason: value } })
+    // 100자 이상이면 100자까지만 잘라내기
+    const trimmedValue = value.slice(0, 100)
+    setAbsenceState({ ...absenceData, absenceData: { ...absenceData, reason: trimmedValue } })
   }
 
   // 스크롤 완전 차단
@@ -46,7 +42,7 @@ export default function ReasonField() {
           value={absenceData?.reason}
           maxLength={100}
           onChange={(e) => onChangeReason(e.target.value)}
-          className="bg-background1 body-lg-medium outline-primary-400 h-[124px] w-full rounded-[12px] border border-gray-300 p-[14px]"
+          className="bg-background1 body-lg-medium outline-primary-400 h-[124px] w-full resize-none rounded-[12px] border border-gray-300 p-[14px]"
         />
         <div className="flex w-full justify-end">
           <p className="caption-sm-medium text-gray-400">{absenceData?.reason ? absenceData?.reason.length : 0}/100</p>
