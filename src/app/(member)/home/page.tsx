@@ -7,8 +7,6 @@ import NoticeCard from '@/components/member/home/NoticeCard'
 import Banner from '@/components/member/home/Banner'
 import { getSessionThisWeek } from '@/lib/member/server/session'
 
-export const dynamic = 'force-dynamic'
-
 export default async function HomePage() {
   const profileSummaryResult = await getProfileSummary()
   const sessionResult = await getSessionThisWeek()
