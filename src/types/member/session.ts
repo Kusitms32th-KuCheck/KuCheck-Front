@@ -34,6 +34,8 @@ export interface SessionDetailType {
   content: string
   images: string[]
   isHoliday: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 export type SessionCategoryType = 'CORPORATE_PROJECT' | 'MEETUP_PROJECT' | 'NETWORKING' | 'HOLIDAY' | 'REST'
