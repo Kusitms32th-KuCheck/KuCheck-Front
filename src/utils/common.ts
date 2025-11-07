@@ -89,7 +89,8 @@ export function formatMonthDay(timestamp: string | undefined): string {
  * @param isoString - ISO 8601 형식의 날짜 문자열 (예: "2025-11-01T03:18:38.482258")
  * @returns 포맷된 날짜 문자열 (예: "11/1 03:18")
  */
-export const formatDateTime = (isoString: string): string => {
+export const formatDateTime = (isoString: string | undefined): string => {
+  if (!isoString) return ''
   const date = new Date(isoString)
 
   const month = date.getMonth() + 1

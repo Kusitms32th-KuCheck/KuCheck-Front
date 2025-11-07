@@ -1,9 +1,9 @@
 import MemberHeader from '@/components/member/common/MemberHeader'
 import { CalendarIcon } from '@/assets/svgComponents'
 import Link from 'next/link'
-import { PaperclipIcon } from '@/assets/svgComponents/member'
 import { getSessionNoticeDetail } from '@/lib/member/server/session'
-import { formatMonthDay, formatTimeToHHMM, formatToKoreanDate } from '@/utils/common'
+import { formatDateTime, formatTimeToHHMM, formatToKoreanDate } from '@/utils/common'
+import SessionContent from '@/components/member/session/SessionContent'
 
 interface Props {
   params: Promise<{
@@ -36,7 +36,11 @@ export default async function SessionDetailPage({ params }: Props) {
         <div className="mt-[23px] px-5 pb-[145px]">
           <section className="flex flex-col gap-y-[3px] pt-[10px] pb-[8px]">
             <p className="heading-sm-semibold">{sessionData?.title}</p>
-            <p className="body-sm-regular text-gray-400">9월 22일 19:00</p>
+            {sessionData?.updatedAt ? (
+              <p className="body-sm-regular text-gray-400">{formatDateTime(sessionData?.updatedAt)}</p>
+            ) : (
+              <p className="body-sm-regular text-gray-400">{formatDateTime(sessionData?.createdAt)}</p>
+            )}
           </section>
 
           <section className="my-[23px] flex flex-col gap-y-[6px]">
@@ -53,7 +57,7 @@ export default async function SessionDetailPage({ params }: Props) {
             </div>
           </section>
 
-          <p className="body-sm-regular mt-[31px] text-gray-800">{sessionData?.content}</p>
+          <SessionContent content={sessionData?.content} />
 
           {sessionData?.images ? (
             <section className="flex flex-col gap-y-2">
