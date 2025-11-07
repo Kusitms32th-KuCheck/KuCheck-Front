@@ -14,7 +14,7 @@ export default function Home() {
             <LogoIcon width={315} height={50} />
             <p className="heading-sm-regular text-gray-500">KUSITMS 관리자 대시보드</p>
           </section>
-          <section className="desktop:hidden laptop:hidden tablet:hidden flex min-h-screen flex-col items-center justify-center gap-y-[28px]">
+          <section className="desktop:hidden laptop:hidden tablet:hidden flex min-h-screen flex-col items-center justify-center gap-y-[28px] pb-[80px]">
             <HomeLogo width={117} height={97} />
             <p className="heading-sm-semibold text-center text-white">
               큐시즘 출석 서비스 <br />

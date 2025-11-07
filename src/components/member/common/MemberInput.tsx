@@ -11,6 +11,7 @@ interface MemberInputProps {
   value?: string | number
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
   onClick?: () => void
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   textCount?: number
   totalCount?: number
   rightIcon?: React.ReactNode
@@ -34,6 +35,7 @@ const MemberInput = ({
   type = 'text',
   customClassName,
   onClick,
+  onKeyDown,
   onFocus,
 }: MemberInputProps) => {
   const inputBoxBase =
@@ -47,6 +49,7 @@ const MemberInput = ({
       {leftIcon ? leftIcon : null}
       <div className="flex w-full justify-between">
         <input
+          onKeyDown={onKeyDown}
           onClick={onClick}
           value={value}
           onChange={onChange ?? (() => {})}

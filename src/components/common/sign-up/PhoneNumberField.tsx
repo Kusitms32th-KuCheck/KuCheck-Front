@@ -28,6 +28,17 @@ export default function PhoneNumberField() {
     setSignUpState({ ...signUpData, signUpData: { ...signUpData, phoneNumber: formatted } })
   }
 
+  /**
+   * Enter 키 입력 감지
+   */
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Enter 키이고 이름이 1자 이상일 때만 실행
+    if (e.key === 'Enter' && signUpData?.phoneNumber && signUpData?.phoneNumber?.length === 13) {
+      e.preventDefault()
+      handleStepClick('3')
+    }
+  }
+
   return (
     <div>
       {/* input field */}
@@ -39,6 +50,7 @@ export default function PhoneNumberField() {
           value={signUpData?.phoneNumber ?? ''}
           placeholder={'휴대폰 번호'}
           onChange={handlePhoneNumberChange}
+          onKeyDown={handleKeyDown}
         />
       </section>
 

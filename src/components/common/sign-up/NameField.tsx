@@ -26,6 +26,17 @@ export default function NameField() {
     setSignUpState({ ...signUpData, signUpData: { ...signUpData, name: e.target.value } })
   }
 
+  /**
+   * Enter 키 입력 감지
+   */
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Enter 키이고 이름이 1자 이상일 때만 실행
+    if (e.key === 'Enter' && signUpData?.name && signUpData.name.length > 0) {
+      e.preventDefault()
+      handleStepClick('2')
+    }
+  }
+
   return (
     <div>
       {/* input field */}
@@ -37,6 +48,7 @@ export default function NameField() {
             type={'text'}
             value={signUpData?.name ?? ''}
             placeholder={'이름'}
+            onKeyDown={handleKeyDown}
             onChange={handleNameChange}
           />
           <p className="body-sm-medium text-gray-400">성까지 포함한 이름을 입력해 주세요.</p>
@@ -44,7 +56,7 @@ export default function NameField() {
       </section>
 
       {/* bottom button */}
-      <section className="fixed bottom-[36px] w-full bg-white px-5">
+      <section className="fixed bottom-[42px] w-full bg-white px-5">
         <MemberButton
           styleSize={'lg'}
           buttonType={'button'}

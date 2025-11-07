@@ -60,6 +60,17 @@ export default function SchoolField() {
     handleStepClick('4')
   }, [handleStepClick])
 
+  /**
+   * Enter 키 입력 감지
+   */
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Enter 키이고 이름이 1자 이상일 때만 실행
+    if (e.key === 'Enter' && signUpData?.school) {
+      e.preventDefault()
+      handleStepClick('4')
+    }
+  }
+
   return (
     <div>
       <section className="flex flex-col gap-y-[24px] px-5">
@@ -73,6 +84,7 @@ export default function SchoolField() {
             value={signUpData?.school ?? ''}
             placeholder={'학교 이름 입력'}
             onChange={handleSchoolChange}
+            onKeyDown={handleKeyDown}
             onFocus={() => setIsDropdownOpen(true)}
           />
 

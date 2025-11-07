@@ -25,6 +25,17 @@ export default function MajorField() {
     setSignUpState({ ...signUpData, signUpData: { ...signUpData, major: e.target.value } })
   }
 
+  /**
+   * Enter 키 입력 감지
+   */
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Enter 키이고 이름이 1자 이상일 때만 실행
+    if (e.key === 'Enter' && signUpData?.major && signUpData?.major?.length > 0) {
+      e.preventDefault()
+      handleStepClick('5')
+    }
+  }
+
   return (
     <div>
       {/* input field */}
@@ -32,6 +43,7 @@ export default function MajorField() {
         <h1 className="heading-lg-semibold">학과를 알려주세요</h1>
         <div className="flex flex-col gap-y-2">
           <MemberInput
+            onKeyDown={handleKeyDown}
             inputBoxStyle={'default'}
             type={'text'}
             value={signUpData?.major ?? ''}
