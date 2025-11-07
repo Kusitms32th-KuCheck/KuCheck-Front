@@ -13,6 +13,7 @@ interface HeaderProps {
   title?: string
   headerType?: 'default' | 'dynamic'
   headerColor?: string
+  backPath?: string
   onBack?: () => void
   rightElement?: React.ReactNode
   isBottomBorder?: boolean
@@ -25,10 +26,17 @@ const MemberHeader = ({
   headerColor,
   rightElement,
   isBottomBorder = false,
+  backPath,
 }: HeaderProps) => {
   const router = useRouter()
   const [role, setRole] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
+
+  const handleBack = () => {
+    if (onBack) return onBack()
+    if (backPath) return router.push(backPath)
+    router.back()
+  }
 
   useEffect(() => {
     try {
@@ -46,12 +54,7 @@ const MemberHeader = ({
       case 'dynamic':
         return (
           <div className={`${headerColor} relative flex h-[62px] items-center px-[7px]`}>
-            <ChevronLeftBlackIcon
-              onClick={onBack ? onBack : () => router.back()}
-              width={36}
-              height={36}
-              className="cursor-pointer"
-            />
+            <ChevronLeftBlackIcon onClick={handleBack} width={36} height={36} className="cursor-pointer" />
             <p className="body-lg-semibold absolute left-1/2 -translate-x-1/2 whitespace-nowrap">{title}</p>
             {rightElement ? rightElement : <div className="h-[36px] w-[36px]" />}
           </div>

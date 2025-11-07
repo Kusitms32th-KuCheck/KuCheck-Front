@@ -30,6 +30,7 @@ export default async function ReasonForAbsencePage() {
       <MemberHeader
         headerType={'dynamic'}
         title={'불참 사유서'}
+        backPath="/home"
         rightElement={
           <Link className="absolute right-5" href={'/reason-for-absence/guide'}>
             <HelpCircleIcon width={20} height={20} />
