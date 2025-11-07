@@ -31,7 +31,7 @@ export default function SubmissionComplete() {
         <p className="heading-sm-semibold text-primary-500">제출이 완료되었어요</p>
       </section>
 
-      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
+      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[60px]">
         <MemberButton onClick={handleStepClick}>확인</MemberButton>
       </section>
     </div>

@@ -176,7 +176,7 @@ export default function AttendanceTypeSelector() {
       </Drawer>
 
       {/* bottom button */}
-      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
+      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[60px]">
         <MemberButton
           disabled={!isButtonEnabled}
           styleType="primary"
@@ -212,7 +212,7 @@ function LateDateTimeSelector({
       />
       <DrawerClose asChild>
         <button
-          className="bg-primary-500 mb-[36px] w-full rounded-[8px] px-6 py-3 font-semibold text-white"
+          className="bg-primary-500 mb-[60px] w-full rounded-[8px] px-6 py-3 font-semibold text-white"
           type="button"
           onClick={onClose}
         >
@@ -242,7 +242,7 @@ function LeaveDateTimeSelector({
       />
       <DrawerClose asChild>
         <button
-          className="bg-primary-500 mb-[36px] w-full rounded-[8px] px-6 py-3 font-semibold text-white"
+          className="bg-primary-500 mb-[60px] w-full rounded-[8px] px-6 py-3 font-semibold text-white"
           type="button"
           onClick={onClose}
         >

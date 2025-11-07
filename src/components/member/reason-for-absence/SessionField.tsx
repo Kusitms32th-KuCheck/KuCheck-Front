@@ -68,7 +68,7 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
       </section>
 
       {/* bottom button */}
-      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[36px]">
+      <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[60px]">
         <MemberButton
           disabled={!absenceData?.sessionId}
           styleType={'primary'}
