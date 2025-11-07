@@ -14,6 +14,8 @@ export default async function HomePage() {
   const userData = profileSummaryResult.data
   const sessionData = sessionResult.data
 
+  console.log('userData', userData)
+
   return (
     <div className="mt-[24px] flex flex-col gap-y-[10px] px-5 pb-[40px]">
       <ProfileCard

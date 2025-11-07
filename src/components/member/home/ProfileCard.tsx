@@ -38,17 +38,14 @@ export default function ProfileCard({ name, part, totalPoints, profileImage }: P
               <Skeleton width={30} height={26} />
             )}
           </div>
-          {totalPoints ? (
-            <div className="flex gap-x-2">
-              <p className="body-sm-semibold text-gray-600">상벌점</p>
+          <div className="flex items-center gap-x-2">
+            <p className="body-sm-semibold text-gray-600">상벌점</p>
+            {totalPoints || totalPoints === 0 ? (
               <p className="body-sm-semibold text-gray-600">{totalPoints}</p>
-            </div>
-          ) : (
-            <div className="flex gap-x-2">
-              <Skeleton width={37} height={20} />
+            ) : (
               <Skeleton width={25} height={20} />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
       <section className="flex gap-x-[7px] px-[12px]">
