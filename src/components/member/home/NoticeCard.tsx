@@ -26,13 +26,10 @@ export default function NoticeCard() {
           }}
           className="flex flex-col gap-y-[6px] border-b border-gray-100 px-5 pt-[14px] pb-[18px]"
         >
-          <p className="body-sm-medium">📢 밋업 프로젝트 팀 빌딩 공지</p>
+          <p className="body-sm-medium">이달의 큐픽</p>
           <div className="flex gap-x-1">
             <MemberTag status={'default'} type={'round'}>
-              밋업프로젝트
-            </MemberTag>
-            <MemberTag status={'default'} type={'round'}>
-              자기소개서
+              큐픽
             </MemberTag>
           </div>
         </div>
@@ -42,19 +39,10 @@ export default function NoticeCard() {
           }}
           className="flex flex-col gap-y-[6px] px-5 pt-[14px] pb-[18px]"
         >
-          <p className="body-sm-medium">🔥 1차 스프린트 안내 🔥</p>
+          <p className="body-sm-medium">[한글과컴퓨터] 한컴 AI 아카데미 3기 참여자 모집 (~11/12)</p>
           <div className="flex gap-x-1">
             <MemberTag status={'default'} type={'round'}>
-              밋업프로젝트
-            </MemberTag>
-            <MemberTag status={'default'} type={'round'}>
-              유의사항
-            </MemberTag>
-            <MemberTag status={'default'} type={'round'}>
-              제출방법
-            </MemberTag>
-            <MemberTag status={'default'} type={'round'}>
-              제출방법
+              홍보
             </MemberTag>
           </div>
         </div>

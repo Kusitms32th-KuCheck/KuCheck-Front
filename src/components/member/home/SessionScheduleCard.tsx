@@ -36,11 +36,11 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
     >
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-x-[5px]">
-          <div className="flex h-[24px] w-[24px] items-center justify-center">
+          <div className="flex h-[24px] w-[24px] shrink-0 items-center justify-center">
             <ScheduleIcon width={15} height={15} />
           </div>
           {sessionData?.title ? (
-            <p className="body-lg-semibold pl-[5px]">{sessionData?.title}</p>
+            <p className="body-lg-semibold line-clamp-2 min-w-0 pl-[5px]">{sessionData?.title}</p>
           ) : (
             <Skeleton width={92} height={30} />
           )}
@@ -52,7 +52,7 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
       </div>
       <div className="flex min-w-0 flex-col gap-y-[3px] pl-[6px]">
         {sessionData?.place ? (
-          <p className="caption-sm-medium w-full min-w-0 truncate text-gray-700">{sessionData.place}</p>
+          <p className="caption-sm-medium line-clamp-1 min-w-0 text-gray-700">{sessionData.place}</p>
         ) : (
           <Skeleton width={107} height={16}></Skeleton>
         )}
