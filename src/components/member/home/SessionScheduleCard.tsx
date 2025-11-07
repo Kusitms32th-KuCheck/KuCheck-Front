@@ -50,9 +50,9 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
           <ChevronRightIcon className="ml-[19px]" width={24} height={24} />
         </Link>
       </div>
-      <div className="flex flex-col gap-y-[3px] pl-[6px]">
+      <div className="flex min-w-0 flex-col gap-y-[3px] pl-[6px]">
         {sessionData?.place ? (
-          <p className="caption-sm-medium text-gray-700">{sessionData?.place}</p>
+          <p className="caption-sm-medium w-full min-w-0 truncate text-gray-700">{sessionData.place}</p>
         ) : (
           <Skeleton width={107} height={16}></Skeleton>
         )}
