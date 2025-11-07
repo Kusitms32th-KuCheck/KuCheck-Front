@@ -1,12 +1,17 @@
 import Link from 'next/link'
+import { Error404Icon } from '@/assets/svgComponents/member'
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center border bg-white">
-      <h2 className="mb-4 text-4xl font-bold">404 - 페이지를 찾을 수 없습니다</h2>
-      <p className="mb-6 text-gray-600">요청하신 페이지가 존재하지 않습니다.</p>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-y-[25px] border bg-white">
+      <div className="flex flex-col items-center justify-center">
+        <Error404Icon width={68} height={68} />
+        <h2 className="body-lg-medium text-gray-500">페이지를 찾을 수 없어요</h2>
+      </div>
       <Link href="/">
-        <span className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">홈으로 돌아가기</span>
+        <span className="caption-sm-semibold rounded-full border border-gray-300 px-3 py-2 text-gray-400">
+          홈으로 돌아가기
+        </span>
       </Link>
     </div>
   )

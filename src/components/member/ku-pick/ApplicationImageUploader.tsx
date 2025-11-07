@@ -17,6 +17,7 @@ import { formatDateTime } from '@/utils/common'
 import { extractFileExtension, generateId } from '@/utils/upload'
 import { postKuPickApplication } from '@/lib/member/client/ku-pick'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/member/common/toast/ToastContext'
 
 interface ApplicationImageUploaderProps {
   myKuPickData: KuPickResponseType | undefined
@@ -31,12 +32,13 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
   const [isLoading, setIsLoading] = useState(false)
 
   const [isSubmitSuccessOpen, setIsSubmitSuccessOpen] = useState(false)
+  const { error } = useToast()
 
   const { uploadFile } = useFileUpload()
 
   useEffect(() => {
     return () => {
-      setState({ viewFile: undefined })
+      setState({ applicationFile: undefined })
     }
   }, [])
 
@@ -46,12 +48,12 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
     if (!selectedFile) return
 
     if (!selectedFile.type.startsWith('image/')) {
-      console.error('❌ 이미지 파일만 선택 가능합니다')
+      error('이미지 파일만 선택 가능합니다')
       return
     }
 
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      console.error('❌ 파일 크기가 5MB를 초과합니다')
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      error('파일 크기가 10MB를 초과합니다')
       return
     }
 
@@ -71,7 +73,7 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
 
   const handleSubmit = async () => {
     if (!file?.url) {
-      console.error('❌ 업로드할 파일을 선택해주세요')
+      error('업로드할 파일을 선택해주세요')
       return
     }
 
@@ -80,6 +82,10 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
 
       const extension = extractFileExtension(file.name)
       const presignedResponse = await postKuPickApplication(`kuPickApplication.${extension}`)
+
+      if (presignedResponse.error) {
+        error(`${presignedResponse.error}`)
+      }
 
       if (!presignedResponse.success || !presignedResponse.data?.data?.newUrl) {
         throw new Error('프리사인드 URL 요청 실패')
@@ -90,16 +96,16 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
       })
 
       if (!uploadResult.success) {
-        throw new Error('파일 업로드 실패')
+        throw new Error('파일 업로드 실패하였습니다.')
       }
-
-      console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       if (uploadResult.success) {
         setState({ applicationFile: undefined })
         router.push('/ku-pick/success')
+        console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       }
-    } catch (error) {
-      console.error('❌ 업로드 중 오류:', error)
+    } catch (errorMessage) {
+      // error('업로드 중 오류가 발생하였습니다.')
+      console.error('❌ 업로드 중 오류:', errorMessage)
     } finally {
       setIsLoading(false)
     }

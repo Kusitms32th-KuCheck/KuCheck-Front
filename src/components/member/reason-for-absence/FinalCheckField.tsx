@@ -12,6 +12,7 @@ import { convertISODateTimeToTime } from '@/utils/common'
 import { postAbsence } from '@/lib/member/client/reason-for-absence'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { extractFileExtension } from '@/utils/upload'
+import { useToast } from '@/components/member/common/toast/ToastContext'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -26,6 +27,8 @@ export default function FinalCheckField() {
   // file upload
   const { uploadFile } = useFileUpload()
   const file = useAbsenceStore((state) => state.file)
+
+  const { error } = useToast()
 
   const handleStepClick = (step: StepType) => {
     // URL 업데이트 → 서버 컴포넌트 재렌더링
@@ -56,6 +59,7 @@ export default function FinalCheckField() {
   const handleSubmit = async (absenceData: AbsenceDataType | undefined) => {
     try {
       if (!absenceData) {
+        error('불참 정보를 입력해주세요')
         console.error('불참 정보를 입력해주세요')
         return
       }
@@ -73,7 +77,12 @@ export default function FinalCheckField() {
         const uploadResult = await uploadFile(file, { preSignedUrl: response.data.data.preSignedUrl })
         console.log('📁 사진 업로드 결과:', uploadResult)
 
+        if (uploadResult.error) {
+          error(`${uploadResult.error}`)
+        }
+
         if (!uploadResult.success) {
+          error(`${uploadResult.error}`)
           console.error('❌ 파일 업로드 실패:', uploadResult.error)
           return
         }
@@ -81,6 +90,7 @@ export default function FinalCheckField() {
         if (response.success) {
           handleStepClick('6')
         } else {
+          error(`${response.error}`)
           console.error('❌ 불참 정보 제출 실패:', response.error)
         }
       }
