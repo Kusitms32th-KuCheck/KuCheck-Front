@@ -41,7 +41,7 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
   if (!skipAuth) {
     const accessToken = await getAccessTokenServer()
     if (accessToken) {
-      headers.set('authorization', `Bearer ${accessToken}`)
+      headers.set('Authorization', `Bearer ${accessToken}`)
     }
   }
 
