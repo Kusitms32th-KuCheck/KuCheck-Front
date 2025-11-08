@@ -6,6 +6,7 @@ import MemberTag from '@/components/member/common/MemberTag'
 import Image from 'next/image'
 
 interface NoticeCardProps {
+  id: number
   title: string
   tag: string
   tagStyle?: string
@@ -15,6 +16,7 @@ interface NoticeCardProps {
 }
 
 export default function NoticeCard({
+  id,
   title,
   tag,
   content,
@@ -26,7 +28,7 @@ export default function NoticeCard({
   return (
     <div
       onClick={() => {
-        router.push('/notice/1')
+        router.push(`/notice/${id}`)
       }}
       className="flex cursor-pointer items-end gap-x-[15px] border-b border-gray-200 py-[20px]"
     >

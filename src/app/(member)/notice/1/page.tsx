@@ -1,9 +1,8 @@
 import MemberHeader from '@/components/member/common/MemberHeader'
-import { PaperclipIcon } from '@/assets/svgComponents/member'
-import Image from 'next/image'
 import Link from 'next/link'
+import Image from 'next/image'
 
-export default function NoticeDetailPage() {
+export default function Page1() {
   return (
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen bg-white">

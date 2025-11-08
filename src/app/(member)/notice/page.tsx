@@ -28,6 +28,7 @@ export default function NoticePage() {
         </section>
         <section className="">
           <NoticeCard
+            id={1}
             title={'이달의 큐픽'}
             content={
               '안녕하세요! 경영총괄팀 사무대관 담당 윤창현입니다 이번 32기의 두 번째 큐픽, 11월의 큐픽이 찾아왔습니다'
@@ -37,6 +38,7 @@ export default function NoticePage() {
             imageUrl={'/ut/UT_01.png'}
           />
           <NoticeCard
+            id={3}
             title={'[한글과컴퓨터] 한컴 AI 아카데미 3기 참여자 모집 (~11/12)'}
             content={
               '(스나이퍼팩토리 주관) 안녕하세요 큐밀리 여러분~! 스나이퍼팩토리에서 진행하는 [한글과컴퓨터] 한컴 AI 아카데미 3기 프로그램이 열렸습니다! '
@@ -46,6 +48,7 @@ export default function NoticePage() {
             tagStyle={'bg-[#E2F9E7] text-[#14712B]'}
           />
           <NoticeCard
+            id={2}
             title={'전시회 제출물 안내'}
             content={
               '구글폼을 통해 X배너 및 포스터 파일을 제출해주시기 바랍니다.[KUSITMS 32nd 전체 노션]에서[팀별 스페이스]에 접속 후 전시 부스 운영 계획서 페이지에 내용을 채워주시기 바랍니다.'

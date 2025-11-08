@@ -24,7 +24,7 @@ export default function NoticeCard() {
           onClick={() => {
             router.push('/notice/1')
           }}
-          className="flex flex-col gap-y-[6px] border-b border-gray-100 px-5 pt-[14px] pb-[18px]"
+          className="flex cursor-pointer flex-col gap-y-[6px] border-b border-gray-100 px-5 pt-[14px] pb-[18px]"
         >
           <p className="body-sm-medium">이달의 큐픽</p>
           <div className="flex gap-x-1">
@@ -37,7 +37,7 @@ export default function NoticeCard() {
           onClick={() => {
             router.push('/notice/1')
           }}
-          className="flex flex-col gap-y-[6px] px-5 pt-[14px] pb-[18px]"
+          className="flex cursor-pointer flex-col gap-y-[6px] px-5 pt-[14px] pb-[18px]"
         >
           <p className="body-sm-medium">[한글과컴퓨터] 한컴 AI 아카데미 3기 참여자 모집 (~11/12)</p>
           <div className="flex gap-x-1">
