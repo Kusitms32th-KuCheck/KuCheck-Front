@@ -55,15 +55,10 @@ export const refreshAccessTokenServer = async () => {
 
     if (!response.ok) {
       // 쿠키 삭제 - Route Handler 호출
-      const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/cookies`, {
+      const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/cookies`, {
         method: 'DELETE',
       })
       console.log('❌ 쿠키 삭제', result)
-      const accessToken = cookieStore.get('accessToken')
-      const refreshToken = cookieStore.get('refreshToken')
-
-      console.log('❌ 쿠키 삭제 액세스', accessToken)
-      console.log('❌ 쿠키 삭제 리프레시', refreshToken)
 
       return { success: false, error: 'Token refresh failed' }
     }
@@ -72,7 +67,7 @@ export const refreshAccessTokenServer = async () => {
     const tokens = result.data
 
     // 쿠키 설정 - Route Handler 호출
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/cookies`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/cookies`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
