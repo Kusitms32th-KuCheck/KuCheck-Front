@@ -31,18 +31,15 @@ interface FetchOptions extends RequestInit {
  * @param options - fetch 옵션
  */
 export const apiFetchServer = async (url: string, options: FetchOptions = {}): Promise<Response> => {
-  const { skipAuth = false, ...fetchOptions } = options
+  const { ...fetchOptions } = options
 
   // 기본 설정
   const requestUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${url}`
   const headers = new Headers(fetchOptions.headers || {})
 
-  // Authorization 헤더 추가 (skipAuth가 false일 때)
-  if (!skipAuth) {
-    const accessToken = await getAccessTokenServer()
-    if (accessToken) {
-      headers.set('Authorization', `Bearer ${accessToken}`)
-    }
+  const accessToken = await getAccessTokenServer()
+  if (accessToken) {
+    headers.set('Authorization', `Bearer ${accessToken}`)
   }
 
   // Content-Type 기본값 설정
@@ -60,7 +57,7 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
   console.log(response)
 
   // 401 또는 403 에러인 경우 토큰 갱신 시도
-  if ((response.status === 401 || response.status === 403) && !skipAuth) {
+  if (response.status === 401 || response.status === 403) {
     console.log('상태', response.status)
     console.log('🔄 Token expired, attempting to refresh...')
 
