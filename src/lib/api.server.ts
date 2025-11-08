@@ -57,11 +57,15 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
     credentials: 'include' as const,
   })
 
+  console.log(response)
+
   // 401 또는 403 에러인 경우 토큰 갱신 시도
   if ((response.status === 401 || response.status === 403) && !skipAuth) {
+    console.log('상태', response.status)
     console.log('🔄 Token expired, attempting to refresh...')
 
     const refreshResult = await refreshAccessTokenServer()
+    console.log('refresh result', refreshResult)
 
     if (refreshResult.success && refreshResult.accessToken) {
       // 새 토큰으로 헤더 업데이트
@@ -74,6 +78,8 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
         cache: 'no-store',
         credentials: 'include' as const,
       })
+      // ⭐ 재시도 후에도 실패하면 그냥 반환 (무한 루프 방지)
+      console.log('Retry response status:', response.status)
     } else {
       // 토큰 갱신 실패 - Route Handler로 쿠키 삭제
       try {

@@ -53,6 +53,9 @@ export const postAuthKaKao = async (code: string | null, env: 'LOCAL' | 'DEV'): 
     const accessToken = jwtResponse.headers.get('authorization')?.replace('Bearer ', '')
     const refreshToken = jwtResponse.headers.get('X-Refresh-Token')?.replace('Bearer ', '')
 
+    console.log('카카오 로그인 하고 액세스토큰', accessToken)
+    console.log('카카오 로그인 하고 리스레시 토큰', refreshToken)
+
     console.log('✅ Kakao authentication successful')
 
     return {
