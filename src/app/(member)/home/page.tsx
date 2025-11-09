@@ -8,8 +8,7 @@ import Banner from '@/components/member/home/Banner'
 import { getSessionThisWeek } from '@/lib/member/server/session'
 
 export default async function HomePage() {
-  const profileSummaryResult = await getProfileSummary()
-  const sessionResult = await getSessionThisWeek()
+  const [profileSummaryResult, sessionResult] = await Promise.all([getProfileSummary(), getSessionThisWeek()])
 
   const userData = profileSummaryResult.data
   const sessionData = sessionResult.data
