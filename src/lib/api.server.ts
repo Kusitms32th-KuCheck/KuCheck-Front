@@ -80,7 +80,7 @@ export const apiFetchServer = async (url: string, options: FetchOptions = {}): P
     } else {
       // 토큰 갱신 실패 - Route Handler로 쿠키 삭제
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/cookies`, {
+        await fetch(`${process.env.NEXT_PUBLIC_URL}/api/auth/cookies`, {
           method: 'DELETE',
         })
       } catch (error) {

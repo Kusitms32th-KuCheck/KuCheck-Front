@@ -48,41 +48,34 @@ export const refreshAccessTokenServer = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Refresh-Token': `Bearer ${refreshToken}`,
+        'X-Refresh-Token': refreshToken,
       },
     })
-    console.log('refresh token으로 갱신', response)
 
     if (!response.ok) {
       // 쿠키 삭제 - Route Handler 호출
-      const result = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/cookies`, {
+      await fetch(`${process.env.NEXT_PUBLIC_URL}/api/auth/cookies`, {
         method: 'DELETE',
       })
-      console.log('❌ 쿠키 삭제', result)
-
       return { success: false, error: 'Token refresh failed' }
     }
 
-    const result = await response.json()
-    const tokens = result.data
+    const accessToken = response.headers.get('authorization')?.replace('Bearer ', '')
 
     // 쿠키 설정 - Route Handler 호출
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/cookies`, {
+    await fetch(`${process.env.NEXT_PUBLIC_URL}/api/auth/cookies`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-        status: tokens.status,
-        role: tokens.role,
+        accessToken: accessToken,
       }),
     })
 
     return {
       success: true,
-      accessToken: tokens.accessToken,
+      accessToken: accessToken,
     }
   } catch (error) {
     console.error('Error refreshing token:', error)
