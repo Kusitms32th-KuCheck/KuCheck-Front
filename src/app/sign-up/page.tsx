@@ -11,10 +11,6 @@ import SignUpDataSubmitModal from '@/components/common/sign-up/SignUpDataSubmitM
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
-/**
- * 'step'에 따라 올바른 컴포넌트를 반환하는 스위처 컴포넌트
- * (코드를 깔끔하게 관리하기 위해 분리)
- */
 function SignUpStepSwitcher({ step }: { step: StepType }) {
   if (step === '1') return <NameField />
   if (step === '2') return <PhoneNumberField />
@@ -24,7 +20,6 @@ function SignUpStepSwitcher({ step }: { step: StepType }) {
   if (step === '6') return <StudentCardUploadField />
   if (step === '7') return <SignUpDataSubmitModal />
 
-  // 'step' 값이 유효하지 않을 경우 기본값으로 1단계 표시
   return <NameField />
 }
 
@@ -34,8 +29,6 @@ export default async function SignUpPage({ searchParams }: { searchParams: Searc
 
   return (
     <main className="">
-      {/* 2. 'step'에 의존하는 부분을 Suspense로 감싸줌. */}
-      {/* fallback에는 로딩 중에 보여줄 UI (스피너, 스켈레톤 등)를 넣음. */}
       <Suspense fallback={<div>Loading...</div>}>
         <SignUpStepSwitcher step={step} />
       </Suspense>

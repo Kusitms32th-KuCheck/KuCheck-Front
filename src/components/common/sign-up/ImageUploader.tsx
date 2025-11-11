@@ -16,7 +16,7 @@ type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 export default function ImageUploader() {
   const fileRef = useRef<HTMLInputElement>(null)
   const file = useSignUpStore((state) => state.file)
-  const setState = useSignUpStore((state) => state.setState)
+  const setFile = useSignUpStore((state) => state.setFile)
   const [isImageError, setIsImageError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -29,7 +29,7 @@ export default function ImageUploader() {
 
   useEffect(() => {
     return () => {
-      setState({ file: undefined })
+      setFile(undefined)
     }
   }, [])
 
@@ -64,7 +64,7 @@ export default function ImageUploader() {
         url: reader.result as string,
         file: selectedFile,
       }
-      setState({ file: fileInfo })
+      setFile(fileInfo)
     }
     reader.readAsDataURL(selectedFile)
   }
@@ -99,7 +99,7 @@ export default function ImageUploader() {
       console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       if (uploadResult.success) {
         handleStepClick('7')
-        setState({ file: undefined })
+        setFile(undefined)
       } else if (uploadResult.error) {
         error(`${uploadResult.error}`)
       }

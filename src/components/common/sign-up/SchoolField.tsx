@@ -14,8 +14,8 @@ export default function SchoolField() {
   const pathname = usePathname()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  const setSignUpState = useSignUpStore((state) => state.setState)
   const signUpData = useSignUpStore((state) => state.signUpData)
+  const updateSignUpData = useSignUpStore((state) => state.updateSignUpData)
 
   // 검색 결과 필터링 (useMemo로 최적화)
   const filteredUniversities = useMemo(() => {
@@ -35,25 +35,20 @@ export default function SchoolField() {
   const handleSchoolChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
-      setSignUpState({
-        ...signUpData,
-        signUpData: { ...signUpData, school: value },
-      })
+      updateSignUpData({ school: value })
       setIsDropdownOpen(true)
     },
-    [signUpData, setSignUpState]
+    [signUpData, updateSignUpData]
   )
 
   // 대학교 선택 시
   const handleUniversitySelect = useCallback(
     (university: string) => {
-      setSignUpState({
-        ...signUpData,
-        signUpData: { ...signUpData, school: university },
-      })
+      updateSignUpData({ school: university })
+
       setIsDropdownOpen(false)
     },
-    [signUpData, setSignUpState]
+    [signUpData, updateSignUpData]
   )
 
   const handleNext = useCallback(() => {
