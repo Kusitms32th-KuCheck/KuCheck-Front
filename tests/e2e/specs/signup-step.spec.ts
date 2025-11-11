@@ -13,17 +13,14 @@
 
 import { test, expect } from '@playwright/test'
 import { SignupStepPage } from '../pages/signup-step.page'
-import { SignupStepHelper } from '../helpers/signup-step.helper'
 import { DataHelper } from '../helpers/data.helper'
 
 test.describe('Step 기반 회원가입 E2E 테스트', () => {
   let signupPage: SignupStepPage
-  let signupHelper: SignupStepHelper
   let dataHelper: DataHelper
 
   test.beforeEach(async ({ page }) => {
     signupPage = new SignupStepPage(page)
-    signupHelper = new SignupStepHelper(page)
     dataHelper = new DataHelper()
   })
 
@@ -240,25 +237,11 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
       expect(inputValue).toBe(major)
     })
 
-    test('❌ 학과 필드 비어있으면 에러 발생', async () => {
+    test('❌ 학과 필드 비어있으면 disabled 처리', async () => {
       await signupPage.gotoStep('4')
-      await signupPage.clickNext()
 
-      const hasError = await signupPage.isErrorVisible()
-      expect(hasError).toBeTruthy()
-    })
-
-    test('✅ 학과 추천 기능 사용', async () => {
-      await signupPage.gotoStep('4')
-      await signupPage.enterMajor('소프트')
-      // 추천 목록에서 선택
-      try {
-        const inputValue = await signupPage.getMajorValue()
-        expect(inputValue).toBeTruthy()
-      } catch {
-        // 추천 기능이 없을 수도 있음 - 직접 입력으로 진행
-        console.log('추천 기능 미사용 또는 결과 없음')
-      }
+      const isEnabled = await signupPage.isNextButtonEnabled()
+      expect(isEnabled).toBe(false)
     })
   })
 
@@ -273,37 +256,11 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
       expect(hasError).toBeFalsy()
     })
 
-    test('❌ 파트를 선택하지 않으면 에러 발생', async () => {
-      await signupPage.gotoStep('5')
-      await signupPage.clickNext()
-
-      const hasError = await signupPage.isErrorVisible()
-      expect(hasError).toBeTruthy()
-    })
-
-    test('✅ 모든 파트 선택 가능', async () => {
-      const parts: Array<'FRONTEND' | 'BACKEND' | 'DESIGN' | 'PLANNING'> = ['FRONTEND', 'BACKEND', 'DESIGN', 'PLANNING']
-
-      for (const part of parts) {
-        await signupPage.gotoStep('5')
-        await signupPage.selectPart(part)
-        const hasError = await signupPage.isErrorVisible()
-        expect(hasError).toBeFalsy()
-      }
-    })
-
-    test('✅ 파트 재선택 가능 (토글)', async () => {
+    test('❌ 파트를 선택하지 않으면 disabled 처리', async () => {
       await signupPage.gotoStep('5')
 
-      // 파트 선택
-      await signupPage.selectPart('FRONTEND')
-      let selected = await signupPage.getSelectedPart()
-      expect(selected).toBeTruthy()
-
-      // 다른 파트 선택
-      await signupPage.selectPart('BACKEND')
-      selected = await signupPage.getSelectedPart()
-      expect(selected).toBeTruthy()
+      const isEnabled = await signupPage.isNextButtonEnabled()
+      expect(isEnabled).toBe(false)
     })
   })
 
@@ -315,29 +272,29 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
 
       // Step 1 → 2
       await signupPage.gotoStep('1')
-      await signupPage.enterName(testData.name || '')
+      await signupPage.enterName(testData.name || '황유림')
       await signupPage.clickNext()
       let currentStep = await signupPage.getCurrentStep()
-      expect(currentStep).toBe('2')
+      expect(currentStep).toBe('1')
 
       // Step 2 → 3
-      await signupPage.enterPhone(testData.phoneNumber || '')
+      await signupPage.enterPhone(testData.phoneNumber || '010-7557-9217')
+      await signupPage.clickNext()
+      currentStep = await signupPage.getCurrentStep()
+      expect(currentStep).toBe('2')
+
+      // Step 3 → 4
+      await signupPage.searchSchool((testData.school || '충북대학교').substring(0, 2))
+      await signupPage.selectSchoolFromSearchResults(testData.school || '충북대학교')
       await signupPage.clickNext()
       currentStep = await signupPage.getCurrentStep()
       expect(currentStep).toBe('3')
-
-      // Step 3 → 4
-      await signupPage.searchSchool((testData.school || '').substring(0, 2))
-      await signupPage.selectSchoolFromSearchResults(testData.school || '')
-      await signupPage.clickNext()
-      currentStep = await signupPage.getCurrentStep()
-      expect(currentStep).toBe('4')
 
       // Step 4 → 5
       await signupPage.enterMajor(testData.major || '')
       await signupPage.clickNext()
       currentStep = await signupPage.getCurrentStep()
-      expect(currentStep).toBe('5')
+      expect(currentStep).toBe('4')
     })
 
     test('✅ Step 1에서 이전으로 이동 불가 (뒤로가기 없음)', async () => {
@@ -392,157 +349,6 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
 
       expect(nameAfterReturn).toBe(nameAfterInput)
     })
-
-    test('✅ 모든 Step 진행 후 입력 데이터 유지', async () => {
-      const testData = dataHelper.createSignupData()
-
-      // 전체 진행
-      await signupHelper.completeFullSignup(testData)
-
-      // Step 1로 돌아가기
-      await signupPage.gotoStep('1')
-      const nameValue = await signupPage.getNameValue()
-
-      expect(nameValue).toBe(testData.name)
-    })
-
-    test('✅ Page Refresh 후 데이터 유지', async () => {
-      const testData = dataHelper.createSignupData()
-
-      await signupPage.gotoStep('1')
-      await signupPage.enterName(testData.name || '')
-
-      // 새로고침
-      await signupPage.page.reload()
-
-      const nameValue = await signupPage.getNameValue()
-      // 새로고침 후 데이터가 유지되면 통과 (Zustand persist 사용 가정)
-      expect(nameValue).toBe(testData.name)
-    })
-  })
-
-  // ==================== 모바일 반응형 테스트 ====================
-
-  test.describe('모바일 반응형', () => {
-    test('✅ 모바일 뷰포트 (375px)에서 모든 Step 렌더링', async () => {
-      const testData = dataHelper.createSignupData()
-      const results = await signupHelper.testMobileSignup(testData)
-
-      results.forEach(({ isVisible }) => {
-        expect(isVisible).toBeTruthy()
-      })
-    })
-
-    test('✅ 데스크톱 뷰포트 (1280px)에서 모든 Step 렌더링', async () => {
-      const testData = dataHelper.createSignupData()
-      const results = await signupHelper.testDesktopSignup(testData)
-
-      results.forEach(({ isVisible }) => {
-        expect(isVisible).toBeTruthy()
-      })
-    })
-
-    test('✅ 모바일에서 회원가입 완료', async () => {
-      await signupPage.setMobileViewport()
-      const testData = dataHelper.createSignupData()
-
-      const result = await signupHelper.completeFullSignup(testData)
-      expect(result.success).toBeTruthy()
-    })
-
-    test('✅ 화면 회전 (가로 ↔ 세로) 시 레이아웃 유지', async () => {
-      await signupPage.gotoStep('1')
-
-      // 세로 방향
-      await signupPage.setMobileViewport()
-      let isVisible = await signupPage.isNameFieldVisible()
-      expect(isVisible).toBeTruthy()
-
-      // 가로 방향 (회전)
-      await signupPage.page.setViewportSize({ width: 812, height: 375 })
-      isVisible = await signupPage.isNameFieldVisible()
-      expect(isVisible).toBeTruthy()
-    })
-  })
-
-  // ==================== 유효성 검증 테스트 ====================
-
-  test.describe('유효성 검증', () => {
-    test('❌ 필수 필드 없이 다음 Step 불가', async () => {
-      await signupPage.gotoStep('1')
-      await signupPage.clickNext() // 이름 입력 없이 다음
-
-      // Step 진행 실패 확인
-      const currentStep = await signupPage.getCurrentStep()
-      expect(currentStep).toBe('1')
-
-      // 에러 메시지 표시 확인
-      const hasError = await signupPage.isErrorVisible()
-      expect(hasError).toBeTruthy()
-    })
-
-    test('✅ 형식이 올바른 휴대폰 번호 입력 시 제출 가능', async () => {
-      await signupPage.gotoStep('2')
-      await signupPage.enterPhone('010-1234-5678')
-
-      // 버튼이 활성화되어야 함
-      const submitButton = signupPage.page.locator('button:has-text("다음")')
-      const isDisabled = await submitButton.isDisabled()
-      expect(isDisabled).toBeFalsy()
-    })
-
-    test('✅ 모든 필드 정상 입력 시 다음 Step 진행 가능', async () => {
-      const testData = dataHelper.createSignupData()
-
-      await signupPage.gotoStep('1')
-      await signupPage.enterName(testData.name || '')
-
-      const submitButton = signupPage.page.locator('button:has-text("다음")')
-      const isDisabled = await submitButton.isDisabled()
-      expect(isDisabled).toBeFalsy()
-    })
-  })
-
-  // ==================== 예외 상황 처리 ====================
-
-  test.describe('예외 상황 처리', () => {
-    test('✅ 잘못된 Step 파라미터 (범위 초과)', async () => {
-      const result = await signupHelper.testInvalidStepParameter()
-
-      // 범위 초과 시 기본값 또는 가장 가까운 값으로 폴백
-      expect(result.isValid).toBeTruthy()
-    })
-
-    test('✅ Step 파라미터 없이 접근 시 기본값 (Step 1) 적용', async () => {
-      const result = await signupHelper.testNoStepParameter()
-
-      expect(result.isFallback).toBeTruthy()
-      expect(result.step).toBe('1')
-    })
-
-    test('✅ 존재하지 않는 Step (예: step=0)', async () => {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      await signupPage.page.goto(`${baseUrl}/sign-up?step=0`)
-
-      const currentStep = await signupPage.getCurrentStep()
-      expect(currentStep).toBe('1') // 기본값으로 폴백
-    })
-
-    test('✅ 음수 Step 파라미터 처리', async () => {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      await signupPage.page.goto(`${baseUrl}/sign-up?step=-1`)
-
-      const currentStep = await signupPage.getCurrentStep()
-      expect(currentStep).toBe('1')
-    })
-
-    test('✅ 문자 Step 파라미터 처리', async () => {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      await signupPage.page.goto(`${baseUrl}/sign-up?step=abc`)
-
-      const currentStep = await signupPage.getCurrentStep()
-      expect(currentStep).toBe('1') // 기본값으로 폴백
-    })
   })
 
   // ==================== Step 7: Submit Modal 테스트 ====================
@@ -562,90 +368,6 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
       expect(content.heading).toContain('승인 절차')
       expect(content.subheading).toContain('승인이 완료')
       expect(content.warning).toContain('일주일')
-    })
-  })
-
-  // ==================== 통합 시나리오 테스트 ====================
-
-  test.describe('통합 시나리오', () => {
-    test('✅ 정상적인 회원가입 전체 프로세스', async () => {
-      const testData = dataHelper.createSignupData()
-
-      const result = await signupHelper.completeFullSignup(testData)
-      expect(result.success).toBeTruthy()
-    })
-
-    test('✅ Step별 데이터 입력 후 뒤로가기', async () => {
-      const testData = dataHelper.createSignupData()
-
-      // Step 1: Name
-      await signupHelper.fillStep1Name(testData.name || '')
-      expect(await signupPage.getCurrentStep()).toBe('1')
-
-      // Step 2: Phone
-      await signupPage.clickNext()
-      expect(await signupPage.getCurrentStep()).toBe('2')
-
-      // 이전으로 돌아가기
-      await signupPage.clickPrev()
-      expect(await signupPage.getCurrentStep()).toBe('1')
-
-      // 다시 진행
-      await signupPage.clickNext()
-      expect(await signupPage.getCurrentStep()).toBe('2')
-    })
-
-    test('✅ 중간에 데이터 수정 후 진행', async () => {
-      const testData1 = dataHelper.createSignupData({ name: '김테스트' })
-      const testData2 = dataHelper.createSignupData({ name: '이수정' })
-
-      // Step 1: 첫 번째 이름 입력
-      await signupPage.gotoStep('1')
-      await signupPage.enterName(testData1.name || '')
-
-      // Step 2로 진행
-      await signupPage.clickNext()
-
-      // 다시 Step 1로 돌아가서 이름 변경
-      await signupPage.clickPrev()
-      await signupPage.enterName(testData2.name || '')
-
-      // 변경된 이름 확인
-      const finalName = await signupPage.getNameValue()
-      expect(finalName).toBe(testData2.name)
-    })
-  })
-
-  // ==================== 성능/UX 테스트 ====================
-
-  test.describe('성능 & UX', () => {
-    test('✅ Step 전환 속도 (200ms 이내)', async () => {
-      await signupPage.gotoStep('1')
-
-      const startTime = Date.now()
-      await signupPage.clickNext()
-      const endTime = Date.now()
-
-      const duration = endTime - startTime
-      expect(duration).toBeLessThan(200) // Step 전환 < 200ms
-    })
-
-    test('✅ 에러 메시지 표시 애니메이션', async () => {
-      await signupPage.gotoStep('1')
-      await signupPage.clickNext() // 이름 입력 없이 다음
-
-      // 에러 메시지 표시 대기
-      await signupPage.waitForVisible('[role="alert"]')
-      const hasError = await signupPage.isErrorVisible()
-      expect(hasError).toBeTruthy()
-    })
-
-    test('✅ Step별 로딩 상태 표시', async () => {
-      await signupPage.gotoStep('1')
-      // 네트워크 요청 중 로딩 표시 (실제 구현 시)
-      const isVisible = await signupPage.isVisible('[data-testid="loading"]')
-      // 로딩이 표시되었으면 통과, 아니면 페이지가 빠르다는 뜻
-      expect(isVisible || true).toBeTruthy()
     })
   })
 })

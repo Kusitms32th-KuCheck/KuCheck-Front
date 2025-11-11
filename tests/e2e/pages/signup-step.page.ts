@@ -33,35 +33,15 @@ export class SignupStepPage extends BasePage {
 
   // ==================== Step 3: School Field ====================
   private readonly schoolInput = 'input[placeholder="학교 이름 입력"]'
-  private readonly schoolHeading = 'text=대학교를 입력해 주세요'
-  private readonly schoolDropdown = '.absolute.top-full' // 드롭다운 메뉴
-  private readonly schoolDropdownItem = '.border-b.border-gray-100' // 드롭다운 아이템
-  private readonly schoolDropdownEmpty = 'text=검색 결과가 없습니다'
 
   // ==================== Step 4: Major Field ====================
   private readonly majorInput = 'input[placeholder="학과"]'
-  private readonly majorHeading = 'text=학과를 알려주세요'
-  private readonly majorHint = 'text=복수 전공이 있다면'
 
   // ==================== Step 5: Part Field ====================
   private readonly partHeading = 'text=파트를 선택해 주세요'
-  private readonly partButton = '.grid.grid-cols-2 div' // 2x2 그리드의 파트 버튼
-  private readonly partButtonSelected = '.bg-primary-50.border-primary-500'
-  private readonly partNames = {
-    planning: 'text=기획',
-    design: 'text=디자인',
-    frontend: 'text=프론트엔드',
-    backend: 'text=백엔드',
-  }
 
   // ==================== Step 6: Student Card Upload ====================
   private readonly cardHeading = 'text=사진을 업로드 해주세요'
-  private readonly cardUploadInput = 'input[type="file"]'
-  private readonly cardUploadArea = '.flex.h-\\[232px\\]' // 업로드 영역
-  private readonly cardPreview = 'img[alt="프로필"]'
-  private readonly cardPreviewContainer = '.border.border-gray-200.bg-gray-100'
-  private readonly cardUploadIcon = 'svg' // ImageUploaderIcon
-  private readonly cardReuploadButton = 'button:has-text("다시 선택하기")'
 
   // ==================== Step 7: Submit Modal ====================
   private readonly submitModalHeading = 'text=승인 절차를 진행 중이에요'
@@ -250,13 +230,6 @@ export class SignupStepPage extends BasePage {
   }
 
   /**
-   * 학교 드롭다운 표시 여부
-   */
-  async isSchoolDropdownVisible(): Promise<boolean> {
-    return await this.isVisible(this.schoolDropdown)
-  }
-
-  /**
    * 학교 필드 표시 여부
    */
   async isSchoolFieldVisible(): Promise<boolean> {
@@ -303,17 +276,6 @@ export class SignupStepPage extends BasePage {
     const text = partTextMap[partName]
     await this.page.locator(`.grid.grid-cols-2 div:has-text("${text}")`).click()
   }
-
-  /**
-   * 선택된 파트 조회
-   */
-  async getSelectedPart(): Promise<string | null> {
-    // 선택된 파트의 텍스트 조회
-    return await this.page
-      .locator(`.bg-primary-50.border-primary-500 + div, .bg-primary-50.border-primary-500`)
-      .textContent()
-  }
-
   /**
    * 파트 필드 표시 여부
    */
@@ -321,43 +283,11 @@ export class SignupStepPage extends BasePage {
     return await this.isVisible(this.partHeading)
   }
 
-  // ==================== Step 6: Student Card Upload ====================
-
-  /**
-   * 학생증 이미지 업로드
-   */
-  async uploadStudentCard(filePath: string) {
-    await this.page.locator(this.cardUploadInput).setInputFiles(filePath)
-    // 이미지 로드 대기
-    await this.page.waitForTimeout(500)
-  }
-
-  /**
-   * 이미지 업로드 입력 필드 클릭 (파일 선택 다이얼로그 열기)
-   */
-  async clickUploadArea() {
-    await this.click(this.cardUploadArea)
-  }
-
-  /**
-   * 학생증 카드 미리보기 표시 여부
-   */
-  async isCardPreviewVisible(): Promise<boolean> {
-    return await this.isVisible(this.cardPreview)
-  }
-
   /**
    * 학생증 업로드 필드 표시 여부
    */
   async isCardUploadFieldVisible(): Promise<boolean> {
     return await this.isVisible(this.cardHeading)
-  }
-
-  /**
-   * "다시 선택하기" 버튼 클릭
-   */
-  async clickReuploadButton() {
-    await this.click(this.cardReuploadButton)
   }
 
   // ==================== Step 7: Submit Modal ====================
@@ -391,52 +321,6 @@ export class SignupStepPage extends BasePage {
    */
   async isErrorVisible(): Promise<boolean> {
     return await this.isVisible(this.errorAlert)
-  }
-
-  /**
-   * 에러 메시지 조회
-   */
-  async getErrorMessage(): Promise<string> {
-    try {
-      return await this.getText(this.errorAlert)
-    } catch {
-      return ''
-    }
-  }
-
-  /**
-   * 특정 step 필드 표시 여부 확인
-   */
-  async isStepFieldVisible(step: StepType): Promise<boolean> {
-    switch (step) {
-      case '1':
-        return await this.isNameFieldVisible()
-      case '2':
-        return await this.isPhoneFieldVisible()
-      case '3':
-        return await this.isSchoolFieldVisible()
-      case '4':
-        return await this.isMajorFieldVisible()
-      case '5':
-        return await this.isPartFieldVisible()
-      case '6':
-        return await this.isCardUploadFieldVisible()
-      case '7':
-        return await this.isSubmitModalVisible()
-      default:
-        return false
-    }
-  }
-
-  /**
-   * 페이지 뷰포트 설정 (모바일/데스크톱)
-   */
-  async setMobileViewport() {
-    await this.page.setViewportSize({ width: 375, height: 812 })
-  }
-
-  async setDesktopViewport() {
-    await this.page.setViewportSize({ width: 1280, height: 720 })
   }
 
   /**
