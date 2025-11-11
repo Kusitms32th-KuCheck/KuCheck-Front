@@ -219,12 +219,11 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
       expect(isEmpty).toBeTruthy()
     })
 
-    test('❌ 학교를 선택하지 않으면 에러 발생', async () => {
+    test('❌ 학교를 선택하지 않으면 disabled 처리', async () => {
       await signupPage.gotoStep('3')
-      await signupPage.clickNext()
 
-      const hasError = await signupPage.isErrorVisible()
-      expect(hasError).toBeTruthy()
+      const isEnabled = await signupPage.isNextButtonEnabled()
+      expect(isEnabled).toBe(false)
     })
   })
 
