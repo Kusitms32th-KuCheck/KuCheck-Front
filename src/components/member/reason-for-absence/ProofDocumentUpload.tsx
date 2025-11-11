@@ -22,7 +22,6 @@ export default function ProofDocumentUpload() {
   const setState = useAbsenceStore((state) => state.setState)
 
   const handleStepClick = (step: StepType) => {
-    // URL 업데이트 → 서버 컴포넌트 재렌더링
     router.push(`${pathname}?step=${encodeURIComponent(step)}`)
   }
 
@@ -35,27 +34,21 @@ export default function ProofDocumentUpload() {
     if (files && files.length > 0) {
       const file = files[0]
 
-      // 파일 유효성 검사
       const validation = isValidFile(file)
 
       if (!validation.valid) {
-        console.error('❌', validation.error)
-        alert(validation.error) // 또는 toast 메시지
-        // 파일 input 초기화
+        alert(validation.error)
         if (fileRef.current) {
           fileRef.current.value = ''
         }
         return
       }
 
-      // 유효한 파일이면 FileInfoType으로 변환 및 저장
       const fileInfo = await convertFileToFileInfo(file)
 
       setState({
         file: fileInfo,
       })
-
-      console.log('✅ 파일 저장 완료:', file.name)
     }
   }
 

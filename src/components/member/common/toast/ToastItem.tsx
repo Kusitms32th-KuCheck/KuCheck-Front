@@ -34,13 +34,9 @@ export default function ToastItem({ toast, onClose }: ToastItemProps) {
 
   return (
     <motion.div
-      // ✅ 초기 상태 - 아래에서 시작
       initial={{ opacity: 0, y: 100 }}
-      // ✅ 진입 애니메이션 - 위로 올라오고 나타남
       animate={{ opacity: 1, y: 0 }}
-      // ✅ 퇴장 애니메이션 - 아래로 내려가면서 사라짐
       exit={{ opacity: 0, y: 100 }}
-      // ✅ 트랜지션 분리
       transition={{
         type: 'tween',
         duration: 0.3,

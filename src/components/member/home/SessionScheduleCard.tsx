@@ -1,14 +1,13 @@
 'use client'
+
 import Link from 'next/link'
-
-import { BarIcon, ChevronRightIcon, ScheduleIcon } from '@/assets/svgComponents'
-
-import { ThisWeekSessionDataType } from '@/types/member/session'
-import { formatToMonthDay } from '@/utils/common'
-
+import { useRouter } from 'next/navigation'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { useRouter } from 'next/navigation'
+
+import { BarIcon, ChevronRightIcon, ScheduleIcon } from '@/assets/svgComponents'
+import { ThisWeekSessionDataType } from '@/types/member/session'
+import { formatToMonthDay } from '@/utils/common'
 
 interface SessionScheduleCardProps {
   sessionData: ThisWeekSessionDataType | undefined
@@ -16,60 +15,62 @@ interface SessionScheduleCardProps {
 
 export default function SessionScheduleCard({ sessionData }: SessionScheduleCardProps) {
   const router = useRouter()
-  /**
-   * 시간 문자열에서 초(seconds)를 제거
-   * @param timeString - 시간 문자열 (예: "15:02:00")
-   * @returns 초가 제거된 시간 문자열 (예: "15:02")
-   */
-  const removeSeconds = (timeString: string | undefined) => {
-    if (timeString) {
-      return timeString.split(':').slice(0, 2).join(':')
+
+  const removeSeconds = (timeString: string | undefined): string | undefined => {
+    return timeString?.split(':').slice(0, 2).join(':')
+  }
+
+  const handleCardClick = () => {
+    if (sessionData?.sessionId) {
+      router.push(`/session/${sessionData.sessionId}`)
     }
   }
 
   return (
     <div
-      onClick={() => {
-        router.push(`/session/${sessionData?.sessionId}`)
-      }}
-      className="flex w-full flex-col justify-between gap-y-[29px] rounded-[16px] bg-white px-[14px] pt-[17px] pb-[10px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]"
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      className="flex w-full cursor-pointer flex-col justify-between gap-y-[29px] rounded-[16px] bg-white px-[14px] pt-[17px] pb-[10px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]"
+      onKeyDown={(e) => e.key === 'Enter' && handleCardClick()}
     >
       <div className="flex items-start justify-between">
-        <div className="flex items-start gap-x-[5px]">
-          <div className="flex h-[24px] w-[24px] shrink-0 items-center justify-center">
-            <ScheduleIcon width={15} height={15} />
-          </div>
+        <div className="flex min-w-0 items-start gap-x-[5px]">
+          <ScheduleIcon width={15} height={15} className="mt-1 flex-shrink-0" />
           {sessionData?.title ? (
-            <p className="body-lg-semibold line-clamp-2 min-w-0 pl-[5px]">{sessionData?.title}</p>
+            <p className="body-lg-semibold line-clamp-2">{sessionData.title}</p>
           ) : (
-            <Skeleton width={92} height={30} />
+            <Skeleton width={120} height={30} />
           )}
         </div>
 
-        <Link href={'/session'}>
-          <ChevronRightIcon className="ml-[19px]" width={24} height={24} />
+        <Link href="/session" className="ml-2 flex-shrink-0">
+          <ChevronRightIcon width={24} height={24} />
         </Link>
       </div>
-      <div className="flex min-w-0 flex-col gap-y-[3px] pl-[6px]">
+
+      <div className="flex flex-col gap-y-[3px] pl-[6px]">
         {sessionData?.place ? (
-          <p className="caption-sm-medium line-clamp-1 min-w-0 text-gray-700">{sessionData.place}</p>
+          <p className="caption-sm-medium line-clamp-1 text-gray-700">{sessionData.place}</p>
         ) : (
-          <Skeleton width={107} height={16}></Skeleton>
+          <Skeleton width={120} height={16} />
         )}
 
         <div className="flex items-center gap-x-[6px]">
           {sessionData?.startDate ? (
-            <p className="caption-sm-medium text-gray-700">{formatToMonthDay(sessionData?.startDate)}</p>
+            <p className="caption-sm-medium text-gray-700">{formatToMonthDay(sessionData.startDate)}</p>
           ) : (
-            <Skeleton width={26} height={16} />
+            <Skeleton width={40} height={16} />
           )}
-          <BarIcon width={2} height={10} />
+
+          {sessionData?.startDate && <BarIcon width={2} height={10} />}
+
           {sessionData?.startTime && sessionData?.endTime ? (
             <p className="caption-sm-medium text-gray-700">
-              {removeSeconds(sessionData?.startTime)}~{removeSeconds(sessionData?.endTime)}
+              {removeSeconds(sessionData.startTime)}~{removeSeconds(sessionData.endTime)}
             </p>
           ) : (
-            <Skeleton width={69} height={16} />
+            <Skeleton width={80} height={16} />
           )}
         </div>
       </div>

@@ -9,7 +9,6 @@ interface SessionContentProps {
 export default function SessionContent({ content }: SessionContentProps) {
   if (!content) return null
 
-  // XSS 공격 방지를 위해 HTML sanitize
   const sanitizedContent = DOMPurify.sanitize(content, {
     ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a'],
     ALLOWED_ATTR: ['href', 'target', 'rel'],

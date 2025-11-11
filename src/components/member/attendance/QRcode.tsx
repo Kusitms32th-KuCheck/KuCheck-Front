@@ -21,7 +21,6 @@ export default function QRcode({ expAt, token }: QRcodeProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const expirationTimeRef = useRef<Date | null>(null)
 
-  // 초기 props 데이터 설정
   useEffect(() => {
     if (expAt && token) {
       const initialTokenData = {
@@ -41,19 +40,9 @@ export default function QRcode({ expAt, token }: QRcodeProps) {
 
     if (timerRef.current) clearInterval(timerRef.current)
 
-    // 나노초 제거
     const normalizedExpAt = expAtValue.includes('.') ? expAtValue.split('.')[0] : expAtValue
 
-    // 로컬 시간으로 파싱 (Z 없이)
     expirationTimeRef.current = new Date(normalizedExpAt)
-
-    // console.log('타이머 시작:', {
-    //   originalExpAt: expAtValue,
-    //   normalizedExpAt: normalizedExpAt,
-    //   parsedDate: expirationTimeRef.current,
-    //   now: new Date(),
-    //   diffSeconds: Math.floor((new Date(normalizedExpAt).getTime() - new Date().getTime()) / 1000),
-    // })
 
     const calculateRemaining = () => {
       const now = new Date()
@@ -91,8 +80,6 @@ export default function QRcode({ expAt, token }: QRcodeProps) {
     try {
       const newTokenData = await postClientAttendanceToken()
 
-      console.log('API 응답:', newTokenData)
-
       if (!newTokenData.success) {
         console.error('API 에러:', newTokenData.error)
         alert(`재발급 실패: ${newTokenData.error}`)
@@ -100,7 +87,6 @@ export default function QRcode({ expAt, token }: QRcodeProps) {
         return
       }
 
-      // 응답 구조 확인
       const responseData = newTokenData.data
       const newToken = responseData?.data?.token
       const newExpAt = responseData?.data?.expAt
@@ -112,14 +98,11 @@ export default function QRcode({ expAt, token }: QRcodeProps) {
       })
 
       if (newToken && newExpAt) {
-        // 상태 초기화
         setIsExpired(false)
         setRemainingSeconds(0)
 
-        // 토큰 데이터 업데이트
         setTokenData({ token: newToken, expAt: newExpAt })
 
-        // 타이머 재시작
         startTimer(newExpAt)
       } else {
         console.error('토큰 데이터 불완전:', {

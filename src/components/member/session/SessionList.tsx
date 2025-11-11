@@ -57,17 +57,14 @@ export default function SessionList({ sessionList }: SessionListProps) {
     const nextDayObj = new Date(saturdayDateObj)
     nextDayObj.setDate(nextDayObj.getDate() + 1)
 
-    // 세션이 이번주 토요일 이전이면 past
     if (sessionDateObj < saturdayDateObj) {
       return 'past'
     }
 
-    // 세션이 이번주 토요일 당일이면 current
     if (sessionDateObj >= saturdayDateObj && sessionDateObj < nextDayObj) {
       return 'current'
     }
 
-    // 세션이 이번주 토요일 이후면 future
     return 'future'
   }
 

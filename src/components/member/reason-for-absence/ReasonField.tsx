@@ -21,12 +21,10 @@ export default function ReasonField() {
   }
 
   const onChangeReason = (value: string) => {
-    // 100자 이상이면 100자까지만 잘라내기
     const trimmedValue = value.slice(0, 100)
     setAbsenceState({ ...absenceData, absenceData: { ...absenceData, reason: trimmedValue } })
   }
 
-  // 스크롤 완전 차단
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => {
@@ -36,7 +34,6 @@ export default function ReasonField() {
 
   return (
     <div>
-      {/* content */}
       <section className="flex flex-col overflow-hidden px-5 pt-[32px]">
         <textarea
           value={absenceData?.reason}
@@ -49,7 +46,6 @@ export default function ReasonField() {
         </div>
       </section>
 
-      {/* bottom button */}
       <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[60px]">
         <MemberButton
           disabled={!absenceData?.reason}

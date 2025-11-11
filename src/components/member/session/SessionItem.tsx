@@ -56,9 +56,7 @@ export default function SessionItem({
 
   return (
     <div className="flex items-center gap-x-[24px]" key={sessionId} ref={isCurrent ? currentSessionRef : null}>
-      {/* 타임라인 점과 선 */}
       <div className="relative flex h-[26px] w-[26px] items-center justify-center">
-        {/* 원형 점 */}
         {isCurrent ? (
           <div className="bg-primary-100 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-full">
             <div className="bg-primary-500 h-[12px] w-[12px] rounded-full" />
@@ -69,7 +67,6 @@ export default function SessionItem({
           <div className="bg-primary-200 z-10 h-[12px] w-[12px] rounded-full" />
         )}
 
-        {/* 세로 줄 (마지막 아이템 제외) */}
         {!isLast && (
           <div className="bg-primary-50 absolute top-2 left-1/2 h-[calc(100%+80px)] w-[2px] -translate-x-1/2" />
         )}

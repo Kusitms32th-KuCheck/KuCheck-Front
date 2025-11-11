@@ -31,7 +31,6 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
   const handleImagePreview = async (selectedFile: File) => {
     try {
       setIsLoading(true)
-      // 1. 파일 읽기 및 미리보기 설정
       const reader = new FileReader()
 
       reader.onloadend = async () => {
@@ -40,17 +39,14 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
           name: selectedFile.name,
           size: selectedFile.size,
           url: reader.result as string,
-          file: selectedFile, // 실제 File 객체 저장
+          file: selectedFile,
         }
 
         setState({ file: fileInfo })
 
-        // 2. 프리사인드 URL 요청
         try {
           const extension = extractFileExtension(selectedFile.name)
-          console.log(`profile.${extension}`)
           const presignedResponse = await getMembersProfileImageUrl(`profile.${extension}`)
-          console.log('presignedResponse', presignedResponse.data?.data?.newUrl)
 
           if (presignedResponse.error) {
             error(`${presignedResponse.error}`)
@@ -60,8 +56,6 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
             throw new Error('프리사인드 URL 요청 실패')
           }
 
-          console.log('fileInfo', fileInfo)
-          // 3. S3에 파일 업로드
           if (selectedFile && presignedResponse.data?.data?.newUrl) {
             const uploadResult = await uploadFile(fileInfo, {
               preSignedUrl: presignedResponse?.data?.data?.newUrl,
@@ -71,13 +65,9 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
               throw new Error('파일 업로드 실패')
             }
             success('프로필 이미지 업로드 성공하였습니다.')
-            console.log('✅ 프로필 이미지 업로드 성공:', uploadResult)
           }
-
-          // toast 성공 메시지
         } catch (error) {
           console.error('❌ 업로드 중 오류:', error)
-          // toast 에러 메시지
         }
       }
 
@@ -93,14 +83,12 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
     const selectedFile = e.currentTarget.files?.[0]
 
     if (selectedFile) {
-      // 파일 검증 (선택사항)
       if (!selectedFile.type.startsWith('image/')) {
         error('이미지 파일만 선택 가능합니다')
         return
       }
 
       if (selectedFile.size > 10 * 1024 * 1024) {
-        // 10MB 제한
         error('파일 크기가 10MB를 초과합니다')
         return
       }
@@ -109,10 +97,8 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
     }
   }
 
-  // 프로필 이미지 URL 결정
   const profileImageSrc = file?.url || userData?.profileImage || '/default-profile.png'
 
-  // URL이 유효한지 확인
   const isValidImageUrl = profileImageSrc && typeof profileImageSrc === 'string'
 
   return (

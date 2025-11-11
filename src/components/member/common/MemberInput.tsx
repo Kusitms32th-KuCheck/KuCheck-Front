@@ -36,7 +36,6 @@ const MemberInput = ({
   customClassName,
   onClick,
   onKeyDown,
-  onFocus,
 }: MemberInputProps) => {
   const inputBoxBase =
     'border py-[14px] px-[12px] body-md-regular placeholder:text-gray-400 flex gap-x-2 rounded-[12px] items-center bg-white'

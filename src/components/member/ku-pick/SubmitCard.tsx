@@ -16,7 +16,6 @@ interface SubmitCardProps {
 export default function SubmitCard({ title, step, description, href, isSubmit }: SubmitCardProps) {
   const router = useRouter()
 
-  // useCallback으로 함수 메모이제이션 (불필요한 재생성 방지)
   const handleNavigate = useCallback(() => {
     router.push(href)
   }, [href, router])

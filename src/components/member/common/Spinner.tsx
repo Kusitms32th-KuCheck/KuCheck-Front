@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 const Spinner = () => {
   return (
     <div className="relative h-[100px] w-[100px] rounded-full">
-      {/* 4개의 아크 */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}

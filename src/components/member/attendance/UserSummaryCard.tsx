@@ -21,7 +21,6 @@ export default function UserSummaryCard({ name, profileImageUrl, school, part }:
   return (
     <div className="relative w-full rounded-[12px] bg-gradient-to-r from-[#E6EDFF] to-[#CBD9FF] py-[30px] pr-[12px] pl-[20px]">
       <section className="z-10 flex items-center gap-x-[20px]">
-        {/* 이미지 추가 예정*/}
         {profileImageUrl ? (
           <div className="relative h-[126px] w-[105px]">
             <Image

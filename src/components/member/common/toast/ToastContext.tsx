@@ -28,7 +28,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
     setToasts((prev) => [...prev, toast])
 
-    // 자동 제거
     if (duration > 0) {
       setTimeout(() => {
         removeToast(id)
