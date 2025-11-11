@@ -534,3 +534,59 @@ export const validateName = (name: string | undefined): { isValid: boolean; erro
 
   return { isValid: true }
 }
+
+/**
+ * 휴대폰 번호 유효성 검증
+ * @param phoneNumber - 검증할 휴대폰 번호 (포맷팅된 형식)
+ * @returns 유효한 휴대폰 번호인지 여부
+ *
+ * 유효한 형식:
+ * - 010-XXXX-XXXX (13자, 휴대폰)
+ * - 02-XXXX-XXXX (10자, 서울 지역번호)
+ * - 031-XXXX-XXXX (11자, 경기 지역번호)
+ * - 032-XXXX-XXXX (11자, 인천 지역번호)
+ * - 033-XXXX-XXXX (11자, 강원 지역번호)
+ * - 041-XXXX-XXXX (11자, 충남 지역번호)
+ * - 042-XXXX-XXXX (11자, 대전 지역번호)
+ * - 043-XXXX-XXXX (11자, 충북 지역번호)
+ * - 051-XXXX-XXXX (11자, 부산 지역번호)
+ * - 052-XXXX-XXXX (11자, 울산 지역번호)
+ * - 053-XXXX-XXXX (11자, 대구 지역번호)
+ * - 054-XXXX-XXXX (11자, 경북 지역번호)
+ * - 055-XXXX-XXXX (11자, 경남 지역번호)
+ * - 061-XXXX-XXXX (11자, 전남 지역번호)
+ * - 062-XXXX-XXXX (11자, 광주 지역번호)
+ * - 063-XXXX-XXXX (11자, 전북 지역번호)
+ * - 064-XXXX-XXXX (11자, 제주 지역번호)
+ */
+export function isValidPhoneNumber(phoneNumber: string | null | undefined): boolean {
+  if (!phoneNumber) return false
+
+  // 유효한 휴대폰/지역번호 패턴
+  // 010은 4-4, 나머지 지역번호는 3-4 또는 4-3 또는 4-4
+  const phoneRegex = /^(010-\d{4}-\d{4}|0(2|31|32|33|41|42|43|51|52|53|54|55|61|62|63|64)-\d{3,4}-\d{4})$/
+
+  return phoneRegex.test(phoneNumber)
+}
+/**
+ * 휴대폰 번호 에러 메시지 반환
+ * @param phoneNumber - 검증할 휴대폰 번호
+ * @returns 에러 메시지 (유효하면 null)
+ */
+export function getPhoneNumberErrorMessage(phoneNumber: string | null | undefined): string | null {
+  if (!phoneNumber) {
+    return null // 입력 없을 때는 에러 메시지 표시 안 함
+  }
+
+  // 13자 미만이면 불완전한 입력
+  if (phoneNumber.length < 10) {
+    return '휴대폰 번호를 정확하게 입력해주세요'
+  }
+
+  // 유효하지 않은 형식
+  if (!isValidPhoneNumber(phoneNumber)) {
+    return '유효한 휴대폰 번호 형식이 아닙니다'
+  }
+
+  return null
+}

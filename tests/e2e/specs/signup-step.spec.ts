@@ -160,19 +160,19 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
 
     test('❌ 휴대폰 필드 비어있으면 에러 발생', async () => {
       await signupPage.gotoStep('2')
-      await signupPage.clickNext()
+      const isEnabled = await signupPage.isNextButtonEnabled()
+      expect(isEnabled).toBe(false)
 
-      const hasError = await signupPage.isErrorVisible()
-      expect(hasError).toBeTruthy()
+      const isErrorVisible = await signupPage.isErrorAlertVisible()
+      // 빈 문자열이면 에러 메시지가 없어야 함.
+      expect(isErrorVisible).toBe(false)
     })
 
     test('❌ 잘못된 형식의 휴대폰 번호는 에러 발생', async () => {
       await signupPage.gotoStep('2')
-      await signupPage.enterPhone('12345') // 형식 오류
-      await signupPage.clickNext()
-
-      const hasError = await signupPage.isErrorVisible()
-      expect(hasError).toBeTruthy()
+      await signupPage.enterPhone('12345')
+      const isEnabled = await signupPage.isNextButtonEnabled()
+      expect(isEnabled).toBe(false)
     })
 
     test('✅ 다양한 휴대폰 형식 입력 가능', async () => {
@@ -182,7 +182,7 @@ test.describe('Step 기반 회원가입 E2E 테스트', () => {
         await signupPage.gotoStep('2')
         await signupPage.enterPhone(phone)
         const inputValue = await signupPage.getPhoneValue()
-        expect(inputValue).toBeTruthy()
+        expect(inputValue).toBe('010-1234-5678')
       }
     })
   })

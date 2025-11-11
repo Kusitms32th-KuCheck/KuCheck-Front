@@ -27,12 +27,9 @@ export class SignupStepPage extends BasePage {
 
   // ==================== Step 1: Name Field ====================
   private readonly nameInput = 'input[placeholder="이름"]'
-  private readonly nameHeading = 'text=이름을 입력해주세요'
-  private readonly nameLengthHint = 'text=성까지 포함한 이름'
 
   // ==================== Step 2: Phone Number Field ====================
   private readonly phoneInput = 'input[placeholder="휴대폰 번호"]'
-  private readonly phoneHeading = 'text=휴대폰 번호를 입력해 주세요'
 
   // ==================== Step 3: School Field ====================
   private readonly schoolInput = 'input[placeholder="학교 이름 입력"]'
@@ -193,20 +190,6 @@ export class SignupStepPage extends BasePage {
    */
   async isNameFieldVisible(): Promise<boolean> {
     return await this.isVisible(this.nameInput)
-  }
-
-  /**
-   * 다음 버튼의 활성화 상태 확인
-   */
-  async isNextButtonEnabled(): Promise<boolean> {
-    return await this.page.locator(this.nextButton).isEnabled()
-  }
-
-  /**
-   * 에러 메시지 표시 여부
-   */
-  async isErrorAlertVisible(): Promise<boolean> {
-    return await this.isErrorVisible()
   }
 
   // ==================== Step 2: Phone Number Field ====================
@@ -468,5 +451,19 @@ export class SignupStepPage extends BasePage {
     } catch {
       // 로딩 스피너가 없을 수도 있음
     }
+  }
+
+  /**
+   * 다음 버튼의 활성화 상태 확인
+   */
+  async isNextButtonEnabled(): Promise<boolean> {
+    return await this.page.locator(this.nextButton).isEnabled()
+  }
+
+  /**
+   * 에러 메시지 표시 여부
+   */
+  async isErrorAlertVisible(): Promise<boolean> {
+    return await this.isErrorVisible()
   }
 }
