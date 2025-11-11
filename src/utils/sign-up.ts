@@ -505,3 +505,32 @@ export const universityList = [
   'KENTECH',
   'SIMT',
 ]
+
+/**
+ * 이름 유효성 검증 유틸
+ * @param name - 검증할 이름
+ * @returns { isValid: boolean, error?: string }
+ */
+export const validateName = (name: string | undefined): { isValid: boolean; error?: string } => {
+  if (!name || name.trim().length === 0) {
+    return { isValid: false, error: '이름을 입력해주세요' }
+  }
+
+  // 최소 길이 (1자)
+  if (name.length < 1) {
+    return { isValid: false, error: '최소 1자 이상 입력해주세요' }
+  }
+
+  // 최대 길이 (100자)
+  if (name.length > 100) {
+    return { isValid: false, error: '이름은 100자 이하만 입력 가능합니다' }
+  }
+
+  // 특수문자 검증 (한글, 영문, 공백만 허용)
+  const nameRegex = /^[가-힣a-zA-Z\s]+$/
+  if (!nameRegex.test(name)) {
+    return { isValid: false, error: '한글과 영문만 입력 가능합니다' }
+  }
+
+  return { isValid: true }
+}
