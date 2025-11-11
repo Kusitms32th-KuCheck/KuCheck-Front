@@ -1,4 +1,3 @@
-// /src/components/attendance/GuidePointBadge.tsx
 interface GuidePointBadgeProps {
   point: number
   type: 'penalty' | 'reward'

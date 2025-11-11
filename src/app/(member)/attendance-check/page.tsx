@@ -8,7 +8,6 @@ export const dynamic = 'force-dynamic'
 
 export default async function AttendanceCheckPage() {
   const result = await postServerAttendanceToken()
-  console.log(result)
   return (
     <>
       <MemberHeader headerType="dynamic" title={'출석체크'} headerColor={'bg-background1'} />

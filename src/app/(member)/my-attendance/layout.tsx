@@ -1,6 +1,7 @@
 import MemberHeader from '@/components/member/common/MemberHeader'
+import { ReactNode } from 'react'
 
-export default function MyAttendanceLayout({ children }: { children: React.ReactNode }) {
+export default function MyAttendanceLayout({ children }: { children: ReactNode }) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] bg-background1 relative flex min-h-screen w-full flex-col overflow-y-scroll">

@@ -100,7 +100,6 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
         router.push('/ku-pick')
         setState({ applicationFile: undefined })
         info('저장에 성공했어요')
-        console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       }
     } catch (errorMessage) {
       // error('업로드 중 오류가 발생하였습니다.')
@@ -116,7 +115,6 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
   return (
     <div>
       {isSubmitSuccessOpen && <SubmitSuccess setIsSubmitSuccessOpen={setIsSubmitSuccessOpen} />}
-      {/* Hidden input - 한 곳에만 배치 */}
       <input
         type="file"
         accept="image/png,image/jpeg,image/jpg,.heic"
@@ -126,11 +124,9 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
         className="hidden"
       />
 
-      {/* 이미지 업로드 영역 */}
       <div className="relative mx-5 flex flex-col gap-y-2 rounded-[8px]">
         {isValidImageUrl && !isImageError ? (
           <div className="relative h-[185px] w-full rounded-[8px] border border-gray-200 bg-gray-100">
-            {/* 이미지 */}
             <Image
               onError={() => setIsImageError(true)}
               src={profileImageSrc}
@@ -140,10 +136,8 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
               priority
             />
 
-            {/* 어두운 오버레이 */}
             <div className="absolute inset-0 rounded-[8px] bg-black opacity-20" />
 
-            {/* 버튼 */}
             <div className="absolute inset-0 flex items-center justify-center">
               <button
                 onClick={() => fileRef.current?.click()}
@@ -174,7 +168,6 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
         )}
       </div>
 
-      {/* 저장하기 버튼 */}
       <div className="desktop:w-[375px] fixed bottom-[60px] w-full bg-white px-5">
         <MemberButton
           buttonType="button"

@@ -20,18 +20,15 @@ export default function FinalCheckField() {
   const router = useRouter()
   const pathname = usePathname()
 
-  // post data
   const absenceData = useAbsenceStore((state) => state.absenceData)
   const selectedSessionContent = useAbsenceStore((state) => state.selectedSessionContent)
 
-  // file upload
   const { uploadFile } = useFileUpload()
   const file = useAbsenceStore((state) => state.file)
 
   const { error } = useToast()
 
   const handleStepClick = (step: StepType) => {
-    // URL 업데이트 → 서버 컴포넌트 재렌더링
     router.push(`${pathname}?step=${encodeURIComponent(step)}`)
   }
 
@@ -52,10 +49,8 @@ export default function FinalCheckField() {
     }
   }
 
-  // 참석 유형 content, (유형 + 시간)
   const absenceContent = `${changeAbsenceToContent(absenceData?.submitType)} ${absenceData?.submitType === 'LATE' ? (absenceData.lateDateTime ? convertISODateTimeToTime(absenceData.lateDateTime) : '') : absenceData?.submitType === 'EARLY_LEAVE' ? (absenceData?.leaveDateTime ? convertISODateTimeToTime(absenceData.leaveDateTime) : '') : ''}`
 
-  // 제출 핸들러
   const handleSubmit = async (absenceData: AbsenceDataType | undefined) => {
     try {
       if (!absenceData) {
@@ -70,12 +65,9 @@ export default function FinalCheckField() {
           fileName: `absence.${extractFileExtension(file.url)}`,
         }
 
-        // 3️⃣ 불참 정보 제출
         const response = await postAbsence(updatedAbsenceData)
-        console.log('✅ postAbsence 결과:', response)
 
         const uploadResult = await uploadFile(file, { preSignedUrl: response.data.data.preSignedUrl })
-        console.log('📁 사진 업로드 결과:', uploadResult)
 
         if (uploadResult.error) {
           error(`${uploadResult.error}`)
@@ -94,10 +86,8 @@ export default function FinalCheckField() {
           console.error('❌ 불참 정보 제출 실패:', response.error)
         }
       }
-      // 1️⃣ 파일 업로드
     } catch (error) {
       console.error('❌ 제출 중 오류 발생:', error)
-      // toast 또는 alert으로 사용자에게 알림
     }
   }
 

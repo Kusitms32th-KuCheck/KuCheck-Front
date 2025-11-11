@@ -9,7 +9,6 @@ export default function ToastContainer() {
   const context = useContext(ToastContext)
   const [isHydrated, setIsHydrated] = useState(false)
 
-  // 클라이언트에서만 렌더링되도록 보장
   useEffect(() => {
     setIsHydrated(true)
   }, [])

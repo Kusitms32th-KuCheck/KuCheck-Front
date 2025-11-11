@@ -10,7 +10,7 @@ import { useToast } from '@/components/member/common/toast/ToastContext'
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function PartField() {
-  const setSignUpState = useSignUpStore((state) => state.setState)
+  const updateSignUpData = useSignUpStore((state) => state.updateSignUpData)
   const signUpData = useSignUpStore((state) => state.signUpData)
 
   const router = useRouter()
@@ -34,10 +34,7 @@ export default function PartField() {
    * 파트 변경 event handler
    */
   const handlePartChange = (partEnum: PartType) => {
-    setSignUpState({
-      ...signUpData,
-      signUpData: { ...signUpData, part: signUpData?.part === partEnum ? undefined : partEnum },
-    })
+    updateSignUpData({ part: signUpData?.part === partEnum ? undefined : partEnum })
   }
 
   /**

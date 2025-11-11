@@ -14,7 +14,6 @@ interface Props {
 export default async function SessionDetailPage({ params }: Props) {
   const { id } = await params
   const response = await getSessionNoticeDetail(id)
-  console.log('response', response)
 
   const sessionData = response.data
 

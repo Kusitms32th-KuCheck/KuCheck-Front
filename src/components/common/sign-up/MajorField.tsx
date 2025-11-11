@@ -7,8 +7,8 @@ import { useSignUpStore } from '@/store/signUpStore'
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function MajorField() {
-  const setSignUpState = useSignUpStore((state) => state.setState)
   const signUpData = useSignUpStore((state) => state.signUpData)
+  const updateSignUpData = useSignUpStore((state) => state.updateSignUpData)
 
   const router = useRouter()
   const pathname = usePathname()
@@ -22,7 +22,7 @@ export default function MajorField() {
    * 전공 변경 event handler
    */
   const handleMajorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSignUpState({ ...signUpData, signUpData: { ...signUpData, major: e.target.value } })
+    updateSignUpData({ major: e.target.value })
   }
 
   /**

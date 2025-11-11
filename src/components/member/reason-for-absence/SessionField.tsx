@@ -27,7 +27,6 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
   const pathname = usePathname()
 
   const handleStepClick = (step: StepType) => {
-    // URL 업데이트 → 서버 컴포넌트 재렌더링
     router.push(`${pathname}?step=${encodeURIComponent(step)}`)
   }
 
@@ -54,7 +53,6 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
 
   return (
     <div>
-      {/* content */}
       <section className="flex flex-col gap-y-2 px-5 pt-[32px]">
         <h2 className="body-lg-semibold">세션 일시</h2>
         <MemberDropDown
@@ -67,7 +65,6 @@ export default function SessionField({ sessionList }: SessionFieldProps) {
         </MemberDropDown>
       </section>
 
-      {/* bottom button */}
       <section className="desktop:w-[375px] fixed bottom-0 w-full bg-white px-5 pb-[60px]">
         <MemberButton
           disabled={!absenceData?.sessionId}

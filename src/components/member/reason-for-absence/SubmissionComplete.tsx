@@ -18,7 +18,6 @@ export default function SubmissionComplete() {
   }
 
   useEffect(() => {
-    //언마운트시 클린업
     return () => {
       setState({ absenceData: undefined, file: undefined, selectedSessionContent: undefined })
     }

@@ -24,7 +24,6 @@ export default function AttendanceTypeSelector() {
   const pathname = usePathname()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  // post data
   const setAbsenceState = useAbsenceStore((state) => state.setState)
   const absenceData = useAbsenceStore((state) => state.absenceData)
 
