@@ -45,7 +45,15 @@ export default function SessionInfo({ location, time, sessionTitle, isHoliday, c
         disabled={isButtonDisabled}
         customClassName="w-[160px]"
         styleSize="md"
-        onClick={() => router.push('/attendance/qr')}
+        onClick={() => {
+          const params = new URLSearchParams()
+          if (sessionTitle) params.set('title', sessionTitle)
+          if (location) params.set('location', location)
+          if (time) params.set('time', time)
+          const queryString = params.toString()
+          const url = queryString ? `/attendance/qr?${queryString}` : '/attendance/qr'
+          router.push(url)
+        }}
       >
         출석체크 시작하기
       </ManagerButton>
