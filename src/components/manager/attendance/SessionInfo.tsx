@@ -7,9 +7,11 @@ interface SessionInfoProps {
   location?: string
   time?: string
   sessionTitle?: string
+  isHoliday?: boolean
+  category?: string
 }
 
-export default function SessionInfo({ location, time, sessionTitle }: SessionInfoProps) {
+export default function SessionInfo({ location, time, sessionTitle, isHoliday, category }: SessionInfoProps) {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
   const router = useRouter()
 
@@ -17,11 +19,9 @@ export default function SessionInfo({ location, time, sessionTitle }: SessionInf
     const handleScroll = () => {
       const mainContent = document.querySelector('main')
       if (!mainContent) return
-
       const currentScroll = mainContent.scrollTop
-      setShowStickyHeader(currentScroll > 0 && currentScroll < 160)
+      setShowStickyHeader(currentScroll > 0)
     }
-
     const mainContent = document.querySelector('main')
     if (mainContent) {
       mainContent.addEventListener('scroll', handleScroll)
@@ -29,10 +29,24 @@ export default function SessionInfo({ location, time, sessionTitle }: SessionInf
     }
   }, [])
 
+  const getDisplayTitle = () => {
+    if (isHoliday) return '공휴일'
+    if (category === 'REST') return '휴회'
+    return sessionTitle
+  }
+
+  const isButtonDisabled = isHoliday || category === 'REST'
+  const shouldShowLocationTime = !isHoliday && category !== 'REST'
+
   const HeaderContent = () => (
     <>
-      <p className="heading-1xl-semibold">{sessionTitle}</p>
-      <ManagerButton customClassName="w-[160px]" styleSize="md" onClick={() => router.push('/attendance/qr')}>
+      <p className="heading-1xl-semibold">{getDisplayTitle()}</p>
+      <ManagerButton
+        disabled={isButtonDisabled}
+        customClassName="w-[160px]"
+        styleSize="md"
+        onClick={() => router.push('/attendance/qr')}
+      >
         출석체크 시작하기
       </ManagerButton>
     </>
@@ -55,7 +69,7 @@ export default function SessionInfo({ location, time, sessionTitle }: SessionInf
         <div className="flex h-[62px] w-full items-start justify-between">
           <HeaderContent />
         </div>
-        <div className="body-lg-medium text-gray-500">
+        <div className={`body-lg-medium text-gray-500 ${shouldShowLocationTime ? '' : 'invisible'}`}>
           <div className="flex h-[62px] w-full flex-col items-start justify-between py-1">
             <div className="flex items-center gap-x-3">
               <p>장소</p>

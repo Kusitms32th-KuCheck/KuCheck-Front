@@ -19,15 +19,15 @@ interface AbsenceTableProps {
   sessions?: SessionScheduleData[]
 }
 
+const gridTemplate = '161px 151px 131px 123px 112px 500px 224px 173px'
+
 export default function AbsenceTable({ sessionId, sessions = [] }: AbsenceTableProps) {
   const dateOptions = useMemo(() => generateDateOptionsFromSessions(sessions), [sessions])
   const defaultSelectedDate = useMemo(() => getDefaultSelectedDate(sessions), [sessions])
   const [selectedDate, setSelectedDate] = useState(defaultSelectedDate)
-  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(sessionId)
   const [currentRecords, setCurrentRecords] = useState<AbsenceReportItem[]>()
-  const currentTotalCount = useMemo(() => {
-    return currentRecords?.length || 0
-  }, [currentRecords])
+
+  const currentTotalCount = currentRecords?.length || 0
 
   const fetchAbsenceRecords = useCallback(async (sessionId: number) => {
     try {
@@ -42,49 +42,26 @@ export default function AbsenceTable({ sessionId, sessions = [] }: AbsenceTableP
 
   // 초기 데이터 로드
   useEffect(() => {
-    if (sessionId) {
-      console.log('🚀 Initial fetch for sessionId:', sessionId)
-      fetchAbsenceRecords(sessionId)
-    }
+    if (sessionId) fetchAbsenceRecords(sessionId)
   }, [sessionId, fetchAbsenceRecords])
-  // 선택된 날짜에 해당하는 세션 ID 찾기
+
+  // 날짜 변경 시 해당 세션 데이터 불러오기
   const handleDateChange = useCallback(
     (date: string) => {
       setSelectedDate(date)
       const selectedOption = dateOptions.find((option) => option.value === date)
-      if (selectedOption) {
-        setSelectedSessionId(selectedOption.sessionId)
-        console.log('선택된 세션 ID:', selectedOption.sessionId, '날짜:', date)
-        // API 호출하여 불참사유서 리스트 가져오기
-        fetchAbsenceRecords(selectedOption.sessionId)
-      }
+      if (selectedOption) fetchAbsenceRecords(selectedOption.sessionId)
     },
     [dateOptions, fetchAbsenceRecords]
   )
 
-  // 초기 데이터 로드
-  useEffect(() => {
-    if (sessionId) {
-      console.log('🚀 Initial fetch for sessionId:', sessionId)
-      fetchAbsenceRecords(sessionId)
-    }
-  }, [sessionId, fetchAbsenceRecords])
-
-  // 초기 세션 ID 설정
-  useEffect(() => {
-    const defaultOption = dateOptions.find((option) => option.value === defaultSelectedDate)
-    if (defaultOption && selectedSessionId === null) {
-      setSelectedSessionId(defaultOption.sessionId)
-      console.log('초기 세션 ID 설정:', defaultOption.sessionId, '날짜:', defaultSelectedDate)
-    }
-  }, [dateOptions, defaultSelectedDate, selectedSessionId])
   return (
     <div className="flex h-full flex-col rounded-[12px] bg-white py-7">
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between px-6">
           <div className="flex items-center gap-2">
-            <p className="heading-md-semibold m-0 p-0">불참 사유서</p>
-            <p className="body-lg-semibold m-0 flex h-6 w-[30px] items-center justify-center rounded-full bg-black p-0 text-white">
+            <p className="heading-md-semibold">불참 사유서</p>
+            <p className="body-lg-semibold flex h-6 w-[30px] items-center justify-center rounded-full bg-black text-white">
               {currentTotalCount}
             </p>
           </div>
@@ -109,13 +86,14 @@ export default function AbsenceTable({ sessionId, sessions = [] }: AbsenceTableP
           </div>
         ) : (
           <div className="min-w-[960px]">
-            <AbsenceTableHeader />
+            <AbsenceTableHeader gridTemplate={gridTemplate} />
             <div>
               {currentRecords?.map((record, index) => (
                 <AbsenceTableRow
                   key={record.absenceReportId}
                   record={transformAbsenceReportItem(record)}
                   isEven={index % 2 === 0}
+                  gridTemplate={gridTemplate}
                 />
               ))}
             </div>

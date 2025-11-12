@@ -1,10 +1,5 @@
 import { SessionScheduleData } from '@/types/manager/session/type'
-import {
-  AbsenceReportItem,
-  AbsenceSubmitType,
-  PartType,
-  TransformedAbsenceReportItem,
-} from '@/types/manager/attendance/type'
+import { AbsenceReportItem, AbsenceSubmitType, PartType } from '@/types/manager/attendance/type'
 
 /**
  * URL에서 파일 확장자를 추출하는 함수
@@ -30,8 +25,8 @@ const getFileExtension = (url: string): string => {
 /**
  * AbsenceReportItem을 AbsenceTable에서 사용하는 형태로 변환하는 함수
  */
-export const transformAbsenceReportItem = (item: AbsenceReportItem): TransformedAbsenceReportItem => {
-  const getAttendanceStatus = (submitType: AbsenceSubmitType): string => {
+export const transformAbsenceReportItem = (item: AbsenceReportItem): AbsenceReportItem & { documentStatus: string } => {
+  const getAttendanceStatus = (submitType: AbsenceSubmitType | string): string => {
     switch (submitType) {
       case 'ABSENT':
         return '불참'
@@ -44,7 +39,7 @@ export const transformAbsenceReportItem = (item: AbsenceReportItem): Transformed
     }
   }
 
-  const getPartName = (part: PartType): string => {
+  const getPartName = (part: PartType | string): string => {
     switch (part) {
       case 'FRONTEND':
         return '프론트엔드'
@@ -55,22 +50,19 @@ export const transformAbsenceReportItem = (item: AbsenceReportItem): Transformed
       case 'PLANNING':
         return '기획'
       default:
-        return part
+        return String(part)
     }
   }
 
   const fileExtension = getFileExtension(item.url)
 
   return {
-    ...item, // 기존 AbsenceReportItem의 모든 필드 유지
+    ...item, // 기존 AbsenceReportItem의 모든 필드 유지 (url 포함)
     part: getPartName(item.part), // 한국어로 변환된 파트명으로 덮어쓰기
-    submitDate: formatDateToMD(item.submitDate), // 포맷된 날짜로 덮어쓰기
+    submitDate: formatDateToKorean(item.submitDate), // 포맷된 날짜로 덮어쓰기
     submitType: getAttendanceStatus(item.submitType), // 한국어로 변환된 상태로 덮어쓰기
-    time: item.time || '-', // null일 경우 '-'로 표시
-    // 추가 필드들 (UI에서 사용)
-    sessionDate: formatDateToMD(item.submitDate),
-    attendanceStatus: getAttendanceStatus(item.submitType),
-    documentStatus: `${item.name}_증빙.${fileExtension}`,
+    time: formatTimeToHM(item.time) || '-', // null일 경우 '-'로 표시
+    documentStatus: `${item.name}_증빙.${fileExtension}`, // 표시용 파일명
   }
 }
 
@@ -116,9 +108,20 @@ export const formatDateToMD = (dateString: string): string => {
 }
 
 /**
+ * 날짜를 '00월 00일' 형식으로 포맷팅하는 함수
+ */
+export const formatDateToKorean = (dateString: string): string => {
+  const date = new Date(dateString)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${month.toString().padStart(2, '0')}월 ${day.toString().padStart(2, '0')}일`
+}
+
+/**
  * 시간을 'HH:MM' 형식으로 포맷팅하는 함수 (초 제거)
  */
-export const formatTimeToHM = (timeString: string): string => {
+export const formatTimeToHM = (timeString: string | null): string => {
+  if (!timeString) return '-'
   return timeString.split(':').slice(0, 2).join(':')
 }
 
@@ -128,15 +131,6 @@ export const formatTimeToHM = (timeString: string): string => {
 export const generateDateOptionsFromSessions = (
   sessions: SessionScheduleData[]
 ): Array<{ label: string; value: string; sessionId: number }> => {
-  if (!sessions || sessions.length === 0) {
-    return [
-      { label: '09/20', value: '09/20', sessionId: 0 },
-      { label: '08/16', value: '08/16', sessionId: 0 },
-      { label: '08/23', value: '08/23', sessionId: 0 },
-      { label: '08/30', value: '08/30', sessionId: 0 },
-    ]
-  }
-
   // 세션을 날짜순으로 정렬
   const sortedSessions = sessions.sort((a, b) => {
     return new Date(a.startDate).getTime() - new Date(b.startDate).getTime()

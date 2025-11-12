@@ -9,6 +9,8 @@ export default async function AttendancePage() {
   let title: string | undefined
   let location: string | undefined
   let time: string | undefined
+  let isHoliday: boolean | undefined
+  let category: string | undefined
 
   // 세션 스케줄 가져오기
   const sessionScheduleResult = await getSessionScheduleServer(1, 20)
@@ -19,6 +21,8 @@ export default async function AttendancePage() {
     if (upcomingSession) {
       currentSessionId = upcomingSession.sessionId // 동적으로 세션 ID 설정
       title = upcomingSession.title
+      isHoliday = upcomingSession.isHoliday
+      category = upcomingSession.category
 
       // 세션 상세 정보 가져오기 (장소, 시간 정보)
       if (upcomingSession.sessionDetailId) {
@@ -37,7 +41,7 @@ export default async function AttendancePage() {
 
   return (
     <main className="flex h-full flex-col gap-6 p-6">
-      <SessionInfo sessionTitle={title} location={location} time={time} />
+      <SessionInfo sessionTitle={title} location={location} time={time} isHoliday={isHoliday} category={category} />
       {currentSessionId ? (
         <AbsenceTable
           sessionId={currentSessionId}
