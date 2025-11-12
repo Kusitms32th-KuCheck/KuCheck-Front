@@ -4,7 +4,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Heading from '@tiptap/extension-heading'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
   Tiptap1Icon,
@@ -32,7 +32,12 @@ const BUTTONS: Button[] = [
   { name: 'Link', command: 'link', icon: Tiptap7Icon },
 ]
 
-export default function AddBody() {
+type AddBodyProps = {
+  content: string
+  setContent: (v: string) => void
+}
+
+export default function AddBody({ content, setContent }: AddBodyProps) {
   const [isEmpty, setIsEmpty] = useState(true)
 
   const editor = useEditor({
@@ -50,10 +55,23 @@ export default function AddBody() {
         },
       }),
     ],
-    content: '',
+    content,
     immediatelyRender: false,
-    onUpdate: ({ editor }) => setIsEmpty(editor.isEmpty),
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML())
+      setIsEmpty(editor.isEmpty)
+    },
   })
+
+  // content가 변경될 때 isEmpty 상태 업데이트
+  useEffect(() => {
+    if (editor && content) {
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = content
+      const textContent = tempDiv.textContent || tempDiv.innerText || ''
+      setIsEmpty(textContent.trim().length === 0)
+    }
+  }, [content, editor])
 
   if (!editor) return null
 
@@ -86,7 +104,6 @@ export default function AddBody() {
   return (
     <div className="mt-6 w-full pb-6">
       <div className="mb-6 min-h-[778px] rounded-2xl bg-white">
-        {/* Toolbar */}
         <div className="flex border-b">
           {BUTTONS.map((b) => {
             const Icon = b.icon
@@ -107,7 +124,6 @@ export default function AddBody() {
           })}
         </div>
 
-        {/* Editor */}
         <div className="relative w-full px-8 py-6">
           {isEmpty && (
             <p className="pointer-events-none absolute top-6 left-8 text-gray-400 select-none">
@@ -118,11 +134,9 @@ export default function AddBody() {
         </div>
       </div>
 
-      {/* 임시스타일 */}
       <style jsx global>{`
         .tiptap-content {
           line-height: 1.5;
-          width: 100%;
           max-width: 100%;
           min-height: 500px;
           border: none !important;
@@ -130,41 +144,6 @@ export default function AddBody() {
         }
         .tiptap-content .ProseMirror {
           outline: none !important;
-          border: none !important;
-          box-shadow: none !important;
-        }
-        .tiptap-content h1 {
-          font-size: 1.75rem;
-          font-weight: 700;
-          margin-bottom: 0.5rem;
-        }
-        .tiptap-content h2 {
-          font-size: 1.5rem;
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-        }
-        .tiptap-content h3 {
-          font-size: 1.25rem;
-          font-weight: 500;
-          margin-bottom: 0.5rem;
-        }
-        .tiptap-content p {
-          margin-bottom: 0.5rem;
-        }
-        .tiptap-content ul {
-          list-style-type: disc;
-          margin-left: 1.25rem;
-          margin-bottom: 0.5rem;
-        }
-        .tiptap-content ol {
-          list-style-type: decimal;
-          margin-left: 1.25rem;
-          margin-bottom: 0.5rem;
-        }
-        .tiptap-content a {
-          color: #2563eb;
-          text-decoration: underline;
-          cursor: pointer;
         }
       `}</style>
     </div>

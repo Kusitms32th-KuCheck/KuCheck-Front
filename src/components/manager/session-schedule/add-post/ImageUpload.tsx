@@ -1,19 +1,64 @@
 'use client'
 
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useCallback } from 'react'
 import { CancleIcon, AddPhotoIcon } from '@/assets/svgComponents/manager'
 
-export default function ImageUpload() {
-  const [files, setFiles] = useState<File[]>([])
+type ImageUploadProps = {
+  files: File[]
+  setFiles: (files: File[] | ((prev: File[]) => File[])) => void
+}
+
+export default function ImageUpload({ files, setFiles }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleClick = () => fileInputRef.current?.click()
 
-  const handleFiles = useCallback((fileList: FileList) => {
-    const newFiles = Array.from(fileList)
-    setFiles((prev) => [...prev, ...newFiles])
-    if (fileInputRef.current) fileInputRef.current.value = ''
-  }, [])
+  const validateFiles = (files: File[]): { validFiles: File[]; invalidFiles: File[] } => {
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp']
+    const maxSize = 10 * 1024 * 1024 // 10MB
+
+    const validFiles: File[] = []
+    const invalidFiles: File[] = []
+
+    files.forEach((file) => {
+      const extension = file.name.split('.').pop()?.toLowerCase()
+
+      if (!extension || !allowedExtensions.includes(extension)) {
+        invalidFiles.push(file)
+        return
+      }
+
+      if (file.size > maxSize) {
+        invalidFiles.push(file)
+        return
+      }
+
+      validFiles.push(file)
+    })
+
+    return { validFiles, invalidFiles }
+  }
+
+  const handleFiles = useCallback(
+    (fileList: FileList) => {
+      const newFiles = Array.from(fileList)
+      const { validFiles, invalidFiles } = validateFiles(newFiles)
+
+      if (invalidFiles.length > 0) {
+        const invalidNames = invalidFiles.map((f) => f.name).join(', ')
+        alert(
+          `다음 파일들이 올바르지 않은 형식이거나 크기가 너무 큽니다:\n${invalidNames}\n\n허용된 형식: JPG, JPEG, PNG, GIF, WEBP\n최대 크기: 10MB`
+        )
+      }
+
+      if (validFiles.length > 0) {
+        setFiles((prev) => [...prev, ...validFiles])
+      }
+
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    },
+    [setFiles]
+  )
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) handleFiles(e.target.files)

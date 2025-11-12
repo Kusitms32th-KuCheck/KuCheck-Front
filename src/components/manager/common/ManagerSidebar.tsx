@@ -37,7 +37,8 @@ export default function ManagerSidebar() {
     <aside className="z-100 w-[240px] bg-white p-[24px] shadow-lg">
       <nav className="h-[52px] w-[192px]">
         {managerSidebarItems.map((item) => {
-          const isActive = pathname === item.href
+          const isActive =
+            item.href === '/session-schedule' ? pathname?.startsWith('/session-schedule') : pathname === item.href
           const IconComponent = isActive ? item.activeIcon : item.icon
           return (
             <Link

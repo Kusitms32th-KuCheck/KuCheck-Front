@@ -1,4 +1,4 @@
-import SessionAdd from '../../../../components/manager/session-schedule/SessionAdd'
+import SessionAdd from '@/components/manager/session-schedule/session-add/SessionAdd'
 
 export default function SessionAddPage() {
   return (

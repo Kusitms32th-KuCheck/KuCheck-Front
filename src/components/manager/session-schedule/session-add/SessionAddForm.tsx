@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import ManagerButton from '../common/ManagerButton'
-import ManagerInput from '../common/ManagerInput'
-import SessionCalendar from './session-add-form/SessionCalendar'
+import ManagerButton from '../../common/ManagerButton'
+import ManagerInput from '../../common/ManagerInput'
+import SessionCalendar from './SessionCalendar'
 
 type Props = {
   initialWeeks?: number
