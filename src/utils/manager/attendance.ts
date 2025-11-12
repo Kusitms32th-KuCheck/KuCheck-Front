@@ -7,6 +7,27 @@ import {
 } from '@/types/manager/attendance/type'
 
 /**
+ * URL에서 파일 확장자를 추출하는 함수
+ */
+const getFileExtension = (url: string): string => {
+  if (!url) return 'pdf' // 기본값
+
+  try {
+    // URL에서 파일명 부분 추출
+    const urlPath = new URL(url).pathname
+    const fileName = urlPath.split('/').pop() || ''
+    const extension = fileName.split('.').pop()?.toLowerCase()
+
+    // 일반적인 문서 확장자들만 허용, 그 외는 기본값 반환
+    const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'hwp', 'txt']
+    return extension && allowedExtensions.includes(extension) ? extension : 'pdf'
+  } catch {
+    // URL 파싱 실패 시 기본값 반환
+    return 'pdf'
+  }
+}
+
+/**
  * AbsenceReportItem을 AbsenceTable에서 사용하는 형태로 변환하는 함수
  */
 export const transformAbsenceReportItem = (item: AbsenceReportItem): TransformedAbsenceReportItem => {
@@ -38,6 +59,8 @@ export const transformAbsenceReportItem = (item: AbsenceReportItem): Transformed
     }
   }
 
+  const fileExtension = getFileExtension(item.url)
+
   return {
     ...item, // 기존 AbsenceReportItem의 모든 필드 유지
     part: getPartName(item.part), // 한국어로 변환된 파트명으로 덮어쓰기
@@ -47,7 +70,7 @@ export const transformAbsenceReportItem = (item: AbsenceReportItem): Transformed
     // 추가 필드들 (UI에서 사용)
     sessionDate: formatDateToMD(item.submitDate),
     attendanceStatus: getAttendanceStatus(item.submitType),
-    documentStatus: `${item.name}_증빙.pdf`,
+    documentStatus: `${item.name}_증빙.${fileExtension}`,
   }
 }
 

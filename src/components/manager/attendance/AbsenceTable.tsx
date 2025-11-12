@@ -6,6 +6,7 @@ import { AbsenceReportItem } from '@/types/manager/attendance/type'
 import Dropdown from '../common/ManagerdropDown'
 import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 import { SessionScheduleData } from '@/types/manager/session/type'
+import { AbsenceIcon } from '@/assets/svgComponents/manager'
 import {
   generateDateOptionsFromSessions,
   getDefaultSelectedDate,
@@ -27,7 +28,6 @@ export default function AbsenceTable({ sessionId, sessions = [] }: AbsenceTableP
   const currentTotalCount = useMemo(() => {
     return currentRecords?.length || 0
   }, [currentRecords])
-
 
   const fetchAbsenceRecords = useCallback(async (sessionId: number) => {
     try {
@@ -79,7 +79,7 @@ export default function AbsenceTable({ sessionId, sessions = [] }: AbsenceTableP
     }
   }, [dateOptions, defaultSelectedDate, selectedSessionId])
   return (
-    <div className="flex flex-col rounded-[12px] bg-white py-7">
+    <div className="flex h-full flex-col rounded-[12px] bg-white py-7">
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between px-6">
           <div className="flex items-center gap-2">
@@ -101,19 +101,26 @@ export default function AbsenceTable({ sessionId, sessions = [] }: AbsenceTableP
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto">
-        <div className="min-w-[960px]">
-          <AbsenceTableHeader />
-          <div>
-            {currentRecords?.map((record, index) => (
-              <AbsenceTableRow
-                key={record.absenceReportId}
-                record={transformAbsenceReportItem(record)}
-                isEven={index % 2 === 0}
-              />
-            ))}
+      <div className="h-full w-full overflow-x-auto">
+        {currentRecords?.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center gap-3">
+            <AbsenceIcon width={50} height={50} />
+            <p className="body-lg-medium text-gray-400">아직 불참 사유서가 등록되지 않았어요</p>
           </div>
-        </div>
+        ) : (
+          <div className="min-w-[960px]">
+            <AbsenceTableHeader />
+            <div>
+              {currentRecords?.map((record, index) => (
+                <AbsenceTableRow
+                  key={record.absenceReportId}
+                  record={transformAbsenceReportItem(record)}
+                  isEven={index % 2 === 0}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

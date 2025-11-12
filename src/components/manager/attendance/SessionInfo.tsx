@@ -9,11 +9,7 @@ interface SessionInfoProps {
   sessionTitle?: string
 }
 
-export default function SessionInfo({
-  location = '마루180 이벤트홀 지하 1층',
-  time = '9/22 13:00 - 17:00',
-  sessionTitle = '집중협업시간',
-}: SessionInfoProps) {
+export default function SessionInfo({ location, time, sessionTitle }: SessionInfoProps) {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
   const router = useRouter()
 
