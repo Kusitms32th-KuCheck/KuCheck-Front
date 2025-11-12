@@ -16,6 +16,7 @@ export interface SessionScheduleData {
   title: string
   category: string
   sessionDetailId: number | null
+  isHoliday?: boolean
 }
 
 export type SessionScheduleResponse = SessionScheduleData[]

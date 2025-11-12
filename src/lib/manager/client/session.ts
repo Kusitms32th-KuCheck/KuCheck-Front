@@ -136,3 +136,40 @@ export const postDetailImage = async (
     }
   }
 }
+
+//세션 수정
+export const patchClientSession = async (
+  sessionId: number,
+  sessionData: {
+    week: number
+    sessionDate: string
+    title: string
+    category: string
+    isHoliday: boolean
+  }
+): Promise<ApiCallResult<unknown>> => {
+  try {
+    const response = await fetch(`/api/session/staff/${sessionId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(sessionData),
+    })
+
+    const json = await response.json()
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: json.error || `HTTP ${response.status}`,
+      }
+    }
+
+    return { success: true, data: json.data }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}

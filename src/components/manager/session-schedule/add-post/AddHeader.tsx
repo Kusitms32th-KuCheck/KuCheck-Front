@@ -7,6 +7,8 @@ type AddHeaderProps = {
   type: 'session' | 'post'
   place: string
   setPlace: (v: string) => void
+  startTime?: string
+  endTime?: string
   setStartTime: (v: string) => void
   setEndTime: (v: string) => void
   date?: string | null

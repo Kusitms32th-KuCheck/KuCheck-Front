@@ -4,7 +4,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Heading from '@tiptap/extension-heading'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
   Tiptap1Icon,
@@ -62,6 +62,16 @@ export default function AddBody({ content, setContent }: AddBodyProps) {
       setIsEmpty(editor.isEmpty)
     },
   })
+
+  // content가 변경될 때 isEmpty 상태 업데이트
+  useEffect(() => {
+    if (editor && content) {
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = content
+      const textContent = tempDiv.textContent || tempDiv.innerText || ''
+      setIsEmpty(textContent.trim().length === 0)
+    }
+  }, [content, editor])
 
   if (!editor) return null
 

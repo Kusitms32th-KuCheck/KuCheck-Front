@@ -38,13 +38,29 @@ export default function WriteHeader() {
     }
   }
 
+  const handleBackClick = () => {
+    // 수정 모드일 때만 확인 모달 표시
+    if (isEditMode) {
+      const confirmExit = window.confirm('수정 중인 내용이 저장되지 않습니다. 페이지를 나가시겠습니까?')
+      if (confirmExit) {
+        // 예를 선택하면 편집 상태 초기화하고 이동
+        setEditing(false)
+        router.push('/session-schedule/edit')
+      }
+      // 아니요를 선택하면 아무것도 하지 않음 (모달만 사라짐)
+    } else {
+      // 수정 모드가 아니면 바로 이동
+      router.push('/session-schedule/edit')
+    }
+  }
+
   return (
     <div className="align-center sticky top-0 z-10 flex h-[110px] flex-col gap-4 bg-white px-[30px] pt-[12px]">
       <button
         className="flex w-full cursor-pointer items-center justify-start gap-1"
         type="button"
-        onClick={() => router.back()}
-        aria-label="뒤로가기"
+        onClick={handleBackClick}
+        aria-label="세션일정으로 이동"
       >
         <ArrowLeftIcon width={16} />
         <span className="body-lg-medium text-gray-600">세션 일정</span>

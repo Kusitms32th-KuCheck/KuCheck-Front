@@ -73,10 +73,12 @@ export default function SessionDetail({
   sessionDetail,
   date,
   sessionId,
+  sessionDetailId: initialSessionDetailId,
 }: {
   sessionDetail: SessionDetailResponse
   date?: string | null
   sessionId?: number
+  sessionDetailId: number
 }) {
   const router = useRouter()
   const { isEditing, registerSaveHandler } = useSessionEdit()
@@ -87,6 +89,9 @@ export default function SessionDetail({
     content: initialContent,
     sessionImages,
   } = sessionDetail
+
+  // 세션 디테일 ID 상태 관리 (현재 URL의 sessionDetailId 추적용)
+  const [, setCurrentSessionDetailId] = useState(initialSessionDetailId)
 
   // 수정 모드를 위한 상태
   const [place, setPlace] = useState(initialPlace || '')
@@ -114,10 +119,26 @@ export default function SessionDetail({
       const result = await postClientSessionDetail(detailData)
       console.log('세션 상세 수정 응답:', result)
 
-      if (result.success) {
-        console.log('세션 상세 수정 성공!')
-        // 페이지 새로고침하여 수정된 내용 반영
-        router.refresh()
+      if (result.success && result.data?.sessionDetailId) {
+        console.log('세션 상세 수정 성공! 새로운 sessionDetailId:', result.data.sessionDetailId)
+        
+        // 새로운 sessionDetailId로 상태 업데이트
+        const newSessionDetailId = result.data.sessionDetailId
+        setCurrentSessionDetailId(newSessionDetailId)
+        
+        // 새로운 sessionDetailId로 페이지 이동 (완전히 새로운 페이지로 이동하여 최신 데이터 로드)
+        const currentUrl = new URL(window.location.href)
+        const newPath = currentUrl.pathname.replace(/\/\d+/, `/${newSessionDetailId}`)
+        const newUrl = `${newPath}${currentUrl.search}`
+        
+        console.log('새로운 sessionDetailId로 페이지 이동:', {
+          oldUrl: window.location.href,
+          newUrl: newUrl,
+          newSessionDetailId,
+        })
+        
+        // router.push를 사용하여 완전히 새로운 페이지로 이동
+        router.push(newUrl)
         return true
       } else {
         console.log('세션 상세 수정 실패:', result.error)
@@ -146,6 +167,8 @@ export default function SessionDetail({
           type="session"
           place={place}
           setPlace={setPlace}
+          startTime={startTime}
+          endTime={endTime}
           setStartTime={setStartTime}
           setEndTime={setEndTime}
           date={date}

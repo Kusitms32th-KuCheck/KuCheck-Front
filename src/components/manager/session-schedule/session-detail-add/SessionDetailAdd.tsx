@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import AddHeader from '../add-post/AddHeader'
 import AddBody from '../add-post/AddBody'
 import { postClientSessionDetail, postDetailImage } from '@/lib/manager/client/session'
@@ -9,7 +9,6 @@ import { useSessionEdit } from '../session-table/SessionEditContext'
 
 export default function SessionDetailAdd() {
   const { sessionId } = useParams()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const date = searchParams.get('date')
   const { registerSaveHandler } = useSessionEdit()
@@ -183,13 +182,18 @@ export default function SessionDetailAdd() {
       }
 
       // Step 3: 완료 후 페이지 이동
-      const dateParam = date ? `?date=${encodeURIComponent(date)}` : ''
-      const targetUrl = `/session-schedule/detail/${sessionId}${dateParam}`
-      console.log('저장 완료! 이동할 URL:', targetUrl)
+      const dateParam = date ? `?date=${encodeURIComponent(date)}&sessionId=${sessionId}` : `?sessionId=${sessionId}`
+      const targetUrl = `/session-schedule/detail/${sessionDetailId}${dateParam}`
+      console.log('저장 완료! 이동할 URL:', {
+        sessionId: sessionId,
+        sessionDetailId: sessionDetailId,
+        targetUrl: targetUrl,
+      })
 
+      // 전체 페이지 리로드를 사용하여 최신 데이터 확실히 로드
       setTimeout(() => {
-        router.push(targetUrl)
-      }, 1000)
+        window.location.href = targetUrl
+      }, 500) // 딜레이를 줄여서 더 빠른 이동
 
       return true
     } catch (error) {

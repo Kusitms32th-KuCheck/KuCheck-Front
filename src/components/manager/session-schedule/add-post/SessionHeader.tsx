@@ -9,6 +9,8 @@ import ImageUpload from './ImageUpload'
 type SessionHeaderProps = {
   place: string
   setPlace: (v: string) => void
+  startTime?: string
+  endTime?: string
   setStartTime: (v: string) => void
   setEndTime: (v: string) => void
   date?: string | null
@@ -19,6 +21,8 @@ type SessionHeaderProps = {
 export default function SessionHeader({
   place,
   setPlace,
+  startTime,
+  endTime,
   setStartTime,
   setEndTime,
   date,
@@ -34,8 +38,34 @@ export default function SessionHeader({
     value: v,
   }))
 
-  const [selectedHours, setSelectedHours] = useState<string[]>(['', ''])
-  const [selectedMinutes, setSelectedMinutes] = useState<string[]>(['', ''])
+  // 기존 시간 값이 있으면 파싱해서 초기값 설정
+  const parseTime = (timeString: string) => {
+    if (!timeString) return ['', '']
+    const [hour, minute] = timeString.split(':')
+    return [hour || '', minute || '']
+  }
+
+  const [selectedHours, setSelectedHours] = useState<string[]>(() => {
+    const startHourMinute = parseTime(startTime || '')
+    const endHourMinute = parseTime(endTime || '')
+    return [startHourMinute[0], endHourMinute[0]]
+  })
+  
+  const [selectedMinutes, setSelectedMinutes] = useState<string[]>(() => {
+    const startHourMinute = parseTime(startTime || '')
+    const endHourMinute = parseTime(endTime || '')
+    return [startHourMinute[1], endHourMinute[1]]
+  })
+
+  // 초기 시간 값이 변경될 때 상태 업데이트
+  useEffect(() => {
+    if (startTime || endTime) {
+      const startHourMinute = parseTime(startTime || '')
+      const endHourMinute = parseTime(endTime || '')
+      setSelectedHours([startHourMinute[0], endHourMinute[0]])
+      setSelectedMinutes([startHourMinute[1], endHourMinute[1]])
+    }
+  }, [startTime, endTime])
 
   useEffect(() => {
     const s = `${selectedHours[0]}:${selectedMinutes[0]}:00`

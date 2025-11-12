@@ -47,12 +47,14 @@ export default function SessionAddTable({ weeks, firstDate }: Props) {
     const mapCategory = (label: string) => {
       if (label === '기업프로젝트') return 'CORPORATE_PROJECT'
       if (label === '네트워킹') return 'NETWORKING'
+      if (label === '밋업프로젝트') return 'MEETUP_PROJECT'
+      if (label === '휴회') return 'REST'
       if (label === '스터디') return 'STUDY'
       if (label === '선택') return 'NONE'
       return label
     }
 
-    const allowedCategories = new Set(['CORPORATE_PROJECT', 'NETWORKING', 'STUDY', 'NONE'])
+    const allowedCategories = new Set(['CORPORATE_PROJECT', 'NETWORKING', 'MEETUP_PROJECT', 'REST', 'STUDY', 'NONE'])
 
     for (let i = 0; i < rows.length; i++) {
       const r = rows[i]

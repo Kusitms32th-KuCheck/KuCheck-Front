@@ -33,7 +33,12 @@ export default async function SessionAddPage({
 
   return (
     <main className="flex h-full flex-col overflow-visible">
-      <SessionDetail sessionDetail={sessionDetail} date={date} sessionId={sessionId ? Number(sessionId) : undefined} />
+      <SessionDetail
+        sessionDetail={sessionDetail}
+        date={date}
+        sessionId={sessionId ? Number(sessionId) : undefined}
+        sessionDetailId={sessionDetailId}
+      />
     </main>
   )
 }

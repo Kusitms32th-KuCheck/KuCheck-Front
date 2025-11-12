@@ -131,7 +131,7 @@ export default function SessionTable({
                           filled ? 'text-gray-800' : 'text-gray-400'
                         }`}
                       >
-                        {r.isHoliday ? 'Y' : '-'}
+                        {r.isHoliday ? 'O' : 'X'}
                       </div>
                     </>
                   )

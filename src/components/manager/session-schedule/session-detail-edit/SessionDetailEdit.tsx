@@ -32,7 +32,7 @@ export default function SessionDetailEdit({ sessionDetail, sessionDetailId, sess
     }
 
     const detailData = {
-      sessionId, // API 요청에는 sessionId 사용
+      sessionId,
       place,
       startTime,
       endTime,
@@ -45,14 +45,28 @@ export default function SessionDetailEdit({ sessionDetail, sessionDetailId, sess
       const result = await postClientSessionDetail(detailData)
       console.log('세션 상세 수정 응답:', result)
 
-      if (result.success) {
-        console.log('세션 상세 수정 성공!')
-        const dateParam = date ? `?date=${encodeURIComponent(date)}` : ''
-        const targetUrl = `/session-schedule/detail/${sessionDetailId}${dateParam}`
-        console.log('세션 상세 수정 후 이동할 URL:', targetUrl)
-        setTimeout(() => {
-          router.push(targetUrl)
-        }, 1000)
+      if (result.success && result.data?.sessionDetailId) {
+        console.log('세션 상세 수정 성공! 새로운 sessionDetailId:', result.data.sessionDetailId)
+        const newSessionDetailId = result.data.sessionDetailId
+        const currentUrl = new URL(window.location.href)
+        const sessionIdParam = currentUrl.searchParams.get('sessionId')
+        let targetUrl = `/session-schedule/detail/${newSessionDetailId}`
+        const queryParams = new URLSearchParams()
+        if (date) {
+          queryParams.set('date', date)
+        }
+        if (sessionIdParam) {
+          queryParams.set('sessionId', sessionIdParam)
+        }
+        if (queryParams.toString()) {
+          targetUrl += `?${queryParams.toString()}`
+        }
+        console.log('세션 상세 수정 후 이동할 URL:', {
+          oldSessionDetailId: sessionDetailId,
+          newSessionDetailId: newSessionDetailId,
+          targetUrl: targetUrl,
+        })
+        router.push(targetUrl)
         return true
       } else {
         console.log('세션 상세 수정 실패:', result.error)
@@ -78,6 +92,8 @@ export default function SessionDetailEdit({ sessionDetail, sessionDetailId, sess
         type="session"
         place={place}
         setPlace={setPlace}
+        startTime={startTime}
+        endTime={endTime}
         setStartTime={setStartTime}
         setEndTime={setEndTime}
         date={date}
