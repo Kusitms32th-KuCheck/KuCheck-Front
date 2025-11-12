@@ -4,11 +4,16 @@ import { useRouter } from 'next/navigation'
 import ManagerButton from '../common/ManagerButton'
 
 interface SessionInfoProps {
-  location: string
-  time: string
+  location?: string
+  time?: string
+  sessionTitle?: string
 }
 
-export default function SessionInfo({ location, time }: SessionInfoProps) {
+export default function SessionInfo({
+  location = '마루180 이벤트홀 지하 1층',
+  time = '9/22 13:00 - 17:00',
+  sessionTitle = '집중협업시간',
+}: SessionInfoProps) {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
   const router = useRouter()
 
@@ -30,7 +35,7 @@ export default function SessionInfo({ location, time }: SessionInfoProps) {
 
   const HeaderContent = () => (
     <>
-      <p className="heading-1xl-semibold">집중협업시간</p>
+      <p className="heading-1xl-semibold">{sessionTitle}</p>
       <ManagerButton customClassName="w-[160px]" styleSize="md" onClick={() => router.push('/attendance/qr')}>
         출석체크 시작하기
       </ManagerButton>

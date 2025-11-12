@@ -3,19 +3,10 @@ import { useState } from 'react'
 import { gridTemplate } from './AbsenceTableHeader'
 import Dropdown from '../common/ManagerdropDown'
 import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
-
-interface AbsenceRecord {
-  name: string
-  part: string
-  sessionDate: string
-  attendanceStatus: string
-  time: string
-  reason: string
-  documentStatus: string
-}
+import { TransformedAbsenceReportItem } from '@/types/manager/attendance/type'
 
 interface AbsenceTableRowProps {
-  record: AbsenceRecord
+  record: TransformedAbsenceReportItem
   isEven: boolean
 }
 
@@ -31,7 +22,7 @@ const ATTENDANCE_SCORE_OPTIONS = [
 export default function AbsenceTableRow({ record, isEven }: AbsenceTableRowProps) {
   const [selectedScore, setSelectedScore] = useState('')
 
-  const cellData = [record.name, record.part, record.sessionDate, record.attendanceStatus, record.time, record.reason]
+  const cellData = [record.name, record.part, record.submitDate, record.submitType, record.time, record.reason]
 
   return (
     <div
@@ -63,5 +54,3 @@ export default function AbsenceTableRow({ record, isEven }: AbsenceTableRowProps
     </div>
   )
 }
-
-export type { AbsenceRecord }
