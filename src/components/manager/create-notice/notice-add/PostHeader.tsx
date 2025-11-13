@@ -1,9 +1,15 @@
 'use client'
 
-import InputField from './InputField'
-import ImageUpload from './ImageUpload'
+import type { Dispatch, SetStateAction } from 'react'
+import InputField from '../../session-schedule/add-post/InputField'
+import ImageUpload from '../../session-schedule/add-post/ImageUpload'
 
-export default function PostHeader() {
+type PostHeaderProps = {
+  files: File[]
+  setFiles: Dispatch<SetStateAction<File[]>>
+}
+
+export default function PostHeader({ files, setFiles }: PostHeaderProps) {
   const categories = [
     '기프',
     '밋업',
@@ -19,10 +25,10 @@ export default function PostHeader() {
 
   return (
     <div className="space-y-6">
-      <InputField label="제목" placeholder="💜 큐포터즈 1차 모집! 💜" />
+      <InputField label="제목" placeholder="공지 제목을 입력해주세요." />
 
       <InputField label="카테고리">
-        <div className="flex flex-wrap gap-4">
+        <div className="grid grid-cols-5 gap-4">
           {categories.map((cat) => (
             <label key={cat} className="flex items-center gap-2">
               <input type="checkbox" className="accent-blue-500" />
@@ -32,7 +38,7 @@ export default function PostHeader() {
         </div>
       </InputField>
 
-      <ImageUpload />
+      <ImageUpload type="post" files={files} setFiles={setFiles} />
     </div>
   )
 }
