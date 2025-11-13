@@ -1,36 +1,52 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import CheckTableHeader from './CheckTableHeader'
 import CheckTableRow from './CheckTableRow'
 import Dropdown from '../common/ManagerdropDown'
 import TopToast from '../common/TopToast'
-import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon } from '@/assets/svgComponents/manager'
+import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon, KupickIcon } from '@/assets/svgComponents/manager'
 import { getKupickMonths } from '@/utils/manager/kupick'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
-import { KupickIcon } from '@/assets/svgComponents/manager'
+import { getKupicClient } from '@/lib/manager/client/kupic'
 
-interface CheckTableProps {
-  records: CheckDocumentRecord[]
-}
-
-export default function CheckTable({ records }: CheckTableProps) {
+export default function CheckTable() {
   const kupickMonths = getKupickMonths()
   const currentMonth = new Date().getMonth() + 1
   const defaultMonth = kupickMonths.includes(currentMonth) ? `${currentMonth}월` : '10월'
-  const [selectedMonth, setSelectedMonth] = useState(defaultMonth)
-  const [showStickyHeader, setShowStickyHeader] = useState(false)
-  const [toastMessage, setToastMessage] = useState<string | null>(null)
-  console.log('CheckTable records:', records)
-  const gridTemplate = '164px 586px 204px 227px 227px 164px'
 
-  // 큐픽 월들을 역순으로 정렬하여 드롭다운 옵션 생성
-  const dropdownOptions = kupickMonths
-    .sort((a, b) => b - a)
-    .map((month) => ({
-      label: `${month}월`,
-      value: `${month}월`,
-    }))
+  const [selectedMonth, setSelectedMonth] = useState(defaultMonth)
+  const [records, setRecords] = useState<CheckDocumentRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [showStickyHeader, setShowStickyHeader] = useState(false)
+
+  const gridTemplate = '164px 586px 204px 227px 227px 164px'
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const dropdownOptions = useMemo(
+    () => [...kupickMonths].sort((a, b) => b - a).map((month) => ({ label: `${month}월`, value: `${month}월` })),
+    [kupickMonths]
+  )
+  const fetchKupicData = async (year: number, month: number) => {
+    setLoading(true)
+    try {
+      const result = await getKupicClient(year, month)
+      setRecords(result.success ? result.data || [] : [])
+    } catch (err) {
+      console.error('Error fetching kupic data:', err)
+      setRecords([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // 초기 데이터 로딩 + 드롭다운 변경 시
+  useEffect(() => {
+    const currentYear = new Date().getFullYear()
+    const monthNumber = Number(selectedMonth.replace('월', ''))
+    fetchKupicData(currentYear, monthNumber)
+  }, [selectedMonth])
 
   // 초기 토스트 표시
   useEffect(() => {
@@ -39,50 +55,35 @@ export default function CheckTable({ records }: CheckTableProps) {
 
   // 스크롤 처리
   useEffect(() => {
-    const handleScroll = () => {
-      const mainContent = document.querySelector('main')
-      if (!mainContent) return
+    const mainContent = document.querySelector('main')
+    if (!mainContent) return
 
+    const handleScroll = () => {
       const currentScroll = (mainContent as HTMLElement).scrollTop
       setShowStickyHeader(currentScroll > 0)
     }
 
-    const mainContent = document.querySelector('main')
-    if (mainContent) {
-      mainContent.addEventListener('scroll', handleScroll)
-      return () => mainContent.removeEventListener('scroll', handleScroll)
-    }
+    mainContent.addEventListener('scroll', handleScroll)
+    return () => mainContent.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // 토스트 표시
   const handleToast = (message: string) => {
     setToastMessage(message)
-    // 토스트 지속 시간 후 메시지 초기화
-    setTimeout(() => {
-      setToastMessage(null)
-    }, 3400) // 토스트 지속시간(3000) + 페이드 아웃(400)
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
+    toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 3400)
   }
 
-  const HeaderContent = () => (
-    <>
-      <div className="flex items-center gap-2">
-        <p className="heading-md-semibold m-0 p-0">{selectedMonth} 큐픽</p>
-        <p className="body-lg-semibold m-0 flex h-6 w-[30px] items-center justify-center rounded-full bg-black p-0 text-white">
-          {visibleCount}
-        </p>
-      </div>
-    </>
-  )
+  const visibleCount = records.length
 
-  const selectedMonthNumber = Number(selectedMonth.replace('월', ''))
-  const visibleRecords = records.filter((r) => {
-    try {
-      const m = Number(r.submitDate?.split?.('-')?.[1] ?? NaN)
-      return Number.isFinite(m) && m === selectedMonthNumber
-    } catch {
-      return false
-    }
-  })
-  const visibleCount = visibleRecords.length
+  const HeaderContent = () => (
+    <div className="flex items-center gap-2">
+      <p className="heading-md-semibold m-0 p-0">{selectedMonth} 큐픽</p>
+      <p className="body-lg-semibold m-0 flex h-6 w-[30px] items-center justify-center rounded-full bg-black p-0 text-white">
+        {visibleCount}
+      </p>
+    </div>
+  )
 
   return (
     <div className="flex min-h-[calc(100vh-176px)] flex-col gap-6 rounded-[12px] bg-white pt-7 pb-6">
@@ -112,22 +113,32 @@ export default function CheckTable({ records }: CheckTableProps) {
 
       <div className="overflow-x-auto">
         <CheckTableHeader gridTemplate={gridTemplate} />
-        {visibleRecords.map((record, index) => (
-          <CheckTableRow
-            key={index}
-            record={record}
-            isEven={index % 2 === 0}
-            gridTemplate={gridTemplate}
-            onToast={handleToast}
-          />
-        ))}
+        {loading ? (
+          <div className="flex h-[60vh] items-center justify-center">
+            <p className="body-lg-medium text-gray-500">데이터를 불러오는 중...</p>
+          </div>
+        ) : records.length === 0 ? (
+          <div className="flex h-[60vh] items-center justify-center">
+            <p className="body-lg-medium text-gray-500">해당 월의 큐픽 데이터가 없습니다.</p>
+          </div>
+        ) : (
+          records.map((record, index) => (
+            <CheckTableRow
+              key={index}
+              record={record}
+              isEven={index % 2 === 0}
+              gridTemplate={gridTemplate}
+              onToast={handleToast}
+            />
+          ))
+        )}
       </div>
 
       {toastMessage && (
         <TopToast
-          icon={<KupickIcon width={24} height={24} />}
+          icon={toastMessage === '저장되었습니다' ? undefined : <KupickIcon width={24} height={24} />}
           message={toastMessage}
-          key={toastMessage} // 메시지가 바뀔 때마다 새 토스트 생성
+          key={toastMessage}
         />
       )}
     </div>

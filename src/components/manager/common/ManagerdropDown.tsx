@@ -123,7 +123,7 @@ export default function Dropdown({
         align="end"
         className={clsx(
           'z-50 mt-1 rounded-[8px] bg-white p-[6px] shadow-[0px_0px_12px_rgba(0,0,0,0.15)]',
-          size === 'lg' && 'scrollbar-hide max-h-[222px] w-[216px] overflow-y-auto',
+          size === 'lg' && 'scrollbar-hide max-h-[240px] w-[216px] overflow-y-auto',
           size === 'md' && 'w-[193px]',
           size === 'sm' && 'w-[140px]',
           size === 'add' && '] w-[66px]',
