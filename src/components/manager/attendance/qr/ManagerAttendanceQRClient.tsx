@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import QRScanner from './QRScanner'
 import FocusSessionCard from './FocusSessionCard'
 import { postClientAttendanceScan, getClientAttendanceSummary } from '@/lib/manager/client/attendance'
@@ -101,7 +101,9 @@ export default function ManagerAttendanceQRClient() {
 
   return (
     <main className="flex max-h-full flex-col items-center justify-start gap-5 p-6">
-      <FocusSessionCard summary={summary} />
+      <Suspense fallback={<div>로딩 중...</div>}>
+        <FocusSessionCard summary={summary} />
+      </Suspense>
       <QRScanner
         onDetect={handleDetect}
         successPulseUntil={successPulseUntil}
