@@ -69,9 +69,8 @@ export default function Dropdown({
     sm: 'h-[36px] w-[140px] px-3 py-2 body-lg-regular',
 
     md: 'h-[36px] w-[193px] px-6 ',
-    lg: 'h-[40px] gap-2 py-2 body-lg-medium',
+    lg: 'h-[40px] gap-2 py-2 body-lg-medium w-[216px] px-3 ',
     add: 'h-[40px] w-[66px] body-lg-medium px-3 ',
-
   }[size]
   const resolvedTriggerClassWhenOpen = (() => {
     if (!triggerClassName) return 'text-primary-500'
@@ -124,7 +123,7 @@ export default function Dropdown({
         align="end"
         className={clsx(
           'z-50 mt-1 rounded-[8px] bg-white p-[6px] shadow-[0px_0px_12px_rgba(0,0,0,0.15)]',
-          size === 'lg' && 'scrollbar-hide max-h-[222px] w-[216px] overflow-y-auto',
+          size === 'lg' && 'scrollbar-hide max-h-[240px] w-[216px] overflow-y-auto',
           size === 'md' && 'w-[193px]',
           size === 'sm' && 'w-[140px]',
           size === 'add' && '] w-[66px]',

@@ -34,7 +34,7 @@ export default function ManagerSidebar() {
   if (pathname && pathname.startsWith('/attendance/qr')) return null
 
   return (
-    <aside className="z-100 w-[240px] bg-white p-[24px] shadow-lg">
+    <aside className="z-10 w-[240px] bg-white p-[24px] shadow-lg">
       <nav className="h-[52px] w-[192px]">
         {managerSidebarItems.map((item) => {
           const isActive =

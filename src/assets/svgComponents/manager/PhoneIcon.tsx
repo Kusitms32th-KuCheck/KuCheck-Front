@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgPhoneIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 16 16" {...props}><path stroke="#27272D" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M8.667 1.333v.934c0 .373 0 .56-.073.702a.67.67 0 0 1-.291.292c-.143.072-.33.072-.703.072H5.733c-.373 0-.56 0-.702-.072a.67.67 0 0 1-.292-.292c-.072-.142-.072-.33-.072-.702v-.934m-.534 13.334H9.2c.747 0 1.12 0 1.405-.146.251-.128.455-.332.583-.582.145-.286.145-.659.145-1.406V3.467c0-.747 0-1.12-.145-1.406a1.33 1.33 0 0 0-.583-.582c-.285-.146-.658-.146-1.405-.146H4.133c-.746 0-1.12 0-1.405.146-.25.127-.455.331-.583.582C2 2.346 2 2.72 2 3.467v9.066c0 .747 0 1.12.145 1.406.128.25.332.454.583.582.285.146.659.146 1.405.146" /></svg>;
+export default SvgPhoneIcon;

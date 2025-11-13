@@ -1,6 +1,10 @@
 'use client'
 import { LogOutIcon } from '@/assets/svgComponents'
-export default function ProfileModal() {
+// import { getProfileSummary } from '@/lib/member/user'
+
+export default async function ProfileModal() {
+  // const userData = await getProfileSummary()
+
   return (
     <div
       style={{
@@ -11,8 +15,8 @@ export default function ProfileModal() {
       <div className="flex w-full flex-col">
         <div className="flex w-full items-center">
           <div className="flex w-full flex-col border-b border-gray-200 px-4 py-5">
-            <p className="body-lg-medium">김운영</p>
-            <p className="body-sm-medium text-gray-500">qwerqwerqwer@naver.com</p>
+            {/* <p className="body-lg-medium">{userData.data?.name}</p>
+            <p className="body-sm-medium text-gray-500">{userData.data?.name}</p> */}
           </div>
         </div>
 
