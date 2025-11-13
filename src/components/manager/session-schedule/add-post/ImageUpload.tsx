@@ -4,11 +4,12 @@ import { useRef, useCallback } from 'react'
 import { CancleIcon, AddPhotoIcon } from '@/assets/svgComponents/manager'
 
 type ImageUploadProps = {
+  type?: 'post' | 'session'
   files: File[]
   setFiles: (files: File[] | ((prev: File[]) => File[])) => void
 }
 
-export default function ImageUpload({ files, setFiles }: ImageUploadProps) {
+export default function ImageUpload({ files, setFiles, type = 'session' }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleClick = () => fileInputRef.current?.click()
@@ -78,7 +79,7 @@ export default function ImageUpload({ files, setFiles }: ImageUploadProps) {
   return (
     <div className={`space-y-2 transition-all ${files.length === 0 ? 'pb-6' : 'pb-0'}`}>
       <div className="flex items-center gap-3">
-        <label className="body-lg-semibold block">이미지 첨부</label>
+        <label className="body-lg-semibold block">{type === 'post' ? '파일 첨부' : '이미지 첨부'}</label>
         <button
           type="button"
           onClick={handleClick}

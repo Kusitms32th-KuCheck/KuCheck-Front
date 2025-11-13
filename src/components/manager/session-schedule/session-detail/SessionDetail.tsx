@@ -121,22 +121,22 @@ export default function SessionDetail({
 
       if (result.success && result.data?.sessionDetailId) {
         console.log('세션 상세 수정 성공! 새로운 sessionDetailId:', result.data.sessionDetailId)
-        
+
         // 새로운 sessionDetailId로 상태 업데이트
         const newSessionDetailId = result.data.sessionDetailId
         setCurrentSessionDetailId(newSessionDetailId)
-        
+
         // 새로운 sessionDetailId로 페이지 이동 (완전히 새로운 페이지로 이동하여 최신 데이터 로드)
         const currentUrl = new URL(window.location.href)
         const newPath = currentUrl.pathname.replace(/\/\d+/, `/${newSessionDetailId}`)
         const newUrl = `${newPath}${currentUrl.search}`
-        
+
         console.log('새로운 sessionDetailId로 페이지 이동:', {
           oldUrl: window.location.href,
           newUrl: newUrl,
           newSessionDetailId,
         })
-        
+
         // router.push를 사용하여 완전히 새로운 페이지로 이동
         router.push(newUrl)
         return true
@@ -164,7 +164,6 @@ export default function SessionDetail({
     return (
       <div className="mx-auto mt-6 mb-6 w-[854px] space-y-6">
         <AddHeader
-          type="session"
           place={place}
           setPlace={setPlace}
           startTime={startTime}
