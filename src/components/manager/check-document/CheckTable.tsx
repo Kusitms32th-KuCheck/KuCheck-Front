@@ -4,30 +4,47 @@ import { useEffect, useState } from 'react'
 import CheckTableHeader from './CheckTableHeader'
 import CheckTableRow from './CheckTableRow'
 import Dropdown from '../common/ManagerdropDown'
+import TopToast from '../common/TopToast'
 import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon } from '@/assets/svgComponents/manager'
+import { getKupickMonths } from '@/utils/manager/kupick'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
+import { KupickIcon } from '@/assets/svgComponents/manager'
 
 interface CheckTableProps {
   records: CheckDocumentRecord[]
 }
 
 export default function CheckTable({ records }: CheckTableProps) {
-  const fixedMonths = [8, 9, 10, 11]
+  const kupickMonths = getKupickMonths()
   const currentMonth = new Date().getMonth() + 1
-  const defaultMonth = fixedMonths.includes(currentMonth) ? `${currentMonth}월` : '10월'
+  const defaultMonth = kupickMonths.includes(currentMonth) ? `${currentMonth}월` : '10월'
   const [selectedMonth, setSelectedMonth] = useState(defaultMonth)
   const [showStickyHeader, setShowStickyHeader] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
   console.log('CheckTable records:', records)
-  const gridTemplate =
-    'minmax(100px,140px) minmax(120px,641px) minmax(100px,202px) minmax(120px,227px) minmax(120px,227px) minmax(120px,1fr)'
+  const gridTemplate = '164px 586px 204px 227px 227px 164px'
 
+  // 큐픽 월들을 역순으로 정렬하여 드롭다운 옵션 생성
+  const dropdownOptions = kupickMonths
+    .sort((a, b) => b - a)
+    .map((month) => ({
+      label: `${month}월`,
+      value: `${month}월`,
+    }))
+
+  // 초기 토스트 표시
+  useEffect(() => {
+    setToastMessage('먼저 증빙 서류를 확인해 주세요')
+  }, [])
+
+  // 스크롤 처리
   useEffect(() => {
     const handleScroll = () => {
       const mainContent = document.querySelector('main')
       if (!mainContent) return
 
       const currentScroll = (mainContent as HTMLElement).scrollTop
-      setShowStickyHeader(currentScroll > 0 && currentScroll < 160)
+      setShowStickyHeader(currentScroll > 0)
     }
 
     const mainContent = document.querySelector('main')
@@ -36,6 +53,14 @@ export default function CheckTable({ records }: CheckTableProps) {
       return () => mainContent.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  const handleToast = (message: string) => {
+    setToastMessage(message)
+    // 토스트 지속 시간 후 메시지 초기화
+    setTimeout(() => {
+      setToastMessage(null)
+    }, 3400) // 토스트 지속시간(3000) + 페이드 아웃(400)
+  }
 
   const HeaderContent = () => (
     <>
@@ -74,27 +99,37 @@ export default function CheckTable({ records }: CheckTableProps) {
         <HeaderContent />
         <Dropdown
           size="lg"
-          options={[
-            { label: '11월', value: '11월' },
-            { label: '10월', value: '10월' },
-            { label: '9월', value: '9월' },
-            { label: '8월', value: '8월' },
-          ]}
+          options={dropdownOptions}
           selected={selectedMonth}
           onChange={setSelectedMonth}
           leftIcon={<CalendarIcon width={24} height={24} />}
           leftIconActive={<CalendarOnIcon width={24} height={24} />}
           rightIcon={<DownIcon width={24} height={24} />}
           rightIconActive={<UpIcon width={24} height={24} />}
+          placeholder="선택"
         />
       </div>
 
       <div className="overflow-x-auto">
         <CheckTableHeader gridTemplate={gridTemplate} />
         {visibleRecords.map((record, index) => (
-          <CheckTableRow key={index} record={record} isEven={index % 2 === 0} gridTemplate={gridTemplate} />
+          <CheckTableRow
+            key={index}
+            record={record}
+            isEven={index % 2 === 0}
+            gridTemplate={gridTemplate}
+            onToast={handleToast}
+          />
         ))}
       </div>
+
+      {toastMessage && (
+        <TopToast
+          icon={<KupickIcon width={24} height={24} />}
+          message={toastMessage}
+          key={toastMessage} // 메시지가 바뀔 때마다 새 토스트 생성
+        />
+      )}
     </div>
   )
 }

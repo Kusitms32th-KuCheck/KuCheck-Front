@@ -23,37 +23,43 @@ const getFileExtension = (url: string): string => {
 }
 
 /**
+ * 출석 상태를 한글로 변환하는 함수
+ */
+export const getAttendanceStatus = (submitType: AbsenceSubmitType | string): string => {
+  switch (submitType) {
+    case 'ABSENT':
+      return '불참'
+    case 'LATE':
+      return '지각'
+    case 'EARLY_LEAVE':
+      return '조퇴'
+    default:
+      return '불참'
+  }
+}
+
+/**
+ * 파트명을 한글로 변환하는 함수
+ */
+export const getPartName = (part: PartType | string): string => {
+  switch (part) {
+    case 'FRONTEND':
+      return '프론트엔드'
+    case 'BACKEND':
+      return '백엔드'
+    case 'DESIGN':
+      return '디자인'
+    case 'PLANNING':
+      return '기획'
+    default:
+      return String(part)
+  }
+}
+
+/**
  * AbsenceReportItem을 AbsenceTable에서 사용하는 형태로 변환하는 함수
  */
 export const transformAbsenceReportItem = (item: AbsenceReportItem): AbsenceReportItem & { documentStatus: string } => {
-  const getAttendanceStatus = (submitType: AbsenceSubmitType | string): string => {
-    switch (submitType) {
-      case 'ABSENT':
-        return '불참'
-      case 'LATE':
-        return '지각'
-      case 'EARLY_LEAVE':
-        return '조퇴'
-      default:
-        return '불참'
-    }
-  }
-
-  const getPartName = (part: PartType | string): string => {
-    switch (part) {
-      case 'FRONTEND':
-        return '프론트엔드'
-      case 'BACKEND':
-        return '백엔드'
-      case 'DESIGN':
-        return '디자인'
-      case 'PLANNING':
-        return '기획'
-      default:
-        return String(part)
-    }
-  }
-
   const fileExtension = getFileExtension(item.url)
 
   return {
@@ -155,14 +161,7 @@ export const generateDateOptionsFromSessions = (
     })
   })
 
-  return options.length > 0
-    ? options
-    : [
-        { label: '09/20', value: '09/20', sessionId: 0 },
-        { label: '08/16', value: '08/16', sessionId: 0 },
-        { label: '08/23', value: '08/23', sessionId: 0 },
-        { label: '08/30', value: '08/30', sessionId: 0 },
-      ]
+  return options
 }
 
 /**

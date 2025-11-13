@@ -1,16 +1,20 @@
 'use client'
 import { useState } from 'react'
 import Dropdown from '../common/ManagerdropDown'
+import RoleTag from '../common/RoleTag'
+
 import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 import ImageModal from '../modal/imageModal'
 import { useRouter } from 'next/navigation'
 import { postKupicClient } from '@/lib/manager/client/kupic'
+import { formatDateToKorean, getPartName } from '@/utils/manager/attendance'
 import type { CheckDocumentRecord, KupicData } from '@/types/manager/check-document/types'
 
 interface AbsenceTableRowProps {
   record: CheckDocumentRecord
   isEven: boolean
   gridTemplate?: string
+  onToast?: (message: string) => void
 }
 
 const ATTENDANCE_SCORE_OPTIONS = [
@@ -30,7 +34,7 @@ const getFileNameFromUrl = (url: string) => {
   return fileNameWithQuery
 }
 
-export default function AbsenceTableRow({ record, isEven, gridTemplate }: AbsenceTableRowProps) {
+export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast }: AbsenceTableRowProps) {
   const router = useRouter()
   const initialApprovalValue = record.approval === true ? 'approved' : 'rejected'
   const [selectedScore, setSelectedScore] = useState(initialApprovalValue)
@@ -39,9 +43,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
   const [modalOpen, setModalOpen] = useState(false)
   const [modalIndex, setModalIndex] = useState(0)
 
-  const formattedSubmitDate = record.submitDate ? record.submitDate.substring(0, 10) : ''
-
-  const cellData = [record.name, record.part, formattedSubmitDate, record.applicationUrl, record.viewUrl]
+  const formattedSubmitDate = record.submitDate ? formatDateToKorean(record.submitDate) : ''
 
   const toImageUrl = (val: string) => {
     if (val && (val.startsWith('http') || val.startsWith('/'))) return val
@@ -67,6 +69,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
         setSelectedScore(originalValue)
       } else {
         console.log('Approval updated successfully:', result.data)
+        onToast?.('저장되었습니다')
         router.refresh()
       }
     } catch (error) {
@@ -86,40 +89,43 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
         }`}
         style={{ gridTemplateColumns: gridTemplate }}
       >
-        {cellData.map((data, index) => {
-          if (index === 3 || index === 4) {
-            const openIndex = index === 3 ? 0 : 1
-            const fileUrl = data as string
-            const fileName = getFileNameFromUrl(fileUrl)
+        {/* 이름 */}
+        <p className="py-[22px] text-start whitespace-nowrap">{record.name}</p>
 
-            const displayFileName = fileName || '미제출'
-            const isSubmitted = !!fileName
+        {/* 파트 (RoleTag 컴포넌트 사용) */}
+        <div className="flex items-center py-[22px]">
+          <RoleTag label={getPartName(record.part)} />
+        </div>
 
-            return (
-              <button
-                key={index}
-                type="button"
-                onClick={() => {
-                  if (isSubmitted) {
-                    setModalIndex(openIndex)
-                    setModalOpen(true)
-                  }
-                }}
-                className={`body-lg-regular overflow-hidden py-[22px] text-start text-ellipsis whitespace-nowrap ${
-                  isSubmitted ? 'text-gray-800 hover:underline' : 'cursor-default text-gray-500'
-                }`}
-                disabled={!isSubmitted}
-              >
-                <span className="inline-block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                  {displayFileName}
-                </span>
-              </button>
-            )
-          }
+        {/* 제출일시 */}
+        <p className="py-[22px] text-start whitespace-nowrap">{formattedSubmitDate}</p>
+
+        {/* 신청 사진과 시청 사진 */}
+        {[record.applicationUrl, record.viewUrl].map((fileUrl, index) => {
+          const openIndex = index
+          const fileName = getFileNameFromUrl(fileUrl)
+          const displayFileName = fileName || '미제출'
+          const isSubmitted = !!fileName
+
           return (
-            <p key={index} className="py-[22px] text-start whitespace-nowrap">
-              {data}
-            </p>
+            <button
+              key={index + 2}
+              type="button"
+              onClick={() => {
+                if (isSubmitted) {
+                  setModalIndex(openIndex)
+                  setModalOpen(true)
+                }
+              }}
+              className={`body-lg-regular overflow-hidden py-[22px] text-start text-ellipsis whitespace-nowrap ${
+                isSubmitted ? 'text-gray-800 hover:underline' : 'cursor-default text-gray-500'
+              }`}
+              disabled={!isSubmitted}
+            >
+              <span className="inline-block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                {displayFileName}
+              </span>
+            </button>
           )
         })}
 

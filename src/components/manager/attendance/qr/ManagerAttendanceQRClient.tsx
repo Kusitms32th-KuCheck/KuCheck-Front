@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import QRScanner from './QRScanner'
 import FocusSessionCard from './FocusSessionCard'
 import { postClientAttendanceScan, getClientAttendanceSummary } from '@/lib/manager/client/attendance'
-import type { AttendanceScanResponseType, AttendanceSummaryType } from '@/types/manager/check-document/types'
+import type { AttendanceScanResponseType, AttendanceSummaryType } from '@/types/manager/attendance/type'
 import type { ApiCallResult } from '@/types/common'
 import { useAttendanceStore } from '@/store/attendanceStore'
 
