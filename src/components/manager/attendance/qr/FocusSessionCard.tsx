@@ -1,41 +1,32 @@
 'use client'
-import { useState } from 'react'
-import ManagerModal from '@/components/manager/common/ManagerModal'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { AttendanceSummaryType } from '@/types/manager/check-document/types'
 
 export default function FocusSessionCard({ summary }: { summary: AttendanceSummaryType | null }) {
-  const [open, setOpen] = useState(false)
+  const searchParams = useSearchParams()
+
+  const sessionTitle = searchParams.get('title')
+  const location = searchParams.get('location')
+  const time = searchParams.get('time')
+
   const router = useRouter()
 
   return (
     <div className="mx-auto w-full max-w-[1260px] rounded-[12px] bg-white">
       <div className="flex h-[116px] items-start justify-between border-b border-gray-100">
         <div className="flex flex-col gap-3 px-[31px] py-6">
-          <p className="heading-1xl-semibold">집중협업시간</p>
-          <p className="body-lg-medium text-gray-500">장소 마루180 이벤트홀 지하 1층 일시 9/22 13:00~ 17:00</p>
+          <p className="heading-1xl-semibold">{sessionTitle}</p>
+          <p className="body-lg-medium text-gray-500">
+            장소 {location} 일시 {time}
+          </p>
         </div>
         <div className="px-[31px] py-6">
           <button
-            onClick={() => setOpen(true)}
+            onClick={() => router.push('/attendance')}
             className={'= body-2xl-semibold rounded-[12px] bg-gray-700 px-[15.5] py-3 text-white'}
           >
             출석체크 종료하기
           </button>
-          <ManagerModal
-            open={open}
-            message="출석을 종료하시겠습니까?"
-            confirmLabel="종료하기"
-            onCancel={() => setOpen(false)}
-            onConfirm={() => {
-              setOpen(false)
-              interface NavWindow extends Window {
-                __allowNav?: boolean
-              }
-              ;(window as NavWindow).__allowNav = true
-              router.push('/attendance')
-            }}
-          />
         </div>
       </div>
       <div className="flex h-[120px] items-center justify-center">

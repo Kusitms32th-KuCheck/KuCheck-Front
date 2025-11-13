@@ -18,14 +18,55 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const guideRef = useRef<HTMLDivElement | null>(null)
   const intervalRef = useRef<number | null>(null)
+  const streamRef = useRef<MediaStream | null>(null)
   const [scanning, setScanning] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [maskRect, setMaskRect] = useState<MaskRect | null>(null)
   const [guideState, setGuideState] = useState<'idle' | 'detected' | 'success'>('idle')
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment')
+  const [hasMultipleCameras, setHasMultipleCameras] = useState(false)
 
   const pausedRef = useRef(false)
   const resumeDecoding = () => {
     pausedRef.current = false
+  }
+
+  // 사용 가능한 카메라 개수 체크 함수
+  const checkCameraAvailability = async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices()
+      const videoDevices = devices.filter((device) => device.kind === 'videoinput')
+      setHasMultipleCameras(videoDevices.length > 1)
+    } catch (error) {
+      console.warn('카메라 장치를 확인할 수 없습니다:', error)
+      setHasMultipleCameras(false)
+    }
+  }
+
+  // 카메라 전환 함수
+  const switchCamera = async () => {
+    const newFacingMode = facingMode === 'environment' ? 'user' : 'environment'
+
+    // 기존 스트림 정지
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop())
+    }
+
+    try {
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: newFacingMode },
+      })
+
+      const video = videoRef.current
+      if (video) {
+        video.srcObject = newStream
+        streamRef.current = newStream
+        setFacingMode(newFacingMode)
+        setError(null)
+      }
+    } catch {
+      setError('카메라를 전환할 수 없습니다.')
+    }
   }
 
   const updateMask = () => {
@@ -53,18 +94,18 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
   }
 
   useEffect(() => {
-    let stream: MediaStream | null = null
-
     window.addEventListener('resize', updateMask)
 
     const startScanner = async () => {
       try {
         await loadJsQR()
+        await checkCameraAvailability()
 
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } })
         const video = videoRef.current
         if (!video) return
         video.srcObject = stream
+        streamRef.current = stream
         video.setAttribute('playsinline', 'true')
         await video.play()
         setScanning(true)
@@ -136,11 +177,11 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
 
     startScanner()
     return () => {
-      stream?.getTracks().forEach((t) => t.stop())
+      streamRef.current?.getTracks().forEach((track) => track.stop())
       if (intervalRef.current) clearInterval(intervalRef.current)
       window.removeEventListener('resize', updateMask)
     }
-  }, [onDetect])
+  }, [onDetect, facingMode])
 
   return {
     videoRef,
@@ -153,5 +194,8 @@ export default function useQRScanner(onDetect?: (decodedText: string) => void) {
     guideState,
     setGuideState,
     resumeDecoding,
+    switchCamera,
+    facingMode,
+    hasMultipleCameras,
   }
 }

@@ -41,13 +41,23 @@ const ManagerButton = ({
   rightIcon,
   leftIcon,
 }: ManagerButtonProps) => {
-  const base = 'flex items-center justify-center gap-x-2 py-[12px] px-[15.5px] hover:bg-primary-700'
-  const variantClass = variantStyles[styleType][styleStatus]
+  // disabled 상태일 때 styleStatus를 강제로 'disabled'로 설정
+  const actualStyleStatus = disabled ? 'disabled' : styleStatus
+
+  const base = 'flex items-center justify-center gap-x-2 py-[12px] px-[15.5px]'
+  const hoverClass = disabled ? '' : 'hover:bg-primary-700'
+  const variantClass = variantStyles[styleType][actualStyleStatus]
   const sizeClass = sizeStyles[styleSize]
-  const className = [base, variantClass, sizeClass].join(' ')
+  const className = [base, hoverClass, variantClass, sizeClass].join(' ')
+
+  const handleClick = () => {
+    if (!disabled) {
+      onClick()
+    }
+  }
 
   return (
-    <button disabled={disabled} type={buttonType} onClick={onClick} className={`${className} ${customClassName}`}>
+    <button disabled={disabled} type={buttonType} onClick={handleClick} className={`${className} ${customClassName}`}>
       {leftIcon ? leftIcon : null}
       {children}
       {rightIcon ? rightIcon : null}
