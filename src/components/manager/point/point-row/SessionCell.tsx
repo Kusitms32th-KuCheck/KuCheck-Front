@@ -21,6 +21,7 @@ export default function SessionCell({
   className = '',
   disabled = false,
 }: SessionCellProps) {
+  const selectedLabel = ATTENDANCE_OPTIONS.find((opt) => opt.value === value)?.label || value || ''
   return (
     <div className={className}>
       {isEditMode && !disabled ? (
@@ -30,7 +31,7 @@ export default function SessionCell({
             triggerClassName={isModified ? 'body-lg-semibold text-primary-500 ' : 'text-gray-900 body-lg-medium '}
             options={ATTENDANCE_OPTIONS}
             selected={value}
-            placeholder={value || '선택'}
+            placeholder={selectedLabel || '선택'}
             onChange={(v) => onChange && onChange(v)}
             size="lg"
             rightIcon={<PointdownIcon width={10} height={8} />}
@@ -43,7 +44,7 @@ export default function SessionCell({
             disabled && isEditMode ? 'text-gray-300' : ''
           }`}
         >
-          {value || ''}
+          {selectedLabel}
         </p>
       )}
     </div>

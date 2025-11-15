@@ -9,7 +9,9 @@ import {
   updateKupickParticipationClient,
   updateIsTfClient,
   updateIsStaffClient,
+  updateMonthlyAttendanceClient,
 } from '@/lib/manager/client/points'
+import { usePointTableStore } from '@/store/manager/usePointTableStore'
 
 type Args = {
   members: PointMemberStatus[]
@@ -31,6 +33,7 @@ export default function usePointTableActions({
   setFeedbackMessage,
 }: Args) {
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { pendingAttendanceChanges, clearPendingAttendanceChanges } = usePointTableStore()
 
   useEffect(() => {
     return () => {
@@ -107,7 +110,18 @@ export default function usePointTableActions({
       }
     })
 
-    if (promises.length === 0) {
+    // 월별 출석 변경사항 처리
+    const attendancePromises = Object.values(pendingAttendanceChanges).map((change) =>
+      updateMonthlyAttendanceClient({
+        attendanceId: change.attendanceId,
+        memberId: change.memberId,
+        status: change.status,
+      })
+    )
+
+    const allPromises = [...promises, ...attendancePromises]
+
+    if (allPromises.length === 0) {
       setEditMode(false)
       setIsManagerModalOpen(false)
       setFeedbackMessage(<span className="text-primary-500">변경사항이 없습니다</span>)
@@ -116,7 +130,7 @@ export default function usePointTableActions({
       return
     }
 
-    Promise.allSettled(promises).then((results) => {
+    Promise.allSettled(allPromises).then((results) => {
       const failed = results.filter((r) => {
         if (r.status === 'rejected') return true
         const v = (r as PromiseFulfilledResult<unknown>).value
@@ -146,6 +160,7 @@ export default function usePointTableActions({
       setModifiedCells({})
       setIsManagerModalOpen(false)
       originalMembersRef.current = null
+      clearPendingAttendanceChanges() // 월별 출석 변경사항 초기화
       setFeedbackMessage(<span className="text-primary-500">성공적으로 저장되었어요</span>)
       if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current)
       feedbackTimerRef.current = setTimeout(() => setFeedbackMessage(null), 1000)
@@ -160,6 +175,7 @@ export default function usePointTableActions({
       originalMembersRef.current = null
     }
     setModifiedCells({})
+    clearPendingAttendanceChanges() // 월별 출석 변경사항 초기화
     setFeedbackMessage(<span>저장이 취소되었어요. 다시 시도해주세요</span>)
     if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current)
     feedbackTimerRef.current = setTimeout(() => setFeedbackMessage(null), 1000)

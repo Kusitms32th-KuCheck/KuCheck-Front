@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { PointMemberStatus } from '@/types/manager/point/types'
+import type { PointMemberStatus, PendingAttendanceChange } from '@/types/manager/point/types'
 import type { Dispatch, SetStateAction } from 'react'
 
 type PointTableState = {
@@ -10,6 +10,12 @@ type PointTableState = {
   originalMembers: PointMemberStatus[] // 초기화를 위한 원본 데이터
   setOriginalMembers: (members: PointMemberStatus[]) => void
   resetToOriginal: () => void // 초기화 함수
+
+  // 월별 출석 변경사항 관리
+  pendingAttendanceChanges: Record<string, PendingAttendanceChange> // key: `${attendanceId}`
+  setPendingAttendanceChange: (key: string, change: PendingAttendanceChange) => void
+  removePendingAttendanceChange: (key: string) => void
+  clearPendingAttendanceChanges: () => void
 
   collapsedMonths: Set<string>
   toggleCollapsedMonth: (month: string) => void
@@ -44,7 +50,22 @@ export const usePointTableStore = create<PointTableState>((set) => ({
     set((s) => ({
       members: [...s.originalMembers],
       modifiedCells: {},
+      pendingAttendanceChanges: {},
     })),
+
+  // 월별 출석 변경사항 관리
+  pendingAttendanceChanges: {},
+  setPendingAttendanceChange: (key: string, change: PendingAttendanceChange) =>
+    set((s) => ({
+      pendingAttendanceChanges: { ...s.pendingAttendanceChanges, [key]: change },
+    })),
+  removePendingAttendanceChange: (key: string) =>
+    set((s) => {
+      const next = { ...s.pendingAttendanceChanges }
+      delete next[key]
+      return { pendingAttendanceChanges: next }
+    }),
+  clearPendingAttendanceChanges: () => set({ pendingAttendanceChanges: {} }),
 
   collapsedMonths: new Set<string>(['8월', '9월', '10월', '11월', '12월']),
   toggleCollapsedMonth: (month: string) =>

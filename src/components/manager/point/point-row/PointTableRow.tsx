@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { ATTENDANCE_OPTIONS } from '@/constants/manager/point'
+import { usePointTableStore } from '@/store/manager/usePointTableStore'
 import { PointMemberStatus, VisibleDate, MonthlyAttendanceResult } from '@/types/manager/point/types'
 import CheckboxCell from './CheckboxCell'
 import EditableTextCell from './EditableTextCell'
@@ -20,6 +22,7 @@ interface PointTableRowProps {
   onStaffChange?: (memberIndex: number, checked: boolean) => void
   onQpickChange?: (memberIndex: number, monthKey: 'september' | 'october' | 'november', checked: boolean) => void
   onNoteChange?: (memberIndex: number, value: string) => void
+  onMonthlyAttendanceChange?: (memberIndex: number, attendanceId: number, newStatus: string, date: string) => void
   gridTemplate: string
   collapsedMonths: Set<string>
   isHorizScrolled?: boolean
@@ -38,11 +41,13 @@ export default function PointTableRow({
   onQpickChange,
   onStaffChange,
   onNoteChange,
+  onMonthlyAttendanceChange,
   gridTemplate,
   collapsedMonths,
   isHorizScrolled,
   monthlyData,
 }: PointTableRowProps) {
+  const pendingAttendanceChanges = usePointTableStore((s) => s.pendingAttendanceChanges)
   const [showMemoTooltip, setShowMemoTooltip] = useState(false)
   const baseBg = memberIndex % 2 === 0 ? 'bg-white' : 'bg-background1'
   const isQportersModified = Boolean(modifiedCells && modifiedCells[`${memberIndex}-qporters`])
@@ -182,16 +187,22 @@ export default function PointTableRow({
         // API 데이터에서 해당 날짜의 출결 정보 가져오기
         const attendanceRecord = getMemberAttendanceData(date)
 
-        // 출석 상태에 따른 표시 설정
+        // 셀 표시값: 수정 중이면 파란색, 저장 후에는 검정색
+        const attendanceChangeKey = attendanceRecord?.attendanceId ? String(attendanceRecord.attendanceId) : undefined
         let value = ''
         let displayClass = ''
         let isRecordExists = false
-
-        if (attendanceRecord) {
+        const pendingChange = attendanceChangeKey ? pendingAttendanceChanges[attendanceChangeKey] : undefined
+        if (isEditMode && pendingChange) {
+          // 수정 중: 변경사항이 있으면 드롭다운 label로 파란색 표시
+          const opt = ATTENDANCE_OPTIONS.find((o) => o.value === pendingChange.status)
+          value = opt ? opt.label : pendingChange.status
+          displayClass = 'text-primary-500'
+          isRecordExists = true
+        } else if (attendanceRecord) {
+          // 저장 후: 항상 attendanceRecord 기준 검정색 표시
           isRecordExists = true
           const status = attendanceRecord.status
-
-          // 출석 상태별 텍스트 설정
           switch (status) {
             case 'PRESENT':
               if (attendanceRecord.point === 0) {
@@ -239,14 +250,32 @@ export default function PointTableRow({
 
         const keyId = `${memberIndex}-${date}`
         const isModified = Boolean((modifiedCells && modifiedCells[keyId]) || false)
+        // 월별 출석 변경사항이 있는지 추가로 확인
+
+        const isPendingAttendanceChange = !!(attendanceChangeKey && pendingAttendanceChanges[attendanceChangeKey])
+        const isCellModified = isModified || isPendingAttendanceChange
+
+        // 월별 출결 데이터를 위한 핸들러
+        const handleAttendanceChange = async (newStatus: string) => {
+          if (attendanceRecord?.attendanceId && onMonthlyAttendanceChange) {
+            try {
+              onMonthlyAttendanceChange(memberIndex, attendanceRecord.attendanceId, newStatus, date)
+            } catch (error) {
+              console.error('Failed to update monthly attendance:', error)
+            }
+          } else {
+            // 기존 세션 데이터 처리
+            onSessionChange(memberIndex, date, newStatus)
+          }
+        }
 
         return (
           <div key={dateIndex} className="flex justify-end">
             <SessionCell
               isEditMode={isEditMode}
               value={value}
-              isModified={isModified}
-              onChange={(v) => onSessionChange(memberIndex, date, v)}
+              isModified={isCellModified}
+              onChange={handleAttendanceChange}
               className={`w-full border-r border-gray-200 group-hover:bg-gray-100 ${baseBg} ${displayClass}`}
               disabled={!isRecordExists}
             />

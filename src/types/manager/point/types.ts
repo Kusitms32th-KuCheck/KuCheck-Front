@@ -1,6 +1,7 @@
 // 출석 상태 enum
 export enum AttendanceStatus {
   PRESENT = 'PRESENT',
+  PRESENT_HOLIDAY = 'PRESENT_HOLIDAY',
   ABSENT = 'ABSENT',
   ABSENT_WITH_DOC = 'ABSENT_WITH_DOC',
   ABSENT_WITHOUT_DOC = 'ABSENT_WITHOUT_DOC',
@@ -16,6 +17,7 @@ export const attendanceStatusDisplayMap: Record<AttendanceStatus, (point: number
     if (point === 1) return '출석(1)'
     return `출석(${point})`
   },
+  [AttendanceStatus.PRESENT_HOLIDAY]: () => '결석(인정)',
   [AttendanceStatus.ABSENT]: (point) => `결석(${point})`,
   [AttendanceStatus.ABSENT_WITH_DOC]: (point) => {
     if (point === -1) return '결석(사유 -1)'
@@ -162,4 +164,31 @@ export interface MonthlyAttendanceResult {
     totalPages: number
     isLastPage: boolean
   }
+}
+
+// 월별 출석 상태 수정 요청
+export interface MonthlyAttendanceModification {
+  attendanceId: number
+  memberId: number
+  status: string
+}
+
+// 보류 중인 월별 출석 변경사항 (일괄 저장용)
+export interface PendingAttendanceChange {
+  attendanceId: number
+  memberId: number
+  status: string
+  memberIndex: number
+  date: string
+}
+
+// 월별 출석 상태 수정 응답
+export interface MonthlyAttendanceUpdateResponse {
+  attendanceId: number
+  memberId: number
+  oldStatus: string
+  newStatus: string
+  diff: number
+  week: number
+  occurredAt: string
 }

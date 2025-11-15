@@ -64,6 +64,7 @@ export default function PointTableBody({ containerRef, isHorizScrolled, monthlyD
     handleSessionChange,
     handleNoteChange,
     handleStaffChange,
+    handleMonthlyAttendanceChange,
     handleSave,
   } = handlers
 
@@ -113,6 +114,7 @@ export default function PointTableBody({ containerRef, isHorizScrolled, monthlyD
               onStaffChange={handleStaffChange}
               onQpickChange={handleQpickChange}
               onNoteChange={handleNoteChange}
+              onMonthlyAttendanceChange={handleMonthlyAttendanceChange}
               modifiedCells={modifiedCells}
               gridTemplate={gridTemplate}
               collapsedMonths={collapsedMonths}

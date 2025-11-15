@@ -10,6 +10,8 @@ import {
   TfToggleResponse,
   StaffToggleResponse,
   MonthlyAttendanceResult,
+  MonthlyAttendanceModification,
+  MonthlyAttendanceUpdateResponse,
 } from '@/types/manager/point/types'
 
 // GET: 상벌점 조회
@@ -212,6 +214,38 @@ export const updateIsTfClient = async (payload: tfModification): Promise<ApiCall
 export const updateIsStaffClient = async (payload: staffModification): Promise<ApiCallResult<StaffToggleResponse>> => {
   try {
     const response = await fetch(`/api/points/manage/is-staff`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    })
+
+    const json = await response.json()
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: json.error || `HTTP ${response.status}`,
+      }
+    }
+
+    return { success: true, data: json.data }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+// PATCH: 월별 출석 상태 수정
+export const updateMonthlyAttendanceClient = async (
+  payload: MonthlyAttendanceModification
+): Promise<ApiCallResult<MonthlyAttendanceUpdateResponse>> => {
+  try {
+    const response = await fetch(`/api/points/manage/monthly`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
