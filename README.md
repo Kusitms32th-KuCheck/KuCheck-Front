@@ -87,7 +87,7 @@ KuCheck-Front/
 │   │   ├── messages.ts              # 에러/성공 메시지
 │   │   └── ...
 │   │
-│   ├── assets/                      # 정적 리소스
+│   ├── assets/                      # icons
 │   │   ├── images/
 │   │   ├── icons/
 │   │   └── fonts/
