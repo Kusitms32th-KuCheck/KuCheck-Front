@@ -23,10 +23,6 @@ export default function usePointStatusHandlers({
     })
     setModifiedCells((prev) => ({ ...prev, [cellKey]: true }))
   }
-  const handleStudyChange = (memberIndex: number, value: string) => {
-    const num = value === '' ? 0 : Number(value) || 0
-    updateMember(memberIndex, { studyPoints: num }, `${memberIndex}-study`)
-  }
 
   const handleQportersChange = (memberIndex: number, value: string) => {
     const num = value === '' ? 0 : Number(value) || 0
@@ -42,6 +38,11 @@ export default function usePointStatusHandlers({
   }
 
   const handleStaffChange = (memberIndex: number, checked: boolean) => {
+    console.log(' handleStaffChange:', {
+      memberIndex,
+      checked,
+      currentMember: members[memberIndex],
+    })
     updateMember(memberIndex, { isStaff: checked }, `${memberIndex}-staff`)
   }
 
@@ -50,6 +51,7 @@ export default function usePointStatusHandlers({
     const monthNum = monthMap[monthKey]
     const prev = members[memberIndex].kupickParticipation || { 8: false, 9: false, 10: false, 11: false, 12: false }
     const nextKupick = { ...prev, [monthNum]: checked }
+
     updateMember(memberIndex, { kupickParticipation: nextKupick }, `${memberIndex}-qpick-${monthKey}`)
   }
 
@@ -73,7 +75,6 @@ export default function usePointStatusHandlers({
   const handleSave = () => setIsManagerModalOpen(true)
 
   return {
-    handleStudyChange,
     handleQportersChange,
     handleNoteChange,
     handleTfChange,

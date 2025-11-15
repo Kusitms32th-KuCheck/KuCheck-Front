@@ -5,18 +5,21 @@ import PointTableRow from './point-row/PointTableRow'
 import BottomToast, { DEFAULT_SHIFT_WHEEL_MESSAGE } from '@/components/manager/common/BottomToast'
 import ManagerModal from '@/components/manager/common/ManagerModal'
 import { usePointTableStore } from '@/store/manager/usePointTableStore'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
 import usePointStatusHandlers from '@/hooks/manager/point/usePointStatusHandlers'
 import { usePointStore } from '@/store/manager/usePointStore'
-import { computeVisibleDates, computeGridTemplate, computeMinWidth } from '@/utils/manager/computePointTable'
-import type { PointMemberStatus } from '@/types/manager/point/types'
+import { computeGridTemplate, computeMinWidth } from '@/utils/manager/computePointTable'
+import type { PointMemberStatus, MonthlyAttendanceResult } from '@/types/manager/point/types'
 import usePointTableActions from '@/hooks/manager/point/usePointTableActions'
+import { getOptimalVisibleDates } from '@/utils/manager/sessionDataConverter'
 
 type Props = {
   containerRef?: React.RefObject<HTMLDivElement | null>
   isHorizScrolled?: boolean
+  monthlyData: Record<number, MonthlyAttendanceResult>
 }
 
-export default function PointTableBody({ containerRef, isHorizScrolled }: Props) {
+export default function PointTableBody({ containerRef, isHorizScrolled, monthlyData }: Props) {
   const {
     members,
     setMembers,
@@ -31,12 +34,20 @@ export default function PointTableBody({ containerRef, isHorizScrolled }: Props)
     setFeedbackMessage,
   } = usePointTableStore()
 
+  const { sessions } = useSessionScheduleStore()
+
+  console.log('모든 월별 데이터:', Object.keys(monthlyData).length, '개월')
+  console.log('바디에서 받은 세션 데이터:', sessions?.length || 0, '개')
+
   const { isEditMode, setEditMode } = usePointStore()
   const originalMembersRef = useRef<PointMemberStatus[] | null>(null)
 
-  const visibleDates = computeVisibleDates(collapsedMonths)
+  const visibleDates = getOptimalVisibleDates(sessions, monthlyData, collapsedMonths)
+
   const gridTemplate = computeGridTemplate(visibleDates)
   const contentMinWidth = computeMinWidth(gridTemplate)
+
+  console.log('바디에서 사용할 데이터 타입:', sessions && sessions.length > 0 ? '세션 데이터' : '월별 데이터')
 
   const handlers = usePointStatusHandlers({
     members,
@@ -47,7 +58,6 @@ export default function PointTableBody({ containerRef, isHorizScrolled }: Props)
   })
 
   const {
-    handleStudyChange,
     handleQportersChange,
     handleTfChange,
     handleQpickChange,
@@ -97,7 +107,6 @@ export default function PointTableBody({ containerRef, isHorizScrolled }: Props)
               memberIndex={memberIndex}
               visibleDates={visibleDates}
               isEditMode={isEditMode}
-              onStudyChange={handleStudyChange}
               onQportersChange={handleQportersChange}
               onSessionChange={handleSessionChange(isEditMode)}
               onTfChange={handleTfChange}
@@ -108,6 +117,7 @@ export default function PointTableBody({ containerRef, isHorizScrolled }: Props)
               gridTemplate={gridTemplate}
               collapsedMonths={collapsedMonths}
               isHorizScrolled={isHorizScrolled}
+              monthlyData={monthlyData}
             />
           ))}
         </div>

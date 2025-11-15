@@ -7,6 +7,9 @@ type PointTableState = {
   setMembers: Dispatch<SetStateAction<PointMemberStatus[]>>
   modifiedCells: Record<string, boolean>
   setModifiedCells: Dispatch<SetStateAction<Record<string, boolean>>>
+  originalMembers: PointMemberStatus[] // 초기화를 위한 원본 데이터
+  setOriginalMembers: (members: PointMemberStatus[]) => void
+  resetToOriginal: () => void // 초기화 함수
 
   collapsedMonths: Set<string>
   toggleCollapsedMonth: (month: string) => void
@@ -34,6 +37,13 @@ export const usePointTableStore = create<PointTableState>((set) => ({
         typeof v === 'function'
           ? (v as (prev: Record<string, boolean>) => Record<string, boolean>)(s.modifiedCells)
           : v,
+    })),
+  originalMembers: [] as PointMemberStatus[],
+  setOriginalMembers: (members) => set({ originalMembers: [...members] }),
+  resetToOriginal: () =>
+    set((s) => ({
+      members: [...s.originalMembers],
+      modifiedCells: {},
     })),
 
   collapsedMonths: new Set<string>(['8월', '9월', '10월', '11월', '12월']),

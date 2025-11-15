@@ -4,10 +4,11 @@ import { NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
+    const month = searchParams.get('month') || '11'
     const page = searchParams.get('page') || '1'
-    const size = searchParams.get('size') || '80'
+    const size = searchParams.get('size') || '10'
 
-    const { data, error } = await apiCallServer(`/v1/points/manage/overview?page=${page}&size=${size}`, {
+    const { data, error } = await apiCallServer(`/v1/points/manage/monthly?month=${month}&page=${page}&size=${size}`, {
       method: 'GET',
     })
 
