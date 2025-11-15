@@ -27,6 +27,7 @@ export default function UserSummaryCard({ name, profileImageUrl, school, part }:
               src={profileImageUrl ? profileImageUrl : '/common/member/mock_profile.JPG'}
               alt={'프로필'}
               fill
+              fetchPriority={'high'}
               className="rounded-[8px] object-cover"
             />
           </div>

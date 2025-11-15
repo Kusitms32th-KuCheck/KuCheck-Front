@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { CameraIcon, ProfileIcon } from '@/assets/svgComponents'
 import { useSettingStore } from '@/store/member/settingStore'
-import { extractFileExtension, generateId } from '@/utils/upload'
+import { generateId } from '@/utils/upload'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { getMembersProfileImageUrl } from '@/lib/member/client/setting'
 import { UserSummaryType } from '@/types/member/user'
@@ -45,8 +45,7 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
         setState({ file: fileInfo })
 
         try {
-          const extension = extractFileExtension(selectedFile.name)
-          const presignedResponse = await getMembersProfileImageUrl(`profile.${extension}`)
+          const presignedResponse = await getMembersProfileImageUrl(`profile.webp`)
 
           if (presignedResponse.error) {
             error(`${presignedResponse.error}`)

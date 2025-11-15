@@ -568,6 +568,7 @@ export function isValidPhoneNumber(phoneNumber: string | null | undefined): bool
 
   return phoneRegex.test(phoneNumber)
 }
+
 /**
  * 휴대폰 번호 에러 메시지 반환
  * @param phoneNumber - 검증할 휴대폰 번호
