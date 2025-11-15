@@ -189,4 +189,83 @@ Playwright를 사용한 E2E 테스트입니다. 실제 사용자 관점에서 �
 | 결과 | **테스트 통과율: 64% → 100%** <br /><br /> <img width="1231" height="682" alt="image" src="https://github.com/user-attachments/assets/97eddd4c-8c63-496e-865b-66501000025a" /> <img width="2524" height="1498" alt="image" src="https://github.com/user-attachments/assets/8dd79607-3c42-4295-b878-1160dc047a90" /> 체계적인 입력 검증으로 회원가입 프로세스의 모든 시나리오를 안정적으로 제어할 수 있게 되었습니다. <br /><br /> 현재 입력을 받는 기능 2가지 중 회원가입에 이어 **다른 입력 기능에도 동일한 E2E 테스트를 적용 중**입니다. |
 
 
+## ⚒️ 사용 아키텍쳐
+### 📲 BBF 패턴 (Backend-Based Fetching)
+
+### 핵심
+클라이언트 → **Route Handler** → 백엔드
+(토큰은 서버에 보관, XSS 공격 방지)
+
+---
+
+### Route Handler 작성 패턴
+
+#### GET
+```typescript
+export async function GET() {
+  const { data, error } = await apiCallServer('/v1/endpoint', {
+    method: 'GET',
+  })
+  if (error) return Response.json({ error }, { status: 400 })
+  return Response.json({ success: true, data })
+}
+```
+
+#### POST with 검증
+```typescript
+export async function POST(request: Request) {
+  const body = await request.json()
+  if (!body.id) return Response.json({ error: 'id required' }, { status: 400 })
+  
+  const { data, error } = await apiCallServer('/v1/endpoint', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+  if (error) return Response.json({ error }, { status: 400 })
+  return Response.json({ success: true, data })
+}
+```
+
+#### 동적 라우트
+```typescript
+export async function GET(
+  { params }: { params: { id: string } }
+) {
+  if (!params.id) return Response.json({ error: 'id required' }, { status: 400 })
+  
+  const { data, error } = await apiCallServer(`/v1/endpoint/${params.id}`, {
+    method: 'GET',
+  })
+  if (error) return Response.json({ error }, { status: 400 })
+  return Response.json(data)
+}
+```
+
+---
+
+### 클라이언트 사용
+```typescript
+// ✅ 올바른 사용
+const res = await fetch('/api/absence', { method: 'POST' })
+
+// ❌ 절대 금지
+import { apiCallServer } from '@/lib/api.server'  // 에러!
+```
+
+---
+
+### 폴더 구조
+```
+src/app/api/
+├── absence/route.ts
+├── absence/manage/route.ts
+├── absence/manage/[sessionId]/route.ts
+├── attendance/...
+├── auth/cookies/route.ts
+└── points/manage/...
+
+src/lib/
+├── api.server.ts        # 핵심 함수
+└── auth.server.ts       # 토큰 관리
+```
 
