@@ -159,3 +159,34 @@ Playwright를 사용한 E2E 테스트입니다. 실제 사용자 관점에서 �
 3. **타입 안정성**: TypeScript를 철저히 활용하여 런타임 에러 사전 방지
 4. **성능 최적화**: Next.js의 이미지 최적화, 동적 import, 코드 분할 활용
 5. **테스트 가능성**: 로직을 컴포넌트에서 분리하여 E2E 테스트 커버리지 극대화
+
+---
+
+## 📈 개선 경험
+
+### 1️⃣ 출석체크 페이지 이미지 로딩 속도가 느리다
+
+| 목차 | 설명 |
+|------|-------------|
+| 문제 상황 | 저희 서비스 메인 로직인 출석체크 페이지에서 나의 프로필을 불러오는 이미지 부분의 로딩 속도가 현저하게 떨어지는 문제가 발생하였습니다. <br /><br /> **LCP 29.6초**, **실질적인 체감으로는 5-6초 정도 이후 이미지가 로드** 되는 문제점이 있었습니다. <br /><br /> 충분히 사용자가 느끼기도 **"느리다"** 판단될 것이라 생각하였고, 이 때문에 전체적인 앱서비스 완성도가 떨어져보이는 문제점이 있다고 판단하여 개선을 진행하였습니다. <img width="3456" height="2082" alt="image" src="https://github.com/user-attachments/assets/b7465acc-2dce-4369-8bff-15df259ff68f" />|
+| 해결 과정 | 처음에는 Image 태그 속성의 `fetchPriority={'high'}` 와 이미지 사이즈를 지정하여 이미지 최적화를 진행해보았고, next.config.js 이미지 리사이징 설정, 캐시 설정을 진행하여 LCP 지수를 감소시키고자 하였습니다. <br /><br /> `deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840]` <br /> `imageSizes: [16, 32, 48, 64, 96, 128, 256, 384]` <br /> `minimumCacheTTL: 60 * 60 * 24 * 365` <br /><br /> 하지만 여전히 동일한 성능 지수를 나타내고 있었고, Image 태그 속성만으로는 이미지 최적화가 어렵겠다는 판단을 하게 되었습니다. Cloudinary, ImageKit, UploadCare와 같은 이미지 최적화 라이브러리 사용을 고려했으나, **근본적인 문제를 포장하기 위해 또 다른 라이브러리를 추가하는 것이 과연 올바른 해결책인가** 하는 의문이 들었습니다. <br /><br /> 따라서 사고를 전환하여 **"아예 업로드 단계에서 이미지 용량을 줄여볼까?"** 하는 접근을 시도했습니다. 저희 서비스는 출석체크, 상벌점, 세션 장소 공지 등이 주요 기능이었기 때문에 이미지는 중요도가 낮았습니다. 특히 출석체크 페이지의 프로필 이미지는 모바일 화면에서만 사용되므로 큰 크기와 용량이 필요하지 않았습니다. <br /><br /> **[1] 이미지 리사이징** <br /> 종횡비 유지하며 최대 크기 제한: <br /> `let { width, height } = img` <br /> `const aspectRatio = width / height` <br /> `if (width > maxWidth) { width = maxWidth; height = width / aspectRatio }` <br /> `if (height > maxHeight) { height = maxHeight; width = height * aspectRatio }` <br /> 📊 효과: 4000×3000 → 1920×1080 축소 시 파일 크기 대폭 감소 <br /><br /> **[2] Canvas 화질 최적화** <br /> 리사이징 시 이미지 품질 보존: <br /> `ctx.imageSmoothingEnabled = true` <br /> `ctx.imageSmoothingQuality = 'high'` <br /> 📊 효과: 품질 저하로 인한 재압축 방지, 단일 최적화 단계로 효율화 <br /><br /> **[3] Quality 파라미터 제어** <br /> JPEG 압축률 최적화: `quality = 0.8` <br /> 📊 효과: 지각할 수 없는 수준의 손실 압축으로 파일 크기 최적화 <br /><br /> **[4] 정수 반올림으로 렌더링 최적화** <br /> 소수점 캔버스 크기 제거: <br /> `canvas.width = Math.round(width)` <br /> `canvas.height = Math.round(height)` <br /> 📊 효과: 렌더링 성능 향상, 캔버스 그리기 시간 단축 (29초 → 18초) <img width="3440" height="2062" alt="image" src="https://github.com/user-attachments/assets/91d6711e-da24-4a87-8959-96bde17bd0ca" /><br /><br /> **[5] WebP 변환** <br /> 확장자를 JPEG/PNG에서 WebP로 변경: <br /> `if (shouldConvertToWebP) { blob = await convertToWebP(canvas, quality) }` <br /> 📊 효과: 20~30% 크기 감소로 이미지 다운로드 시간 단축 |
+| 결과 | **LCP 성능 지수 개선: 29.6초 → 18.8초 → 13.8초** <br /><br /> 업로드 단계에서의 이미지 리사이징, Canvas 화질 최적화, Quality 파라미터 제어, 정수 반올림, WebP 변환 등 다양한 최적화 기법을 조합하여 **74% 성능 개선**을 달성했습니다. <br /><br /> 백엔드 개발자분들의 적극적인 협력으로 WebP 확장자 지원을 추가하여 이미지 다운로드 시간을 추가로 단축할 수 있었습니다. <br /><br /> 현재도 학회원분들, 멘토링, AI 등을 통해 추가적인 이미지 최적화 방안을 지속적으로 연구 중입니다. <img width="3456" height="2164" alt="image" src="https://github.com/user-attachments/assets/d2ab348e-ddb6-4b62-84ca-b73da3557db7" />|
+
+### 2️⃣ 출석체크 페이지 초기 로딩 속도가 느리다
+
+| 목차 | 설명 |
+|------|-------------|
+| 문제 상황 | IT 경영학회 큐시즘의 출석체크 앱서비스 구현 중, 가장 중요한 출석체크 페이지의 **FCP(First Contentful Paint)가 현저하게 저하**되었습니다. <br /><br /> 실제 사용자가 QR코드를 인식하려면 **아무것도 보이지 않은 상태로 3-4초 정도 대기**해야 하고, 화면이 로딩되면 QR코드를 인식해야 하는 상황이었습니다. <br /><br /> 이는 사용자의 불편을 야기할 수 있으므로, **FCP 성능 증가 및 로딩 중 사용자 경험 개선**이 필요했습니다. |
+| 해결 과정 | **[1] Dynamic Import - QRCode 비동기 로드** <br /> qrcode.react 라이브러리는 약 20-30KB 용량을 가지고 있었고, 초기 페이지 로드 시 무조건 다운로드되고 있었습니다. <br /><br /> 개선 전: `import { QRCodeSVG } from 'qrcode.react'` (메인 번들에 포함) <br /><br /> 개선 후: `const QRCodeSVG = dynamic(() => import('qrcode.react').then(...), { ssr: false, loading: () => <스켈레톤UI /> })` <br /><br /> 효과: <br /> - 페이지 초기 로드 시 QRCodeSVG 코드 제외 <br /> - 렌더링 시 스켈레톤 UI 먼저 표시 <br /> - 백그라운드에서 라이브러리 비동기 다운로드 <br /> - 로드 완료 후 스켈레톤이 실제 QRCode로 교체 <br /> 📊 로딩 중 사용자가 페이지 변화를 감지할 수 있어 불안감 제거 <br /><br /> **[2] useCallback - 함수 메모이제이션** <br /> 개선 전: `const startTimer = (expAtValue: string) => { ... }` <br /> useEffect 내 expAt, token 변경 시마다 새로운 함수 객체 생성 <br /><br /> 개선 후: `const startTimer = useCallback((expAtValue: string) => { ... }, [])` <br /> 📊 효과: 함수 참조 유지, 자식 컴포넌트의 불필요한 리렌더링 방지, 메모리 효율성 증가 <br /><br /> **[3] useMemo - 계산 결과 캐싱** <br /> 개선 전: 남은 초(remainingSeconds)가 매초 업데이트될 때마다 `qrData = JSON.stringify({ token: tokenData.token })` 재계산 <br /> 10분 진행 시 600번의 불필요한 리렌더링 발생 <br /><br /> 개선 후: `const qrData = useMemo(() => (tokenData?.token ? JSON.stringify(...) : ''), [tokenData?.token])` <br /> 📊 효과: token 변경 시만 qrData 재계산, remainingSeconds 업데이트 시 캐싱된 값 사용으로 불필요한 렌더링 제거 |
+| 결과 | **FCP 성능 향상: 5.6초 → 1.7초** <br /><br /> **LightHouse 기준 성능지수: 13% 개선** <br /><br /> Dynamic Import, useCallback, useMemo를 조합하여 초기 로딩 속도를 획기적으로 개선하고, 사용자가 로딩 중임을 인지할 수 있는 스켈레톤 UI로 경험을 개선했습니다. 이를 통해 출석체크 프로세스의 사용성이 크게 향상되었습니다. |
+
+### 3️⃣ E2E 테스트 코드로 회원가입 페이지 타입 안정화
+
+| 목차 | 설명 |
+|------|-------------|
+| 문제 상황 | UT세션 준비를 위해 QA를 진행하는 과정에서 예상치 못한 사용자 입력들이 발견되었습니다. <br /><br /> **이름 필드**: 황유림**><**, **ㅁㅇㅁㄴ**, **너무 긴 이름** <br /> **전화번호 필드**: 101-421 (불완전한 입력) <br /> **악의적 입력**: **&lt;script&gt;&lt;/script&gt;** (XSS 공격 시도) <br /><br /> 농담식으로 스크립트 코드를 넣기도 했지만, 실제 서비스 사용 중 예상과 다르게 입력하는 사용자는 분명히 발생할 것으로 예상되었습니다. <br /><br /> 이러한 변수들을 최대한 제어하고 대응하기 위해 **E2E 테스트 코드 도입의 필요성**을 인식하게 되었습니다. |
+| 해결 과정 | 다양한 테스트 도구 중 **Playwright 기반의 E2E 테스트**를 선택했습니다. 이유는 사용자 시나리오를 직접 설정하여 실제 사용자 흐름대로 서비스가 문제없이 동작하는지 검증할 수 있기 때문입니다. <br /><br /> 회원가입은 Step별로 구성되어 있었고 (Step 1: 이름 입력, Step 2: 학과 입력 등), 각 Step에서 요구되는 기능들을 검증했습니다. <br /><br /> **과한 테스트보다는 목적 지향적인 테스트 작성**: 다른 기능 구현이 남아있어 리소스 낭비를 피하고, **다양한 입력을 하는 사용자를 제어하기 위한 테스트 코드**에 집중했습니다. <br /><br /> **테스트 작성 후 발견된 이슈**: disable 처리, error 로직 미흡 등이 드러났고, 테스트에서 통과하지 못한 케이스들을 예외처리했습니다. <br /><br /> **[1] 이름 유효성 검증** <br /> `validateName(name)`: 빈 값 체크, 최소/최대 길이(1-100자) 검증, 한글/영문/공백만 허용 <br /> 특수문자 제거: `/^[가-힣a-zA-Z\s]+$/` 정규식으로 한글, 영문만 허용 <br /> 📊 효과: 예상 밖의 이름 입력 차단 <br /><br /> **[2] 휴대폰 번호 유효성 검증** <br /> `isValidPhoneNumber(phoneNumber)`: 010, 02~064 지역번호 포함 모든 유효한 형식 검증 <br /> 정규식: `/^(010-\d{4}-\d{4}|0(2|31|32|...)-\d{3,4}-\d{4})$/` <br /> 📊 효과: 불완전하거나 잘못된 전화번호 입력 방지 <br /><br /> **[3] 휴대폰 에러 메시지 처리** <br /> `getPhoneNumberErrorMessage(phoneNumber)`: 입력 없을 때, 13자 미만, 유효하지 않은 형식 등 상황별 에러 메시지 제공 <br /> 📊 효과: 사용자에게 명확한 피드백 제공 |
+| 결과 | **테스트 통과율: 64% → 100%** <br /><br /> <img width="1231" height="682" alt="image" src="https://github.com/user-attachments/assets/97eddd4c-8c63-496e-865b-66501000025a" /> <img width="2524" height="1498" alt="image" src="https://github.com/user-attachments/assets/8dd79607-3c42-4295-b878-1160dc047a90" /> 체계적인 입력 검증으로 회원가입 프로세스의 모든 시나리오를 안정적으로 제어할 수 있게 되었습니다. <br /><br /> 현재 입력을 받는 기능 2가지 중 회원가입에 이어 **다른 입력 기능에도 동일한 E2E 테스트를 적용 중**입니다. |
+
+
+
