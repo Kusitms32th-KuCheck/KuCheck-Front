@@ -8,15 +8,16 @@ import Dropdown from '../common/ManagerdropDown'
 import RoleTag from '../common/RoleTag'
 import ImageModal from '../modal/imageModal'
 import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
+import CheckOneIcon from '@/assets/svgComponents/manager/CheckOneIcon'
 import { postKupicClient } from '@/lib/manager/client/kupic'
-import { formatDateToKorean, getPartName } from '@/utils/manager/attendance'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
+import { formatDateToKorean, getPartName } from '@/utils/manager/attendance'
 
 interface AbsenceTableRowProps {
   record: CheckDocumentRecord
   isEven: boolean
   gridTemplate?: string
-  onToast?: (message: string) => void
+  onToast?: (toast: { message: string; icon?: React.ReactNode }) => void
 }
 
 const ATTENDANCE_SCORE_OPTIONS = [
@@ -60,11 +61,11 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
     try {
       const result = await postKupicClient({ kupickId: record.kupickId, approval: isApproved })
       if (!result.success) throw new Error(result.error || '알 수 없는 오류')
-      onToast?.('저장되었습니다')
+      onToast?.({ message: '저장되었습니다', icon: <CheckOneIcon width={16} height={16} /> })
       router.refresh()
     } catch (err: unknown) {
       console.error('Approval update failed:', err)
-      onToast?.(`승인 처리 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`)
+      onToast?.({ message: `승인 처리 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}` })
       setSelectedScore(originalValue)
     } finally {
       setIsLoading(false)
