@@ -1,4 +1,4 @@
-// app/api/auth/cookies/route.ts
+// app/api/auth/cookies/profile-image.ts
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
