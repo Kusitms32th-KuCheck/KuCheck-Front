@@ -62,7 +62,7 @@ export default function FinalCheckField() {
       if (file) {
         const updatedAbsenceData = {
           ...absenceData,
-          fileName: `absence.${extractFileExtension(file.url)}`,
+          fileName: 'absence.webp',
         }
 
         const response = await postAbsence(updatedAbsenceData)
