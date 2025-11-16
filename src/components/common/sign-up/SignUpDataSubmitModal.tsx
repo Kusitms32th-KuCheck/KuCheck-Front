@@ -11,10 +11,13 @@ export default function SignUpDataSubmitModal() {
         </div>
       </section>
 
-      <p className="body-sm-regular fixed bottom-[53px] text-gray-500">
+      <p className="body-sm-regular fixed bottom-[53px] text-center text-gray-500">
         일주일 이상 승인되지 않을 시,
         <br />
         경영총괄팀으로 문의해주세요
+        <br />
+        <br />
+        kusitms.management@gmail.com
       </p>
     </main>
   )

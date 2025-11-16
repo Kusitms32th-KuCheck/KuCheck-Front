@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgPointsIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 32 32" {...props}><rect width={19.047} height={19.047} fill="#BFCFFF" rx={7.326} /><path fill="#5F86FF" d="M9.327 4.44c.724 0 1.31.587 1.31 1.311v2.288h2.574a1.31 1.31 0 1 1 0 2.62h-2.573v2.954a1.31 1.31 0 0 1-2.621 0V10.66h-2.67a1.31 1.31 0 0 1 0-2.62h2.67V5.751c0-.724.586-1.31 1.31-1.31" /><rect width={18.639} height={18.639} x={12.837} y={12.496} fill="#BFCFFF" stroke="#fff" strokeWidth={0.952} rx={7.279} /><rect width={8.857} height={2.657} x={17.714} y={20.273} fill="#5F86FF" rx={1.329} /></svg>;
+export default SvgPointsIcon;

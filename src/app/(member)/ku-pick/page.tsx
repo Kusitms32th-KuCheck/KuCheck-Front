@@ -11,6 +11,8 @@ export default async function QPickPage() {
   return (
     <main>
       <MemberHeader
+        backPath={'/home'}
+        headerColor={'bg-white'}
         headerType={'dynamic'}
         title={'큐픽 제출하기'}
         rightElement={
@@ -19,9 +21,11 @@ export default async function QPickPage() {
           </Link>
         }
       />
-      <div className="h-[116px]" />
-      <div className="mt-[20px] flex flex-col gap-y-4 px-5">
+      <div className="h-[116px] border" />
+      <div className="mt-[8px] flex flex-col gap-y-3 px-5">
+        <h1 className="body-2xl-semibold">11월 큐픽</h1>
         <SubmitCard
+          colorGray={false}
           isSubmit={!!myKuPickData?.applicationUrl}
           href={'/ku-pick/application'}
           title={'신청 사진 업로드'}
@@ -35,9 +39,10 @@ export default async function QPickPage() {
           }
         />
         <SubmitCard
+          colorGray={!myKuPickData?.applicationUrl}
           isSubmit={!!myKuPickData?.viewUrl}
           href={'/ku-pick/view'}
-          title={'시청 인증 사진 업로드 '}
+          title={'시청 인증 사진 업로드'}
           step={2}
           description={
             <div className="body-sm-medium text-gray-500">
@@ -47,6 +52,11 @@ export default async function QPickPage() {
             </div>
           }
         />
+        <p className="caption-sm-medium text-primary-500">
+          큐픽 제출이 완료되었어요
+          <br />
+          이달 말일까지는 이미지 수정이 가능해요
+        </p>
       </div>
     </main>
   )
