@@ -52,6 +52,12 @@ export default function MyAttendancePage() {
     return () => observer.disconnect()
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, error])
 
+  const getTotalPointsColor = (totalPoint: number | undefined): string => {
+    if (!totalPoint) return ''
+    if (totalPoint < -5) return 'text-sub-red'
+    return 'text-gray-700'
+  }
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-4">
@@ -83,7 +89,9 @@ export default function MyAttendancePage() {
       <section className="flex flex-1 flex-col px-5">
         <section className="mt-[15px] flex flex-col items-center justify-center">
           <p className="body-lg-regular text-gray-500">{firstPageData?.name}님의 현재 상벌점</p>
-          <p className="heading-3xl-semibold">{firstPageData?.totalPoints}</p>
+          <p className={`${getTotalPointsColor(firstPageData?.totalPoints)} heading-3xl-semibold`}>
+            {firstPageData?.totalPoints}
+          </p>
           <div className="mt-[11px] flex h-[40px] gap-x-[14px] rounded-[20px] border border-gray-100 bg-white px-4 py-2">
             <div className="flex items-center">
               <RewardPointIcon width={20} height={20} />
