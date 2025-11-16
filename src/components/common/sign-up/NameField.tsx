@@ -91,11 +91,12 @@ export default function NameField() {
             onKeyDown={handleKeyDown}
             onChange={handleNameChange}
           />
-          <p className="body-sm-medium text-gray-400">성까지 포함한 이름을 입력해 주세요.</p>
-          {error && (
+          {error ? (
             <p role="alert" className="body-sm-medium text-red-500">
               {error}
             </p>
+          ) : (
+            <p className="body-sm-medium text-gray-400">성까지 포함한 이름을 입력해 주세요.</p>
           )}
         </div>
       </section>
