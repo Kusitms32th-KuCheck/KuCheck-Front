@@ -1,4 +1,5 @@
 export { default as QrIcon } from './QrIcon'
+export { default as AkarIconsCircleCheckFillIcon } from './AkarIconsCircleCheckFillIcon'
 export { default as AlertErrorIcon } from './AlertErrorIcon'
 export { default as AlertInfoIcon } from './AlertInfoIcon'
 export { default as AlertSuccessIcon } from './AlertSuccessIcon'

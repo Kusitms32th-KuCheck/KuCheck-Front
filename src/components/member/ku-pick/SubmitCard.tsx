@@ -3,7 +3,7 @@
 import { ChevronRightIcon } from '@/assets/svgComponents'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useCallback } from 'react'
-import { FillCheckIcon } from '@/assets/svgComponents/member'
+import { AkarIconsCircleCheckFillIcon } from '@/assets/svgComponents/member'
 
 interface SubmitCardProps {
   isSubmit: boolean
@@ -11,23 +11,24 @@ interface SubmitCardProps {
   title: string
   description: ReactNode
   href: string
+  colorGray: boolean
 }
 
-export default function SubmitCard({ title, step, description, href, isSubmit }: SubmitCardProps) {
+export default function SubmitCard({ title, step, description, href, isSubmit, colorGray }: SubmitCardProps) {
   const router = useRouter()
-
   const handleNavigate = useCallback(() => {
-    router.push(href)
+    if (colorGray) return
+    else router.push(href)
   }, [href, router])
 
   return (
-    <div className="bg-primary-50 flex flex-col gap-y-[16px] rounded-[16px] p-4">
+    <div className={`${colorGray ? 'bg-gray-100' : 'bg-primary-50'} flex flex-col gap-y-[16px] rounded-[16px] p-4`}>
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-[2px]">
-          <p className="caption-sm-medium text-primary-500">STEP {step}</p>
+          <p className={`${colorGray ? 'text-gray-600' : 'text-primary-500'} caption-sm-medium`}>STEP {step}</p>
           <div className="flex items-center gap-x-2">
             <h1 className={`${isSubmit ? 'text-primary-500' : ''} body-2xl-semibold`}>{title}</h1>
-            {isSubmit && <FillCheckIcon width={20} height={20} />}
+            {isSubmit && <AkarIconsCircleCheckFillIcon width={24} height={24} />}
           </div>
         </div>
 
@@ -40,7 +41,7 @@ export default function SubmitCard({ title, step, description, href, isSubmit }:
           <ChevronRightIcon width={24} height={24} />
         </button>
       </div>
-      {description}
+      {isSubmit ? null : description}
     </div>
   )
 }
