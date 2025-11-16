@@ -11,6 +11,7 @@ export default async function QPickPage() {
   return (
     <main>
       <MemberHeader
+        backPath={'/home'}
         headerColor={'bg-white'}
         headerType={'dynamic'}
         title={'큐픽 제출하기'}
