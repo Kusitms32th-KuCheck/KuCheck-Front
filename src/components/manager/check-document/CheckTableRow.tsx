@@ -11,7 +11,7 @@ import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 import CheckOneIcon from '@/assets/svgComponents/manager/CheckOneIcon'
 import { postKupicClient } from '@/lib/manager/client/kupic'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
-import { formatDateToMD, formatTimeToHM, getPartName } from '@/utils/manager/attendance'
+import { formatDateToKorean, formatDateToMD, formatTimeToHM, getPartName } from '@/utils/manager/attendance'
 
 interface AbsenceTableRowProps {
   record: CheckDocumentRecord
@@ -42,6 +42,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
 
   const formattedDate = record.submitDate ? formatDateToMD(record.submitDate) : ''
   const formattedTime = record.submitDate ? formatTimeToHM(record.submitDate.split('T')[1] || '') : ''
+  const formattedSubmitDate = record.submitDate ? formatDateToKorean(record.submitDate) : ''
 
   const files = [
     { url: record.applicationUrl, title: '신청 사진' },
@@ -83,9 +84,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
         <div className="flex items-center py-[22px]">
           <RoleTag label={getPartName(record.part)} />
         </div>
-        <p className="py-[22px] text-start whitespace-nowrap">
-          {formattedDate} {formattedTime}
-        </p>
+        <p className="py-[22px] text-start whitespace-nowrap">{formattedSubmitDate}</p>
         {files.map(({ url }, index) => {
           const fileName = getFileNameFromUrl(url)
           const isSubmitted = !!fileName
