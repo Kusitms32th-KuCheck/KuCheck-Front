@@ -1,3 +1,40 @@
+// 출석 상태 enum
+export enum AttendanceStatus {
+  PRESENT = 'PRESENT',
+  PRESENT_HOLIDAY = 'PRESENT_HOLIDAY',
+  ABSENT = 'ABSENT',
+  ABSENT_WITH_DOC = 'ABSENT_WITH_DOC',
+  ABSENT_WITHOUT_DOC = 'ABSENT_WITHOUT_DOC',
+  ABSENT_NO_SUBMISSION = 'ABSENT_NO_SUBMISSION',
+  LATE = 'LATE',
+  EARLY_LEAVE = 'EARLY_LEAVE',
+}
+
+// 출석 상태별 표시 텍스트 맵핑
+export const attendanceStatusDisplayMap: Record<AttendanceStatus, (point: number) => string> = {
+  [AttendanceStatus.PRESENT]: (point) => {
+    if (point === 0) return '출석(0)'
+    if (point === 1) return '출석(1)'
+    return `출석(${point})`
+  },
+  [AttendanceStatus.PRESENT_HOLIDAY]: () => '결석(인정)',
+  [AttendanceStatus.ABSENT]: (point) => `결석(${point})`,
+  [AttendanceStatus.ABSENT_WITH_DOC]: (point) => {
+    if (point === -1) return '결석(사유 -1)'
+    return `결석(${point})`
+  },
+  [AttendanceStatus.ABSENT_WITHOUT_DOC]: (point) => {
+    if (point === -2) return '결석(무단 -2)'
+    return `결석(${point})`
+  },
+  [AttendanceStatus.ABSENT_NO_SUBMISSION]: (point) => {
+    if (point === -3) return '결석(미제출 -3)'
+    return `결석(${point})`
+  },
+  [AttendanceStatus.LATE]: () => '지각(-1)',
+  [AttendanceStatus.EARLY_LEAVE]: () => '조퇴(-1)',
+}
+
 export interface PointMemberStatus {
   memberId: number
   name: string
@@ -25,7 +62,6 @@ export interface PointMemberStatus {
     11: boolean
     12: boolean
   }
-  studyPoints: number
   kuportersPoints: number
   memo: string | null
   sessions?: Record<string, string>
@@ -58,10 +94,6 @@ export interface AttendanceMonthlyResult {
 }
 
 //상벌점 수정 reques body
-export interface StudyModification {
-  memberId: number
-  studyPoints: number
-}
 export interface MemoModification {
   memberId: number
   memo: string | null
@@ -72,12 +104,15 @@ export interface kupportersModification {
 }
 export interface kupickModification {
   memberId: number
+  yearMonth: string
 }
 export interface tfModification {
   memberId: number
+  yearMonth: string
 }
 export interface staffModification {
   memberId: number
+  yearMonth: string
 }
 //이번달 큐픽 승인 토글 응답
 export interface KupickToggleResponse {
@@ -104,4 +139,56 @@ export interface VisibleDate {
 export interface DropdownOption {
   label: string
   value: string
+}
+
+// 월별 출결 조회 전용 타입
+export interface MonthlyAttendanceRecord {
+  date: string
+  attendanceId: number | null
+  status: string | null
+  point: number | null
+}
+
+export interface MonthlyMemberData {
+  memberId: number
+  name: string
+  records: MonthlyAttendanceRecord[]
+}
+
+export interface MonthlyAttendanceResult {
+  year: number
+  month: number
+  sessionDates: number[]
+  members: {
+    data: MonthlyMemberData[]
+    totalPages: number
+    isLastPage: boolean
+  }
+}
+
+// 월별 출석 상태 수정 요청
+export interface MonthlyAttendanceModification {
+  attendanceId: number
+  memberId: number
+  status: string
+}
+
+// 보류 중인 월별 출석 변경사항 (일괄 저장용)
+export interface PendingAttendanceChange {
+  attendanceId: number
+  memberId: number
+  status: string
+  memberIndex: number
+  date: string
+}
+
+// 월별 출석 상태 수정 응답
+export interface MonthlyAttendanceUpdateResponse {
+  attendanceId: number
+  memberId: number
+  oldStatus: string
+  newStatus: string
+  diff: number
+  week: number
+  occurredAt: string
 }

@@ -10,5 +10,9 @@ const colorMap: Record<string, string> = {
 }
 
 export default function RoleTag({ label }: RoleTagProps) {
-  return <div className={`body-lg-semibold rounded-[8px] px-4 py-2 text-center ${colorMap[label]}`}>{label}</div>
+  return (
+    <div className={`body-lg-semibold flex h-[34px] items-center justify-center rounded-[8px] px-4 ${colorMap[label]}`}>
+      {label}
+    </div>
+  )
 }

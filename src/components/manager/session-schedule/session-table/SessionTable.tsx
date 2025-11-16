@@ -49,9 +49,9 @@ export default function SessionTable({
         <div className="min-w-[797px]">
           {/* 헤더 */}
           <div
-            className={`grid ${gridCols} body-lg-semibold items-center gap-0 border-b border-gray-100 py-[14px] text-gray-500`}
+            className={`grid ${gridCols} body-lg-semibold items-center gap-0 border-b border-gray-100 py-[14px] pl-[16px] text-gray-500`}
           >
-            <div className="pl-[34px]">주차</div>
+            <div className="pl-[16px]">주차</div>
             <div>세션 일자</div>
             <div>세션 이름</div>
             <div>세션 종류</div>
@@ -91,7 +91,7 @@ export default function SessionTable({
                           value={r.name}
                           onChange={(v) => onNameChange?.(i, v)}
                           isModified={r.name.trim().length > 0}
-                          className="w-full border-r border-gray-200 px-[20px] py-[14px]"
+                          className="w-full border-r border-gray-200 px-[20px] py-[13px]"
                         />
                         <DropDownCell
                           className="align-center flex h-full border-r border-gray-200"
@@ -99,7 +99,7 @@ export default function SessionTable({
                           value={r.type}
                           onChange={(v) => onTypeChange?.(i, v)}
                         />
-                        <div className="flex items-center justify-center border-r border-gray-200">
+                        <div className="flex h-full items-center justify-center border-r border-gray-200">
                           <input
                             type="checkbox"
                             checked={Boolean(r.isHoliday)}
@@ -127,7 +127,7 @@ export default function SessionTable({
                         {filled ? r.type : '-'}
                       </div>
                       <div
-                        className={`border-r border-gray-200 px-[20px] py-[22px] ${
+                        className={`w-full border-r border-gray-200 py-[22px] text-center ${
                           filled ? 'text-gray-800' : 'text-gray-400'
                         }`}
                       >
