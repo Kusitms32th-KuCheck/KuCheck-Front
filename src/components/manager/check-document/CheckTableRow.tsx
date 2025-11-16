@@ -34,7 +34,7 @@ const getFileNameFromUrl = (url?: string) => {
 
 export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast }: AbsenceTableRowProps) {
   const router = useRouter()
-  const initialApprovalValue = record.approval ? 'approved' : 'rejected'
+  const initialApprovalValue = record.approval === null ? '' : record.approval ? 'approved' : 'rejected'
 
   const [selectedScore, setSelectedScore] = useState(initialApprovalValue)
   const [isLoading, setIsLoading] = useState(false)
@@ -77,14 +77,14 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
   return (
     <>
       <div
-        className={clsx('body-lg-regular grid items-center border-b px-6', isEven ? 'bg-white' : 'bg-background1')}
+        className={clsx('body-lg-regular grid items-center border-b px-6')}
         style={{ gridTemplateColumns: gridTemplate }}
       >
-        <p className="py-[22px] text-start whitespace-nowrap">{record.name}</p>
-        <div className="flex items-center py-[22px]">
+        <p className={clsx('py-[22px] text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{record.name}</p>
+        <div className={clsx('flex items-center py-[22px]', isEven ? 'bg-white' : 'bg-background1')}>
           <RoleTag label={getPartName(record.part)} />
         </div>
-        <p className="py-[22px] text-start whitespace-nowrap">{formattedSubmitDate}</p>
+        <p className={clsx('py-[22px] text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{formattedSubmitDate}</p>
         {files.map(({ url }, index) => {
           const fileName = getFileNameFromUrl(url)
           const isSubmitted = !!fileName
@@ -96,6 +96,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
               disabled={!isSubmitted}
               className={clsx(
                 'body-lg-regular overflow-hidden py-[22px] text-start text-ellipsis whitespace-nowrap',
+                isEven ? 'bg-white' : 'bg-background1',
                 isSubmitted ? 'text-gray-800 hover:underline' : 'cursor-default text-gray-500'
               )}
             >
@@ -105,7 +106,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
             </button>
           )
         })}
-        <div className="flex items-center justify-between">
+        <div className={clsx('flex items-center justify-between', isEven ? 'bg-white' : 'bg-background1')}>
           <Dropdown
             options={ATTENDANCE_SCORE_OPTIONS}
             selected={selectedScore}
@@ -114,6 +115,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
             rightIcon={<DownIcon width={24} height={24} />}
             rightIconActive={<UpIcon width={24} height={24} />}
             showValueInsteadOfLabel
+            placeholder="선택"
           />
         </div>
       </div>
