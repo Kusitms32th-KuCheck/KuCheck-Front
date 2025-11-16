@@ -11,7 +11,7 @@ import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 import CheckOneIcon from '@/assets/svgComponents/manager/CheckOneIcon'
 import { postKupicClient } from '@/lib/manager/client/kupic'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
-import { formatDateToKorean, getPartName } from '@/utils/manager/attendance'
+import { formatDateToMD, formatTimeToHM, getPartName } from '@/utils/manager/attendance'
 
 interface AbsenceTableRowProps {
   record: CheckDocumentRecord
@@ -40,7 +40,8 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
   const [isLoading, setIsLoading] = useState(false)
   const [modalState, setModalState] = useState<{ open: boolean; index: number }>({ open: false, index: 0 })
 
-  const formattedSubmitDate = record.submitDate ? formatDateToKorean(record.submitDate) : ''
+  const formattedDate = record.submitDate ? formatDateToMD(record.submitDate) : ''
+  const formattedTime = record.submitDate ? formatTimeToHM(record.submitDate.split('T')[1] || '') : ''
 
   const files = [
     { url: record.applicationUrl, title: '신청 사진' },
@@ -82,7 +83,9 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
         <div className="flex items-center py-[22px]">
           <RoleTag label={getPartName(record.part)} />
         </div>
-        <p className="py-[22px] text-start whitespace-nowrap">{formattedSubmitDate}</p>
+        <p className="py-[22px] text-start whitespace-nowrap">
+          {formattedDate} {formattedTime}
+        </p>
         {files.map(({ url }, index) => {
           const fileName = getFileNameFromUrl(url)
           const isSubmitted = !!fileName
@@ -120,7 +123,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
         <ImageModal
           titles={files.map((f) => f.title)}
           images={files.map((f) => toImageUrl(f.url))}
-          footerText={`${record.name}  ${formattedSubmitDate}`}
+          footerText={`${record.name} ${formattedDate} ${formattedTime}`}
           initialIndex={modalState.index}
           onClose={() => setModalState({ ...modalState, open: false })}
           imageClassName="px-0 m-0"
