@@ -5,6 +5,7 @@ import Dropdown from '../../common/ManagerdropDown'
 import { PointupIcon, PointdownIcon } from '@/assets/svgComponents/manager'
 import InputField from './InputField'
 import ImageUpload from './ImageUpload'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
 
 type SessionHeaderProps = {
   place: string
@@ -78,8 +79,12 @@ export default function SessionHeader({
 
   // error prop으로 상태 제어
 
+  const selectedSessionName = useSessionScheduleStore(
+    (state: import('@/store/manager/useSessionScheduleStore').SessionScheduleStore) => state.selectedSessionName
+  )
   return (
     <div className="space-y-6">
+      <p className="heading-lg-medium">{selectedSessionName || '세션이름없음'}</p>
       <InputField
         label={<span>장소 {error && !place && <span className="text-sub-red ml-2">필수 항목입니다</span>}</span>}
         placeholder="세션 장소를 입력해 주세요"

@@ -5,12 +5,13 @@ import ManagerButton from '../../common/ManagerButton'
 import { useSessionEdit } from './SessionEditContext'
 import ManagerModal from '@/components/manager/common/ManagerModal'
 import { useRouter } from 'next/navigation'
+import { HeaderArrowRight } from '@/assets/svgComponents/manager'
 
 export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
   const [saving, setSaving] = useState(false)
 
-  const { isEditing, toggleEdit, runSaveHandlers } = useSessionEdit()
+  const { isEditing, toggleEdit, runSaveHandlers, resetToOriginal } = useSessionEdit()
   const [feedbackMessage, setFeedbackMessage] = useState<React.ReactNode | null>(null)
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const router = useRouter()
@@ -51,40 +52,20 @@ export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean
     }
   }, [])
 
+  const handleReset = () => {
+    if (resetToOriginal && typeof resetToOriginal.current === 'function') {
+      resetToOriginal.current()
+    }
+  }
+
   const handleHeaderButton = async () => {
-    if (saveOnly) {
-      setSaving(true)
-      try {
-        const ok = await runSaveHandlers()
-        if (ok) {
-          setFeedbackMessage(<span className="text-primary-500">성공적으로 저장되었어요</span>)
-        } else {
-          setFeedbackMessage(<span>저장에 실패했어요. 다시 시도해주세요</span>)
-        }
-        if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current)
-        feedbackTimerRef.current = setTimeout(() => {
-          setFeedbackMessage(null)
-          if (ok) {
-            router.push('/session-schedule/edit')
-          }
-        }, 1000)
-      } finally {
-        setSaving(false)
-      }
-      return
-    }
-
-    if (!isEditing) {
-      toggleEdit()
-      return
-    }
-
     setSaving(true)
     try {
       const ok = await runSaveHandlers()
       if (ok) {
-        toggleEdit()
         setFeedbackMessage(<span className="text-primary-500">성공적으로 저장되었어요</span>)
+        if (isEditing) toggleEdit()
+        if (saveOnly && router) router.push('/session-schedule/edit')
       } else {
         setFeedbackMessage(<span>저장에 실패했어요. 다시 시도해주세요</span>)
       }
@@ -95,19 +76,50 @@ export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean
     }
   }
 
-  const HeaderContent = () => (
-    <>
-      <p className="heading-lg-medium">세션 일정</p>
-      <ManagerButton
-        onClick={handleHeaderButton}
-        styleSize="sm"
-        disabled={saving || !isAllFilled}
-        className={saving || !isAllFilled ? 'bg-gray-500 text-white' : ''}
-      >
-        {saving ? '저장중...' : saveOnly ? '저장하기' : isEditing ? '저장하기' : '수정하기'}
-      </ManagerButton>
-    </>
-  )
+  const HeaderContent = () => {
+    if (saveOnly) {
+      // 세션 추가 페이지
+      return (
+        <>
+          <p className="heading-lg-medium">세션 일정</p>
+          <ManagerButton onClick={handleHeaderButton} styleSize="sm" disabled={saving || !isAllFilled}>
+            {saving ? '저장중...' : '저장하기'}
+          </ManagerButton>
+        </>
+      )
+    }
+    // 세션 수정 페이지: PointHeader 스타일
+    return isEditing ? (
+      <>
+        {/* 수정 모드 - 브레드크럼 */}
+        <div className="flex items-center gap-2">
+          <span className="heading-lg-medium text-gray-600">세션 일정</span>
+          <HeaderArrowRight width={24} height={24} />
+          <span className="heading-lg-medium">수정하기</span>
+        </div>
+        {/* 수정 모드 - 초기화/저장하기 버튼 */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleReset}
+            className="body-lg-medium body-sm-medium h-[36px] w-[73px] rounded-[4px] bg-white text-gray-900"
+          >
+            초기화
+          </button>
+          <ManagerButton onClick={handleHeaderButton} styleSize="sm" disabled={saving}>
+            {saving ? '저장중...' : '저장하기'}
+          </ManagerButton>
+        </div>
+      </>
+    ) : (
+      <>
+        {/* 일반 모드 */}
+        <p className="heading-lg-medium">세션 일정</p>
+        <ManagerButton onClick={toggleEdit} styleSize="sm" disabled={false}>
+          수정하기
+        </ManagerButton>
+      </>
+    )
+  }
 
   return (
     <>

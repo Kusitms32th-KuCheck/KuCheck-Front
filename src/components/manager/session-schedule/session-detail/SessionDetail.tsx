@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { SessionDetailResponse } from '@/types/manager/session/type'
 import { postClientSessionDetail } from '@/lib/manager/client/session'
 import { useSessionEdit } from '../session-table/SessionEditContext'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
 import AddHeader from '../add-post/AddHeader'
 import AddBody from '../add-post/AddBody'
 import Image from 'next/image'
@@ -126,7 +127,6 @@ export default function SessionDetail({
         const newSessionDetailId = result.data.sessionDetailId
         setCurrentSessionDetailId(newSessionDetailId)
 
-        // 새로운 sessionDetailId로 페이지 이동 (완전히 새로운 페이지로 이동하여 최신 데이터 로드)
         const currentUrl = new URL(window.location.href)
         const newPath = currentUrl.pathname.replace(/\/\d+/, `/${newSessionDetailId}`)
         const newUrl = `${newPath}${currentUrl.search}`
@@ -177,12 +177,15 @@ export default function SessionDetail({
     )
   }
 
+  const selectedSessionName = useSessionScheduleStore(
+    (state: import('@/store/manager/useSessionScheduleStore').SessionScheduleStore) => state.selectedSessionName
+  )
   // 읽기 모드일 때는 기존 UI를 보여줌
   return (
     <div className="flex w-full justify-center py-8">
       <div className="shadow-middlemodal w-[854px] rounded-[12px] bg-white px-8 py-7">
         <div className="mb-5 flex flex-col gap-1">
-          <p className="heading-sm-semibold">☕ 아이디어 발표 & 커피챗 세션 ☕</p>
+          <p className="heading-sm-semibold">{selectedSessionName || '세션이름없음'}</p>
           <p className="body-sm-medium text-gray-400">09/22 19:23</p>
         </div>
         <div className="mb-6 space-y-2">
