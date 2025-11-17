@@ -31,7 +31,6 @@ export default function WriteHeader() {
         }
       } else {
         console.log('WriteHeader: 저장 실패')
-        alert('저장에 실패했습니다. 내용을 확인해 주세요.')
       }
     } finally {
       setSaving(false)
