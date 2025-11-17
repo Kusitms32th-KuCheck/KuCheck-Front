@@ -34,6 +34,18 @@ export default function SessionAddTable({ weeks, firstDate }: Props) {
 
   useEffect(() => setRows(generated), [generated])
 
+  // 모든 입력값이 채워졌는지 체크해서 window에 상태 저장 및 이벤트 dispatch
+  useEffect(() => {
+    const allFilled =
+      rows.length > 0 &&
+      rows.every((r) => r.name && r.name.trim() !== '' && r.type && r.type !== '선택') &&
+      weeks != null &&
+      weeks > 0 &&
+      firstDate
+    window.__sessionAddAllFilled = allFilled
+    window.dispatchEvent(new Event('sessionAddFilledChange'))
+  }, [rows, weeks, firstDate])
+
   const formatYYYYMMDD = (d: Date) => {
     const yyyy = d.getFullYear()
     const mm = String(d.getMonth() + 1).padStart(2, '0')
@@ -49,7 +61,6 @@ export default function SessionAddTable({ weeks, firstDate }: Props) {
       if (label === '네트워킹') return 'NETWORKING'
       if (label === '밋업프로젝트') return 'MEETUP_PROJECT'
       if (label === '휴회') return 'REST'
-      if (label === '스터디') return 'STUDY'
       if (label === '선택') return 'NONE'
       return label
     }

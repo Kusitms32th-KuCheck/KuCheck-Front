@@ -15,6 +15,20 @@ export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const router = useRouter()
 
+  // 세션 추가 폼/테이블의 입력 상태를 window에서 가져옴
+  const [isAllFilled, setIsAllFilled] = useState(false)
+  useEffect(() => {
+    const checkFilled = () => {
+      // window.__sessionAddAllFilled은 SessionAddTable에서 관리
+      setIsAllFilled(Boolean(window.__sessionAddAllFilled))
+    }
+    window.addEventListener('sessionAddFilledChange', checkFilled)
+    checkFilled()
+    return () => {
+      window.removeEventListener('sessionAddFilledChange', checkFilled)
+    }
+  }, [])
+
   useEffect(() => {
     const handleScroll = () => {
       const mainContent = document.querySelector('main')
@@ -84,7 +98,12 @@ export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean
   const HeaderContent = () => (
     <>
       <p className="heading-lg-medium">세션 일정</p>
-      <ManagerButton onClick={handleHeaderButton} styleSize="sm" disabled={saving}>
+      <ManagerButton
+        onClick={handleHeaderButton}
+        styleSize="sm"
+        disabled={saving || !isAllFilled}
+        className={saving || !isAllFilled ? 'bg-gray-500 text-white' : ''}
+      >
         {saving ? '저장중...' : saveOnly ? '저장하기' : isEditing ? '저장하기' : '수정하기'}
       </ManagerButton>
     </>

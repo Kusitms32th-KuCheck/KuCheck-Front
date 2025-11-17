@@ -46,7 +46,7 @@ export default function SessionTable({
   return (
     <div className="shadow-middlemodal flex flex-col overflow-hidden rounded-[12px] bg-white">
       <div className="align-center flex w-full overflow-x-auto">
-        <div className="min-w-[797px]">
+        <div className={`${showViewButton ? 'min-w-[797px]' : 'max-w-[872px]'}`}>
           {/* 헤더 */}
           <div
             className={`grid ${gridCols} body-lg-semibold items-center gap-0 border-b border-gray-100 py-[14px] pl-[16px] text-gray-500`}
@@ -99,7 +99,7 @@ export default function SessionTable({
                           value={r.type}
                           onChange={(v) => onTypeChange?.(i, v)}
                         />
-                        <div className="flex h-full items-center justify-center border-r border-gray-200">
+                        <div className="flex h-full items-center justify-center border-gray-200">
                           <input
                             type="checkbox"
                             checked={Boolean(r.isHoliday)}
