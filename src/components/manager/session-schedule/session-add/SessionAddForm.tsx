@@ -15,6 +15,7 @@ export default function SessionAddForm({ initialWeeks, initialDate = '', onGener
   const [weeks, setWeeks] = useState<string>(initialWeeks != null ? String(initialWeeks) : '')
   const [firstDate, setFirstDate] = useState<string>(initialDate)
   const [errors, setErrors] = useState<{ weeks?: string; firstDate?: string }>({})
+  const [locked, setLocked] = useState(false)
 
   const validate = () => {
     const e: typeof errors = {}
@@ -28,6 +29,11 @@ export default function SessionAddForm({ initialWeeks, initialDate = '', onGener
   const handleConfirm = () => {
     if (!validate()) return
     onGenerate(Number(weeks), firstDate)
+    setLocked(true)
+  }
+
+  const handleReset = () => {
+    setLocked(false)
   }
 
   return (
@@ -40,6 +46,7 @@ export default function SessionAddForm({ initialWeeks, initialDate = '', onGener
           customClassName="max-w-[295px]"
           value={weeks}
           onChange={(e) => {
+            if (locked) return
             const v = e.target.value
             if (v === '' || /^\d+$/.test(v)) {
               if (errors.weeks) setErrors((prev) => ({ ...prev, weeks: undefined }))
@@ -61,6 +68,7 @@ export default function SessionAddForm({ initialWeeks, initialDate = '', onGener
         <SessionCalendar
           value={firstDate}
           onChange={(d) => {
+            if (locked) return
             setFirstDate(d)
             if (errors.firstDate) setErrors((prev) => ({ ...prev, firstDate: undefined }))
           }}
@@ -69,9 +77,19 @@ export default function SessionAddForm({ initialWeeks, initialDate = '', onGener
       </div>
 
       <div className="px-3 pb-4">
-        <ManagerButton onClick={handleConfirm} styleSize="sm">
-          확인
-        </ManagerButton>
+        {locked ? (
+          <button
+            type="button"
+            onClick={handleReset}
+            className="bg-primary-100 text-primary-500 body-sm-medium rounded-[8px] px-6 py-2"
+          >
+            재설정
+          </button>
+        ) : (
+          <ManagerButton onClick={handleConfirm} styleSize="sm">
+            확인
+          </ManagerButton>
+        )}
       </div>
     </div>
   )

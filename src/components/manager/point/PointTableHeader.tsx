@@ -1,27 +1,39 @@
-import { VisibleDate } from '@/types/manager/point/types'
+import { MonthlyAttendanceResult } from '@/types/manager/point/types'
 import { DropLIcon, DropRIcon } from '@/assets/svgComponents/manager'
+import { computeGridTemplate, computeMinWidth } from '@/utils/manager/computePointTable'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
+import { getOptimalVisibleDates } from '@/utils/manager/sessionDataConverter'
 
 type Props = {
-  visibleDates: VisibleDate[]
   collapsedMonths: Set<string>
   onToggleMonth: (m: string) => void
-  gridTemplate: string
   isScrolled: boolean
   isHorizScrolled?: boolean
-  contentMinWidth: string
   headerScrollRef: React.RefObject<HTMLDivElement | null>
+  monthlyData: Record<number, MonthlyAttendanceResult>
 }
 
 export default function PointTableHeader({
-  visibleDates,
   collapsedMonths,
   onToggleMonth,
-  gridTemplate,
   isScrolled,
   isHorizScrolled,
-  contentMinWidth,
   headerScrollRef,
+  monthlyData,
 }: Props) {
+  const { sessions } = useSessionScheduleStore()
+
+  console.log('헤더에서 받은 세션 데이터:', sessions?.length || 0, '개')
+  console.log('헤더에서 받은 월별 데이터:', Object.keys(monthlyData).length, '개월')
+
+  const visibleDates = getOptimalVisibleDates(sessions, monthlyData, collapsedMonths)
+
+  const gridTemplate = computeGridTemplate(visibleDates)
+  const contentMinWidth = computeMinWidth(gridTemplate)
+
+  console.log('사용할 데이터 타입:', sessions && sessions.length > 0 ? '세션 데이터' : '월별 데이터')
+  console.log('visibleDates:', visibleDates)
+
   return (
     <div
       className={`mx-[24px] mt-[28px] flex overflow-hidden rounded-t-[12px] bg-white ${isScrolled ? 'z-20 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
@@ -43,7 +55,6 @@ export default function PointTableHeader({
             </p>
             <p className="body-lg-medium px-[13px] text-end text-gray-500">상벌점</p>
             <p className="body-lg-medium px-[13px] text-end text-gray-500">파트</p>
-
             {visibleDates.map((item, index) => (
               <div key={index} className="flex items-center justify-end px-[13px]">
                 {item.month ? (
@@ -64,23 +75,13 @@ export default function PointTableHeader({
                 )}
               </div>
             ))}
-            {[
-              '9월 큐픽',
-              '10월 큐픽',
-              '11월 큐픽',
-              'TF',
-              '스터디',
-              '큐포터즈',
-              '운영진',
-              '메모',
-              '전화번호',
-              '학교',
-              '학과',
-            ].map((label, i) => (
-              <p key={label + i} className="body-lg-medium px-[13px] text-end text-gray-500">
-                {label}
-              </p>
-            ))}
+            {['9월 큐픽', '10월 큐픽', '11월 큐픽', 'TF', '큐포터즈', '운영진', '메모', '전화번호', '학교', '학과'].map(
+              (label, i) => (
+                <p key={label + i} className="body-lg-medium px-[13px] text-end text-gray-500">
+                  {label}
+                </p>
+              )
+            )}
           </div>
         </div>
       </div>

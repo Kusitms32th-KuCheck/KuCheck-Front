@@ -22,8 +22,8 @@ export function computeGridTemplate(visibleDates: VisibleDate[]) {
       return '180px'
     })
     .join(' ')
-  // stats columns correspond to: 9월 큐픽, 10월 큐픽, 11월 큐픽, TF, 스터디, 큐포터즈, 운영진, 비고, 전화번호, 학교, 학과
-  const statsColumns = '180px 180px 180px 100px 100px 100px 140px 340px 190px 190px 340px'
+  // stats columns correspond to: 9월 큐픽, 10월 큐픽, 11월 큐픽, TF, 큐포터즈, 운영진, 비고, 전화번호, 학교, 학과
+  const statsColumns = '180px 180px 180px 100px 100px 140px 340px 190px 190px 340px'
   return `${baseColumns} ${dateColumns} ${statsColumns}`
 }
 

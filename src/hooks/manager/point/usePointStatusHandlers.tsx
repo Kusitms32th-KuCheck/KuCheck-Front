@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react'
 import { PointMemberStatus } from '@/types/manager/point/types'
+import { usePointTableStore } from '@/store/manager/usePointTableStore'
 
 type HandlersParams = {
   members: PointMemberStatus[]
@@ -15,6 +16,7 @@ export default function usePointStatusHandlers({
   setModifiedCells,
   setIsManagerModalOpen,
 }: HandlersParams) {
+  const { setPendingAttendanceChange } = usePointTableStore()
   const updateMember = (memberIndex: number, updates: Partial<PointMemberStatus>, cellKey: string) => {
     setMembers((prev) => {
       const next = [...prev]
@@ -22,10 +24,6 @@ export default function usePointStatusHandlers({
       return next
     })
     setModifiedCells((prev) => ({ ...prev, [cellKey]: true }))
-  }
-  const handleStudyChange = (memberIndex: number, value: string) => {
-    const num = value === '' ? 0 : Number(value) || 0
-    updateMember(memberIndex, { studyPoints: num }, `${memberIndex}-study`)
   }
 
   const handleQportersChange = (memberIndex: number, value: string) => {
@@ -42,6 +40,11 @@ export default function usePointStatusHandlers({
   }
 
   const handleStaffChange = (memberIndex: number, checked: boolean) => {
+    console.log(' handleStaffChange:', {
+      memberIndex,
+      checked,
+      currentMember: members[memberIndex],
+    })
     updateMember(memberIndex, { isStaff: checked }, `${memberIndex}-staff`)
   }
 
@@ -50,6 +53,7 @@ export default function usePointStatusHandlers({
     const monthNum = monthMap[monthKey]
     const prev = members[memberIndex].kupickParticipation || { 8: false, 9: false, 10: false, 11: false, 12: false }
     const nextKupick = { ...prev, [monthNum]: checked }
+
     updateMember(memberIndex, { kupickParticipation: nextKupick }, `${memberIndex}-qpick-${monthKey}`)
   }
 
@@ -70,16 +74,44 @@ export default function usePointStatusHandlers({
     setModifiedCells((prev) => ({ ...prev, [`${memberIndex}-${date}`]: true }))
   }
 
+  const handleMonthlyAttendanceChange = (
+    memberIndex: number,
+    attendanceId: number,
+    newStatus: string,
+    date: string
+  ) => {
+    const memberId = members[memberIndex].memberId
+
+    // 월별 출석 변경사항을 pendingAttendanceChanges에 저장
+    const key = `${attendanceId}`
+    setPendingAttendanceChange(key, {
+      attendanceId,
+      memberId,
+      status: newStatus,
+      memberIndex,
+      date,
+    })
+
+    // 수정된 셀 표시를 위한 상태 업데이트
+    setModifiedCells((prev) => ({ ...prev, [`${memberIndex}-attendance-${attendanceId}`]: true }))
+
+    console.log('Monthly attendance change queued for save:', {
+      attendanceId,
+      memberId,
+      status: newStatus,
+    })
+  }
+
   const handleSave = () => setIsManagerModalOpen(true)
 
   return {
-    handleStudyChange,
     handleQportersChange,
     handleNoteChange,
     handleTfChange,
     handleStaffChange,
     handleQpickChange,
     handleSessionChange,
+    handleMonthlyAttendanceChange,
     handleSave,
   }
 }

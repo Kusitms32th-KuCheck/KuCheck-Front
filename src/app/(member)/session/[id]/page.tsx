@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { getSessionNoticeDetail } from '@/lib/member/server/session'
 import { formatDateTime, formatTimeToHHMM, formatToKoreanDate } from '@/utils/common'
 import SessionContent from '@/components/member/session/SessionContent'
+import { Polygon14Icon } from '@/assets/svgComponents/member'
+import SessionCheckGuide from '@/components/member/session/SessionCheckGuide'
 
 interface Props {
   params: Promise<{
@@ -14,15 +16,16 @@ interface Props {
 export default async function SessionDetailPage({ params }: Props) {
   const { id } = await params
   const response = await getSessionNoticeDetail(id)
-
   const sessionData = response.data
 
   return (
     <div className="flex items-center justify-center bg-gray-100">
-      <div className="desktop:w-[375px] bg-background1 min-h-screen w-full">
+      <div className="desktop:w-[375px] bg-background1 relative min-h-screen w-full">
+        {/* 헤더 */}
         <MemberHeader
           headerType="dynamic"
           title={'세션 공지'}
+          bannerElement={<SessionCheckGuide />}
           headerColor={'bg-background1'}
           isBottomBorder={true}
           rightElement={
@@ -31,23 +34,27 @@ export default async function SessionDetailPage({ params }: Props) {
             </Link>
           }
         />
+
+        {/* 헤더 높이 공간 */}
         <div className="h-[116px]" />
+
+        {/* 콘텐츠 */}
         <div className="mt-[12px] px-5 pb-[145px]">
+          {/* 제목 & 날짜 */}
           <section className="flex flex-col gap-y-[3px] pt-[10px] pb-[8px]">
             <p className="heading-sm-semibold">{sessionData?.title}</p>
-            {sessionData?.updatedAt ? (
-              <p className="body-sm-regular text-gray-400">{formatDateTime(sessionData?.updatedAt)}</p>
-            ) : (
-              <p className="body-sm-regular text-gray-400">{formatDateTime(sessionData?.createdAt)}</p>
-            )}
+            <p className="body-sm-regular text-gray-400">
+              {sessionData?.updatedAt ? formatDateTime(sessionData.updatedAt) : formatDateTime(sessionData?.createdAt)}
+            </p>
           </section>
 
+          {/* 장소 & 일시 */}
           <section className="my-[23px] flex flex-col gap-y-[6px]">
-            <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
+            <div className="bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
               <p className="body-sm-medium text-primary-500">장소</p>
               <p className="body-sm-medium">{sessionData?.place}</p>
             </div>
-            <div className="bg- bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
+            <div className="bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
               <p className="body-sm-medium text-primary-500">일시</p>
               <p className="body-sm-medium">
                 {formatToKoreanDate(sessionData?.startDate)} {formatTimeToHHMM(sessionData?.startTime)} -{' '}
@@ -56,15 +63,17 @@ export default async function SessionDetailPage({ params }: Props) {
             </div>
           </section>
 
+          {/* 본문 내용 */}
           <SessionContent content={sessionData?.content} />
 
-          {sessionData?.images ? (
+          {/* 이미지 */}
+          {sessionData?.images && sessionData.images.length > 0 && (
             <section className="flex flex-col gap-y-2">
               {sessionData.images.map((image) => (
-                <div key={image} className="h-[335px] w-full rounded-[16px] bg-gray-100"></div>
+                <div key={image} className="h-[335px] w-full rounded-[16px] bg-gray-100" />
               ))}
             </section>
-          ) : null}
+          )}
         </div>
       </div>
     </div>

@@ -3,15 +3,19 @@ import { apiCallServer } from '@/lib/api.server'
 export async function PATCH(request: Request) {
   try {
     const body = await request.json()
-    const { memberId } = body
+    const { memberId, yearMonth } = body
 
     if (!memberId) {
       return Response.json({ error: 'memberId is required' }, { status: 400 })
     }
 
+    if (!yearMonth) {
+      return Response.json({ error: 'yearMonth is required' }, { status: 400 })
+    }
+
     const { data, error } = await apiCallServer('/v1/points/manage/kupick', {
       method: 'PATCH',
-      body: JSON.stringify({ memberId }),
+      body: JSON.stringify({ memberId, yearMonth }),
     })
 
     if (error) {

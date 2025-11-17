@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useSessionEdit } from '../session-table/SessionEditContext'
 import SessionTable from '../session-table/SessionTable'
 import { getClientSessionSchedule, patchClientSession } from '@/lib/manager/client/session'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
 import type { SessionScheduleResponse } from '@/types/manager/session/type'
 
 type Row = {
@@ -64,9 +65,16 @@ export function mapLabelToCategory(label: string) {
 }
 
 export default function SessionEditTable({ weeks, firstDate }: Props) {
-  const { isEditing, registerSaveHandler } = useSessionEdit()
+  const { isEditing, registerSaveHandler, resetToOriginal } = useSessionEdit()
+  const { setSessions } = useSessionScheduleStore()
   const [rows, setRows] = useState<Row[]>([])
   const [originalRows, setOriginalRows] = useState<Row[]>([]) // 원본 데이터 저장
+  // SessionEditContext에 초기화 함수 등록
+  useEffect(() => {
+    if (resetToOriginal) {
+      resetToOriginal.current = () => setRows([...originalRows])
+    }
+  }, [originalRows, resetToOriginal])
 
   // 행이 변경되었는지 확인하는 함수
   const isRowModified = useCallback((originalRow: Row, currentRow: Row) => {
@@ -81,19 +89,19 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
   const handleSave = useCallback(async () => {
     try {
       console.log('세션 편집 저장 시작:', rows)
-      
+
       // 수정된 세션들만 필터링하여 저장
       const modifiedRows = rows.filter((row) => {
         if (!row.sessionId || !row.name.trim()) return false
-        
+
         const originalRow = originalRows.find((orig) => orig.sessionId === row.sessionId)
         if (!originalRow) return false
-        
+
         return isRowModified(originalRow, row)
       })
 
       console.log('수정된 세션들:', modifiedRows.length, '개')
-      
+
       if (modifiedRows.length === 0) {
         console.log('수정된 세션이 없습니다.')
         return true
@@ -104,7 +112,7 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
         const [month, day] = row.date.split('/')
         const year = new Date().getFullYear() // 현재 연도 사용
         const sessionDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-        
+
         const sessionData = {
           week: parseInt(row.weekLabel.replace('주차', '')), // "1주차" -> 1
           sessionDate: sessionDate,
@@ -112,16 +120,16 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
           category: mapLabelToCategory(row.type),
           isHoliday: row.isHoliday || false,
         }
-        
+
         console.log(`세션 ${row.sessionId} 수정 요청:`, sessionData)
         return patchClientSession(row.sessionId!, sessionData)
       })
 
       const results = await Promise.all(updatePromises)
-      
+
       // 모든 요청이 성공했는지 확인
       const allSuccess = results.every((result) => result.success)
-      
+
       if (allSuccess) {
         console.log('모든 세션 수정 완료')
         return true
@@ -165,6 +173,10 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
       if (cancelled) return
       if (res.success && Array.isArray(res.data)) {
         const data = res.data as SessionScheduleResponse
+
+        // 스토어에 세션 데이터 저장 (날짜 자동 추출됨)
+        setSessions(data)
+
         const mapped: Row[] = data.map((s, idx) => {
           const d = new Date(s.startDate)
           return {
@@ -198,13 +210,28 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
     }
   }, [firstDate, weeks, generated])
 
+  // 각 셀/드롭다운/체크박스가 수정되었는지 체크하는 함수
+  const getCellClass = (idx: number, key: keyof Row) => {
+    const original = originalRows[idx]
+    const current = rows[idx]
+    if (!original || !current) return ''
+    if (key === 'name' && original.name !== current.name) return 'text-blue-500'
+    if (key === 'type' && original.type !== current.type) return 'text-blue-500'
+    if (key === 'isHoliday' && original.isHoliday !== current.isHoliday) return 'text-blue-500'
+    return ''
+  }
+
   return (
-    <div className="flex pt-[30px]">
+    <div className="flex flex-col gap-2 pt-[30px]">
       <SessionTable
         rows={rows}
         mode={isEditing ? 'edit' : 'view'}
         isRowFilled={(idx, row) => (typeof row.filled === 'boolean' ? row.filled : row.name.trim().length > 0)}
         showViewButton
+        // 각 셀에 파란색 표시를 위한 className 전달
+        nameCellClass={(idx) => getCellClass(idx, 'name')}
+        typeCellClass={(idx) => getCellClass(idx, 'type')}
+        holidayCellClass={(idx) => getCellClass(idx, 'isHoliday')}
         onNameChange={(i, v) => setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, name: v } : r)))}
         onTypeChange={(i, v) => setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, type: v } : r)))}
         onHolidayChange={(i, v) => setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, isHoliday: v } : r)))}

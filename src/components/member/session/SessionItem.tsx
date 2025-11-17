@@ -1,7 +1,10 @@
+'use client'
+
 import { formatToMonthDay } from '@/utils/common'
 import { SessionCategoryType, SessionDataType } from '@/types/member/session'
 import { RefObject } from 'react'
 import MemberTag from '@/components/member/common/MemberTag'
+import { useRouter } from 'next/navigation'
 
 interface SessionItemProps extends SessionDataType {
   isCurrent: boolean
@@ -21,6 +24,7 @@ export default function SessionItem({
   title,
   currentSessionRef,
 }: SessionItemProps) {
+  const router = useRouter()
   const switchSessionEnumTypeToContent = (sessionEnum: SessionCategoryType) => {
     const tagConfigs: Record<SessionCategoryType, { className: string; label: string }> = {
       REST: {
@@ -55,7 +59,14 @@ export default function SessionItem({
   }
 
   return (
-    <div className="flex items-center gap-x-[24px]" key={sessionId} ref={isCurrent ? currentSessionRef : null}>
+    <div
+      onClick={() => {
+        router.push(`/session/${sessionId}`)
+      }}
+      className="flex items-center gap-x-[24px]"
+      key={sessionId}
+      ref={isCurrent ? currentSessionRef : null}
+    >
       <div className="relative flex h-[26px] w-[26px] items-center justify-center">
         {isCurrent ? (
           <div className="bg-primary-100 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-full">

@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter, usePathname } from 'next/navigation'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
 import DropDownCell from './DropDownCell'
 import EditableTextCell from './EditableTextCell'
 
@@ -24,6 +25,9 @@ type Props = {
   onTypeChange?: (idx: number, v: string) => void
   onHolidayChange?: (idx: number, v: boolean) => void
   onViewClick?: (idx: number) => void
+  nameCellClass?: (idx: number) => string
+  typeCellClass?: (idx: number) => string
+  holidayCellClass?: (idx: number) => string
 }
 
 export default function SessionTable({
@@ -42,16 +46,17 @@ export default function SessionTable({
   const gridCols = showViewButton
     ? 'grid-cols-[147px_145px_312px_193px_75px_150px]'
     : 'grid-cols-[147px_145px_312px_193px_75px]'
+  const { setSelectedSessionName } = useSessionScheduleStore()
 
   return (
     <div className="shadow-middlemodal flex flex-col overflow-hidden rounded-[12px] bg-white">
       <div className="align-center flex w-full overflow-x-auto">
-        <div className="min-w-[797px]">
+        <div className={`${showViewButton ? 'min-w-[797px]' : 'max-w-[872px]'}`}>
           {/* 헤더 */}
           <div
-            className={`grid ${gridCols} body-lg-semibold items-center gap-0 border-b border-gray-100 py-[14px] text-gray-500`}
+            className={`grid ${gridCols} body-lg-semibold items-center gap-0 border-b border-gray-100 py-[14px] pl-[16px] text-gray-500`}
           >
-            <div className="pl-[34px]">주차</div>
+            <div className="pl-[16px]">주차</div>
             <div>세션 일자</div>
             <div>세션 이름</div>
             <div>세션 종류</div>
@@ -91,7 +96,7 @@ export default function SessionTable({
                           value={r.name}
                           onChange={(v) => onNameChange?.(i, v)}
                           isModified={r.name.trim().length > 0}
-                          className="w-full border-r border-gray-200 px-[20px] py-[14px]"
+                          className="w-full border-r border-gray-200 px-[20px] py-[13px]"
                         />
                         <DropDownCell
                           className="align-center flex h-full border-r border-gray-200"
@@ -99,7 +104,9 @@ export default function SessionTable({
                           value={r.type}
                           onChange={(v) => onTypeChange?.(i, v)}
                         />
-                        <div className="flex items-center justify-center border-r border-gray-200">
+                        <div
+                          className={`flex h-full ${showViewButton ? 'border-r' : ''} items-center justify-center border-gray-200`}
+                        >
                           <input
                             type="checkbox"
                             checked={Boolean(r.isHoliday)}
@@ -127,7 +134,7 @@ export default function SessionTable({
                         {filled ? r.type : '-'}
                       </div>
                       <div
-                        className={`border-r border-gray-200 px-[20px] py-[22px] ${
+                        className={`w-full border-r border-gray-200 py-[22px] text-center ${
                           filled ? 'text-gray-800' : 'text-gray-400'
                         }`}
                       >
@@ -160,7 +167,13 @@ export default function SessionTable({
                         const target = `${baseTarget}?date=${encodeURIComponent(date)}`
                         console.log('SessionTable navigate target:', target, 'sid:', sid, 'date:', date)
                         return (
-                          <button onClick={() => router.push(target)} className={inputClass}>
+                          <button
+                            onClick={() => {
+                              setSelectedSessionName(r.name)
+                              router.push(target)
+                            }}
+                            className={inputClass}
+                          >
                             세션 정보 입력
                           </button>
                         )
@@ -170,6 +183,7 @@ export default function SessionTable({
                         <button
                           onClick={() => {
                             if (hasDetail) {
+                              setSelectedSessionName(r.name)
                               const sessionId = (r as Row & { sessionId?: number }).sessionId
                               const sessionDetailId = r.sessionDetailId
                               console.log(

@@ -1,7 +1,7 @@
 'use client'
 
 type InputFieldProps = {
-  label: string
+  label: React.ReactNode
   placeholder?: string
   children?: React.ReactNode
 }

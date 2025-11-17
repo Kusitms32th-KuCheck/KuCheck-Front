@@ -9,14 +9,13 @@ export const monthGroups: Record<string, string[]> = {
 export const allDates = Object.values(monthGroups).flat()
 
 export const ATTENDANCE_OPTIONS = [
-  { label: '출석(0)', value: '출석 (-0)' },
-  { label: '결석(인정)', value: '결석(인정)' },
-  { label: '결석(사유 -1)', value: '결석(사유 -1)' },
-  { label: '결석(무단 -2)', value: '결석(무단 -2)' },
-  { label: '결석(미제출 -3)', value: '결석(미제출 -3)' },
-  { label: '지각(-1)', value: '지각 (-1)' },
-  { label: '조퇴(-1)', value: '조퇴(-1)' },
-  { label: '출석(1)', value: '출석 (1)' },
+  { label: '출석(0)', value: 'PRESENT' },
+  { label: '결석(인정)', value: 'PRESENT_HOLIDAY' },
+  { label: '결석(사유 -1)', value: 'ABSENT_WITH_DOC' },
+  { label: '결석(무단 -2)', value: 'ABSENT_WITHOUT_DOC' },
+  { label: '결석(미제출 -3)', value: 'ABSENT_NO_SUBMISSION' },
+  { label: '지각(-1)', value: 'LATE' },
+  { label: '조퇴(-1)', value: 'EARLY_LEAVE' },
 ]
 
 // 그리드 레이아웃 설정
