@@ -5,6 +5,7 @@ import Dropdown from '../../common/ManagerdropDown'
 import { PointupIcon, PointdownIcon } from '@/assets/svgComponents/manager'
 import InputField from './InputField'
 import ImageUpload from './ImageUpload'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
 
 type SessionHeaderProps = {
   place: string
@@ -16,6 +17,7 @@ type SessionHeaderProps = {
   date?: string | null
   files: File[]
   setFiles: (files: File[] | ((prev: File[]) => File[])) => void
+  error?: boolean
 }
 
 export default function SessionHeader({
@@ -28,6 +30,7 @@ export default function SessionHeader({
   date,
   files,
   setFiles,
+  error = false,
 }: SessionHeaderProps) {
   const hourOptions = Array.from({ length: 6 }, (_, i) => ({
     label: String(11 + i).padStart(2, '0'),
@@ -50,7 +53,7 @@ export default function SessionHeader({
     const endHourMinute = parseTime(endTime || '')
     return [startHourMinute[0], endHourMinute[0]]
   })
-  
+
   const [selectedMinutes, setSelectedMinutes] = useState<string[]>(() => {
     const startHourMinute = parseTime(startTime || '')
     const endHourMinute = parseTime(endTime || '')
@@ -74,17 +77,35 @@ export default function SessionHeader({
     if (selectedHours[1] && selectedMinutes[1]) setEndTime(e)
   }, [selectedHours, selectedMinutes, setStartTime, setEndTime])
 
+  // error prop으로 상태 제어
+
+  const selectedSessionName = useSessionScheduleStore(
+    (state: import('@/store/manager/useSessionScheduleStore').SessionScheduleStore) => state.selectedSessionName
+  )
   return (
     <div className="space-y-6">
-      <InputField label="장소" placeholder="세션 장소를 입력해 주세요">
+      <p className="heading-lg-medium">{selectedSessionName || '세션이름없음'}</p>
+      <InputField
+        label={<span>장소 {error && !place && <span className="text-sub-red ml-2">필수 항목입니다</span>}</span>}
+        placeholder="세션 장소를 입력해 주세요"
+      >
         <input
-          className="body-lg-medium h-[40px] w-full rounded-[8px] border border-gray-300 px-3 text-gray-900"
+          className={`body-lg-medium focus:border-primary-500 h-[40px] w-full rounded-[8px] border px-3 text-gray-900 focus:ring-[0.5] focus:outline-none ${error && !place ? 'border-sub-red' : 'border-gray-300'}`}
           value={place}
           onChange={(e) => setPlace(e.target.value)}
         />
       </InputField>
 
-      <InputField label="일시">
+      <InputField
+        label={
+          <span>
+            일시{' '}
+            {error && (!selectedHours[0] || !selectedMinutes[0] || !selectedHours[1] || !selectedMinutes[1]) && (
+              <span className="text-sub-red ml-2">필수 항목입니다</span>
+            )}
+          </span>
+        }
+      >
         <div className="flex items-center">
           <div className="body-lg-medium bg-background1 mr-[21px] flex h-[40px] items-center rounded-[8px] border border-gray-300 px-3 text-gray-500">
             {date}
@@ -92,7 +113,7 @@ export default function SessionHeader({
           {['시작', '종료'].map((t, idx) => (
             <div key={t} className="flex items-center">
               {idx === 1 && <span>~</span>}
-              <div className="mx-2">
+              <div className={`mx-2 ${error && !selectedHours[idx] ? 'border-sub-red rounded-[8px] border' : ''}`}>
                 <Dropdown
                   size="add"
                   options={hourOptions}
@@ -107,7 +128,7 @@ export default function SessionHeader({
                 />
               </div>
               <span>:</span>
-              <div className="mx-2">
+              <div className={`mx-2 ${error && !selectedMinutes[idx] ? 'border-sub-red rounded-[8px] border' : ''}`}>
                 <Dropdown
                   size="add"
                   options={minuteOptions}

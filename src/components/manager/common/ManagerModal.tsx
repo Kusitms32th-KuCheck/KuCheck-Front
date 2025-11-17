@@ -12,6 +12,7 @@ type ManagerModalProps = {
   transientDuration?: number
   onTransientClose?: () => void
   confirmLabel?: string
+  cancelLabel?: string
 }
 
 export default function ManagerModal({
@@ -24,6 +25,7 @@ export default function ManagerModal({
   transientDuration = 10000,
   onTransientClose,
   confirmLabel = '저장',
+  cancelLabel = '취소',
 }: ManagerModalProps) {
   const [transientVisible, setTransientVisible] = useState(false)
 
@@ -58,16 +60,16 @@ export default function ManagerModal({
             <div className="heading-sm-medium flex w-full items-center justify-center text-gray-700">{message}</div>
             <div className="flex gap-x-2">
               <button
-                onClick={onCancel}
+                onClick={onConfirm}
                 className="body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] bg-gray-100 text-gray-600"
               >
-                취소
+                {confirmLabel}
               </button>
               <button
-                onClick={onConfirm}
+                onClick={onCancel}
                 className="bg-primary-500 body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] text-white"
               >
-                {confirmLabel}
+                {cancelLabel}
               </button>
             </div>
           </>

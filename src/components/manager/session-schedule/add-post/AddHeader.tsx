@@ -12,12 +12,13 @@ type AddHeaderProps = {
   date?: string | null
   files?: File[]
   setFiles?: (files: File[] | ((prev: File[]) => File[])) => void
+  error?: boolean
 }
 
 export default function AddHeader({ files = [], setFiles = () => {}, ...props }: AddHeaderProps) {
   return (
     <div className="w-full space-y-6 rounded-2xl bg-white px-6 pt-6">
-      <SessionHeader {...props} files={files} setFiles={setFiles} />
+      <SessionHeader {...props} files={files} setFiles={setFiles} error={props.error} />
     </div>
   )
 }

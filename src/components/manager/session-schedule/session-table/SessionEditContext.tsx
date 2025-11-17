@@ -8,6 +8,7 @@ type SessionEditContextValue = {
   toggleEdit: () => void
   registerSaveHandler: (fn: () => Promise<boolean>) => () => void
   runSaveHandlers: () => Promise<boolean>
+  resetToOriginal: React.MutableRefObject<(() => void) | null>
 }
 
 const SessionEditContext = createContext<SessionEditContextValue | undefined>(undefined)
@@ -37,9 +38,10 @@ export function SessionEditProvider({ children }: { children: React.ReactNode })
     return true
   }
 
+  const resetToOriginal = React.useRef<(() => void) | null>(null)
   return (
     <SessionEditContext.Provider
-      value={{ isEditing, setEditing: setIsEditing, toggleEdit, registerSaveHandler, runSaveHandlers }}
+      value={{ isEditing, setEditing: setIsEditing, toggleEdit, registerSaveHandler, runSaveHandlers, resetToOriginal }}
     >
       {children}
     </SessionEditContext.Provider>

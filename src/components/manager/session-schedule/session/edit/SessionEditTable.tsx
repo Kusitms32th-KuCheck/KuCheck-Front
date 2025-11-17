@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useSessionEdit } from '../session-table/SessionEditContext'
-import SessionTable from '../session-table/SessionTable'
+import SessionTable from '../../session-table/SessionTable'
 import { getClientSessionSchedule, patchClientSession } from '@/lib/manager/client/session'
 import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
 import type { SessionScheduleResponse } from '@/types/manager/session/type'
@@ -65,16 +65,10 @@ export function mapLabelToCategory(label: string) {
 }
 
 export default function SessionEditTable({ weeks, firstDate }: Props) {
-  const { isEditing, registerSaveHandler, resetToOriginal } = useSessionEdit()
+  const { isEditing, registerSaveHandler, registerResetHandler } = useSessionEdit()
   const { setSessions } = useSessionScheduleStore()
   const [rows, setRows] = useState<Row[]>([])
   const [originalRows, setOriginalRows] = useState<Row[]>([]) // 원본 데이터 저장
-  // SessionEditContext에 초기화 함수 등록
-  useEffect(() => {
-    if (resetToOriginal) {
-      resetToOriginal.current = () => setRows([...originalRows])
-    }
-  }, [originalRows, resetToOriginal])
 
   // 행이 변경되었는지 확인하는 함수
   const isRowModified = useCallback((originalRow: Row, currentRow: Row) => {
@@ -143,13 +137,22 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
     }
   }, [rows, originalRows, isRowModified])
 
+  // 초기화 핸들러
+  const handleReset = useCallback(() => {
+    setRows([...originalRows])
+  }, [originalRows])
+
   // 저장 핸들러 등록
   useEffect(() => {
     if (isEditing) {
-      const unregister = registerSaveHandler(handleSave)
-      return unregister
+      const unregisterSave = registerSaveHandler(handleSave)
+      const unregisterReset = registerResetHandler?.(handleReset)
+      return () => {
+        unregisterSave?.()
+        unregisterReset?.()
+      }
     }
-  }, [isEditing, registerSaveHandler, handleSave])
+  }, [isEditing, registerSaveHandler, handleSave, registerResetHandler, handleReset])
 
   const generated = useMemo(() => {
     if (!firstDate || weeks == null || weeks <= 0) return []
@@ -228,7 +231,6 @@ export default function SessionEditTable({ weeks, firstDate }: Props) {
         mode={isEditing ? 'edit' : 'view'}
         isRowFilled={(idx, row) => (typeof row.filled === 'boolean' ? row.filled : row.name.trim().length > 0)}
         showViewButton
-        // 각 셀에 파란색 표시를 위한 className 전달
         nameCellClass={(idx) => getCellClass(idx, 'name')}
         typeCellClass={(idx) => getCellClass(idx, 'type')}
         holidayCellClass={(idx) => getCellClass(idx, 'isHoliday')}

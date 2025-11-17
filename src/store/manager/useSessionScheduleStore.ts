@@ -1,14 +1,16 @@
 import { create } from 'zustand'
 import { SessionScheduleData } from '@/types/manager/session/type'
 
-interface SessionScheduleStore {
+export interface SessionScheduleStore {
   sessions: SessionScheduleData[]
   sessionDates: Record<number, number[]> // 월별 세션 날짜들 { 11: [13, 20, 27], 12: [4, 11] }
+  selectedSessionName: string
 
   // 액션들
   setSessions: (sessions: SessionScheduleData[]) => void
   setSessionDates: (sessionDates: Record<number, number[]>) => void
   clearSessions: () => void
+  setSelectedSessionName: (name: string) => void
 
   // 헬퍼 함수들
   getSessionDatesByMonth: (month: number) => number[]
@@ -18,6 +20,7 @@ interface SessionScheduleStore {
 export const useSessionScheduleStore = create<SessionScheduleStore>((set, get) => ({
   sessions: [],
   sessionDates: {},
+  selectedSessionName: '',
 
   setSessions: (sessions) => {
     // 세션 데이터에서 월별 날짜 추출
@@ -47,7 +50,9 @@ export const useSessionScheduleStore = create<SessionScheduleStore>((set, get) =
 
   setSessionDates: (sessionDates) => set({ sessionDates }),
 
-  clearSessions: () => set({ sessions: [], sessionDates: {} }),
+  setSelectedSessionName: (name) => set({ selectedSessionName: name }),
+
+  clearSessions: () => set({ sessions: [], sessionDates: {}, selectedSessionName: '' }),
 
   getSessionDatesByMonth: (month) => {
     const state = get()

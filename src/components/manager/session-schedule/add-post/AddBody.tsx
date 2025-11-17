@@ -35,9 +35,10 @@ const BUTTONS: Button[] = [
 type AddBodyProps = {
   content: string
   setContent: (v: string) => void
+  error?: boolean
 }
 
-export default function AddBody({ content, setContent }: AddBodyProps) {
+export default function AddBody({ content, setContent, error }: AddBodyProps) {
   const [isEmpty, setIsEmpty] = useState(true)
 
   const editor = useEditor({
@@ -103,7 +104,7 @@ export default function AddBody({ content, setContent }: AddBodyProps) {
 
   return (
     <div className="mt-6 w-full pb-6">
-      <div className="mb-6 min-h-[778px] rounded-2xl bg-white">
+      <div className={`mb-6 min-h-[778px] rounded-2xl bg-white ${error && isEmpty ? 'border-sub-red border' : ''}`}>
         <div className="flex border-b">
           {BUTTONS.map((b) => {
             const Icon = b.icon
@@ -137,6 +138,7 @@ export default function AddBody({ content, setContent }: AddBodyProps) {
       <style jsx global>{`
         .tiptap-content {
           line-height: 1.5;
+          width: 100%;
           max-width: 100%;
           min-height: 500px;
           border: none !important;
@@ -144,6 +146,41 @@ export default function AddBody({ content, setContent }: AddBodyProps) {
         }
         .tiptap-content .ProseMirror {
           outline: none !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
+        .tiptap-content h1 {
+          font-size: 1.75rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+        }
+        .tiptap-content h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+        .tiptap-content h3 {
+          font-size: 1.25rem;
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+        }
+        .tiptap-content p {
+          margin-bottom: 0.5rem;
+        }
+        .tiptap-content ul {
+          list-style-type: disc;
+          margin-left: 1.25rem;
+          margin-bottom: 0.5rem;
+        }
+        .tiptap-content ol {
+          list-style-type: decimal;
+          margin-left: 1.25rem;
+          margin-bottom: 0.5rem;
+        }
+        .tiptap-content a {
+          color: #2563eb;
+          text-decoration: underline;
+          cursor: pointer;
         }
       `}</style>
     </div>

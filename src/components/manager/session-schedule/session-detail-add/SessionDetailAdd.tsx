@@ -19,6 +19,7 @@ export default function SessionDetailAdd() {
   const [files, setFiles] = useState<File[]>([])
   const [isImageProcessing, setIsImageProcessing] = useState(false)
   const [imageProcessingError, setImageProcessingError] = useState<string | null>(null)
+  const [error, setError] = useState(false)
 
   // 파일이 변경될 때마다 에러 상태 초기화
   const handleFilesChange = (newFiles: File[] | ((prev: File[]) => File[])) => {
@@ -33,9 +34,11 @@ export default function SessionDetailAdd() {
       return false
     }
     if (!place || !startTime || !endTime || !content) {
-      console.log('모든 항목을 입력해주세요.')
-      alert('장소, 시작시간, 종료시간, 내용을 모두 입력해주세요.')
+      setError(true)
+
       return false
+    } else {
+      setError(false)
     }
 
     // 이미지 처리 중이면 저장 방지
@@ -223,7 +226,6 @@ export default function SessionDetailAdd() {
   return (
     <div className="mt-6 mb-6 w-[854px] space-y-6">
       <AddHeader
-        type="session"
         place={place}
         setPlace={setPlace}
         setStartTime={setStartTime}
@@ -231,8 +233,9 @@ export default function SessionDetailAdd() {
         date={date}
         files={files}
         setFiles={handleFilesChange}
+        error={error}
       />
-      <AddBody content={content} setContent={setContent} />
+      <AddBody content={content} setContent={setContent} error={error} />
     </div>
   )
 }
