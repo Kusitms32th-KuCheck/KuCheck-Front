@@ -1,5 +1,5 @@
 import { apiCallServer } from '@/lib/api.server'
-import { ApiCallResult, ApiResponse } from '@/types/common'
+import { ApiCallResult } from '@/types/common'
 import { SessionDataType, SessionDetailType, ThisWeekSessionDataType } from '@/types/member/session'
 
 /**
