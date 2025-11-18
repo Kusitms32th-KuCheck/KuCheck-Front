@@ -1,4 +1,4 @@
-import { AttendanceCheckRecordType, AttendanceEnumType } from '@/types/member/attendance'
+import { AttendanceCheckRecordType } from '@/types/member/attendance'
 import { switchAttendanceTypeToKor } from '@/utils/member/attendance'
 
 interface AttendanceItemProps {
