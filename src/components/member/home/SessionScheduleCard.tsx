@@ -30,7 +30,7 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
       onClick={handleCardClick}
       role="button"
       tabIndex={0}
-      className="flex w-full cursor-pointer flex-col justify-between gap-y-[29px] rounded-[16px] bg-white pt-[17px] pr-[10px] pb-[10px] pl-5 shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]"
+      className="flex w-full cursor-pointer flex-col justify-between rounded-[16px] bg-white pt-[17px] pr-[10px] pb-[10px] pl-5 shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]"
       onKeyDown={(e) => e.key === 'Enter' && handleCardClick()}
     >
       <div className="flex items-start justify-between">
@@ -38,32 +38,31 @@ export default function SessionScheduleCard({ sessionData }: SessionScheduleCard
           <p className="body-lg-semibold">이번주 세션</p>
         </div>
 
-        <Link href="/session" className="ml-2 flex-shrink-0">
-          <ChevronRightGray600Icon width={24} height={24} />
-        </Link>
+        <ChevronRightGray600Icon width={24} height={24} />
       </div>
 
-      <div className="flex flex-col gap-y-[9px]">
+      <div className="flex flex-col">
         {sessionData?.title ? (
           <p className="body-sm-medium line-clamp-2">{sessionData.title}</p>
         ) : (
-          <Skeleton width={120} height={30} />
+          // <p className="body-sm-medium line-clamp-2">호앵앵</p>
+          <Skeleton width={120} height={20} />
         )}
-        <div className="flex flex-col gap-y-[1px] pl-[1px]">
+        <div className="flex flex-col pl-[1px]">
           {sessionData?.place ? (
-            <p className="caption-sm-medium line-clamp-1 text-gray-500">{sessionData.place}</p>
+            <p className="caption-sm-medium mt-[9px] line-clamp-1 text-gray-500">{sessionData.place}</p>
           ) : (
-            // <Skeleton width={120} height={16} />
-            <p className="caption-sm-medium line-clamp-1 text-gray-500">마루 180 이벤트 홀</p>
+            <Skeleton width={120} height={16} />
+            // <p className="caption-sm-medium mt-[9px] line-clamp-1 text-gray-500">마루 180 이벤트 홀</p>
           )}
 
           {sessionData?.startTime && sessionData?.endTime ? (
-            <p className="caption-sm-medium text-gray-500">
+            <p className="caption-sm-medium mt-[1px] text-gray-500">
               {removeSeconds(sessionData.startTime)}~{removeSeconds(sessionData.endTime)}
             </p>
           ) : (
-            <p className="caption-sm-medium line-clamp-1 text-gray-500">13:00~17:00</p>
-            // <Skeleton width={80} height={16} />
+            // <p className="caption-sm-medium line-clamp-1 text-gray-500">13:00~17:00</p>
+            <Skeleton width={80} height={16} />
           )}
         </div>
       </div>
