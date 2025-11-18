@@ -4,8 +4,6 @@ import Link from 'next/link'
 import { getSessionNoticeDetail } from '@/lib/member/server/session'
 import { formatDateTime, formatTimeToHHMM, formatToKoreanDate } from '@/utils/common'
 import SessionContent from '@/components/member/session/SessionContent'
-import { Polygon14Icon } from '@/assets/svgComponents/member'
-import SessionCheckGuide from '@/components/member/session/SessionCheckGuide'
 
 interface Props {
   params: Promise<{
@@ -25,7 +23,6 @@ export default async function SessionDetailPage({ params }: Props) {
         <MemberHeader
           headerType="dynamic"
           title={'세션 공지'}
-          bannerElement={<SessionCheckGuide />}
           headerColor={'bg-background1'}
           isBottomBorder={true}
           rightElement={
