@@ -52,7 +52,38 @@ export const getClientCategory = async (): Promise<ApiCallResult<NoticeCategory[
 
     const data = await response.json()
     console.log('API 성공 응답:', data)
-    // API 응답이 { data: Array } 형태일 때 data.data 반환
+    return { success: true, data: data.data }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//파일, 이미지 업로드
+export const postClientNoticeFile = async (
+  filename: string,
+  fileType: 'FILE' | 'IMAGE'
+): Promise<ApiCallResult<{ presignedUrl: string; fileId: number }>> => {
+  try {
+    const response = await fetch(`/api/notice/files?filename=${filename}&fileType=${fileType}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+
+    const data = await response.json()
+    console.log('API 성공 응답:', data)
     return { success: true, data: data.data }
   } catch (error) {
     console.error('Fetch 에러:', error)

@@ -6,6 +6,7 @@ import PostHeader from './PostHeader'
 import { postClientNoticeManage, getClientCategory } from '@/lib/manager/client/notice'
 import NoticeAddHeader from './NoticeAddHeader'
 import { NoticeCategory } from '@/types/manager/notice/type'
+import { postClientNoticeFile } from '@/lib/manager/client/notice'
 
 export default function NoticeAdd() {
   const [title, setTitle] = useState('')
@@ -27,11 +28,34 @@ export default function NoticeAdd() {
     fetchCategories()
   }, [])
 
+  const uploadFilesAndGetIds = async (files: File[]): Promise<number[]> => {
+    const fileIds: number[] = []
+
+    // pdf 확장자만 필터링
+    const pdfFiles = files.filter((file) => file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))
+
+    await Promise.all(
+      pdfFiles.map(async (file) => {
+        const fileType: 'FILE' | 'IMAGE' = 'FILE'
+        const res = await postClientNoticeFile(file.name, fileType)
+        if (res.success && res.data) {
+          fileIds.push(res.data.fileId)
+        } else {
+          console.error('파일 업로드 실패:', file.name)
+        }
+      })
+    )
+
+    return fileIds
+  }
+
   const handleSubmit = async () => {
+    const uploadedFileIds = await uploadFilesAndGetIds(files)
     const response = await postClientNoticeManage({
       title,
       categoryIds: category,
       content,
+      fileIds: uploadedFileIds,
     })
     if (response.success) {
       console.log('✅ Notice created successfully:', response.data)
