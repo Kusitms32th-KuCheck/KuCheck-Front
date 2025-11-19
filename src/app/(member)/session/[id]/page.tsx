@@ -1,6 +1,4 @@
 import MemberHeader from '@/components/member/common/MemberHeader'
-import { CalendarIcon } from '@/assets/svgComponents'
-import Link from 'next/link'
 import { getSessionNoticeDetail } from '@/lib/member/server/session'
 import { formatDateTime, formatTimeToHHMM, formatToKoreanDate } from '@/utils/common'
 import SessionContent from '@/components/member/session/SessionContent'
@@ -20,17 +18,7 @@ export default async function SessionDetailPage({ params }: Props) {
     <div className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] bg-background1 relative min-h-screen w-full">
         {/* 헤더 */}
-        <MemberHeader
-          headerType="dynamic"
-          title={'세션 공지'}
-          headerColor={'bg-background1'}
-          isBottomBorder={true}
-          rightElement={
-            <Link href={'/session'} className="absolute right-5">
-              <CalendarIcon width={20} height={22} />
-            </Link>
-          }
-        />
+        <MemberHeader headerType="dynamic" title={'세션 공지'} headerColor={'bg-background1'} isBottomBorder={true} />
 
         {/* 헤더 높이 공간 */}
         <div className="h-[116px]" />

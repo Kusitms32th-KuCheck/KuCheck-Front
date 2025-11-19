@@ -32,3 +32,36 @@ export const getNotice = async (
     }
   }
 }
+
+
+export const getNoticeSearch = async (
+  page: number,
+  size: number,
+  keyword: string
+): Promise<ApiCallResult<ApiCallResult<PaginationResultType<NoticeType[]>>>> => {
+  try {
+    const response = await fetch(
+      `/api/notice/search?page=${page}&size=${size}&keyword=${keyword}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // 쿠키 자동 포함 (httpOnly)
+      }
+    )
+
+    if (!response.ok) {
+      const error = await response.json()
+      return { success: false, error: error.error || 'Failed to submit' }
+    }
+
+    const data = await response.json()
+    return { success: true, data }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}

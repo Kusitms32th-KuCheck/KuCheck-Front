@@ -25,7 +25,6 @@ export default async function NoticePage() {
       <div className="h-[120px]" />
       <div className="flex flex-1 flex-col px-5">
         <NoticeCategories noticeCategories={noticeCategories} />
-
         <NoticeList />
       </div>
     </main>

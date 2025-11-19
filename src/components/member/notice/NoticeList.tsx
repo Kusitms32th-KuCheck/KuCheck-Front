@@ -74,7 +74,7 @@ export default function NoticeList() {
 
   const allNoticeData = data?.pages.flatMap((page) => page?.data?.data ?? []) ?? []
   return (
-    <section className="flex w-full flex-1 flex-col gap-y-[24px]">
+    <section className="flex w-full flex-1 flex-col mt-[28px]">
       {allNoticeData.length === 0 ? (
         <div className="flex flex-1 items-center justify-center">
           <p className="body-lg-medium text-gray-500">아직 작성된 공지사항이 없어요</p>

@@ -10,11 +10,10 @@ export type NoticeCategoryColorType =
   | 'GREEN'
   | 'TEAL'
   | 'BLUE'
-  | 'INDIGO'
+  | 'LIGHT_GREEN'
   | 'PURPLE'
   | 'PINK'
   | 'BROWN'
-  | 'GRAY'
 
 export type NoticeType = {
   id?: number
@@ -32,5 +31,7 @@ export type NoticeType = {
 export interface NoticeImageType {
   id: number
   url: string
+  size: number
 }
+
 export type NoticeStatusType = 'SCHEDULED' | 'DRAFT' | 'PUBLISHED'

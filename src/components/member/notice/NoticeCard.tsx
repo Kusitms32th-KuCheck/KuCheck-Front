@@ -5,8 +5,18 @@ import { useRouter } from 'next/navigation'
 import MemberTag from '@/components/member/common/MemberTag'
 import Image from 'next/image'
 import { NoticeCategoryColorType, NoticeType } from '@/types/member/notice'
+
+import DOMPurify from 'isomorphic-dompurify'
+
 export default function NoticeCard({ id, title, content, categories, createdAt, imageUrls }: NoticeType) {
   const router = useRouter()
+
+  if (!content) return null
+
+  const sanitizedContent = DOMPurify.sanitize(content, {
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a'],
+    ALLOWED_ATTR: ['href', 'target', 'rel'],
+  })
 
   const getCategoryColor = (color: NoticeCategoryColorType) => {
     switch (color) {
@@ -28,6 +38,9 @@ export default function NoticeCard({ id, title, content, categories, createdAt, 
         return 'bg-[#FEE5FE] text-[#F45AD5]'
       case 'ORANGE':
         return 'bg-[#FFF4EE] text-[#FF9C49]'
+      case 'LIGHT_GREEN':
+        return 'bg-[#F8FFE6] text-[#29A051]'
+
     }
   }
 
@@ -38,11 +51,11 @@ export default function NoticeCard({ id, title, content, categories, createdAt, 
       }}
       className="flex w-full cursor-pointer items-end gap-x-[15px] border-b border-gray-200 py-[20px]"
     >
-      <section className="flex flex-col">
+      <section className="flex w-full flex-col">
         <div className="flex flex-col gap-y-[18px]">
           <div className="flex flex-col gap-y-[10px]">
             <section className="flex gap-x-2">
-              {categories.map((category) => {
+              {categories?.map((category) => {
                 return (
                   <div key={category.color}>
                     <MemberTag customClassName={getCategoryColor(category.color)} status={'default'} type={'category'}>
@@ -55,7 +68,10 @@ export default function NoticeCard({ id, title, content, categories, createdAt, 
 
             <div className="flex flex-col gap-y-[6px]">
               <p className="body-lg-medium">{title}</p>
-              <p className="body-sm-regular line-clamp-2">{content}</p>
+              <div
+                className="body-sm-regular [&_a]:text-primary-500 line-clamp-2 [&_a]:cursor-pointer [&_a]:hover:opacity-80"
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+              ></div>
             </div>
           </div>
 
@@ -69,7 +85,8 @@ export default function NoticeCard({ id, title, content, categories, createdAt, 
             <div className="absolute right-[7px] bottom-1 z-10 flex h-[14px] w-[14px] items-center justify-center rounded-[3px] bg-[#3A4047] text-white">
               <p className="font-pretendard text-[8px] font-medium text-white">{imageUrls.length}</p>
             </div>
-            <div className="absolute right-1 bottom-[7px] h-[14px] w-[14px] rounded-[3px] bg-[#BDBDBD]" />
+            {imageUrls.length === 1 ? null :
+              <div className="absolute right-1 bottom-[7px] h-[14px] w-[14px] rounded-[3px] bg-[#BDBDBD]" />}
           </>
         </div>
       ) : null}
