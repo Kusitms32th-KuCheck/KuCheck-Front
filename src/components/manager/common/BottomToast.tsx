@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react'
 interface BottomToastProps {
   message: string
   duration?: number
+  className?: string // 추가: 커스텀 클래스
 }
 
-export default function BottomToast({ message, duration = 3000 }: BottomToastProps) {
+export default function BottomToast({ message, duration = 3000, className = '' }: BottomToastProps) {
   const [visible, setVisible] = useState(false)
   const [shouldRender, setShouldRender] = useState(false)
 
@@ -26,9 +27,12 @@ export default function BottomToast({ message, duration = 3000 }: BottomToastPro
   if (!shouldRender) return null
 
   return (
-    <div aria-live="polite" className="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
+    <div
+      aria-live="polite"
+      className={`pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 ${className}`}
+    >
       <div
-        className={`w-[420px] rounded-full bg-gray-800 px-[16px] py-3 text-white shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-opacity duration-400 ease-in-out ${
+        className={`w-fit rounded-full bg-gray-800 px-[16px] py-3 text-white shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-opacity duration-400 ease-in-out ${
           visible ? 'opacity-100' : 'opacity-0'
         }`}
       >

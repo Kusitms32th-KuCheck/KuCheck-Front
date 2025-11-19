@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import clsx from 'clsx'
 import { DownIcon, UpIcon } from '@/assets/svgComponents/manager'
+import { getClientAvailableCategoryColors } from '@/lib/manager/client/notice'
 
 interface DropdownOption {
   label: string
@@ -13,6 +14,7 @@ interface ColorSelectDropdownProps {
   options: DropdownOption[]
   selected: string
   onChange: (value: string) => void
+  refreshTrigger?: number
   placeholder?: string
 }
 
@@ -24,9 +26,27 @@ export default function ColorSelectDropdown({
 }: ColorSelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const [availableColors, setAvailableColors] = useState<string[]>([])
 
-  const availableOptions = options.filter((opt) => opt.value !== selected && opt.value !== '')
-  const selectedOption = options.find((opt) => opt.value === selected)
+  useEffect(() => {
+    // 사용 가능한 컬러 API 연동 -> 타입에러보기
+    getClientAvailableCategoryColors().then((res) => {
+      if (res.success && res.data && Array.isArray(res.data.colors)) {
+        setAvailableColors(res.data.colors)
+      } else if (res.success && Array.isArray(res.data)) {
+        setAvailableColors(res.data)
+      } else {
+        setAvailableColors([])
+      }
+    })
+  }, [])
+
+  // 옵션 중 사용 가능한 컬러만 필터링
+  const filteredOptions = options.filter(
+    (opt) => (Array.isArray(availableColors) && availableColors.includes(opt.value)) || opt.value === selected
+  )
+  const availableOptions = filteredOptions.filter((opt) => opt.value !== selected && opt.value !== '')
+  const selectedOption = filteredOptions.find((opt) => opt.value === selected)
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

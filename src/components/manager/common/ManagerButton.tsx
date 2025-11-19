@@ -6,20 +6,24 @@ const variantStyles = {
     disabled: 'bg-gray-100 text-gray-500 cursor-not-allowed',
   },
   gray: {
-    default: '',
+    default: 'bg-background2 text-black',
+    disabled: '',
+  },
+  white: {
+    default: 'bg-white text-black',
     disabled: '',
   },
 }
 const sizeStyles = {
   lg: '',
-  md: 'body-2xl-semibold h-[52px] rounded-[12px]',
-  sm: 'body-sm-medium h-[36px] rounded-[4px]',
+  md: 'body-2xl-semibold h-[52px] rounded-[12px] ',
+  sm: 'body-sm-medium h-[36px] rounded-[4px] min-w-[73px]',
 }
 
 export interface ManagerButtonProps {
   children: ReactNode
   onClick: () => void
-  styleType?: 'primary' | 'gray'
+  styleType?: 'primary' | 'gray' | 'white'
   styleStatus?: 'default' | 'disabled'
   styleSize?: 'lg' | 'md' | 'sm'
   customClassName?: string
