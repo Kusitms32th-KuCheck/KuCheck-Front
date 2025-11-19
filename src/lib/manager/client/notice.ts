@@ -71,6 +71,33 @@ export const putClientNoticeManage = async (
   }
 }
 
+//공지 삭제
+export const deleteClientNoticeManage = async (noticeId: number): Promise<ApiCallResult<null>> => {
+  try {
+    const response = await fetch(`/api/notice/manage/${noticeId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    })
+
+    const json = await response.json()
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: json.error || `HTTP ${response.status}`,
+      }
+    }
+
+    return { success: true, data: null }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
 //공지 상세 조회
 export const getClientNoticeDetail = async (noticeId: number): Promise<ApiCallResult<NoticeManageResponse>> => {
   try {

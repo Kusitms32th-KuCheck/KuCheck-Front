@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { NoticeSettingIcon } from '@/assets/svgComponents/manager'
 import CreateNoticeDropDown from '../CreateNoticeDropDown'
-import { getClientNoticeList } from '@/lib/manager/client/notice'
+import { getClientNoticeList, deleteClientNoticeManage } from '@/lib/manager/client/notice'
 import { NoticeListItem } from '@/types/manager/notice/type'
 import { getCategoryClass } from '@/utils/manager/notice'
 import { useRouter } from 'next/navigation'
@@ -51,6 +51,17 @@ export default function CreateNoticeBody() {
       if (currentRef) observer.unobserve(currentRef)
     }
   }, [loading, isLastPage])
+
+  // 삭제 핸들러
+  const handleDelete = async (noticeId: number) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
+    const res = await deleteClientNoticeManage(noticeId)
+    if (res.success) {
+      setNotices((prev) => prev.filter((n) => n.id !== noticeId))
+    } else {
+      alert('삭제에 실패했습니다.')
+    }
+  }
 
   return (
     <div className="mx-6 rounded-t-[12px] bg-white">
@@ -113,11 +124,13 @@ export default function CreateNoticeBody() {
                 { label: '삭제', value: '삭제' },
               ]}
               selected={selectedSetting}
-              onChange={setSelectedSetting}
+              onChange={(value) => {
+                setSelectedSetting(value)
+                if (value === '삭제') handleDelete(n.id)
+              }}
             />
           </div>
         ))}
-        {/* 무한스크롤 감지용 div */}
         {!isLastPage && <div ref={observerRef} style={{ height: 1 }} />}
         {loading && <div className="py-4 text-center text-gray-400">로딩 중...</div>}
       </div>
