@@ -12,6 +12,7 @@ type PostHeaderProps = {
   files: File[]
   setFiles: Dispatch<SetStateAction<File[]>>
   categories: NoticeCategory[]
+  selectedCategoryIds?: number[] // 선택된 카테고리
   error?: boolean
 }
 
@@ -22,15 +23,13 @@ export default function PostHeader({
   files,
   setFiles,
   categories,
+  selectedCategoryIds = [],
   error,
 }: PostHeaderProps) {
   const clickCheckbox = (id: number) => {
     setCategory((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((catId) => catId !== id)
-      } else {
-        return [...prev, id]
-      }
+      if (prev.includes(id)) return prev.filter((catId) => catId !== id)
+      return [...prev, id]
     })
   }
 
@@ -41,7 +40,12 @@ export default function PostHeader({
         <div className="grid grid-cols-5 gap-4">
           {categories.map((cat) => (
             <label key={cat.id} className="flex items-center gap-2">
-              <input type="checkbox" className="accent-blue-500" onChange={() => clickCheckbox(cat.id)} />
+              <input
+                type="checkbox"
+                className="accent-blue-500"
+                checked={selectedCategoryIds.includes(cat.id)} // ✅ 선택 표시
+                onChange={() => clickCheckbox(cat.id)}
+              />
               <span className="text-sm text-gray-700">{cat.name}</span>
             </label>
           ))}

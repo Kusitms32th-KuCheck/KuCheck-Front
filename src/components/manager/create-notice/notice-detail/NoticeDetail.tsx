@@ -4,12 +4,14 @@ import { NoticeManageResponse } from '@/types/manager/notice/type'
 import { COLOR_OPTIONS } from '@/utils/manager/notice'
 import NoticeDetailHeader from './NoticeDetailHeader'
 import { LinkIcon } from '@/assets/svgComponents/manager'
+import { useRouter } from 'next/navigation'
 
-export default function SessionDetailPublishing(notice: NoticeManageResponse) {
+export default function NoticeDetail(notice: NoticeManageResponse) {
   console.log('notice:', notice)
 
   const imageUrls = notice.imageUrls || []
   const fileUrls = notice.fileUrls || []
+  const router = useRouter()
 
   // 카테고리 컬러 Tailwind 클래스 반환 함수
   const getCategoryClass = (color: string) => {
@@ -17,10 +19,14 @@ export default function SessionDetailPublishing(notice: NoticeManageResponse) {
     return option?.tailwind || 'bg-amber-100 text-amber-700'
   }
 
+  const handleEdit = () => {
+    router.push(`/create-notice/add?isEditMode=true&noticeId=${notice.id}`)
+  }
+
   // 읽기 모드일 때
   return (
     <div>
-      <NoticeDetailHeader title={notice.title} handleSubmit={() => {}} />
+      <NoticeDetailHeader title={notice.title} handleSubmit={handleEdit} />
       <div className="flex w-full justify-center py-8">
         <div className="shadow-middlemodal w-[854px] rounded-[12px] bg-white px-8 py-7">
           <div className="mb-5 flex flex-col gap-[20px]">

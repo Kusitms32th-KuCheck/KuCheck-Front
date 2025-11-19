@@ -1,4 +1,4 @@
-import SessionDetailPublishing from '@/components/manager/create-notice/notice-detail/NoticeDetail'
+import NoticeDetail from '@/components/manager/create-notice/notice-detail/NoticeDetail'
 import { getServerNoticeDetail } from '@/lib/manager/notice'
 
 export default async function CreateNoticeDetailPage(params: { params: { id: number } }) {
@@ -15,7 +15,7 @@ export default async function CreateNoticeDetailPage(params: { params: { id: num
 
   return (
     <main className="flex h-full flex-col overflow-visible">
-      <SessionDetailPublishing {...data} />
+      <NoticeDetail {...data} />
     </main>
   )
 }

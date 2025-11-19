@@ -40,6 +40,12 @@ type AddBodyProps = {
 
 export default function AddBody({ content, setContent, error }: AddBodyProps) {
   const [isEmpty, setIsEmpty] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
+
+  // 클라이언트에서만 렌더링
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const editor = useEditor({
     extensions: [
@@ -56,7 +62,7 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
         },
       }),
     ],
-    content,
+    content: isMounted ? content : '', // 클라이언트에서만 content 적용
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML())
@@ -67,6 +73,7 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
   // content가 변경될 때 isEmpty 상태 업데이트
   useEffect(() => {
     if (editor && content) {
+      editor.commands.setContent(content) // 수정 모드에서 content 적용
       const tempDiv = document.createElement('div')
       tempDiv.innerHTML = content
       const textContent = tempDiv.textContent || tempDiv.innerText || ''
@@ -74,7 +81,7 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
     }
   }, [content, editor])
 
-  if (!editor) return null
+  if (!isMounted || !editor) return null
 
   const handleClick = (button: Button) => {
     editor.chain().focus()
