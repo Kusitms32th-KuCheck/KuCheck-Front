@@ -5,12 +5,13 @@ import { NoticePlusIcon, NoticeTagIcon } from '@/assets/svgComponents/manager'
 import ManagerButton from '../../common/ManagerButton'
 import CategoryModal from '../CtegoryModal'
 import { Category, categoryHelpers } from '@/utils/manager/notice'
+import { useRouter } from 'next/navigation'
 
 export default function CreateNoticeHeader() {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
-
+  const router = useRouter()
   useEffect(() => {
     const handleScroll = () => {
       const mainContent = document.querySelector('main')
@@ -51,7 +52,7 @@ export default function CreateNoticeHeader() {
           카테고리 편집
         </button>
 
-        <ManagerButton onClick={() => console.log('공지 등록하기 클릭됨')} styleSize="sm">
+        <ManagerButton onClick={() => router.push('/create-notice/add')} styleSize="sm">
           <NoticePlusIcon width={16} height={16} />
           공지 등록하기
         </ManagerButton>

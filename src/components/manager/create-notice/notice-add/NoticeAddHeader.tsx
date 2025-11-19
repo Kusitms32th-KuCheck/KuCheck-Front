@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import ManagerButton from '../../common/ManagerButton'
 import { ArrowLeftIcon } from '@/assets/svgComponents/manager'
 import ManagerModal from '../../common/ManagerModal'
+import { useSearchParams } from 'next/navigation'
 
 interface NoticeAddHeaderProps {
   handleSubmit: () => Promise<void>
@@ -12,27 +13,26 @@ interface NoticeAddHeaderProps {
 
 export default function NoticeAddHeader({ handleSubmit }: NoticeAddHeaderProps) {
   const router = useRouter()
-  const pathname = usePathname()
-  const [isEditing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
-  const isDetailAddPage = pathname?.includes('/detail-add')
-  const isEditMode = isDetailAddPage || isEditing
+  const searchParams = useSearchParams()
+  const isEditMode = searchParams.get('isEditMode') === 'true'
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleButtonClick = async () => {
-    if (!isEditMode) {
-      setEditing(true)
-      return
-    }
-
     setSaving(true)
     try {
       const ok = await handleSubmit()
       if (ok) {
         console.log('WriteHeader: 저장 성공!')
-        if (!isDetailAddPage) {
-          setEditing(false)
-        }
       } else {
         console.log('WriteHeader: 저장 실패')
       }
@@ -54,24 +54,25 @@ export default function NoticeAddHeader({ handleSubmit }: NoticeAddHeaderProps) 
     setShowModal(false)
   }
   const handleModalConfirm = () => {
-    setEditing(false)
     setShowModal(false)
     router.push('/create-notice')
   }
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex h-[110px] w-full flex-col gap-4 bg-white px-[30px] py-3">
+      <div
+        className={`sticky top-0 z-10 flex h-[110px] w-full flex-col gap-4 bg-white px-[30px] py-3 transition-shadow duration-200 ${isScrolled ? 'shadow-[0_2px_8px_rgba(0,0,0,0.12)]' : ''} `}
+      >
         <button
           className="flex w-full cursor-pointer items-center justify-start gap-1"
           type="button"
           onClick={handleBackClick}
         >
           <ArrowLeftIcon width={16} />
-          <span className="body-lg-medium text-gray-600">공지 등록</span>
+          <span className="body-lg-medium text-gray-600">{isEditMode ? '공지 등록' : '공지 수정'}</span>
         </button>
         <div className="flex w-full flex-row items-center justify-between">
-          <p className="heading-lg-medium">공지 작성</p>
+          <p className="heading-lg-medium">{isEditMode ? '공지 수정' : '공지 등록'}</p>
           <div className="flex gap-[22px]">
             <ManagerButton onClick={() => {}} styleSize="sm" styleType="white">
               취소
@@ -85,6 +86,7 @@ export default function NoticeAddHeader({ handleSubmit }: NoticeAddHeaderProps) 
           </div>
         </div>
       </div>
+
       {showModal && (
         <ManagerModal
           open={showModal}

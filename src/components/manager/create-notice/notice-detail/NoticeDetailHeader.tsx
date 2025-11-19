@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import ManagerButton from '../../common/ManagerButton'
 import { ArrowLeftIcon } from '@/assets/svgComponents/manager'
@@ -16,9 +16,16 @@ export default function NoticeDetailHeader({ title, handleSubmit }: NoticeAddHea
   const pathname = usePathname()
   const [isEditing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   const isDetailAddPage = pathname?.includes('/detail-add')
   const isEditMode = isDetailAddPage || isEditing
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 0)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleButtonClick = async () => {
     if (!isEditMode) {
@@ -28,15 +35,7 @@ export default function NoticeDetailHeader({ title, handleSubmit }: NoticeAddHea
 
     setSaving(true)
     try {
-      const ok = await handleSubmit()
-      if (ok) {
-        console.log('WriteHeader: 저장 성공!')
-        if (!isDetailAddPage) {
-          setEditing(false)
-        }
-      } else {
-        console.log('WriteHeader: 저장 실패')
-      }
+      await handleSubmit()
     } finally {
       setSaving(false)
     }
@@ -51,9 +50,7 @@ export default function NoticeDetailHeader({ title, handleSubmit }: NoticeAddHea
     }
   }
 
-  const handleModalCancel = () => {
-    setShowModal(false)
-  }
+  const handleModalCancel = () => setShowModal(false)
   const handleModalConfirm = () => {
     setEditing(false)
     setShowModal(false)
@@ -62,7 +59,9 @@ export default function NoticeDetailHeader({ title, handleSubmit }: NoticeAddHea
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex h-[110px] w-full flex-col gap-4 bg-white px-[30px] py-3">
+      <div
+        className={`sticky top-0 z-10 flex h-[110px] w-full flex-col gap-4 bg-white px-[30px] py-3 transition-shadow duration-200 ${isScrolled ? 'shadow-[0_2px_8px_rgba(0,0,0,0.12)]' : ''} `}
+      >
         <button
           className="flex w-full cursor-pointer items-center justify-start gap-1"
           type="button"
@@ -80,6 +79,7 @@ export default function NoticeDetailHeader({ title, handleSubmit }: NoticeAddHea
           </div>
         </div>
       </div>
+
       {showModal && (
         <ManagerModal
           open={showModal}

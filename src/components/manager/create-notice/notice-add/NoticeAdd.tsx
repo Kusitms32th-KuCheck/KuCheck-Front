@@ -13,6 +13,7 @@ import {
 import NoticeAddHeader from './NoticeAddHeader'
 import { NoticeCategory } from '@/types/manager/notice/type'
 import { useRouter, useSearchParams } from 'next/navigation'
+import NoticeBottomToast from './NoticeBottomToast'
 
 export default function NoticeAdd() {
   const [title, setTitle] = useState('')
@@ -20,20 +21,22 @@ export default function NoticeAdd() {
   const [content, setContent] = useState('')
   const [files, setFiles] = useState<File[]>([])
   const [categories, setCategories] = useState<NoticeCategory[]>([])
-  const [existingFileIds, setExistingFileIds] = useState<number[]>([]) // 기존 파일 ID
+  const [existingFileIds, setExistingFileIds] = useState<number[]>([]) // 기존 파일 ID -> 수정해야함
+  const [error, setError] = useState<{ title?: boolean; category?: boolean; content?: boolean }>({})
+  const [toastMsg, setToastMsg] = useState<string>('')
   const router = useRouter()
   const searchParams = useSearchParams()
   const isEditMode = searchParams.get('isEditMode') === 'true'
   const noticeId = searchParams.get('noticeId')
 
-  // 1️⃣ 카테고리 조회
+  // 카테고리 조회
   const fetchCategories = async () => {
     const response = await getClientCategory()
     if (response.success && response.data) setCategories(response.data)
     else console.error('❌ Error fetching categories:', response.error)
   }
 
-  // 2️⃣ 기존 공지 내용 조회
+  // 기존 공지 내용 조회
   const fetchNoticeDetail = async () => {
     if (isEditMode && noticeId) {
       const res = await getClientNoticeDetail(parseInt(noticeId))
@@ -51,7 +54,7 @@ export default function NoticeAdd() {
           setCategory(selectedIds)
         }
 
-        // 기존 파일
+        // 기존 파일 -> 수정해야함
         if (notice.fileUrls) {
           setExistingFileIds(notice.fileUrls.map((f) => f.id))
         }
@@ -67,7 +70,7 @@ export default function NoticeAdd() {
     if (categories.length > 0) fetchNoticeDetail()
   }, [categories])
 
-  // 3️⃣ 파일 업로드
+  // 파일 업로드
   const uploadFilesAndGetIds = async (files: File[]): Promise<number[]> => {
     const fileIds: number[] = []
     for (const file of files) {
@@ -94,8 +97,16 @@ export default function NoticeAdd() {
     return fileIds
   }
 
-  // 4️⃣ 제출 (등록 / 수정 분기)
+  // 제출 (등록 / 수정 분기)
   const handleSubmit = async () => {
+    const newError = {
+      title: !title.trim(),
+      category: category.length === 0,
+      content: !content.trim(),
+    }
+    setError(newError)
+    if (newError.title || newError.category || newError.content) return
+
     const uploadedFileIds = await uploadFilesAndGetIds(files)
     const allFileIds = [...existingFileIds, ...uploadedFileIds]
 
@@ -120,6 +131,54 @@ export default function NoticeAdd() {
     }
   }
 
+  // 카테고리 선택 제한
+  const handleSetCategory: typeof setCategory = (value) => {
+    if (typeof value === 'function') {
+      setCategory((prev) => {
+        const next = value(prev)
+        if (next.length > 3) {
+          setToastMsg('카테고리는 최대 3개까지 설정할 수 있어요')
+          return prev
+        }
+        return next
+      })
+    } else {
+      if (value.length > 3) {
+        setToastMsg('카테고리는 최대 3개까지 설정할 수 있어요')
+        return
+      }
+      setCategory(value)
+    }
+  }
+
+  // 이미지 선택 제한
+  const handleSetFiles: typeof setFiles = (value) => {
+    if (typeof value === 'function') {
+      setFiles((prev) => {
+        const next = value(prev)
+        if (next.length > 8) {
+          setToastMsg('이미지는 최대 8개까지 등록 가능해요')
+          return prev
+        }
+        return next
+      })
+    } else {
+      if (value.length > 8) {
+        setToastMsg('이미지는 최대 8개까지 등록 가능해요')
+        return
+      }
+      setFiles(value)
+    }
+  }
+
+  // 토스트 자동 닫기
+  useEffect(() => {
+    if (toastMsg) {
+      const timer = setTimeout(() => setToastMsg(''), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [toastMsg])
+
   return (
     <>
       <NoticeAddHeader handleSubmit={handleSubmit} />
@@ -128,16 +187,17 @@ export default function NoticeAdd() {
           <PostHeader
             title={title}
             setTitle={setTitle}
-            setCategory={setCategory}
+            setCategory={handleSetCategory}
             files={files}
-            setFiles={setFiles}
+            setFiles={handleSetFiles}
             categories={categories}
-            selectedCategoryIds={category} // ✅ 선택된 카테고리 표시
-            error={false}
+            selectedCategoryIds={category}
+            error={error}
           />
         </div>
-        <AddBody content={content} setContent={setContent} />
+        <AddBody content={content} setContent={setContent} error={error.content} />
       </div>
+      <NoticeBottomToast message={toastMsg} />
     </>
   )
 }

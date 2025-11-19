@@ -54,13 +54,15 @@ export default function CreateNoticeBody() {
 
   // 삭제 핸들러
   const handleDelete = async (noticeId: number) => {
-    if (!window.confirm('정말 삭제하시겠습니까?')) return
     const res = await deleteClientNoticeManage(noticeId)
     if (res.success) {
       setNotices((prev) => prev.filter((n) => n.id !== noticeId))
     } else {
       alert('삭제에 실패했습니다.')
     }
+  }
+  const handleEdit = async (noticeId: number) => {
+    router.push(`/create-notice/add?isEditMode=true&noticeId=${noticeId}`)
   }
 
   return (
@@ -113,22 +115,25 @@ export default function CreateNoticeBody() {
                 <img className="h-[100px] w-[100px] rounded-[8px] object-cover" src={n.imageUrls[0]?.url} alt="image" />
               )}
             </div>
-            <CreateNoticeDropDown
-              trigger={
-                <button className="cursor-pointer">
-                  <NoticeSettingIcon width={28} height={35} />
-                </button>
-              }
-              options={[
-                { label: '수정', value: '수정' },
-                { label: '삭제', value: '삭제' },
-              ]}
-              selected={selectedSetting}
-              onChange={(value) => {
-                setSelectedSetting(value)
-                if (value === '삭제') handleDelete(n.id)
-              }}
-            />
+            <div onClick={(e) => e.stopPropagation()} className="flex items-start justify-end">
+              <CreateNoticeDropDown
+                trigger={
+                  <button className="cursor-pointer">
+                    <NoticeSettingIcon width={28} height={35} />
+                  </button>
+                }
+                options={[
+                  { label: '수정', value: '수정' },
+                  { label: '삭제', value: '삭제' },
+                ]}
+                selected={selectedSetting}
+                onChange={(value) => {
+                  setSelectedSetting(value)
+                  if (value === '삭제') handleDelete(n.id)
+                  else if (value === '수정') handleEdit(n.id)
+                }}
+              />
+            </div>
           </div>
         ))}
         {!isLastPage && <div ref={observerRef} style={{ height: 1 }} />}

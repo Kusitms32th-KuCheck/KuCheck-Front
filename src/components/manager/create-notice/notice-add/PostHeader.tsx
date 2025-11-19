@@ -1,7 +1,6 @@
 'use client'
 
 import { Dispatch, SetStateAction } from 'react'
-import InputField from '../../session-schedule/add-post/InputField'
 import ImageUpload from '../../session-schedule/add-post/ImageUpload'
 import { NoticeCategory } from '@/types/manager/notice/type'
 
@@ -13,7 +12,10 @@ type PostHeaderProps = {
   setFiles: Dispatch<SetStateAction<File[]>>
   categories: NoticeCategory[]
   selectedCategoryIds?: number[] // 선택된 카테고리
-  error?: boolean
+  error?: {
+    title?: boolean
+    category?: boolean
+  }
 }
 
 export default function PostHeader({
@@ -24,7 +26,7 @@ export default function PostHeader({
   setFiles,
   categories,
   selectedCategoryIds = [],
-  error,
+  error = {},
 }: PostHeaderProps) {
   const clickCheckbox = (id: number) => {
     setCategory((prev) => {
@@ -35,22 +37,38 @@ export default function PostHeader({
 
   return (
     <div className="space-y-6">
-      <InputField label="제목" value={title} onChange={setTitle} placeholder="공지 제목을 입력해주세요." />
-      <InputField label="카테고리">
-        <div className="grid grid-cols-5 gap-4">
+      <div>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold">제목</span>
+          {error.title && <span className="text-xs text-red-500">필수 항목입니다</span>}
+        </div>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="공지 제목을 입력해주세요."
+          className={`mt-1 w-full rounded-xl border px-4 py-3 text-sm outline-none ${error.title ? 'border-red-400' : 'border-gray-200'}`}
+        />
+      </div>
+      <div>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold">카테고리</span>
+          {error.category && <span className="text-xs text-red-500">필수 항목입니다</span>}
+        </div>
+        <div className={'mt-1 grid grid-cols-5 gap-4 rounded-xl px-2 py-2'}>
           {categories.map((cat) => (
             <label key={cat.id} className="flex items-center gap-2">
               <input
                 type="checkbox"
                 className="accent-blue-500"
-                checked={selectedCategoryIds.includes(cat.id)} // ✅ 선택 표시
+                checked={selectedCategoryIds.includes(cat.id)}
                 onChange={() => clickCheckbox(cat.id)}
               />
               <span className="text-sm text-gray-700">{cat.name}</span>
             </label>
           ))}
         </div>
-      </InputField>
+      </div>
 
       <ImageUpload type="post" files={files} setFiles={setFiles} />
     </div>

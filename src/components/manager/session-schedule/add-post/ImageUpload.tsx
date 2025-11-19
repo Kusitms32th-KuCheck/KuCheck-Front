@@ -107,19 +107,35 @@ export default function ImageUpload({ files, setFiles, type = 'session' }: Image
             <div className="w-20 px-4 py-2 text-right">용량</div>
           </div>
           <div className="divide-y text-sm">
-            {files.map((file, i) => (
-              <div key={i} className="flex items-center hover:bg-gray-50">
-                <div className="flex flex-1 items-center gap-3 py-2 pl-[16px]">
-                  <button type="button" onClick={() => handleRemove(i)} className="text-gray-400 hover:text-red-500">
-                    <CancleIcon width={24} height={24} />
-                  </button>
-                  <span className="body-sm-regular truncate px-[10px] text-gray-900">{file.name}</span>
+            {files.map((file, i) => {
+              const extension = file.name.split('.').pop()?.toLowerCase()
+              const isImage = extension && ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)
+              return (
+                <div key={i} className="flex items-center hover:bg-gray-50">
+                  <div className="flex flex-1 items-center gap-3 py-2 pl-[16px]">
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(i)}
+                      className="mr-[10px] text-gray-400 hover:text-red-500"
+                    >
+                      <CancleIcon width={24} height={24} />
+                    </button>
+                    {isImage && (
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt="preview"
+                        className="h-[22px] w-[22px] object-cover"
+                        onLoad={(e) => URL.revokeObjectURL((e.target as HTMLImageElement).src)}
+                      />
+                    )}
+                    <span className="body-sm-regular truncate text-gray-900">{file.name}</span>
+                  </div>
+                  <span className="body-sm-medium w-20 px-4 py-2 text-right text-gray-400">
+                    {formatFileSize(file.size)}
+                  </span>
                 </div>
-                <span className="body-sm-medium w-20 px-4 py-2 text-right text-gray-400">
-                  {formatFileSize(file.size)}
-                </span>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
