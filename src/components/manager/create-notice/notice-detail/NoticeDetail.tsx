@@ -3,6 +3,7 @@
 import { NoticeManageResponse } from '@/types/manager/notice/type'
 import { COLOR_OPTIONS } from '@/utils/manager/notice'
 import NoticeDetailHeader from './NoticeDetailHeader'
+import { LinkIcon } from '@/assets/svgComponents/manager'
 
 export default function SessionDetailPublishing(notice: NoticeManageResponse) {
   console.log('notice:', notice)
@@ -48,11 +49,12 @@ export default function SessionDetailPublishing(notice: NoticeManageResponse) {
             <div className="my-10 mb-6 flex flex-col gap-3">
               {fileUrls.map((file) => (
                 <div key={file.id} className="flex items-center rounded-[6px] bg-gray-100 px-[10px] py-3">
+                  <LinkIcon width={20} height={20} />
                   <a
                     href={file.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:underline"
+                    className="ml-2 hover:underline"
                     download="공지사항 첨부파일.pdf"
                   >
                     공지사항 첨부파일.pdf
