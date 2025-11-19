@@ -18,16 +18,13 @@ export const useNativeDeviceInfo = () => {
     const handleMessage = (event: MessageEvent) => {
       try {
         const message = JSON.parse(event.data);
-        console.log('📨 받은 메시지:', message);
 
         if (message.deviceId && !message.type) {
-          console.log('✅ deviceId 감지:', message.deviceId);
           setDeviceInfo(message as DeviceInfo);
           setIsLoading(false);
         }
 
         if (message.type === 'deviceInfo') {
-          console.log('✅ deviceInfo 응답:', message.deviceId);
           setDeviceInfo({
             deviceId: message.deviceId,
             platform: message.platform,
@@ -36,14 +33,12 @@ export const useNativeDeviceInfo = () => {
           setIsLoading(false);
         }
       } catch (err) {
-        console.error('❌ 메시지 파싱 오류:', err);
         setError('디바이스 정보를 받을 수 없습니다');
         setIsLoading(false);
       }
     };
 
     window.addEventListener('message', handleMessage);
-    console.log('📌 메시지 리스너 등록');
 
     const timeout = setTimeout(() => {
       if (!deviceInfo && !requestSentRef.current) {

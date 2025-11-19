@@ -7,7 +7,6 @@ import NoticeCard from '@/components/member/home/NoticeCard'
 import Banner from '@/components/member/home/Banner'
 import { getSessionThisWeek } from '@/lib/member/server/session'
 import DirectLink from '@/components/member/home/DirectLink'
-import Link from 'next/link'
 
 export const revalidate = 60
 
@@ -20,7 +19,6 @@ export default async function HomePage() {
   return (
     <div className="mt-[24px] flex flex-col gap-y-[12px] pb-[40px]">
       <div className="flex flex-col gap-y-[12px] px-5">
-        <Link href={'/sign-up'}>회원가입</Link>
         <ProfileCard
           profileImage={userData?.profileImage}
           name={userData?.name}

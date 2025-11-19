@@ -45,7 +45,13 @@ export default function PartField() {
    * 온보딩 제출
    */
   const handleSubmit = async () => {
-    const response = await postMembersOnboarding(signUpData)
+    // deviceId가 있으면 fcmToken 추가
+    const dataToSubmit = {
+      ...signUpData,
+      ...(deviceInfo?.deviceId && { fcmToken: deviceInfo.deviceId }),
+    }
+
+    const response = await postMembersOnboarding(dataToSubmit)
     if (response.success) {
       handleStepClick('6')
     } else if (response.error) {
@@ -72,11 +78,6 @@ export default function PartField() {
           })}
         </div>
       </section>
-      <div>
-        <p>디바이스 ID:{deviceInfo?.deviceId}</p>
-        <p>디바이스 플랫폼:{deviceInfo?.platform}</p>
-        <p>디바이스 timestamp:{deviceInfo?.timestamp}</p>
-      </div>
 
       {/* bottom button */}
       <section className="fixed bottom-[60px] w-full bg-white px-5">
