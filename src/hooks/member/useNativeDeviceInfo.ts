@@ -1,5 +1,5 @@
 // hooks/useNativeDeviceInfo.ts
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface DeviceInfo {
   deviceId: string;
@@ -12,19 +12,22 @@ export const useNativeDeviceInfo = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const requestSentRef = useRef(false);
+
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       try {
         const message = JSON.parse(event.data);
+        console.log('📨 받은 메시지:', message);
 
-        // React Native에서 보낸 초기 메시지
-        if (message.deviceId) {
+        if (message.deviceId && !message.type) {
+          console.log('✅ deviceId 감지:', message.deviceId);
           setDeviceInfo(message as DeviceInfo);
           setIsLoading(false);
         }
 
-        // 요청에 대한 응답
         if (message.type === 'deviceInfo') {
+          console.log('✅ deviceInfo 응답:', message.deviceId);
           setDeviceInfo({
             deviceId: message.deviceId,
             platform: message.platform,
@@ -33,18 +36,25 @@ export const useNativeDeviceInfo = () => {
           setIsLoading(false);
         }
       } catch (err) {
-        console.error('메시지 파싱 오류:', err);
+        console.error('❌ 메시지 파싱 오류:', err);
         setError('디바이스 정보를 받을 수 없습니다');
+        setIsLoading(false);
       }
     };
 
-    // ✅ 웹뷰에서 보낸 메시지 리스너
     window.addEventListener('message', handleMessage);
+    console.log('📌 메시지 리스너 등록');
 
-    // ✅ 필요시 장치 정보 요청 (만약 아직 안 받았다면)
     const timeout = setTimeout(() => {
-      if (!deviceInfo) {
+      if (!deviceInfo && !requestSentRef.current) {
+        console.log('⏱️ 타임아웃 - deviceInfo 요청 중...');
         requestDeviceInfo();
+        requestSentRef.current = true;
+      } else if (deviceInfo) {
+        setIsLoading(false);
+      } else if (!deviceInfo) {
+        console.warn('⚠️ 웹뷰에서 메시지를 받지 못했습니다');
+        setIsLoading(false);
       }
     }, 1000);
 
@@ -52,14 +62,16 @@ export const useNativeDeviceInfo = () => {
       window.removeEventListener('message', handleMessage);
       clearTimeout(timeout);
     };
-  }, []);
+  }, []); // ✅ 의존성 배열 비움
 
-  // ✅ React Native 앱에 정보 요청
   const requestDeviceInfo = () => {
-    if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
+    if ((window as any).ReactNativeWebView) {
+      console.log('🔄 앱에 deviceInfo 요청 전송');
+      (window as any).ReactNativeWebView.postMessage(
         JSON.stringify({ type: 'needsDeviceInfo' })
       );
+    } else {
+      console.warn('⚠️ React Native WebView가 감지되지 않음');
     }
   };
 
@@ -71,7 +83,6 @@ export const useNativeDeviceInfo = () => {
   };
 };
 
-// 타입 선언 추가 (window 객체에 ReactNativeWebView 추가)
 declare global {
   interface Window {
     ReactNativeWebView?: {
