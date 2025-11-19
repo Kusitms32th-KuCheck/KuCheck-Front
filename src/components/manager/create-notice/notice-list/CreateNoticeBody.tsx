@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { NoticeSettingIcon } from '@/assets/svgComponents/manager'
-import CreateNoticeDropDown from '../CreateNoticeDropDown'
+import CreateNoticeDropDown from '../category/CreateNoticeDropDown'
 import { getClientNoticeList, deleteClientNoticeManage } from '@/lib/manager/client/notice'
 import { NoticeListItem } from '@/types/manager/notice/type'
 import { getCategoryClass } from '@/utils/manager/notice'

@@ -1,12 +1,17 @@
 import { apiCallServer } from '@/lib/api.server'
 
-//카테고리 조회
-export async function GET() {
+//카테고리 수정
+export async function PUT(request: Request, { params }: { params: { categoryId: string } }) {
   try {
-    const endpoint = `/v1/notice/categories`
+    const { name, color } = await request.json()
+    const categoryId = params.categoryId
+
+    const endpoint = `/v1/notice/categories/${categoryId}`
 
     const { data, error } = await apiCallServer(endpoint, {
-      method: 'GET',
+      method: 'PUT',
+      body: JSON.stringify({ name, color }),
+      headers: { 'Content-Type': 'application/json' },
     })
 
     if (error) {
@@ -19,17 +24,15 @@ export async function GET() {
   }
 }
 
-//카테고리 등록 보내는건 name, color
-export async function POST(request: Request) {
+//카테고리 삭제
+export async function DELETE(request: Request, { params }: { params: { categoryId: string } }) {
   try {
-    const { name, color } = await request.json()
+    const categoryId = params.categoryId
 
-    const endpoint = `/v1/notice/categories`
+    const endpoint = `/v1/notice/categories/${categoryId}`
 
     const { data, error } = await apiCallServer(endpoint, {
-      method: 'POST',
-      body: JSON.stringify({ name, color }),
-      headers: { 'Content-Type': 'application/json' },
+      method: 'DELETE',
     })
 
     if (error) {

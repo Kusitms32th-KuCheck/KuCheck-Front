@@ -156,6 +156,42 @@ export const getClientNoticeList = async (page: number, size: number): Promise<A
   }
 }
 
+//파일, 이미지 업로드
+export const postClientNoticeFile = async (
+  filename: string,
+  fileType: 'FILE' | 'IMAGE',
+  fileSize: number
+): Promise<ApiCallResult<{ presignedUrl: string; fileId: number }>> => {
+  try {
+    const response = await fetch(
+      `/api/notice/files?filename=${encodeURIComponent(filename)}&fileType=${fileType}&fileSize=${fileSize}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      }
+    )
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+
+    const data = await response.json()
+    console.log('API 성공 응답:', data)
+    return { success: true, data: data.data }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
 //카테고리 조회
 export const getClientCategory = async (): Promise<ApiCallResult<NoticeCategory[]>> => {
   try {
@@ -185,23 +221,108 @@ export const getClientCategory = async (): Promise<ApiCallResult<NoticeCategory[
   }
 }
 
-//파일, 이미지 업로드
-export const postClientNoticeFile = async (
-  filename: string,
-  fileType: 'FILE' | 'IMAGE',
-  fileSize: number
-): Promise<ApiCallResult<{ presignedUrl: string; fileId: number }>> => {
+//카테고리 수정
+export const putClientCategory = async (
+  categoryId: number,
+  name: string,
+  color: string
+): Promise<ApiCallResult<NoticeCategory>> => {
   try {
-    const response = await fetch(
-      `/api/notice/files?filename=${encodeURIComponent(filename)}&fileType=${fileType}&fileSize=${fileSize}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }
-    )
+    const response = await fetch(`/api/notice/categories/${categoryId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ name, color }),
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+
+    const data = await response.json()
+    console.log('API 성공 응답:', data)
+    return { success: true, data: data.data }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//카테고리 삭제
+export const deleteClientCategory = async (categoryId: number): Promise<ApiCallResult<null>> => {
+  try {
+    const response = await fetch(`/api/notice/categories/${categoryId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+
+    console.log('API 성공 응답:', { success: true })
+    return { success: true, data: null }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//카테고리 등록
+export const postClientCategory = async (name: string, color: string): Promise<ApiCallResult<NoticeCategory>> => {
+  try {
+    const response = await fetch('/api/notice/categories', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ name, color }),
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+
+    const data = await response.json()
+    console.log('API 성공 응답:', data)
+    return { success: true, data: data.data }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//사용 가능한 카테고리 색상 조회
+export const getClientAvailableCategoryColors = async (): Promise<ApiCallResult<string[]>> => {
+  try {
+    const response = await fetch(`/api/notice/categories/colors/available`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
 
     if (!response.ok) {
       const error = await response.json()

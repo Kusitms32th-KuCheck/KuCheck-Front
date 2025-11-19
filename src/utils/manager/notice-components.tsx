@@ -28,7 +28,8 @@ export const getCategoryEditIcon = (color: string, size: number = 16): React.Rea
     orange: <EditOrrange width={size} height={size} />,
     lime: <EditLime width={size} height={size} />,
   }
-  return iconMap[color] || <EditBlue width={size} height={size} />
+  const key = color.toLowerCase()
+  return iconMap[key] || <EditBlue width={size} height={size} />
 }
 
 // 색상 드롭다운용 옵션 생성 (JSX 포함)

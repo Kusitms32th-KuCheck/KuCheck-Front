@@ -14,8 +14,9 @@ import NoticeAddHeader from './NoticeAddHeader'
 import { NoticeCategory } from '@/types/manager/notice/type'
 import { useRouter, useSearchParams } from 'next/navigation'
 import NoticeBottomToast from './NoticeBottomToast'
+import dynamic from 'next/dynamic'
 
-export default function NoticeAdd() {
+const NoticeAddInner = () => {
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState<number[]>([])
   const [content, setContent] = useState('')
@@ -171,7 +172,6 @@ export default function NoticeAdd() {
     }
   }
 
-  // 토스트 자동 닫기
   useEffect(() => {
     if (toastMsg) {
       const timer = setTimeout(() => setToastMsg(''), 2000)
@@ -201,3 +201,6 @@ export default function NoticeAdd() {
     </>
   )
 }
+
+// CSR에서만 렌더링되게 dynamic import로 감싸기
+export default dynamic(() => Promise.resolve(NoticeAddInner), { ssr: false })

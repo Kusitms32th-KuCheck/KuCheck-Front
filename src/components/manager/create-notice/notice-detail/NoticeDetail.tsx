@@ -13,8 +13,8 @@ export default function NoticeDetail(notice: NoticeManageResponse) {
   const fileUrls = notice.fileUrls || []
   const router = useRouter()
 
-  const handleEdit = () => {
-    router.push(`/create-notice/add?isEditMode=true&noticeId=${notice.id}`)
+  const handleEdit = async (): Promise<void> => {
+    await router.push(`/create-notice/add?isEditMode=true&noticeId=${notice.id}`)
   }
 
   // 읽기 모드일 때

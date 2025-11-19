@@ -3,15 +3,28 @@
 import { useEffect, useState } from 'react'
 import { NoticePlusIcon, NoticeTagIcon } from '@/assets/svgComponents/manager'
 import ManagerButton from '../../common/ManagerButton'
-import CategoryModal from '../CtegoryModal'
-import { Category, categoryHelpers } from '@/utils/manager/notice'
+import CategoryModal from '../category/CategoryModal'
 import { useRouter } from 'next/navigation'
+import { getClientCategory } from '@/lib/manager/client/notice'
+import { NoticeCategory } from '@/types/manager/notice/type'
 
 export default function CreateNoticeHeader() {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<NoticeCategory[]>([])
   const router = useRouter()
+
+  // 카테고리 조회
+  const fetchCategories = async () => {
+    const response = await getClientCategory()
+    if (response.success && response.data) setCategories(response.data)
+    else console.error('❌ Error fetching categories:', response.error)
+  }
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  //스크롤 감지
   useEffect(() => {
     const handleScroll = () => {
       const mainContent = document.querySelector('main')
@@ -28,16 +41,25 @@ export default function CreateNoticeHeader() {
     }
   }, [])
 
-  const handleAddCategory = (newCategory: Omit<Category, 'id'>) => {
-    setCategories((prev) => categoryHelpers.addCategory(prev, newCategory))
+  // 카테고리 추가
+  const handleAddCategory = async (newCategory: Omit<NoticeCategory, 'id'>) => {
+    const { postClientCategory } = await import('@/lib/manager/client/notice')
+    await postClientCategory(newCategory.name, newCategory.color)
+    fetchCategories()
   }
 
-  const handleDeleteCategory = (categoryId: string) => {
-    setCategories((prev) => categoryHelpers.deleteCategory(prev, categoryId))
+  // 카테고리 삭제
+  const handleDeleteCategory = async (categoryId: string) => {
+    const { deleteClientCategory } = await import('@/lib/manager/client/notice')
+    await deleteClientCategory(Number(categoryId))
+    fetchCategories()
   }
 
-  const handleEditCategory = (categoryId: string, updatedCategory: Omit<Category, 'id'>) => {
-    setCategories((prev) => categoryHelpers.editCategory(prev, categoryId, updatedCategory))
+  // 카테고리 수정
+  const handleEditCategory = async (categoryId: string, updatedCategory: Omit<NoticeCategory, 'id'>) => {
+    const { putClientCategory } = await import('@/lib/manager/client/notice')
+    await putClientCategory(Number(categoryId), updatedCategory.name, updatedCategory.color)
+    fetchCategories()
   }
 
   const HeaderContent = () => (
