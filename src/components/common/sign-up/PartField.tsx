@@ -6,10 +6,14 @@ import { PartType } from '@/types/sign-up'
 import { useSignUpStore } from '@/store/signUpStore'
 import { postMembersOnboarding } from '@/lib/common'
 import { useToast } from '@/components/member/common/toast/ToastContext'
+import { useNativeDeviceInfo } from '@/hooks/member/useNativeDeviceInfo'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function PartField() {
+  const { deviceInfo } = useNativeDeviceInfo();
+  console.log('deviceInfo', deviceInfo)
+
   const updateSignUpData = useSignUpStore((state) => state.updateSignUpData)
   const signUpData = useSignUpStore((state) => state.signUpData)
 
@@ -68,6 +72,11 @@ export default function PartField() {
           })}
         </div>
       </section>
+      <div>
+        <p>디바이스 ID:{deviceInfo?.deviceId}</p>
+        <p>디바이스 플랫폼:{deviceInfo?.platform}</p>
+        <p>디바이스 timestamp:{deviceInfo?.timestamp}</p>
+      </div>
 
       {/* bottom button */}
       <section className="fixed bottom-[60px] w-full bg-white px-5">
