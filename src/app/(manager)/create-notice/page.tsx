@@ -1,5 +1,5 @@
-import CreateNoticeHeader from '@/components/manager/create-notice/CreateNoticeHeader'
-import CreateNoticeBody from '@/components/manager/create-notice/CreateNoticeBody'
+import CreateNoticeHeader from '@/components/manager/create-notice/notice-list/CreateNoticeHeader'
+import CreateNoticeBody from '@/components/manager/create-notice/notice-list/CreateNoticeBody'
 
 export default function CreateNoticePage() {
   return (

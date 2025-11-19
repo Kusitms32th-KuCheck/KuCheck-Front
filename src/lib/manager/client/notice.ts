@@ -1,5 +1,10 @@
 import { ApiCallResult } from '@/types/common'
-import { NoticeManageResponse, NoticeManageRequest, NoticeCategory } from '@/types/manager/notice/type'
+import {
+  NoticeManageResponse,
+  NoticeManageRequest,
+  NoticeCategory,
+  NoticeListResponse,
+} from '@/types/manager/notice/type'
 
 //공지 등록
 export const postClientNoticeManage = async (
@@ -66,10 +71,39 @@ export const putClientNoticeManage = async (
   }
 }
 
-//공지 조회
+//공지 상세 조회
 export const getClientNoticeDetail = async (noticeId: number): Promise<ApiCallResult<NoticeManageResponse>> => {
   try {
     const response = await fetch(`/api/notice/${noticeId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+
+    const data = await response.json()
+    console.log('API 성공 응답:', data)
+    return { success: true, data: data.data }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//공지 리스트 조회
+export const getClientNoticeList = async (page: number, size: number): Promise<ApiCallResult<NoticeListResponse>> => {
+  try {
+    const response = await fetch(`/api/notice?page=${page}&size=${size}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

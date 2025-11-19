@@ -1,7 +1,7 @@
 'use client'
 
 import { NoticeManageResponse } from '@/types/manager/notice/type'
-import { COLOR_OPTIONS } from '@/utils/manager/notice'
+import { getCategoryClass } from '@/utils/manager/notice'
 import NoticeDetailHeader from './NoticeDetailHeader'
 import { LinkIcon } from '@/assets/svgComponents/manager'
 import { useRouter } from 'next/navigation'
@@ -12,12 +12,6 @@ export default function NoticeDetail(notice: NoticeManageResponse) {
   const imageUrls = notice.imageUrls || []
   const fileUrls = notice.fileUrls || []
   const router = useRouter()
-
-  // 카테고리 컬러 Tailwind 클래스 반환 함수
-  const getCategoryClass = (color: string) => {
-    const option = COLOR_OPTIONS.find((opt) => opt.value === color)
-    return option?.tailwind || 'bg-amber-100 text-amber-700'
-  }
 
   const handleEdit = () => {
     router.push(`/create-notice/add?isEditMode=true&noticeId=${notice.id}`)
@@ -45,12 +39,7 @@ export default function NoticeDetail(notice: NoticeManageResponse) {
               <p className="body-sm-medium text-gray-400">{notice.createdAt}</p>
             </div>
           </div>
-
-          <div
-            className="prose prose-gray max-w-none text-gray-800"
-            dangerouslySetInnerHTML={{ __html: notice.content }}
-          />
-
+          <div className="tiptap-content" dangerouslySetInnerHTML={{ __html: notice.content }} />
           {fileUrls.length > 0 && (
             <div className="my-10 mb-6 flex flex-col gap-3">
               {fileUrls.map((file) => (

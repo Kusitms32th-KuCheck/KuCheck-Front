@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import clsx from 'clsx'
 import { ModalXIcon } from '@/assets/svgComponents/manager'
-import ColorSelectDropdown from './ ColorDropDown'
+import ColorSelectDropdown from './ColorDropDown'
 import {
   Category,
   MAX_CATEGORY_LENGTH,

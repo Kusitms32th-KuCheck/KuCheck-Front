@@ -31,6 +31,12 @@ export const getCategoryColorClasses = (color: string): string => {
   return option ? option.tailwind : COLOR_OPTIONS[0].tailwind
 }
 
+// 카테고리 클래스 가져오기 (기본값: bg-amber-100, text-amber-700)
+export const getCategoryClass = (color: string) => {
+  const option = COLOR_OPTIONS.find((opt) => opt.value === color)
+  return option?.tailwind || 'bg-amber-100 text-amber-700'
+}
+
 // 카테고리 유효성 검증
 export const validateCategoryName = (name: string, existingCategories: Category[], excludeId?: string): string => {
   const trimmedName = name.trim()

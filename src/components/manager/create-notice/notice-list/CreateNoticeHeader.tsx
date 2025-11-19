@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { NoticePlusIcon, NoticeTagIcon } from '@/assets/svgComponents/manager'
-import ManagerButton from '../common/ManagerButton'
-import CategoryModal from './CtegoryModal'
+import ManagerButton from '../../common/ManagerButton'
+import CategoryModal from '../CtegoryModal'
 import { Category, categoryHelpers } from '@/utils/manager/notice'
 
 export default function CreateNoticeHeader() {

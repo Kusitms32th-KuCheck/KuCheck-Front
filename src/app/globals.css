@@ -718,3 +718,42 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+.tiptap-content {
+  @apply w-full;
+  line-height: 1.5;
+}
+
+.tiptap-content h1 {
+  @apply text-2xl font-bold mb-2;
+}
+
+.tiptap-content h2 {
+  @apply text-xl font-semibold mb-2;
+}
+
+.tiptap-content h3 {
+  @apply text-lg font-medium mb-2;
+}
+
+.tiptap-content p {
+  @apply mb-2;
+}
+
+.tiptap-content ul {
+  @apply list-disc ml-5 mb-2;
+}
+
+.tiptap-content ol {
+  @apply list-decimal ml-5 mb-2;
+}
+
+.tiptap-content a {
+  @apply text-blue-600 underline cursor-pointer;
+}
+
+.tiptap-content strong {
+  @apply font-bold;
+}
+
