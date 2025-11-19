@@ -8,7 +8,6 @@ import { ChevronLeftBlackIcon, HomeLogoIcon, NotificationIcon, SettingIcon } fro
 import DeviceSwitch from '@/components/member/common/DeviceSwitch'
 import Cookies from 'js-cookie'
 import { ReactNode, useEffect, useState } from 'react'
-import Banner from '@/components/member/home/Banner'
 
 interface HeaderProps {
   title?: string
@@ -29,7 +28,6 @@ const MemberHeader = ({
   rightElement,
   isBottomBorder = false,
   backPath,
-  bannerElement,
 }: HeaderProps) => {
   const router = useRouter()
   const [role, setRole] = useState<string | undefined>(undefined)
@@ -89,9 +87,6 @@ const MemberHeader = ({
       className={`${isBottomBorder ? 'border-b border-gray-100' : headerType === 'default' ? 'bg-background2' : headerColor} desktop:w-[375px] fixed top-0 z-50 w-full ${headerColor}`}
       style={{ paddingTop: '54px' }}
     >
-      {/* 배너 */}
-      {bannerElement && bannerElement}
-
       {renderHeaderType(headerType)}
     </header>
   )
