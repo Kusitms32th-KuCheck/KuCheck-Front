@@ -65,16 +65,20 @@ export const getClientCategory = async (): Promise<ApiCallResult<NoticeCategory[
 //파일, 이미지 업로드
 export const postClientNoticeFile = async (
   filename: string,
-  fileType: 'FILE' | 'IMAGE'
+  fileType: 'FILE' | 'IMAGE',
+  fileSize: number
 ): Promise<ApiCallResult<{ presignedUrl: string; fileId: number }>> => {
   try {
-    const response = await fetch(`/api/notice/files?filename=${filename}&fileType=${fileType}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    })
+    const response = await fetch(
+      `/api/notice/files?filename=${encodeURIComponent(filename)}&fileType=${fileType}&fileSize=${fileSize}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      }
+    )
 
     if (!response.ok) {
       const error = await response.json()

@@ -7,10 +7,11 @@ import { ArrowLeftIcon } from '@/assets/svgComponents/manager'
 import ManagerModal from '../../common/ManagerModal'
 
 interface NoticeAddHeaderProps {
+  title: string
   handleSubmit: () => Promise<void>
 }
 
-export default function NoticeAddHeader({ handleSubmit }: NoticeAddHeaderProps) {
+export default function NoticeDetailHeader({ title, handleSubmit }: NoticeAddHeaderProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [isEditing, setEditing] = useState(false)
@@ -71,16 +72,10 @@ export default function NoticeAddHeader({ handleSubmit }: NoticeAddHeaderProps) 
           <span className="body-lg-medium text-gray-600">공지 등록</span>
         </button>
         <div className="flex w-full flex-row items-center justify-between">
-          <p className="heading-lg-medium">공지 작성</p>
+          <p className="heading-lg-medium">{title}</p>
           <div className="flex gap-[22px]">
-            <ManagerButton onClick={() => {}} styleSize="sm" styleType="white">
-              취소
-            </ManagerButton>
-            <ManagerButton onClick={() => {}} styleSize="sm" styleType="gray">
-              예약
-            </ManagerButton>
             <ManagerButton onClick={handleButtonClick} styleSize="sm">
-              {saving ? '저장중...' : '등록'}
+              {saving ? '저장중...' : '수정하기'}
             </ManagerButton>
           </div>
         </div>

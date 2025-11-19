@@ -15,7 +15,8 @@ export default function ImageUpload({ files, setFiles, type = 'session' }: Image
   const handleClick = () => fileInputRef.current?.click()
 
   const validateFiles = (files: File[]): { validFiles: File[]; invalidFiles: File[] } => {
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp']
+    // pdf도 허용
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf']
     const maxSize = 10 * 1024 * 1024 // 10MB
 
     const validFiles: File[] = []
@@ -87,14 +88,7 @@ export default function ImageUpload({ files, setFiles, type = 'session' }: Image
         >
           내 PC
         </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={handleFileChange}
-        />
+        <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileChange} />
       </div>
 
       {files.length === 0 ? (

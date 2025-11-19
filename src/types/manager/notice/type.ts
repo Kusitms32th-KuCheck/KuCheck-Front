@@ -14,6 +14,7 @@ type Category = {
 type NoticeImageOrFile = {
   id: number
   url: string
+  size: null | number
 }
 export interface NoticeManageResponse {
   id: number
@@ -23,7 +24,7 @@ export interface NoticeManageResponse {
   content: string
   authorId: number
   authorName: string
-  imagesUrl: NoticeImageOrFile[]
+  imageUrls: NoticeImageOrFile[]
   fileUrls: NoticeImageOrFile[]
 }
 

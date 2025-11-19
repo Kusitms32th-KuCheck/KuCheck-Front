@@ -7,13 +7,14 @@ export async function POST(request: Request) {
     const { searchParams } = new URL(request.url)
     const filename = searchParams.get('filename')
     const fileType = searchParams.get('fileType')
+    const fileSize = searchParams.get('fileSize')
 
-    if (!filename || !fileType) {
-      return Response.json({ error: 'filename, fileType are required' }, { status: 400 })
+    if (!filename || !fileType || !fileSize) {
+      return Response.json({ error: 'filename, fileType, fileSize are required' }, { status: 400 })
     }
 
     // presigned url 발급 API 호출
-    const url = `/v1/notice/manage/files?filename=${encodeURIComponent(filename)}&fileType=${encodeURIComponent(fileType)}`
+    const url = `/v1/notice/manage/files?filename=${encodeURIComponent(filename)}&fileType=${encodeURIComponent(fileType)}&fileSize=${encodeURIComponent(fileSize)}`
     const { data, error } = await apiCallServer(url, {
       method: 'POST',
       headers: {

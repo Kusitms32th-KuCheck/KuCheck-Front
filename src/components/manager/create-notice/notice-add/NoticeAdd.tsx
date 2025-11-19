@@ -7,6 +7,7 @@ import { postClientNoticeManage, getClientCategory } from '@/lib/manager/client/
 import NoticeAddHeader from './NoticeAddHeader'
 import { NoticeCategory } from '@/types/manager/notice/type'
 import { postClientNoticeFile } from '@/lib/manager/client/notice'
+import { useRouter } from 'next/navigation'
 
 export default function NoticeAdd() {
   const [title, setTitle] = useState('')
@@ -14,6 +15,7 @@ export default function NoticeAdd() {
   const [content, setContent] = useState('')
   const [files, setFiles] = useState<File[]>([])
   const [categories, setCategories] = useState<NoticeCategory[]>([])
+  const router = useRouter()
 
   //카테고리조회
   const fetchCategories = async () => {
@@ -31,20 +33,35 @@ export default function NoticeAdd() {
   const uploadFilesAndGetIds = async (files: File[]): Promise<number[]> => {
     const fileIds: number[] = []
 
-    // pdf 확장자만 필터링
-    const pdfFiles = files.filter((file) => file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))
+    for (const file of files) {
+      const ext = file.name.split('.').pop()?.toLowerCase()
+      const fileType: 'FILE' | 'IMAGE' = ['png', 'jpg', 'jpeg', 'webp'].includes(ext || '') ? 'IMAGE' : 'FILE'
+      // MB 단위, 정수로 변환
+      const sizeMB = Math.max(1, Math.round(file.size / (1024 * 1024)))
 
-    await Promise.all(
-      pdfFiles.map(async (file) => {
-        const fileType: 'FILE' | 'IMAGE' = 'FILE'
-        const res = await postClientNoticeFile(file.name, fileType)
-        if (res.success && res.data) {
-          fileIds.push(res.data.fileId)
-        } else {
-          console.error('파일 업로드 실패:', file.name)
-        }
-      })
-    )
+      const presignedRes = await postClientNoticeFile(file.name, fileType, sizeMB)
+      if (!presignedRes.success || !presignedRes.data) {
+        console.error('프리사인드 URL 발급 실패:', file.name)
+        continue
+      }
+
+      const { presignedUrl, fileId } = presignedRes.data
+
+      try {
+        const uploadRes = await fetch(presignedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: { 'Content-Type': file.type },
+        })
+
+        if (!uploadRes.ok) throw new Error(`S3 업로드 실패: ${uploadRes.status}`)
+
+        fileIds.push(fileId)
+        console.log('파일 업로드 성공:', file.name)
+      } catch (err) {
+        console.error('S3 업로드 실패:', file.name, err)
+      }
+    }
 
     return fileIds
   }
@@ -59,6 +76,9 @@ export default function NoticeAdd() {
     })
     if (response.success) {
       console.log('✅ Notice created successfully:', response.data)
+      if (response.data?.id) {
+        router.push(`/create-notice/detail/${response.data.id}`)
+      }
     } else {
       console.error('❌ Error creating notice:', response.error)
     }
