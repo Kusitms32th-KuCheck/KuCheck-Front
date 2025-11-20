@@ -1,15 +1,15 @@
 import { create } from 'zustand'
-import type { Member } from '@/types/manager/member/mockData'
+import type { MemberApprovedResponse } from '@/types/manager/member/types'
 import type { Dispatch, SetStateAction } from 'react'
 
 type MemberTableState = {
-  members: Member[]
-  setMembers: Dispatch<SetStateAction<Member[]>>
+  members: MemberApprovedResponse[]
+  setMembers: Dispatch<SetStateAction<MemberApprovedResponse[]>>
   modifiedCells: Record<string, boolean>
   setModifiedCells: Dispatch<SetStateAction<Record<string, boolean>>>
-  editBuffer: Record<number, Partial<Member>>
-  setEditBuffer: Dispatch<SetStateAction<Record<number, Partial<Member>>>>
-  updateEditBufferEntry: (index: number, patch: Partial<Member>) => void
+  editBuffer: Record<number, Partial<MemberApprovedResponse>>
+  setEditBuffer: Dispatch<SetStateAction<Record<number, Partial<MemberApprovedResponse>>>>
+  updateEditBufferEntry: (index: number, patch: Partial<MemberApprovedResponse>) => void
   clearEditBuffer: () => void
   applyEditBuffer: () => void
   isManagerModalOpen: boolean
@@ -23,9 +23,14 @@ type MemberTableState = {
 }
 
 export const useMemberTableStore = create<MemberTableState>((set) => ({
-  members: [] as Member[],
+  members: [] as MemberApprovedResponse[],
   setMembers: (m) =>
-    set((s) => ({ members: typeof m === 'function' ? (m as (prev: Member[]) => Member[])(s.members) : m })),
+    set((s) => ({
+      members:
+        typeof m === 'function'
+          ? (m as (prev: MemberApprovedResponse[]) => MemberApprovedResponse[])(s.members)
+          : m,
+    })),
   modifiedCells: {},
   setModifiedCells: (v) =>
     set((s) => ({
@@ -40,10 +45,10 @@ export const useMemberTableStore = create<MemberTableState>((set) => ({
     set((s) => ({
       editBuffer:
         typeof b === 'function'
-          ? (b as (prev: Record<number, Partial<Member>>) => Record<number, Partial<Member>>)(s.editBuffer)
+          ? (b as (prev: Record<number, Partial<MemberApprovedResponse>>) => Record<number, Partial<MemberApprovedResponse>>)(s.editBuffer)
           : b,
     })),
-  updateEditBufferEntry: (index: number, patch: Partial<Member>) =>
+  updateEditBufferEntry: (index: number, patch: Partial<MemberApprovedResponse>) =>
     set((s) => {
       const next = { ...(s.editBuffer || {}) }
       next[index] = { ...(next[index] || {}), ...patch }
@@ -53,7 +58,7 @@ export const useMemberTableStore = create<MemberTableState>((set) => ({
   applyEditBuffer: () =>
     set((s) => {
       const newMembers = s.members.map((m, i) =>
-        s.editBuffer && s.editBuffer[i] ? { ...m, ...(s.editBuffer[i] as Partial<Member>) } : m
+        s.editBuffer && s.editBuffer[i] ? { ...m, ...(s.editBuffer[i] as Partial<MemberApprovedResponse>) } : m
       )
       return { members: newMembers, editBuffer: {} }
     }),

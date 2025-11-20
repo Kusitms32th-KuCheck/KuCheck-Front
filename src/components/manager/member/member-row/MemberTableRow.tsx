@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import ImageModal from '../../modal/imageModal'
 import EditableTextCell from './EditableTextCell'
 import SessionCell from './SessionCell'
-import type { Member } from '@/types/manager/member/mockData'
+import { MemberApprovedResponse } from '@/types/manager/member/types'
 import { AppleIcon } from '@/assets/svgComponents/manager'
 import { useMemberTableStore } from '@/store/manager/useMemberTableStore'
 
@@ -17,13 +17,13 @@ export default function MemberTableRow({
   editedValues,
   onEdit,
 }: {
-  member: Member
+  member: MemberApprovedResponse
   index: number
   isEditMode?: boolean
   gridTemplate?: string
   revertToken?: number
-  editedValues?: Partial<Member>
-  onEdit?: (patch: Partial<Member>) => void
+  editedValues?: Partial<MemberApprovedResponse>
+  onEdit?: (patch: Partial<MemberApprovedResponse>) => void
 }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalIndex, setModalIndex] = useState(0)
@@ -31,26 +31,18 @@ export default function MemberTableRow({
   const [part, setPart] = useState(editedValues?.part ?? member.part)
   const [school, setSchool] = useState(editedValues?.school ?? member.school)
   const [major, setMajor] = useState(editedValues?.major ?? member.major)
-  const [phone, setPhone] = useState(editedValues?.phone ?? member.phone)
+  const [phone, setPhone] = useState(editedValues?.phoneNumber ?? member.phoneNumber)
   const isNameModified = name !== member.name
   const isPartModified = part !== member.part
   const isSchoolModified = school !== member.school
   const isMajorModified = major !== member.major
-  const isPhoneModified = phone !== member.phone
-
-  const toImageUrl = (val: string | undefined, seed = 1) => {
-    if (!val) return `/png/mock-image-${seed}.png`
-    if (val.startsWith('http')) return val
-    if (val.startsWith('/')) return val
-    return `/png/mock-image-${seed}.png`
-  }
-
+  const isPhoneModified = phone !== member.phoneNumber
   useEffect(() => {
     setName(editedValues?.name ?? member.name)
     setPart(editedValues?.part ?? member.part)
     setSchool(editedValues?.school ?? member.school)
     setMajor(editedValues?.major ?? member.major)
-    setPhone(editedValues?.phone ?? member.phone)
+    setPhone(editedValues?.phoneNumber ?? member.phoneNumber)
   }, [member, editedValues])
 
   useEffect(() => {
@@ -58,7 +50,7 @@ export default function MemberTableRow({
     setPart(member.part)
     setSchool(member.school)
     setMajor(member.major)
-    setPhone(member.phone)
+    setPhone(member.phoneNumber)
   }, [revertToken, member])
 
   return (
@@ -91,8 +83,8 @@ export default function MemberTableRow({
             }}
             className="bg-background1 body-lg-regular flex h-[40px] min-w-[120px] items-center justify-center rounded-[8px] border border-gray-200 px-4 text-center text-gray-800 hover:bg-gray-100"
           >
-            {member.photo ? (
-              <span className="truncate">{member.photo.split('/').pop()}</span>
+            {member.profileImageUrl ? (
+              <span className="truncate">{member.profileImageUrl.split('/').pop()}</span>
             ) : (
               <span className="text-gray-400">사진 없음</span>
             )}
@@ -153,19 +145,19 @@ export default function MemberTableRow({
             isModified={isPhoneModified}
             onChange={(v) => {
               setPhone(v)
-              if (onEdit) onEdit({ phone: v })
+              if (onEdit) onEdit({ phoneNumber: v })
             }}
             className="w-full"
           />
         </div>
 
-        <p
+        <div
           className={`body-lg-medium flex h-[68px] items-center justify-between gap-2 px-6 text-gray-900 group-hover:bg-gray-100`}
         >
-          <div className="flex items-center gap-2">
+          <span className="flex items-center gap-2">
             <AppleIcon width={20} height={20} />
-            <span className="truncate">{member.social}</span>
-          </div>
+            <span className="truncate">{member.email}</span>
+          </span>
           {isEditMode && (
             <button
               type="button"
@@ -179,12 +171,12 @@ export default function MemberTableRow({
               삭제
             </button>
           )}
-        </p>
+        </div>
       </div>
       {modalOpen && (
         <ImageModal
           title={'사진'}
-          images={[toImageUrl(member.photo, 1)]}
+          images={member.profileImageUrl ? [member.profileImageUrl] : []}
           footerText={member.name}
           initialIndex={modalIndex}
           onClose={() => setModalOpen(false)}

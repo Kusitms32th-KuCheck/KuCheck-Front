@@ -1,17 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { generateMockMembers } from '@/types/manager/member/mockData'
 import useScrollSync from '@/utils/manager/useScrollSync'
 import Dropdown from '../common/ManagerdropDown'
 import { DownIcon, UpIcon } from '@/assets/svgComponents/manager'
+import { MemberApprovalRequestListResponse, MemberApprovalRequestResponse } from '@/types/manager/member/types'
+import ImageModal from '@/components/manager/modal/imageModal'
 
-export default function ApprovalListNew() {
-  const members = generateMockMembers().slice(0, 10)
-
-  const gridTemplate = '130px 130px 185px 419px 170px 404px 170px'
+export default function ApprovalListNew({ data }: { data?: MemberApprovalRequestListResponse }) {
+  const [members] = useState<MemberApprovalRequestResponse[]>(data?.members.data || [])
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalIndex, setModalIndex] = useState(0)
+  // 사진 컬럼 추가로 gridTemplate도 컬럼 개수에 맞게 수정해야 함
+  const gridTemplate = '130px  171px 130px 185px 419px 170px 404px 170px'
   const { containerRef, headerScrollRef, isScrolled } = useScrollSync()
-
   const [selections, setSelections] = useState<Record<number, string>>({})
 
   const APPROVAL_OPTIONS = [
@@ -28,6 +30,7 @@ export default function ApprovalListNew() {
         <div ref={headerScrollRef} className="scrollbar-hide overflow-x-auto">
           <div className="grid items-center py-[14px]" style={{ gridTemplateColumns: gridTemplate }}>
             <p className="body-lg-medium pl-[30px] text-start text-gray-500">이름</p>
+            <p className="body-lg-medium px-[13px] text-start text-gray-500">사진</p>
             <p className="body-lg-medium px-[13px] text-start text-gray-500">파트</p>
             <p className="body-lg-medium px-[13px] text-start text-gray-500">학교</p>
             <p className="body-lg-medium px-[13px] text-start text-gray-500">학과</p>
@@ -49,25 +52,35 @@ export default function ApprovalListNew() {
               <div className="body-lg-medium flex h-[68px] items-center px-[24px] text-start text-gray-900">
                 <span className="truncate">{m.name}</span>
               </div>
-
+              <div className={`flex h-[68px] items-center  px-[24px] group-hover:bg-gray-100`}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setModalIndex(i)
+                    setModalOpen(true)
+                  }}
+                  className="bg-background1 body-lg-regular flex h-[40px] min-w-[120px] items-center justify-center rounded-[8px] border border-gray-200 px-4 text-center text-gray-800 hover:bg-gray-100"
+                >
+                  {m.profileImageUrl ? (
+                    <span className="truncate">{m.profileImageUrl.split('/').pop()}</span>
+                  ) : (
+                    <span className="text-gray-400">사진 없음</span>
+                  )}
+                </button>
+              </div>
               <div className="flex h-[68px] items-center px-[13px]">{m.part}</div>
-
               <div className="body-lg-medium flex h-[68px] items-center justify-start pl-3 text-gray-900">
                 <span className="truncate">{m.school}</span>
               </div>
-
               <div className="body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900">
                 <span className="truncate">{m.major}</span>
               </div>
-
               <div className="body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900">
-                {m.phone}
+                {m.phoneNumber}
               </div>
-
               <div className="body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900">
-                <span className="truncate">{m.social}</span>
+                <span className="truncate">{m.email}</span>
               </div>
-
               <div className="body-lg-medium flex h-[68px] items-center justify-center px-[13px] text-gray-900">
                 <Dropdown
                   options={APPROVAL_OPTIONS}
@@ -84,6 +97,20 @@ export default function ApprovalListNew() {
           ))}
         </div>
       </div>
+      {modalOpen && (
+        <ImageModal
+          title={'사진'}
+          images={
+            members[modalIndex]?.profileImageUrl
+              ? [members[modalIndex].profileImageUrl]
+              : []
+          }
+          footerText={members[modalIndex]?.name}
+          initialIndex={0}
+          onClose={() => setModalOpen(false)}
+          customClassName="px-[60px] gap-[60px]"
+        />
+      )}
     </div>
   )
 }
