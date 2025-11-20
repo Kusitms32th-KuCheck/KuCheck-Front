@@ -17,7 +17,13 @@ export default function MemberSelectModal({
   onClose?: () => void
   onSave?: (selected: Member[]) => void
 }) {
-  const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>({})
+  const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>(() => {
+    const initial: Record<number, boolean> = {}
+    members.forEach((m, i) => {
+      if (!!m.checked) initial[i] = true
+    })
+    return initial
+  })
 
   if (!open) return null
 

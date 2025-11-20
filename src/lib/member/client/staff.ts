@@ -4,10 +4,15 @@ import { MemberListResult, MemberApprovalRequestListResponse } from '@/types/man
 //승인된 회원 명단 페이징 조회
 export const getClientApprovedStaffMembers = async (
   page: number,
-  size: number
+  size: number,
+  isStaff?: boolean
 ): Promise<ApiCallResult<MemberListResult>> => {
   try {
-    const response = await fetch(`/api/members/staff/approved?page=${page}&size=${size}`, {
+    let url = `/api/members/staff/approved?page=${page}&size=${size}`
+    if (typeof isStaff !== 'undefined') {
+      url += `&isStaff=${isStaff}`
+    }
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -143,6 +148,67 @@ export const patchClientStaffProfile = async (
       },
       credentials: 'include',
       body: JSON.stringify(body),
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+    const data = await response.json()
+    console.log('API 성공 응답:', data)
+    return { success: true, data }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//운영진 여부 일괄 수정
+export const patchClientStaffBatch = async (staffMemberIds: number[]): Promise<ApiCallResult<null>> => {
+  try {
+    const response = await fetch(`/api/members/executive/staff`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ staffMemberIds }),
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('API 응답 에러:', error)
+      return { success: false, error: error.error || `HTTP ${response.status}` }
+    }
+    const data = await response.json()
+    console.log('API 성공 응답:', data)
+    return { success: true, data }
+  } catch (error) {
+    console.error('Fetch 에러:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+//운영진 권한 일괄 수정
+export const patchClientStaffRolesBatch = async (
+  staffRoles: { memberId: number; role: 'STAFF' | 'MANAGEMENT' }[]
+): Promise<ApiCallResult<null>> => {
+  try {
+    const payload = { items: staffRoles }
+    const response = await fetch(`/api/members/executive/roles`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(payload),
     })
 
     if (!response.ok) {

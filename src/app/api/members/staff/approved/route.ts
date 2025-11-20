@@ -5,7 +5,11 @@ export async function GET(request: Request) {
     const url = new URL(request.url)
     const page = url.searchParams.get('page')
     const size = url.searchParams.get('size')
-    const endpoint = `/v1/members/staff/approved?page=${page}&size=${size}`
+    const isStaff = url.searchParams.get('isStaff')
+    let endpoint = `/v1/members/staff/approved?page=${page}&size=${size}`
+    if (isStaff !== null) {
+      endpoint += `&isStaff=${isStaff}`
+    }
 
     const { data, error } = await apiCallServer(endpoint, {
       method: 'GET',

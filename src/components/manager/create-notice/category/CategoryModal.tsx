@@ -141,7 +141,7 @@ export default function CategoryModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.35)]">
-      <div className="h-[620px] min-w-[756px] rounded-[16px] bg-white p-8 shadow-lg">
+      <div className="h-[620px] w-[756px] max-w-[756px] rounded-[16px] bg-white p-8 shadow-lg">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">카테고리 편집</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -160,7 +160,7 @@ export default function CategoryModal({
                   <div
                     key={cat.id}
                     className={clsx(
-                      'relative flex h-[36px] w-auto min-w-[130px] items-center justify-between rounded-md px-3 text-sm font-medium',
+                      'relative flex h-[36px] w-auto max-w-[130px] items-center justify-between rounded-md px-2 text-sm font-medium',
                       getCategoryColorClasses(cat.color),
                       isEditing && 'border-2 border-blue-500'
                     )}
@@ -173,7 +173,7 @@ export default function CategoryModal({
                         onKeyDown={(e) => e.key === 'Enter' && confirmEdit()}
                         maxLength={MAX_CATEGORY_LENGTH}
                         autoFocus
-                        className="w-[130px] bg-transparent text-start outline-none"
+                        className="bg-transparent text-start outline-none"
                       />
                     ) : (
                       <span className="flex items-center gap-1">

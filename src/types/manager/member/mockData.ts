@@ -6,6 +6,9 @@ export type Member = {
   major: string
   phone: string
   social: string
+  role?: string
+  checked?: boolean
+  memberId?: number
 }
 
 export const generateMockMembers = (): Member[] => {

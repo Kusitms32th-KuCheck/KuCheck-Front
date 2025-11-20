@@ -53,13 +53,13 @@ export default function ApprovalListNew({ data }: { data?: MemberApprovalRequest
             {members.map((m, i) => (
               <div
                 key={i}
-                className={`even:bg-background1 grid cursor-default items-center gap-0 border-b border-gray-100 bg-white`}
+                className={`grid cursor-default items-center gap-0 border-b border-gray-100 bg-white`}
                 style={{ gridTemplateColumns: gridTemplate }}
               >
-                <div className="body-lg-medium flex h-[68px] items-center px-[24px] text-start text-gray-900">
+                <div className={`body-lg-medium flex h-[68px] items-center px-[24px] text-start text-gray-900 ${i % 2 === 1 ? 'bg-background1' : ''}`}>
                   <span className="truncate">{m.name}</span>
                 </div>
-                <div className={`flex h-[68px] items-center  px-[24px] group-hover:bg-gray-100`}>
+                <div className={`flex h-[68px] items-center px-[24px] group-hover:bg-gray-100 ${i % 2 === 1 ? 'bg-background1' : ''}`}>
                   <button
                     type="button"
                     onClick={() => {
@@ -75,20 +75,20 @@ export default function ApprovalListNew({ data }: { data?: MemberApprovalRequest
                     )}
                   </button>
                 </div>
-                <div className="flex h-[68px] items-center px-[13px]">{m.part}</div>
-                <div className="body-lg-medium flex h-[68px] items-center justify-start pl-3 text-gray-900">
+                <div className={`flex h-[68px] items-center px-[13px] ${i % 2 === 1 ? 'bg-background1' : ''}`}>{m.part}</div>
+                <div className={`body-lg-medium flex h-[68px] items-center justify-start pl-3 text-gray-900 ${i % 2 === 1 ? 'bg-background1' : ''}`}>
                   <span className="truncate">{m.school}</span>
                 </div>
-                <div className="body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900">
+                <div className={`body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900 ${i % 2 === 1 ? 'bg-background1' : ''}`}>
                   <span className="truncate">{m.major}</span>
                 </div>
-                <div className="body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900">
+                <div className={`body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900 ${i % 2 === 1 ? 'bg-background1' : ''}`}>
                   {m.phoneNumber}
                 </div>
-                <div className="body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900">
+                <div className={`body-lg-medium flex h-[68px] items-center justify-start px-[13px] text-gray-900 ${i % 2 === 1 ? 'bg-background1' : ''}`}>
                   <span className="truncate">{m.email}</span>
                 </div>
-                <div className="body-lg-medium flex h-[68px] items-center justify-center px-[13px] text-gray-900">
+                <div className={`body-lg-medium flex h-[68px] items-center justify-center px-[13px] text-gray-900 ${i % 2 === 1 ? 'bg-background1' : ''}`}>
                   <Dropdown
                     options={APPROVAL_OPTIONS}
                     selected={selections[i] ?? ''}

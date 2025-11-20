@@ -138,5 +138,5 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
         )}
       </div>
     </>
-  )
-}
+  )}
+

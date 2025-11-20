@@ -4,14 +4,15 @@ export async function PATCH(request: Request) {
   try {
     const staffData = await request.json()
 
-    if (!staffData) {
+    if (!staffData || !Array.isArray(staffData) || staffData.length === 0) {
       return Response.json({ error: 'Staff data is required' }, { status: 400 })
     }
 
-    const { data, error } = await apiCallServer(`/v1/members/executive/staff`, {
+    const { data, error } = await apiCallServer(`/v1/members/executive/roles`, {
       method: 'PATCH',
-      body: JSON.stringify(staffData)
+      body: JSON.stringify(staffData),
     })
+
     if (error) {
       return Response.json({ error }, { status: 400 })
     }

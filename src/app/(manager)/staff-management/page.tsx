@@ -1,17 +1,16 @@
+'use client'
 import TeamTable from '@/components/manager/staff-management/TeamTable'
-import { generateMockMembers } from '@/types/manager/member/mockData'
-
-const members = generateMockMembers()
-
+import StaffHeader from '@/components/manager/staff-management/StaffHeader'
+import { useState } from 'react'
 export default function StaffManagementPage() {
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [handleSaveRoles, setHandleSaveRoles] = useState<(() => void) | null>(null)
+
   return (
     <main className="flex h-full flex-col overflow-visible">
-      <p className="heading-lg-medium px-6 pt-8">운영진 관리</p>
-      <div className="px-6 pt-6">
-        <TeamTable teamName="학부학" members={members.slice(0, 3)} />
-        <TeamTable teamName="경영총괄팀" members={members.slice(0, 6)} />
-        <TeamTable teamName="교육기획팀" members={members.slice(0, 3)} />
-        <TeamTable teamName="대외홍보팀" members={[]} />
+      <StaffHeader isEditMode={isEditMode} setIsEditMode={setIsEditMode} onSaveRoles={handleSaveRoles ?? undefined} />
+      <div className="px-6 pt-6 flex flex-1">
+        <TeamTable isEditMode={isEditMode} setHandleSaveRoles={setHandleSaveRoles} />
       </div>
     </main>
   )

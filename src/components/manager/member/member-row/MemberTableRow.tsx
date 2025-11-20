@@ -56,11 +56,11 @@ export default function MemberTableRow({
   return (
     <>
       <div
-        className={`group even:bg-background1 grid cursor-default items-center gap-0`}
+        className={`group grid min-h-[68px] cursor-default items-center gap-0`}
         style={{ gridTemplateColumns: gridTemplate ?? '200px repeat(3,1fr) 200px 220px' }}
       >
         <div
-          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center border-r border-gray-200 px-[24px] text-start text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center border-r border-gray-200 px-[24px] text-start text-gray-900 group-hover:bg-gray-100 focus-within:border-2 ${index % 2 === 1 ? 'bg-background1' : ''}`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -74,7 +74,9 @@ export default function MemberTableRow({
           />
         </div>
 
-        <div className={`flex h-[68px] items-center border-r border-gray-200 px-[24px] group-hover:bg-gray-100`}>
+        <div
+          className={`flex h-[68px] items-center border-r border-gray-200 px-[24px] group-hover:bg-gray-100 ${index % 2 === 1 ? 'bg-background1' : ''}`}
+        >
           <button
             type="button"
             onClick={() => {
@@ -92,7 +94,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-3 text-gray-900 group-hover:bg-gray-100`}
+          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-3 text-gray-900 group-hover:bg-gray-100 ${index % 2 === 1 ? 'bg-background1' : ''}`}
         >
           <SessionCell
             isEditMode={isEditMode}
@@ -107,7 +109,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2 ${index % 2 === 1 ? 'bg-background1' : ''}`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -122,7 +124,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2 ${index % 2 === 1 ? 'bg-background1' : ''}`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -137,7 +139,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2`}
+          className={`body-lg-medium focus-within:border-primary-500 flex h-[68px] items-center justify-start border-r border-gray-200 px-6 text-gray-900 group-hover:bg-gray-100 focus-within:border-2 ${index % 2 === 1 ? 'bg-background1' : ''}`}
         >
           <EditableTextCell
             isEditMode={isEditMode}
@@ -152,7 +154,7 @@ export default function MemberTableRow({
         </div>
 
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-between gap-2 px-6 text-gray-900 group-hover:bg-gray-100`}
+          className={`body-lg-medium flex h-[68px] items-center justify-between gap-2 px-6 text-gray-900 group-hover:bg-gray-100 ${index % 2 === 1 ? 'bg-background1' : ''}`}
         >
           <span className="flex items-center gap-2">
             <AppleIcon width={20} height={20} />
