@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 interface DeviceInfo {
   deviceId: string;
   platform: 'ios' | 'android';
+  pushToken: string | null;
   timestamp: number;
 }
 
@@ -19,26 +20,60 @@ export const useNativeDeviceInfo = () => {
       try {
         const message = JSON.parse(event.data);
 
-        if (message.deviceId && !message.type) {
-          setDeviceInfo(message as DeviceInfo);
+        // deviceId가 있으면 기기 정보로 인식
+        if (message.deviceId) {
+          const deviceData: DeviceInfo = {
+            deviceId: message.deviceId,
+            platform: message.platform || 'ios',
+            pushToken: message.pushToken || null,
+            timestamp: message.timestamp || Date.now(),
+          };
+
+          console.log('📱 기기 정보 수신:', deviceData);
+          setDeviceInfo(deviceData);
+
+          // 로컬스토리지에도 저장
+          localStorage.setItem('nativeDeviceInfo', JSON.stringify(deviceData));
+
           setIsLoading(false);
         }
 
         if (message.type === 'deviceInfo') {
-          setDeviceInfo({
+          const deviceData: DeviceInfo = {
             deviceId: message.deviceId,
             platform: message.platform,
+            pushToken: message.pushToken || null,
             timestamp: message.timestamp || Date.now(),
-          });
+          };
+
+          console.log('📱 deviceInfo 타입 메시지 수신:', deviceData);
+          setDeviceInfo(deviceData);
+
+          // 로컬스토리지에도 저장
+          localStorage.setItem('nativeDeviceInfo', JSON.stringify(deviceData));
+
           setIsLoading(false);
         }
       } catch (err) {
+        console.error('❌ 메시지 파싱 에러:', err);
         setError('디바이스 정보를 받을 수 없습니다');
         setIsLoading(false);
       }
     };
 
     window.addEventListener('message', handleMessage);
+
+    // 저장된 기기 정보 복원
+    try {
+      const saved = localStorage.getItem('nativeDeviceInfo');
+      if (saved) {
+        const parsed = JSON.parse(saved) as DeviceInfo;
+        setDeviceInfo(parsed);
+        console.log('💾 저장된 기기 정보 복원:', parsed);
+      }
+    } catch (err) {
+      console.error('저장된 기기 정보 복원 실패:', err);
+    }
 
     const timeout = setTimeout(() => {
       if (!deviceInfo && !requestSentRef.current) {
