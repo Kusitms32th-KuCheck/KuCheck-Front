@@ -48,7 +48,7 @@ export default function PartField() {
     // deviceId가 있으면 fcmToken 추가
     const dataToSubmit = {
       ...signUpData,
-      ...(deviceInfo?.deviceId && { fcmToken: deviceInfo.deviceId }),
+      ...(deviceInfo?.pushToken && { fcmToken: deviceInfo.pushToken }),
     }
 
     const response = await postMembersOnboarding(dataToSubmit)
