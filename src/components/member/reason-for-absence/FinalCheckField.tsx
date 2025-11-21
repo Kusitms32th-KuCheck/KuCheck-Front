@@ -11,8 +11,8 @@ import { AbsenceDataType, AbsenceType } from '@/types/member/absence'
 import { convertISODateTimeToTime } from '@/utils/common'
 import { postAbsence } from '@/lib/member/client/reason-for-absence'
 import { useFileUpload } from '@/hooks/useFileUpload'
-import { extractFileExtension } from '@/utils/upload'
 import { useToast } from '@/components/member/common/toast/ToastContext'
+import { extractFileExtension } from '@/utils/upload'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -60,9 +60,10 @@ export default function FinalCheckField() {
       }
 
       if (file) {
+        const extension = extractFileExtension(file.name)
         const updatedAbsenceData = {
           ...absenceData,
-          fileName: 'absence.webp',
+          fileName: `absence.${extension}`,
         }
 
         const response = await postAbsence(updatedAbsenceData)

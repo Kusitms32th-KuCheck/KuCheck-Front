@@ -1,12 +1,11 @@
 'use client'
-
 import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import MemberButton from '@/components/member/common/MemberButton'
 import { usePathname, useRouter } from 'next/navigation'
 import { ImageUploaderIcon } from '@/assets/svgComponents/member'
-import { generateId } from '@/utils/upload'
+import { extractFileExtension, generateId } from '@/utils/upload'
 import { useSignUpStore } from '@/store/signUpStore'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { getMembersProfileImageUrl } from '@/lib/member/common'
@@ -78,7 +77,8 @@ export default function ImageUploader() {
 
     try {
       setIsLoading(true)
-      const presignedResponse = await getMembersProfileImageUrl(`profileImageUrl.webp`)
+      const extension = extractFileExtension(file.name)
+      const presignedResponse = await getMembersProfileImageUrl(`profileImageUrl.${extension}`)
 
       if (presignedResponse.error) {
         error(`${presignedResponse.error}`)
@@ -117,7 +117,7 @@ export default function ImageUploader() {
     <div className="flex flex-col items-center justify-center">
       <input
         type="file"
-        accept="image/png,image/jpeg,image/jpg,.heic"
+        accept="image/png,image/jpeg,image/jpg"
         ref={fileRef}
         onChange={handleFileChange}
         disabled={isLoading}

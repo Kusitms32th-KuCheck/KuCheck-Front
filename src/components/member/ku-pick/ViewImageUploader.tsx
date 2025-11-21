@@ -14,7 +14,7 @@ import SubmitSuccess from '@/components/member/ku-pick/SubmitSuccess'
 import { KuPickResponseType } from '@/types/member/ku-pick'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { formatDateTime } from '@/utils/common'
-import { generateId } from '@/utils/upload'
+import { extractFileExtension, generateId } from '@/utils/upload'
 import { postKuPickView } from '@/lib/member/client/ku-pick'
 import { useToast } from '@/components/member/common/toast/ToastContext'
 
@@ -79,8 +79,8 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
 
     try {
       setIsLoading(true)
-
-      const presignedResponse = await postKuPickView(`kuPickView.webp`)
+      const extension = extractFileExtension(file.name)
+      const presignedResponse = await postKuPickView(`kuPickView.${extension}`)
 
       if (presignedResponse.error) {
         error(`${presignedResponse.error}`)
@@ -119,7 +119,7 @@ export default function ViewImageUploader({ myKuPickData }: ViewImageUploaderPro
       {isSubmitSuccessOpen && <SubmitSuccess setIsSubmitSuccessOpen={setIsSubmitSuccessOpen} />}
       <input
         type="file"
-        accept="image/png,image/jpeg,image/jpg,.heic"
+        accept="image/png,image/jpeg,image/jpg"
         ref={fileRef}
         onChange={handleFileChange}
         disabled={isLoading}
