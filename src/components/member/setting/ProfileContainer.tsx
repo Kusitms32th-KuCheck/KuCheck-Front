@@ -44,7 +44,7 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
 
         setState({ file: fileInfo })
 
-        if (!file?.url) {
+        if (!file) {
           error('업로드할 파일을 선택해주세요')
           return
         }
