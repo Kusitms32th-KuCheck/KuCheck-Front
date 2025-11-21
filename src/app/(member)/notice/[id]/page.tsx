@@ -30,7 +30,9 @@ export default async function NoticeDetail({ params }: NoticeDetailPageProps) {
         <MemberHeader headerType="dynamic" title={'공지'} headerColor={'bg-background1'} isBottomBorder={true} />
 
         {/* 헤더 높이 공간 */}
-        <div className="h-[116px]" />
+        {/*<div className="h-[116px]" />*/}
+        <div className="h-[60px]" />
+
 
         {/* 콘텐츠 */}
         <div className="mt-[12px] px-5 pb-[145px]">

@@ -12,7 +12,8 @@ export default async function KuPickViewPage() {
   return (
     <main>
       <MemberHeader backPath={'/ku-pick'} headerType={'dynamic'} title={'시청 인증 사진 업로드'} />
-      <div className="h-[116px]" />
+      {/*<div className="h-[116px]" />*/}
+      <div className="h-[60px]" />
       <div className="flex flex-col gap-y-[32px]">
         <div className="px-5">
           <p className="body-lg-semibold text-primary-500">STEP 2</p>

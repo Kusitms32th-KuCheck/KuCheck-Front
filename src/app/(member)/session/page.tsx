@@ -10,7 +10,8 @@ export default async function SessionDetailPage() {
     <div className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] bg-background1 min-h-screen w-full">
         <MemberHeader headerType="dynamic" title={'전체 세션 일정'} headerColor={'bg-background1'} backPath={'/home'} />
-        <div className="h-[116px]" />
+        {/*<div className="h-[116px]" />*/}
+        <div className="h-[60px]" />
         <SessionList sessionList={sessionList} />
       </div>
     </div>

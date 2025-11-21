@@ -22,8 +22,8 @@ export default async function SignUpLayout({ children }: SignUpLayoutProps) {
       </Suspense>
 
       {/* 헤더의 높이만큼 공간 확보 */}
-      <div className="h-[117px]" />
-
+      {/*<div className="h-[117px]" />*/}
+      <div className="h-[60px]" />
       {children}
     </div>
   )

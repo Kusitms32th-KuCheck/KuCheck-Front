@@ -85,7 +85,7 @@ const MemberHeader = ({
   return (
     <header
       className={`${isBottomBorder ? 'border-b border-gray-100' : headerType === 'default' ? 'bg-background2' : headerColor} desktop:w-[375px] fixed top-0 z-50 w-full ${headerColor}`}
-      style={{ paddingTop: '54px' }}
+      // style={{ paddingTop: '54px' }}
     >
       {renderHeaderType(headerType)}
     </header>

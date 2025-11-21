@@ -4,7 +4,8 @@ export default function KuPickGuidePage() {
   return (
     <main>
       <MemberHeader headerType={'dynamic'} title={''} backPath={'/ku-pick'} />
-      <div className="h-[116px]" />
+      <div className="h-[60px]" />
+      {/*<div className="h-[116px]" />*/}
       <div className="mt-[20px] flex flex-col gap-y-[56px] px-5">
         <div className="flex flex-col gap-y-3">
           <h2 className="body-lg-semibold">큐픽이란?</h2>

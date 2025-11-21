@@ -11,7 +11,8 @@ export default async function AttendanceCheckPage() {
   return (
     <>
       <MemberHeader headerType="dynamic" title={'출석체크'} headerColor={'bg-background1'} />
-      <div className="h-[116px]" />
+      <div className="h-[60px]" />
+      {/*<div className="h-[116px]" />*/}
       <div className="mt-[40px] flex flex-col items-center justify-center gap-y-[60px] px-5">
         <QRcode expAt={result.data?.expAt} token={result.data?.token} />
         <UserSummaryCard

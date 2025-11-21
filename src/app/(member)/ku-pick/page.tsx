@@ -21,7 +21,8 @@ export default async function QPickPage() {
           </Link>
         }
       />
-      <div className="h-[116px] border" />
+      <div className="h-[60px]" />
+      {/*<div className="h-[116px] border" />*/}
       <div className="mt-[8px] flex flex-col gap-y-3 px-5">
         <h1 className="body-2xl-semibold">11월 큐픽</h1>
         <SubmitCard
