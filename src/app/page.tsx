@@ -30,13 +30,13 @@ export default function Home() {
                 <KakaoLogoIcon width={18} height={18} />
                 카카오 로그인
               </Link>
-              <Link
-                className="body-md-semibold flex h-[44px] items-center justify-center rounded-[8px] bg-black text-white"
-                href={''}
-              >
-                <AppleLogoIcon width={24} height={24} />
-                Apple로 계속하기
-              </Link>
+              {/*<Link*/}
+              {/*  className="body-md-semibold flex h-[44px] items-center justify-center rounded-[8px] bg-black text-white"*/}
+              {/*  href={''}*/}
+              {/*>*/}
+              {/*  <AppleLogoIcon width={24} height={24} />*/}
+              {/*  Apple로 계속하기*/}
+              {/*</Link>*/}
             </div>
             <p className="desktop:hidden laptop:hidden tablet:hidden caption-md-regular text-primary-100">
               큐시즘 학회원들을 위한 서비스 입니다.
