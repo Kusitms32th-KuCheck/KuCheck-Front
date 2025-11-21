@@ -110,8 +110,8 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
   }
 
   return (
-    <div className="mt-6 w-full pb-6">
-      <div className={`mb-6 min-h-[778px] rounded-2xl bg-white ${error && isEmpty ? 'border-sub-red border' : ''}`}>
+    <div className="mt-6 w-full pb-6 ">
+      <div className={`mb-6 rounded-2xl bg-white ${error && isEmpty ? 'border-sub-red border' : ''}`}>
         <div className="flex border-b">
           {BUTTONS.map((b) => {
             const Icon = b.icon
@@ -131,14 +131,13 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
             )
           })}
         </div>
-
-        <div className="relative w-full px-8 py-6">
+        <div className="relative w-full px-8 py-6 min-h-[500px] max-h-[2000px] overflow-auto">
           {isEmpty && (
             <p className="pointer-events-none absolute top-6 left-8 text-gray-400 select-none">
               내용을 입력해 주세요...
             </p>
           )}
-          <EditorContent editor={editor} className="tiptap-content h-[800px] w-full outline-none" />
+          <EditorContent editor={editor} className="tiptap-content w-full outline-none" />
         </div>
       </div>
 
