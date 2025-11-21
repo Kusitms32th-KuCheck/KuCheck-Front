@@ -17,7 +17,14 @@ export default function MemberSelectModal({
   onClose?: () => void
   onSave?: (selected: Member[]) => void
 }) {
-  const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>({})
+  const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>(() => {
+    const initial: Record<number, boolean> = {}
+    members.forEach((m, i) => {
+      // 운영진(role이 'manager' 또는 '운영진')이거나 checked가 true면 체크
+      if (m.role === 'manager' || m.role === '운영진' || !!m.checked) initial[i] = true
+    })
+    return initial
+  })
 
   if (!open) return null
 
@@ -33,15 +40,18 @@ export default function MemberSelectModal({
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
-      <section className="relative inline-flex h-[90vh] max-h-[752px] w-[90vw] max-w-[852px] flex-col rounded-[16px] bg-white px-6 py-5 shadow-lg">
-        <div className="relative mb-4 flex items-center justify-between">
-          <p className="body-2xl-medium">{title}</p>
+      <section className="relative inline-flex h-[90vh] max-h-[752px] w-[90vw] max-w-[852px] flex-col rounded-[16px] bg-white px-6 pb-5 shadow-lg">
+        <div className="relative flex items-center justify-between">
+          <div className='py-6 flex flex-row items-center gap-[10px]'>
+          <p className="heading-md-medium">{title}</p>
+          <p className='body-sm-medium text-gray-600'>삭제하려면 선택을 해제한 후 저장해 주세요</p>
+          </div>
           <button
             aria-label="닫기"
             onClick={() => onClose?.()}
             className="absolute right-0 text-gray-500 hover:text-gray-700"
           >
-            <ModalXIcon width={20} height={20} />
+            <ModalXIcon width={32} height={32} />
           </button>
         </div>
 
@@ -61,7 +71,7 @@ export default function MemberSelectModal({
               {members.map((m, i) => (
                 <div
                   key={i}
-                  className={`grid items-center border-b border-gray-100 ${i % 2 === 1 ? 'bg-background1' : ''}`}
+                  className={`grid items-center border-b border-gray-100`}
                   style={{ gridTemplateColumns: '64px 160px 160px 350px' }}
                 >
                   <div className="pl-5">

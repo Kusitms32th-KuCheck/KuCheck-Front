@@ -48,7 +48,7 @@ export default function ManagerSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`hover:bg-background1 flex items-center gap-[8px] rounded-[8px] px-[12px] py-[14px] transition-colors ${
+              className={`hover:bg-background1 flex items-center gap-[8px] rounded-[8px] px-[18px] py-[14px] transition-colors ${
                 isActive ? 'bg-primary-50 text-primary-500' : 'text-gray-500'
               }`}
             >

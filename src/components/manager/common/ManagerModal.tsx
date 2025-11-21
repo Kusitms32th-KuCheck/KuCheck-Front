@@ -13,6 +13,7 @@ type ManagerModalProps = {
   onTransientClose?: () => void
   confirmLabel?: string
   cancelLabel?: string
+  reverseButtons?: boolean // 버튼 순서 반전 여부
 }
 
 export default function ManagerModal({
@@ -26,6 +27,7 @@ export default function ManagerModal({
   onTransientClose,
   confirmLabel = '저장',
   cancelLabel = '취소',
+  reverseButtons = false,
 }: ManagerModalProps) {
   const [transientVisible, setTransientVisible] = useState(false)
 
@@ -59,18 +61,37 @@ export default function ManagerModal({
           <>
             <div className="heading-sm-medium flex w-full items-center justify-center text-gray-700">{message}</div>
             <div className="flex gap-x-2">
-              <button
-                onClick={onConfirm}
-                className="body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] bg-gray-100 text-gray-600"
-              >
-                {confirmLabel}
-              </button>
-              <button
-                onClick={onCancel}
-                className="bg-primary-500 body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] text-white"
-              >
-                {cancelLabel}
-              </button>
+              {reverseButtons ? (
+                <>
+                  <button
+                    onClick={onConfirm}
+                    className="bg-primary-500 body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] text-white"
+                  >
+                    {confirmLabel}
+                  </button>
+                  <button
+                    onClick={onCancel}
+                    className="body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] bg-gray-100 text-gray-600"
+                  >
+                    {cancelLabel}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={onCancel}
+                    className="body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] bg-gray-100 text-gray-600"
+                  >
+                    {cancelLabel}
+                  </button>
+                  <button
+                    onClick={onConfirm}
+                    className="bg-primary-500 body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] text-white"
+                  > 
+                    {confirmLabel}
+                  </button>
+                </>
+              )}
             </div>
           </>
         )}

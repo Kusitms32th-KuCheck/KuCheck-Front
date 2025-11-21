@@ -84,7 +84,7 @@ export default function ColorSelectDropdown({
 
       {isOpen && (
         <div className="absolute top-full right-0 left-0 z-50 mt-1 rounded-[8px] bg-white shadow-[0px_0px_12px_rgba(0,0,0,0.15)]">
-          <div className="scrollbar-hide max-h-[249px] overflow-y-auto p-[6px]">
+          <div className="scrollbar-hide max-h-[230px] overflow-y-auto p-[6px]">
             {availableOptions.length > 0 ? (
               availableOptions.map((option) => (
                 <button
