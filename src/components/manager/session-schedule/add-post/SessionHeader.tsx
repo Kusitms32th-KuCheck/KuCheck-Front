@@ -32,7 +32,7 @@ export default function SessionHeader({
   setFiles,
   error = false,
 }: SessionHeaderProps) {
-  const hourOptions = Array.from({ length: 6 }, (_, i) => ({
+  const hourOptions = Array.from({ length: 13 }, (_, i) => ({
     label: String(11 + i).padStart(2, '0'),
     value: String(11 + i).padStart(2, '0'),
   }))

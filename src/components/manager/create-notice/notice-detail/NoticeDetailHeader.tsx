@@ -86,7 +86,7 @@ export default function NoticeDetailHeader({ title, handleSubmit }: NoticeAddHea
           message={
             <div>
               <div className="heading-md-semibold mb-2 text-center">작성중인 글을 취소하겠습니까?</div>
-              <div className="body-md-regular text-center text-gray-400">
+              <div className="body-md-regular text-center text-gray-400 mb-[20px]">
                 작성 취소 선택 시, 작성된 글은 저장되지 않습니다.
               </div>
             </div>
