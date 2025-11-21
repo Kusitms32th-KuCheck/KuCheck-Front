@@ -5,7 +5,7 @@ import CheckTableHeader from './CheckTableHeader'
 import CheckTableRow from './CheckTableRow'
 import Dropdown from '../common/ManagerdropDown'
 import TopToast from '../common/TopToast'
-import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon, KupickIcon } from '@/assets/svgComponents/manager'
+import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon } from '@/assets/svgComponents/manager'
 import { getKupickMonths } from '@/utils/manager/kupick'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
 import { getKupicClient } from '@/lib/manager/client/kupic'
@@ -68,7 +68,8 @@ export default function CheckTable() {
   }, [])
 
   // 토스트 표시
-  const handleToast = (message: string) => {
+  const handleToast = (toast: { message: string; icon?: React.ReactNode }) => {
+    const message = toast?.message ?? ''
     setToastMessage(message)
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
     toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 3400)
@@ -134,13 +135,7 @@ export default function CheckTable() {
         )}
       </div>
 
-      {toastMessage && (
-        <TopToast
-          icon={toastMessage === '저장되었습니다' ? undefined : <KupickIcon width={24} height={24} />}
-          message={toastMessage}
-          key={toastMessage}
-        />
-      )}
+      {toastMessage && <TopToast message={toastMessage} key={toastMessage} />}
     </div>
   )
 }
