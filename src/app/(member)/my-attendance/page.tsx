@@ -28,6 +28,8 @@ export default function MyAttendancePage() {
     initialPageParam: 1,
     retry: 1,
     throwOnError: false,
+    staleTime: 0,           // 즉시 stale 상태로 변경
+    gcTime: 0,              // 가비지 컬렉션 시간 0 (캐시 저장 안 함)
   })
 
   useEffect(() => {
