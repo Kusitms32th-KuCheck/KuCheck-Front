@@ -73,7 +73,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
       setIsLoading(false)
     }
   }
-
+console.log(files)
   return (
     <>
       <div

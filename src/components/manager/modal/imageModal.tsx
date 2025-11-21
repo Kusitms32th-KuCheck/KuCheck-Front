@@ -2,6 +2,7 @@
 
 import { CancleIcon } from '@/assets/svgComponents/manager'
 import { ImageModalProps } from '@/types/manager/check-document/types'
+import { useState } from 'react'
 
 export default function ImageModal({
   title = '',
@@ -10,7 +11,10 @@ export default function ImageModal({
   footerText = '',
   onClose,
   customClassName,
-}: ImageModalProps) {
+  initialIndex = 0,
+}: ImageModalProps & { initialIndex?: number }) {
+  const [current, setCurrent] = useState(initialIndex)
+
   if (!images || images.length === 0) return null
 
   return (
@@ -24,7 +28,9 @@ export default function ImageModal({
           .join(' ')}
       >
         <div className="relative mb-[32px] flex items-center justify-center">
-          <p className="heading-md-semibold text-center">{titles && titles[0] ? titles[0] : title || '사진'}</p>
+          <p className="heading-md-semibold text-center">
+            {titles && titles[current] ? titles[current] : title || '사진'}
+          </p>
           <button
             aria-label="닫기"
             onClick={() => onClose?.()}
@@ -36,8 +42,8 @@ export default function ImageModal({
         <div className="mx-auto flex w-full max-w-[90vw] justify-center">
           <div className="flex flex-col">
             <img
-              src={images[0]}
-              alt={titles && titles[0] ? titles[0] : title || '사진'}
+              src={images[current]}
+              alt={titles && titles[current] ? titles[current] : title || '사진'}
               className={['max-h-[70vh] flex-1 object-contain px-[70px]'].filter(Boolean).join(' ')}
             />
             {footerText && <div className="body-2xl-regular mt-4 px-[70px] text-end text-gray-500">{footerText}</div>}
