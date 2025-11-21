@@ -1,6 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { AttendanceSummaryType } from '@/types/manager/check-document/types'
+import { AttendanceSummaryType } from '@/types/manager/attendance/type'
 
 export default function FocusSessionCard({ summary }: { summary: AttendanceSummaryType | null }) {
   const searchParams = useSearchParams()

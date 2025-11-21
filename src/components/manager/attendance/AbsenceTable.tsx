@@ -4,7 +4,7 @@ import AbsenceTableHeader from './AbsenceTableHeader'
 import AbsenceTableRow from './AbsenceTableRow'
 import { AbsenceReportItem } from '@/types/manager/attendance/type'
 import Dropdown from '../common/ManagerdropDown'
-import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon } from '@/assets/svgComponents/manager'
+import {  CalendarOnIcon, UpIcon, KupicArrowIcon } from '@/assets/svgComponents/manager'
 import { SessionScheduleData } from '@/types/manager/session/type'
 import { AbsenceIcon } from '@/assets/svgComponents/manager'
 import {
@@ -70,9 +70,9 @@ export default function AbsenceTable({ sessionId, sessions = [] }: AbsenceTableP
             options={dateOptions}
             selected={selectedDate}
             onChange={handleDateChange}
-            leftIcon={<CalendarIcon width={24} height={24} />}
+            leftIcon={<CalendarOnIcon width={24} height={24} />}
             leftIconActive={<CalendarOnIcon width={24} height={24} />}
-            rightIcon={<DownIcon width={24} height={24} />}
+            rightIcon={<KupicArrowIcon width={24} height={24} />}
             rightIconActive={<UpIcon width={24} height={24} />}
           />
         </div>

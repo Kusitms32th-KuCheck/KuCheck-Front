@@ -1,9 +1,36 @@
 'use client'
-import { LogOutIcon } from '@/assets/svgComponents'
-// import { getProfileSummary } from '@/lib/member/user'
+import { LogOut } from '@/assets/svgComponents/manager'
+import { useRouter } from 'next/navigation'
+import { PhoneIcon } from '@/assets/svgComponents/manager'
+import { handleLogoutAction } from '@/lib/member/actions/auth' // 추가
 
-export default async function ProfileModal() {
-  // const userData = await getProfileSummary()
+export default function ProfileModal({
+  name = '김운영',
+  email = 'qwerqwer@gmail.com',
+  onLogout,
+  onMobileView,
+}: {
+  name?: string
+  email?: string
+  onLogout?: () => void
+  onMobileView?: () => void
+}) {
+  const router = useRouter()
+  const handleMobileView = () => {
+    if (onMobileView) {
+      onMobileView()
+    } else {
+      router.push('/home')
+    }
+  }
+
+  const handleLogout = async () => {
+    if (onLogout) {
+      onLogout()
+    } else {
+      await handleLogoutAction()
+    }
+  }
 
   return (
     <div
@@ -15,14 +42,23 @@ export default async function ProfileModal() {
       <div className="flex w-full flex-col">
         <div className="flex w-full items-center">
           <div className="flex w-full flex-col border-b border-gray-200 px-4 py-5">
-            {/* <p className="body-lg-medium">{userData.data?.name}</p>
-            <p className="body-sm-medium text-gray-500">{userData.data?.name}</p> */}
+            <p className="body-lg-medium">{name}</p>
+            <p className="body-sm-medium text-gray-500">{email}</p>
           </div>
         </div>
-
-        <button className="flex cursor-pointer items-center px-5 py-4">
-          <LogOutIcon width={16} height={16} className="mr-3" />
-          <p className="body-md-medium text-gray-700">로그아웃</p>
+        <button
+          className="flex cursor-pointer items-center px-5 py-4"
+          onClick={handleMobileView}
+        >
+          <PhoneIcon width={16} height={16} className="mr-3" />
+          <p className="body-md-medium text-gray-700">모바일 화면으로 보기</p>
+        </button>
+        <button
+          className="flex cursor-pointer items-center px-5 pb-4"
+          onClick={handleLogout}
+        >
+          <LogOut width={16} height={16} className="mr-3" />
+          <p className="body-md-medium text-primary-500">로그아웃</p>
         </button>
       </div>
     </div>

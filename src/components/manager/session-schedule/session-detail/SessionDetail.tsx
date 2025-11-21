@@ -83,6 +83,9 @@ export default function SessionDetail({
 }) {
   const router = useRouter()
   const { isEditing, registerSaveHandler } = useSessionEdit()
+  const selectedSessionName = useSessionScheduleStore(
+    (state) => state.selectedSessionName
+  ) // <-- 항상 최상단에서 호출
   const {
     place: initialPlace,
     startTime: initialStartTime,
@@ -177,9 +180,6 @@ export default function SessionDetail({
     )
   }
 
-  const selectedSessionName = useSessionScheduleStore(
-    (state: import('@/store/manager/useSessionScheduleStore').SessionScheduleStore) => state.selectedSessionName
-  )
   // 읽기 모드일 때는 기존 UI를 보여줌
   return (
     <div className="flex w-full justify-center py-8">
@@ -221,3 +221,4 @@ export default function SessionDetail({
     </div>
   )
 }
+
