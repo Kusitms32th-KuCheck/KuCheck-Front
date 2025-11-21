@@ -78,15 +78,6 @@ export default function TeamTable({ isEditMode, setHandleSaveRoles }: { isEditMo
     <section className="mb-6 overflow-hidden rounded-[12px] bg-white">
    
       <div>
-        {loading ? (
-          <div className="flex h-[120px] items-center justify-center text-gray-400">
-            <span className="body-lg-medium">운영진 정보를 불러오는 중...</span>
-          </div>
-        ) : error ? (
-          <div className="flex h-[120px] items-center justify-center text-red-400">
-            <span className="body-lg-medium">{error}</span>
-          </div>
-        ) : members && members.length > 0 ? (
           <div className="scrollbar-hide overflow-x-auto">
             <div
               className="grid items-center border-b border-gray-100 p-[14px]"
@@ -113,11 +104,7 @@ export default function TeamTable({ isEditMode, setHandleSaveRoles }: { isEditMo
               ))}
             </div>
           </div>
-        ) : (
-          <div className="flex h-[120px] items-center justify-center text-gray-400">
-            <span className="body-lg-medium">운영진이 없습니다.</span>
-          </div>
-        )}
+
       </div>
     </section>
   )

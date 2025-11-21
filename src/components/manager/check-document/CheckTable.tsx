@@ -5,7 +5,7 @@ import CheckTableHeader from './CheckTableHeader'
 import CheckTableRow from './CheckTableRow'
 import Dropdown from '../common/ManagerdropDown'
 import TopToast from '../common/TopToast'
-import { CalendarIcon, CalendarOnIcon, UpIcon, DownIcon, KupickIcon } from '@/assets/svgComponents/manager'
+import { CalendarIcon, CalendarOnIcon, UpIcon, KupicArrowIcon, KupickIcon } from '@/assets/svgComponents/manager'
 import { getKupickMonths } from '@/utils/manager/kupick'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
 import { getKupicClient } from '@/lib/manager/client/kupic'
@@ -103,9 +103,9 @@ export default function CheckTable() {
           options={dropdownOptions}
           selected={selectedMonth}
           onChange={setSelectedMonth}
-          leftIcon={<CalendarIcon width={24} height={24} />}
+          leftIcon={<CalendarOnIcon width={24} height={24} />}
           leftIconActive={<CalendarOnIcon width={24} height={24} />}
-          rightIcon={<DownIcon width={24} height={24} />}
+          rightIcon={<KupicArrowIcon width={24} height={24} />}
           rightIconActive={<UpIcon width={24} height={24} />}
           placeholder="선택"
         />
@@ -119,7 +119,7 @@ export default function CheckTable() {
           </div>
         ) : records.length === 0 ? (
           <div className="flex h-[60vh] items-center justify-center">
-            <p className="body-lg-medium text-gray-500">해당 월의 큐픽 데이터가 없습니다.</p>
+            <p className="body-lg-medium text-gray-500">해당 월의 큐픽 데이터가 없어요</p>
           </div>
         ) : (
           records.map((record, index) => (

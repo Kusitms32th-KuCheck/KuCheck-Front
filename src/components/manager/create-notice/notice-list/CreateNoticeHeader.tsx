@@ -95,7 +95,7 @@ export default function CreateNoticeHeader() {
         </div>
       )}
 
-      <div className="flex flex-row items-center justify-between px-6 pt-8">
+      <div className="flex flex-row items-center justify-between px-8 pt-8">
         <HeaderContent />
       </div>
 

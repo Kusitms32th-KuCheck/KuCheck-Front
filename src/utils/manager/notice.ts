@@ -50,7 +50,7 @@ export const validateCategoryName = (name: string, existingCategories: Category[
   }
 
   if (!trimmedName) {
-    return '카테고리 이름을 입력해주세요'
+    return '카테고리 이름을 입력해 주세요'
   }
 
   const isDuplicate = existingCategories.some(

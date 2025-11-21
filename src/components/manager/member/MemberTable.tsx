@@ -30,7 +30,7 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
   const { containerRef, headerScrollRef, isScrolled } = useScrollSync()
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { feedbackMessage, setFeedbackMessage } = useMemberTableStore()
-  const gridTemplate = '120px 171px 143px 181px 423px 173px 409px'
+  const gridTemplate = '132px 171px 163px 185px 419px 170px 404px'
 
   useEffect(() => {
     // data.members가 배열로 오므로 그대로 사용
@@ -55,7 +55,7 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
     <>
       <div className="mx-6 mt-7 mb-6 flex min-h-0 min-h-[calc(100vh-176px)] flex-1 flex-col">
         <div
-          className={`rounded-t-[12px] border-b border-gray-100 bg-white ${isScrolled ? 'z-1000 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
+          className={`rounded-t-[12px] border-b border-gray-100 bg-white ${isScrolled ? 'z-10 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
         >
           <div ref={headerScrollRef} className="scrollbar-hide overflow-x-auto">
             <div className="grid items-center py-[14px]" style={{ gridTemplateColumns: gridTemplate }}>
@@ -86,7 +86,6 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
             ))}
           </div>
         </div>
-        {data?.members && <div className="p-4 text-sm text-gray-500">총 {data?.approvedCount}명의 회원이 있습니다.</div>}
         <ManagerModal
           open={isManagerModalOpen}
           onCancel={() => {
@@ -125,6 +124,8 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
             setFeedbackMessage(<span className="text-primary-500">삭제되었습니다</span>)
           }}
           confirmLabel={'삭제하기'}
+          cancelLabel={'취소'}
+          reverseButtons={true}
         />
         {feedbackMessage && (
           <ManagerModal

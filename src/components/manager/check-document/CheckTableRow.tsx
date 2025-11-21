@@ -102,7 +102,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
             </button>
           )
         })}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between text-gray-800">
           <Dropdown
             options={ATTENDANCE_SCORE_OPTIONS}
             selected={selectedScore}

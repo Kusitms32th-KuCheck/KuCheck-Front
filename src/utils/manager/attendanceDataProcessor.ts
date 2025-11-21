@@ -26,7 +26,7 @@ export function getMemberAttendanceData(
   if (!monthData?.members?.data) {
     return {
       value: '미기록',
-      displayClass: 'text-gray-400',
+      displayClass: 'text-gray-300',
       isRecordExists: false,
     }
   }
@@ -36,7 +36,7 @@ export function getMemberAttendanceData(
   if (!memberData) {
     return {
       value: '미기록',
-      displayClass: 'text-gray-400',
+      displayClass: 'text-gray-300',
       isRecordExists: false,
     }
   }
@@ -65,7 +65,7 @@ export function getMemberAttendanceData(
   if (!record) {
     return {
       value: '미기록',
-      displayClass: 'text-gray-400',
+      displayClass: 'text-gray-300',
       isRecordExists: false,
     }
   }
@@ -86,7 +86,7 @@ export function getMemberAttendanceData(
   // 알 수 없는 상태의 경우
   return {
     value: '미기록',
-    displayClass: 'text-gray-400',
+    displayClass: 'text-gray-300',
     isRecordExists: false,
   }
 }

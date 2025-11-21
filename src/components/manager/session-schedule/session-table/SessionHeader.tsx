@@ -7,7 +7,7 @@ import ManagerModal from '@/components/manager/common/ManagerModal'
 import { useRouter } from 'next/navigation'
 import { HeaderArrowRight } from '@/assets/svgComponents/manager'
 
-export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean }) {
+export default function SessionHeader({ saveOnly = false, editNone = false }: { saveOnly?: boolean, editNone?: boolean }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false)
   const [saving, setSaving] = useState(false)
 
@@ -114,9 +114,9 @@ export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean
       <>
         {/* 일반 모드 */}
         <p className="heading-lg-medium">세션 일정</p>
-        <ManagerButton onClick={toggleEdit} styleSize="sm" disabled={false}>
+      {editNone === false &&  <ManagerButton onClick={toggleEdit} styleSize="sm" disabled={false}>
           수정하기
-        </ManagerButton>
+        </ManagerButton>}
       </>
     )
   }
@@ -132,7 +132,7 @@ export default function SessionHeader({ saveOnly = false }: { saveOnly?: boolean
         </div>
       )}
 
-      <div className="flex flex-row items-center justify-between px-6 pt-8">
+      <div className="flex flex-row items-center justify-between px-8 pt-8">
         <HeaderContent />
       </div>
 

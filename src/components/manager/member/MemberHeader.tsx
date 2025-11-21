@@ -10,7 +10,7 @@ import { useMemberTableStore } from '@/store/manager/useMemberTableStore'
 import { useMemberApprovalStore } from '@/store/manager/useMemberApprovalStore'
 import { patchClientStaffApprovalStatusBatch } from '@/lib/member/client/staff'
 
-export default function MemberHeader() {
+export default function MemberHeader(memberLength?: number) {
   const { isEditMode, toggleEditMode, isApprovalView, setApprovalView } = useMemberStore()
   const [pendingApprovals, setPendingApprovals] = useState<number>(2)
   const {
@@ -47,8 +47,9 @@ export default function MemberHeader() {
       })
       .filter(Boolean)
     if (requests.length > 0) await Promise.all(requests)
-    clearEditBuffer()
-    setLoadingProfile(false)
+  clearEditBuffer()
+  setLoadingProfile(false)
+  toggleEditMode() // 저장 후 수정모드 해제
   }
 
   // 승인/거절 저장 핸들러 (회원가입 승인)
@@ -79,33 +80,33 @@ export default function MemberHeader() {
   }
 
   return (
-    <div className="flex flex-row items-center justify-between px-6 pt-[26px]">
+    <div className="flex flex-row items-center justify-between px-6 pt-[32px]">
       <div className="pl-2">
         {isApprovalView ? (
-          <div className="flex items-center">
-            <p className="heading-lg-medium text-gray-500">학회원 관리</p>
+          <div className="flex items-center gap-[8px]">
+            <p className="heading-lg-medium text-gray-500 ">학회원 관리</p>
             <ManagementRightIcon width={24} height={24} />
             <p className="heading-lg-medium">회원가입 승인</p>
           </div>
         ) : (
-          <p className="heading-lg-medium">학회원 관리</p>
+          <p className="heading-lg-medium ">학회원 관리</p>
         )}
       </div>
       <div className="flex items-center gap-2">
         <div className="relative">
           {isApprovalView ? (
             <button
-              className={`body-sm-medium text-primary-500 flex cursor-pointer items-center rounded-[4px] bg-white px-3 py-2`}
+              className={`border- border-primary-500 body-sm-medium text-primary-500 flex cursor-pointer items-center rounded-[4px] bg-white px-3 py-2`}
               onClick={() => setApprovalView(false)}
             >
               학회원 관리
             </button>
           ) : (
             <button
-              className={`body-sm-medium text-primary-500 flex cursor-pointer items-center rounded-[4px] bg-white px-3 py-2`}
+              className={`border- border-primary-500  body-sm-medium text-primary-500 flex cursor-pointer items-center rounded-[4px] bg-white px-3 py-2`}
               onClick={() => setApprovalView(true)}
             >
-              승인요청{pendingApprovals > 0 ? ` ${pendingApprovals}` : ''}
+              승인요청{memberLength}
             </button>
           )}
           <button className="sr-only" onClick={() => setPendingApprovals((n) => n + 1)} aria-hidden />

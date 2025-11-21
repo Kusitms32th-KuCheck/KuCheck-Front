@@ -50,14 +50,14 @@ console.log(onSaveRoles)
   }, [isModalOpen])
 
   return (
-    <div className="flex items-center justify-between px-6 pt-8 bg-background2">
+    <div className="flex items-center justify-between px-8 pt-7 pb-1 bg-background2">
       <span className="heading-lg-medium">운영진 관리</span>
       <div className="flex gap-2">
         {!isEditMode ? (
           <>
             <button
               type="button"
-              className="body-md-medium rounded-[6px] border border-primary-100 bg-white px-3 py-1 text-primary-500 hover:bg-primary-50"
+              className="body-md-medium rounded-[6px] border border-primary-100 bg-white px-3 py-2 text-primary-500 hover:bg-primary-50"
               onClick={() => setIsModalOpen(true)}
             >
               운영진 추가/삭제

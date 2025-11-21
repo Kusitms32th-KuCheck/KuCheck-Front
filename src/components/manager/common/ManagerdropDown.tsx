@@ -27,7 +27,9 @@ interface DropdownProps {
   showValueInsteadOfLabel?: boolean
   unstyled?: boolean
   triggerClassName?: string
+  textColor?: string
   disabled?: boolean
+  originValue?: string // 원래 값(수정 전 값)
 }
 
 export default function Dropdown({
@@ -45,6 +47,7 @@ export default function Dropdown({
   showValueInsteadOfLabel = false,
   unstyled = false,
   triggerClassName = '',
+  textColor = '',
   disabled = false,
 }: DropdownProps) {
   const [open, setOpen] = useState(false)
@@ -66,10 +69,10 @@ export default function Dropdown({
     : placeholder
 
   const sizeClass = {
-    sm: 'h-[36px] w-[140px] px-3 py-2 body-lg-regular',
+    sm: 'h-[36px] w-[140px] px-3 py-2 body-lg-regular text-gray-800 ',
 
     md: 'h-[36px] w-[193px] px-6 ',
-    lg: 'h-[40px] gap-2 py-2 body-lg-medium w-[216px] px-3 ',
+    lg: 'h-[40px] gap-2 py-2 body-lg-medium w-[216px] px-3 text-gray-800 ',
     add: 'h-[40px] w-[66px] body-lg-medium px-3 ',
   }[size]
   const resolvedTriggerClassWhenOpen = (() => {
@@ -108,7 +111,7 @@ export default function Dropdown({
                 {open && leftIconActive ? leftIconActive : leftIcon || icon}
               </span>
             )}
-            <span>{selectedLabel}</span>
+  <span className={(!selectedOption && open) ? 'text-black' : textColor}>{selectedLabel}</span>
           </div>
           {(rightIcon || rightIconActive) && (
             <span className={open ? 'text-black' : 'text-gray-500'}>

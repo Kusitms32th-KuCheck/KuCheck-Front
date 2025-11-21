@@ -12,7 +12,7 @@ export default function SessionNone() {
 
   return (
     <>
-      <SessionHeader />
+      <SessionHeader editNone={true}/>
       <div className="mx-6 mt-7 mb-6 flex h-full flex-col items-center justify-center gap-[50px] rounded-[12px] bg-white">
         <SessionNoneIcon width={175} height={182} />
         <div className="flex flex-col items-center gap-[30px]">

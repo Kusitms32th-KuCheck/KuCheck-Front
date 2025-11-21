@@ -239,12 +239,12 @@ export default function PointTableRow({
               break
             default:
               value = '미기록'
-              displayClass = 'text-gray-400'
+              displayClass = 'text-gray-300'
               isRecordExists = false
           }
         } else {
           value = '미기록'
-          displayClass = 'text-gray-400'
+          displayClass = 'text-gray-300'
           isRecordExists = false
         }
 
@@ -387,7 +387,7 @@ export default function PointTableRow({
       </p>
 
       <p
-        className={`body-lg-medium flex h-[52px] items-center justify-end px-[13px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+        className={`body-lg-medium flex h-[52px] items-center justify-end px-[24px] text-end text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >
         {member.major}
       </p>
