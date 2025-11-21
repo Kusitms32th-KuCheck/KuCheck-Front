@@ -85,7 +85,7 @@ export default function NoticeSearchPage() {
             </div>
           ) : /* 검색어 입력했는데 결과 없음 */ allNoticeData.length === 0 ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-y-2">
-              <p className="body-lg-medium text-gray-400 text-center">검색 결과가 없어요 <br/>띄어쓰기에 유의해 다시 검색해 보세요</p>
+              <p className="body-lg-medium text-gray-400 text-center">검색 결과가 없어요 <br />띄어쓰기에 유의해 다시 검색해 보세요</p>
             </div>
           ) : /* 검색 결과 있음 */ (
             allNoticeData.map((notice) => {

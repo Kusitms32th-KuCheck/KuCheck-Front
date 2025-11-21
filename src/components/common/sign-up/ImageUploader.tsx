@@ -117,7 +117,7 @@ export default function ImageUploader() {
     <div className="flex flex-col items-center justify-center">
       <input
         type="file"
-        accept="image/png,image/jpeg,image/jpg,.heic"
+        accept="image/png,image/jpeg,image/jpg"
         ref={fileRef}
         onChange={handleFileChange}
         disabled={isLoading}

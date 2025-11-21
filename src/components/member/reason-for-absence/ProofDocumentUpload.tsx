@@ -82,7 +82,7 @@ export default function ProofDocumentUpload() {
             <div className="relative hidden cursor-pointer">
               <input
                 type="file"
-                accept="image/png,image/jpeg,image/jpg,application/pdf,.heic"
+                accept="image/png,image/jpeg,image/jpg,application/pdf"
                 id="input-file"
                 ref={fileRef}
                 name="input-file"

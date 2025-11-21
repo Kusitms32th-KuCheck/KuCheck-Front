@@ -28,6 +28,8 @@ export default function MyAttendancePage() {
     initialPageParam: 1,
     retry: 1,
     throwOnError: false,
+    staleTime: 0,           // 즉시 stale 상태로 변경
+    gcTime: 0,              // 가비지 컬렉션 시간 0 (캐시 저장 안 함)
   })
 
   useEffect(() => {
@@ -104,7 +106,7 @@ export default function MyAttendancePage() {
           </div>
         </section>
 
-        <section className="mt-[44px] flex w-full flex-1 flex-col items-center justify-center gap-y-[24px]">
+        <section className="mt-[54px] flex w-full flex-1 flex-col items-center justify-center gap-y-[24px]">
           {allRecords.length === 0 ? (
             <div className="flex items-center justify-center">
               <p className="body-lg-medium text-gray-500">아직 받은 상벌점이 없어요</p>

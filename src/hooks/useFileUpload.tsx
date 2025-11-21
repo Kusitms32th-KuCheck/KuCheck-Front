@@ -32,6 +32,31 @@ const isImageFile = (fileName: string): boolean => {
 }
 
 /**
+ * 문서 파일 여부 확인
+ * PDF, HWP, DOCX, DOCS 등 문서 형식은 WebP 변환 대상에서 제외
+ */
+const isDocumentFile = (fileName: string): boolean => {
+  const documentExtensions = [
+    'pdf',
+    'hwp', // 한글
+    'hwpx', // 한글 (신버전)
+    'doc',
+    'docx',
+    'xls',
+    'xlsx',
+    'ppt',
+    'pptx',
+    'txt',
+    'csv',
+    'odt', // OpenDocument Text
+    'ods', // OpenDocument Spreadsheet
+    'odp', // OpenDocument Presentation
+  ]
+  const extension = fileName.split('.').pop()?.toLowerCase() || ''
+  return documentExtensions.includes(extension)
+}
+
+/**
  * 파일명의 확장자를 .webp로 변경
  * 예: "image.jpg" -> "image.webp"
  */
@@ -61,13 +86,13 @@ export const useFileUpload = () => {
   const [uploadProgress, setUploadProgress] = useState(0)
 
   /**
-   * 단일 파일 업로드 (이미지는 자동으로 WebP로 변환)
+   * 단일 파일 업로드 (이미지만 자동으로 WebP로 변환, 문서파일은 원본 유지)
    *
    * LCP 개선 효과:
-   * - WebP 변환으로 JPEG 대비 25~35% 크기 감소
+   * - 이미지 WebP 변환으로 JPEG 대비 25~35% 크기 감소
    * - 리사이징(1920x1080 이하)으로 추가 최적화
    * - HEIC, AVIF 등 무거운 형식도 WebP로 통일
-   * - 확장자를 .webp로 변경하여 S3 저장
+   * - 문서파일(PDF, HWP, DOCX 등)은 원본 확장자 유지
    */
   const uploadFile = useCallback(async (fileInfo: FileInfoType, options: UploadOptions): Promise<UploadResult> => {
     const { preSignedUrl, onProgress, onError, imageOptimizeOptions } = options
@@ -85,8 +110,9 @@ export const useFileUpload = () => {
       let compressionRatio = 0
       let format = 'original'
 
-      // 2. 이미지 파일이면 WebP로 변환
-      if (isImageFile(fileInfo.name)) {
+      // 2. 이미지 파일이고 문서파일이 아니면 WebP로 변환
+      // 문서파일(PDF, HWP, DOCX 등)은 변환하지 않음
+      if (isImageFile(fileInfo.name) && !isDocumentFile(fileInfo.name)) {
         try {
           const optimizedImage = await optimizeImage(file, {
             maxWidth: 1920,
@@ -116,6 +142,9 @@ export const useFileUpload = () => {
           console.warn('⚠️ WebP 변환 실패, 원본으로 업로드:', optimizeError)
           // 변환 실패 시 원본으로 계속
         }
+      } else if (isDocumentFile(fileInfo.name)) {
+        // 문서파일은 원본 그대로 업로드
+        console.log('📄 문서파일로 인식되어 원본 형식으로 업로드:', fileInfo.name)
       }
 
       // 3. S3에 파일 업로드 (presigned URL 사용)
@@ -139,7 +168,7 @@ export const useFileUpload = () => {
         fileName: uploadFileName,
         originalSize: `${(originalSize / 1024).toFixed(2)}KB`,
         uploadedSize: `${(optimizedSize / 1024).toFixed(2)}KB`,
-        compressionRatio: `${compressionRatio}%`,
+        compressionRatio: compressionRatio > 0 ? `${compressionRatio}%` : '압축 없음',
         format,
       })
 
@@ -165,7 +194,7 @@ export const useFileUpload = () => {
   }, [])
 
   /**
-   * 여러 파일 병렬 업로드 (모두 WebP로 변환)
+   * 여러 파일 병렬 업로드 (이미지만 WebP로 변환, 문서파일은 원본 유지)
    */
   const uploadMultipleFiles = useCallback(
     async (fileInfoList: FileInfoType[], preSignedUrl: string): Promise<UploadResult[]> => {

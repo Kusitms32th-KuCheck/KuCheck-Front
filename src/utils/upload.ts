@@ -68,57 +68,124 @@ export const isValidFile = (file: File): { valid: boolean; error?: string } => {
   return { valid: true }
 }
 /**
- * URL에서 파일 확장자를 추출
- * 예: "https://example.com/file.pdf?v=1" → "pdf"
- * 예: "data:application/pdf;base64,JVBERi0xLjQK..." → "pdf" (mime 타입으로 추론)
+ * Mime 타입을 파일 확장자로 변환
+ * 예: "application/pdf" → "pdf"
+ * 예: "image/jpeg" → "jpg"
+ */
+const getMimeTypeExtension = (mimeType: string): string => {
+  const mimeMap: Record<string, string> = {
+    'application/pdf': 'pdf',
+    'application/msword': 'doc',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+    'application/vnd.ms-excel': 'xls',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+    'application/vnd.ms-powerpoint': 'ppt',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
+    'application/vnd.hwp': 'hwp',
+    'application/x-hwp': 'hwp',
+    'text/plain': 'txt',
+    'text/csv': 'csv',
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/gif': 'gif',
+    'image/webp': 'webp',
+    'image/svg+xml': 'svg',
+    'image/heic': 'heic',
+    'image/avif': 'avif',
+    'image/bmp': 'bmp',
+  }
+
+  return mimeMap[mimeType.toLowerCase()] || ''
+}
+
+/**
+ * 이미지 파일 여부 확인
+ */
+const isImageExtension = (extension: string): boolean => {
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'heic', 'avif']
+  return imageExtensions.includes(extension.toLowerCase())
+}
+
+/**
+ * 문서 파일 여부 확인
+ */
+const isDocumentExtension = (extension: string): boolean => {
+  const documentExtensions = [
+    'pdf',
+    'hwp',
+    'hwpx',
+    'doc',
+    'docx',
+    'xls',
+    'xlsx',
+    'ppt',
+    'pptx',
+    'txt',
+    'csv',
+    'odt',
+    'ods',
+    'odp',
+  ]
+  return documentExtensions.includes(extension.toLowerCase())
+}
+
+/**
+ * URL에서 파일 확장자를 추출하고 최적화
+ *
+ * 동작:
+ * - 이미지 확장자면 "webp"로 반환 (WebP 최적화)
+ * - 문서 확장자면 원본 그대로 반환
+ * - 기타 파일은 원본 확장자 반환
+ *
+ * 예시:
+ * - "https://example.com/photo.jpg?v=1" → "webp" ✅ (이미지→WebP)
+ * - "https://example.com/file.pdf" → "pdf" ✅ (문서→원본)
+ * - "data:image/jpeg;base64,..." → "webp" ✅ (이미지→WebP)
+ * - "data:application/pdf;base64,..." → "pdf" ✅ (문서→원본)
  */
 export const extractFileExtension = (url: string | ArrayBuffer | null): string => {
   if (!url || typeof url !== 'string') return ''
 
   try {
+    let extension = ''
+
     // Base64 data URL인 경우 처리
     if (url.startsWith('data:')) {
       const mimeType = url.split(';')[0].replace('data:', '')
-      return getMimeTypeExtension(mimeType)
+      extension = getMimeTypeExtension(mimeType)
+    } else {
+      // 일반 URL에서 경로 추출 (쿼리 파라미터 제거)
+      const urlWithoutQuery = url.split('?')[0]
+
+      // 마지막 슬래시 이후의 파일명 추출
+      const fileName = urlWithoutQuery.split('/').pop() || ''
+
+      // 파일명에서 확장자 추출 (마지막 점 이후)
+      extension = fileName.split('.').pop() || ''
+
+      // 확장자가 너무 길면 유효하지 않은 것으로 판단
+      if (extension.length > 10) return ''
     }
 
-    // 일반 URL에서 경로 추출 (쿼리 파라미터 제거)
-    const urlWithoutQuery = url.split('?')[0]
+    extension = extension.toLowerCase()
 
-    // 마지막 슬래시 이후의 파일명 추출
-    const fileName = urlWithoutQuery.split('/').pop() || ''
+    // 확장자가 없으면 빈 문자열 반환
+    if (!extension) return ''
 
-    // 파일명에서 확장자 추출 (마지막 점 이후)
-    const extension = fileName.split('.').pop() || ''
+    // ✅ 이미지 확장자면 WebP로 변환하여 반환
+    if (isImageExtension(extension)) {
+      return 'webp'
+    }
 
-    // 확장자가 너무 길면 유효하지 않은 것으로 판단
-    return extension.length > 10 ? '' : extension.toLowerCase()
+    // ✅ 문서 확장자면 원본 그대로 반환
+    if (isDocumentExtension(extension)) {
+      return extension
+    }
+
+    // 기타 파일은 원본 확장자 반환
+    return extension
   } catch (error) {
     console.error('Failed to extract extension:', error)
     return ''
   }
-}
-/**
- * MIME 타입을 파일 확장자로 변환
- * 예: "application/pdf" → "pdf"
- */
-const getMimeTypeExtension = (mimeType: string): string => {
-  const mimeToExtension: Record<string, string> = {
-    'application/pdf': 'pdf',
-    'image/jpeg': 'jpg',
-    'image/jpg': 'jpg',
-    'image/png': 'png',
-    'image/gif': 'gif',
-    'image/webp': 'webp',
-    'application/msword': 'doc',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
-    'application/vnd.ms-excel': 'xls',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
-    'text/plain': 'txt',
-    'text/csv': 'csv',
-    'application/zip': 'zip',
-    'application/json': 'json',
-  }
-
-  return mimeToExtension[mimeType] || ''
 }

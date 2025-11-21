@@ -36,7 +36,9 @@ export default async function ReasonForAbsencePage() {
         }
       />
       {/* 헤더의 높이만큼 공간 확보 */}
-      <div className="h-[117px]" />
+      {/*<div className="h-[117px]" />*/}
+      <div className="h-[60px]" />
+
 
       {/* 불참사유서 제출 기록 */}
       <section

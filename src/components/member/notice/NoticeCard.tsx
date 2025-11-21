@@ -49,7 +49,7 @@ export default function NoticeCard({ id, title, content, categories, createdAt, 
       onClick={() => {
         router.push(`/notice/${id}`)
       }}
-      className="flex w-full cursor-pointer items-end gap-x-[15px] border-b border-gray-200 py-[20px]"
+      className="flex w-full cursor-pointer items-end gap-x-[15px] border-b border-gray-100 py-[20px]"
     >
       <section className="flex w-full flex-col">
         <div className="flex flex-col gap-y-[18px]">

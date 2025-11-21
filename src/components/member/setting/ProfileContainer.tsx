@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { CameraIcon, ProfileIcon } from '@/assets/svgComponents'
 import { useSettingStore } from '@/store/member/settingStore'
-import { generateId } from '@/utils/upload'
+import { extractFileExtension, generateId } from '@/utils/upload'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { getMembersProfileImageUrl } from '@/lib/member/client/setting'
 import { UserSummaryType } from '@/types/member/user'
@@ -44,8 +44,14 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
 
         setState({ file: fileInfo })
 
+        if (!file?.url) {
+          error('업로드할 파일을 선택해주세요')
+          return
+        }
+
         try {
-          const presignedResponse = await getMembersProfileImageUrl(`profile.webp`)
+          const extension = extractFileExtension(file.name)
+          const presignedResponse = await getMembersProfileImageUrl(`profile.${extension}`)
 
           if (presignedResponse.error) {
             error(`${presignedResponse.error}`)
@@ -126,7 +132,7 @@ export default function ProfileContainer({ userData }: ProfileContainerProps) {
 
         <input
           type="file"
-          accept="image/png,image/jpeg,image/jpg,.heic"
+          accept="image/png,image/jpeg,image/jpg"
           id="input-file"
           ref={fileRef}
           name="input-file"

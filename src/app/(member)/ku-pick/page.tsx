@@ -21,9 +21,10 @@ export default async function QPickPage() {
           </Link>
         }
       />
-      <div className="h-[116px] border" />
+      <div className="h-[60px]" />
+      {/*<div className="h-[116px] border" />*/}
       <div className="mt-[8px] flex flex-col gap-y-3 px-5">
-        <h1 className="body-2xl-semibold">11월 큐픽</h1>
+        <h1 className="body-2xl-semibold ml-[6px]">11월 큐픽</h1>
         <SubmitCard
           colorGray={false}
           isSubmit={!!myKuPickData?.applicationUrl}
@@ -52,11 +53,13 @@ export default async function QPickPage() {
             </div>
           }
         />
-        <p className="caption-sm-medium text-primary-500">
-          큐픽 제출이 완료되었어요
-          <br />
-          이달 말일까지는 이미지 수정이 가능해요
-        </p>
+        {myKuPickData?.viewUrl && myKuPickData.applicationUrl && (
+          <p className="caption-sm-medium text-primary-500">
+            큐픽 제출이 완료되었어요
+            <br />
+            이달 말일까지는 이미지 수정이 가능해요
+          </p>
+        )}
       </div>
     </main>
   )

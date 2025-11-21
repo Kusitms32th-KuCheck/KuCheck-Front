@@ -45,7 +45,7 @@ export default function SessionItem({
       },
       NETWORKING: {
         className: isPast ? 'bg-gray-100 text-gray-300' : 'bg-[#ECDBFF] text-[#9F45FF]',
-        label: '네트워크',
+        label: '네트워킹',
       },
     }
 
