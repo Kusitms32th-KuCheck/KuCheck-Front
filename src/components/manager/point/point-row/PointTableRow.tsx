@@ -383,7 +383,7 @@ export default function PointTableRow({
             value={member.memo ?? ''}
             isModified={isNoteModified}
             onChange={(v) => onNoteChange && onNoteChange(memberIndex, v)}
-            className={`body-lg-medium flex h-[52px] w-[340px] items-center justify-start overflow-hidden border-r border-gray-200 px-[13px] text-start text-ellipsis whitespace-nowrap text-gray-900 group-hover:bg-gray-100 ${baseBg}`}
+            className={`body-lg-medium flex h-[52px] w-[340px] items-center justify-end overflow-hidden border-r border-gray-200 px-[13px] text-start text-ellipsis whitespace-nowrap text-gray-900 group-hover:bg-gray-100 ${baseBg}`}
           />
         </div>
         {showMemoTooltip && (member.memo ?? '').length > 20 && (
