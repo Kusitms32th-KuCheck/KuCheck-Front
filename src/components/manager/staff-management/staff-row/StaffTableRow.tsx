@@ -5,8 +5,13 @@ import { AppleIcon } from '@/assets/svgComponents/manager'
 import Dropdown from '../../common/ManagerdropDown'
 import { PointupIcon, PointdownIcon } from '@/assets/svgComponents/manager'
 import { useState } from 'react'
-import { patchClientStaffRolesBatch } from '@/lib/member/client/staff'
-
+import RoleTag from '../../common/RoleTag'
+const partMap: Record<string, string> = {
+  BACKEND: '백엔드',
+  FRONTEND: '프론트엔드',
+  DESIGN: '디자인',
+  PLANNING: '기획',
+}
 const ROLE_OPTIONS = [
   { label: '운영진', value: '운영진' },
   { label: '학부학', value: '학부학' },
@@ -84,9 +89,9 @@ export default function StaffTableRow({
         </div>
         {/* 파트 */}
         <div
-          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-3 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+          className={`body-lg-medium flex h-[68px] items-center justify-start border-r border-gray-200 pl-6 text-gray-900 ${baseBg} group-hover:bg-gray-100`}
         >
-          <span className="w-full truncate">{part}</span>
+          <RoleTag label={partMap[part] || part} />
         </div>
         {/* 권한 - isEditMode에 따라 드롭다운 또는 텍스트 */}
         <div
@@ -105,7 +110,7 @@ export default function StaffTableRow({
               rightIconActive={<PointupIcon width={10} height={8} />}
             />
           ) : (
-            <span className="w-full truncate">{selectedRole}</span>
+            <span className="w-full truncate pl-[23px]">{selectedRole}</span>
           )}
         </div>
         {/* 학교 */}

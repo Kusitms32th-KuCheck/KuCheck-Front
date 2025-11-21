@@ -71,7 +71,7 @@ export default function TeamTable({ isEditMode, setHandleSaveRoles }: { isEditMo
   }, [])
   // isModalOpen과 setIsModalOpen을 StaffHeader로 이동
   // 7 columns: 이름, 파트, 권한, 학교, 학과, 전화번호, 로그인한 소셜 계정
-  const gridTemplate = '133px 143px 120px 181px 594px 172px 400px'
+  const gridTemplate = '133px 185px 168px 181px 594px 172px 400px'
   console.log('운영진 멤버들:', members)
 
   return (

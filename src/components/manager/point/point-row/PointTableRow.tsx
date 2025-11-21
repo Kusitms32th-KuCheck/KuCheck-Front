@@ -154,7 +154,7 @@ export default function PointTableRow({
       </p>
 
       <div
-        className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+        className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 pl-[13px] text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >
         <RoleTag label={getPartName(member.part)} />
       </div>

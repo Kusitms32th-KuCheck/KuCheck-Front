@@ -129,7 +129,7 @@ export default function MemberTableRow({
               className="w-full flex px-[12px]"
             />
           ) : (
-            <div className='flex w-full justify-center'>
+            <div className='flex w-full pl-[19px]'>
               <RoleTag label={partMap[part] || part} />
             </div>
           )}
