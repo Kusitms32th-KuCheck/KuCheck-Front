@@ -1,11 +1,12 @@
 'use client'
+
 import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import MemberButton from '@/components/member/common/MemberButton'
 import { usePathname, useRouter } from 'next/navigation'
 import { ImageUploaderIcon } from '@/assets/svgComponents/member'
-import { extractFileExtension, generateId } from '@/utils/upload'
+import { generateId } from '@/utils/upload'
 import { useSignUpStore } from '@/store/signUpStore'
 import { useFileUpload } from '@/hooks/useFileUpload'
 import { getMembersProfileImageUrl } from '@/lib/member/common'
@@ -77,8 +78,7 @@ export default function ImageUploader() {
 
     try {
       setIsLoading(true)
-      const extension = extractFileExtension(file.name)
-      const presignedResponse = await getMembersProfileImageUrl(`profileImageUrl.${extension}`)
+      const presignedResponse = await getMembersProfileImageUrl(`profileImageUrl.webp`)
 
       if (presignedResponse.error) {
         error(`${presignedResponse.error}`)
