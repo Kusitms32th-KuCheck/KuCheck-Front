@@ -58,7 +58,9 @@ export default async function NoticeDetail({ params }: NoticeDetailPageProps) {
           {noticeData.imageUrls && noticeData.imageUrls.length > 0 && (
             <section className="flex flex-col gap-y-2 my-[23px]">
               {noticeData.imageUrls.map((image) => (
-                <Image key={image.id} src={image.url} alt={'이미지'} width={335} height={335} />
+                <div className="relative w-full h-[335]" key={image.id}>
+                  <Image src={image.url} alt={'이미지'} fill className="object-cover"/>
+                </div>
               ))}
             </section>
           )}
