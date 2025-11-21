@@ -51,7 +51,7 @@ export default function ManagerModal({
   return (
     <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
       <section
-        className={`${customClassName} flex ${isTransient ? 'align-center rounded-[12px]' : 'h-[196px] justify-between rounded-[20px] px-[41px] pt-[44px] pb-6'} w-full max-w-[418px] flex-col bg-white`}
+        className={`${customClassName} flex ${isTransient ? 'align-center rounded-[12px]' : ' justify-between rounded-[20px] px-[41px] pt-[44px] pb-7'} w-full max-w-[418px] flex-col bg-white`}
       >
         {isTransient ? (
           <div className="body-lg-medium flex w-full items-center justify-center py-3 text-gray-700">
