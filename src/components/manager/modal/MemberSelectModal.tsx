@@ -20,7 +20,8 @@ export default function MemberSelectModal({
   const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>(() => {
     const initial: Record<number, boolean> = {}
     members.forEach((m, i) => {
-      if (!!m.checked) initial[i] = true
+      // 운영진(role이 'manager' 또는 '운영진')이거나 checked가 true면 체크
+      if (m.role === 'manager' || m.role === '운영진' || !!m.checked) initial[i] = true
     })
     return initial
   })

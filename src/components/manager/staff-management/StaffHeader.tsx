@@ -50,7 +50,7 @@ console.log(onSaveRoles)
   }, [isModalOpen])
 
   return (
-    <div className="flex items-center justify-between px-8 pt-7 pb-1 bg-background2">
+    <div className="flex items-center justify-between px-8 pt-7  bg-background2">
       <span className="heading-lg-medium">운영진 관리</span>
       <div className="flex gap-2">
         {!isEditMode ? (

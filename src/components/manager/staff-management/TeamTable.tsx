@@ -75,7 +75,7 @@ export default function TeamTable({ isEditMode, setHandleSaveRoles }: { isEditMo
   console.log('운영진 멤버들:', members)
 
   return (
-    <section className="mb-6 overflow-hidden rounded-[12px] bg-white">
+    <section className="mb-6 mt-[3px] overflow-hidden rounded-[12px] bg-white">
    
       <div>
           <div className="scrollbar-hide overflow-x-auto">
