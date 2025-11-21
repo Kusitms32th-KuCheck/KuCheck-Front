@@ -129,7 +129,7 @@ export default function Dropdown({
           size === 'lg' && 'scrollbar-hide max-h-[240px] w-[216px] overflow-y-auto',
           size === 'md' && 'w-[193px]',
           size === 'sm' && 'w-[140px]',
-          size === 'add' && '] w-[66px]',
+          size === 'add' && 'w-[66px] h-[196px] overflow-y-auto',
           customWidth && customWidth
         )}
       >
