@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import {
   ManagerOnIcon,
   AttendanceIcon,
@@ -29,12 +30,34 @@ const managerSidebarItems = [
   { title: '운영진 관리', href: '/staff-management', icon: ManagerIcon, activeIcon: ManagerOnIcon },
 ]
 
-export default function ManagerSidebar() {
+export default function ManagerSidebar({
+  forceShow = false,
+  onLinkClick,
+}: {
+  forceShow?: boolean
+  onLinkClick?: () => void
+} = {}) {
   const pathname = usePathname()
+  const [showSidebar, setShowSidebar] = useState(false)
+
+  useEffect(() => {
+    if (forceShow) {
+      setShowSidebar(true)
+      return
+    }
+    const handleResize = () => {
+      setShowSidebar(window.innerWidth >= 767)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [forceShow])
+
   if (pathname && pathname.startsWith('/attendance/qr')) return null
+  if (!showSidebar) return null
 
   return (
-    <aside className="z-10 w-[240px] bg-white p-[24px] shadow-lg">
+    <aside className="z-10 w-[240px] bg-white p-[24px]">
       <nav className="h-[52px] w-[192px]">
         {managerSidebarItems.map((item) => {
           const isActive =
@@ -48,11 +71,15 @@ export default function ManagerSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`hover:bg-background1 flex items-center gap-[8px] rounded-[8px] px-[18px] py-[14px] transition-colors ${
+              className={`flex items-center gap-[8px] rounded-[8px] px-[18px] py-[14px] hover:bg-background1 transition-colors ${
                 isActive ? 'bg-primary-50 text-primary-500' : 'text-gray-500'
               }`}
+              onClick={onLinkClick}
             >
-              <IconComponent width={16} height={16} />
+              {/* 아이콘을 맨 왼쪽에 위치 */}
+              <span className="flex-shrink-0">
+                <IconComponent width={16} height={16} />
+              </span>
               <p className="body-md-semibold">{item.title}</p>
             </Link>
           )

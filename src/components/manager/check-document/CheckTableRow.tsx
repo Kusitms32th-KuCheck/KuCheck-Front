@@ -77,7 +77,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
   return (
     <>
       <div
-        className={clsx('body-lg-regular grid items-center border-b px-6')}
+        className={clsx('body-lg-regular grid items-center border-b px-6',isEven ? 'bg-white' : 'bg-background1')}
         style={{ gridTemplateColumns: gridTemplate }}
       >
         <p className={clsx('py-[22px] text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{record.name}</p>

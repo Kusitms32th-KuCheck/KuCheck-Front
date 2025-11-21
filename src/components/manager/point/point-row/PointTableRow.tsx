@@ -127,6 +127,29 @@ export default function PointTableRow({
     { key: 'tf', value: member.isTf ? 2 : 0, type: 'tf' },
   ]
 
+  // 모든 월의 출석 점수 합산
+  const attendanceTotal =
+    Object.values(member.attendanceMonthlyTotals || {}).reduce((s, n) => s + (n || 0), 0)
+
+  // 큐픽 참여 점수 (9, 10, 11월)
+  const kupickPoints =
+    (member.kupickParticipation?.[9] ? 2 : 0) +
+    (member.kupickParticipation?.[10] ? 2 : 0) +
+    (member.kupickParticipation?.[11] ? 2 : 0)
+
+  // TF 점수
+  const tfPoints = member.isTf ? 2 : 0
+
+  // 큐포터즈 점수 (입력값)
+  const kuportersPoints = Number(member.kuportersPoints) || 0
+
+  // 운영진/학회원 점수
+  const staffPoints = member.isStaff ? 1 : 0
+
+  // 모든 점수 합산
+  const totalPoints =
+    attendanceTotal + kupickPoints + tfPoints + kuportersPoints + staffPoints
+
   return (
     <div className={`group grid cursor-default items-center gap-0`} style={{ gridTemplateColumns: gridTemplate }}>
       <div className={`relative sticky left-0 z-10 h-[52px]`}>
@@ -145,16 +168,14 @@ export default function PointTableRow({
 
       <p
         className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 px-[13px] ${
-          (Object.values(member.attendanceMonthlyTotals || {}) as number[]).reduce((s, n) => s + (n || 0), 0) <= -5
-            ? 'text-sub-red'
-            : 'text-gray-900'
+          totalPoints <= -5 ? 'text-sub-red' : 'text-gray-900'
         } ${baseBg} group-hover:bg-gray-100`}
       >
-        {(Object.values(member.attendanceMonthlyTotals || {}) as number[]).reduce((s, n) => s + (n || 0), 0)}
+        {totalPoints}
       </p>
 
       <div
-        className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 pl-[13px] text-gray-900 ${baseBg} group-hover:bg-gray-100`}
+        className={`body-lg-medium flex h-[52px] items-center justify-end border-r border-gray-200 pr-[8px] text-gray-900 ${baseBg} group-hover:bg-gray-100`}
       >
         <RoleTag label={getPartName(member.part)} />
       </div>

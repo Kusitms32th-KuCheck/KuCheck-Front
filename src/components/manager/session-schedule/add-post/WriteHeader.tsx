@@ -10,12 +10,13 @@ import ManagerModal from '../../common/ManagerModal'
 
 export default function WriteHeader() {
   const router = useRouter()
-  const pathname = usePathname()
+  const pathname = usePathname() || '' // pathname이 undefined일 경우 빈 문자열로 처리
   const { runSaveHandlers, isEditing, setEditing } = useSessionEdit()
   const selectedSessionName = useSessionScheduleStore((state) => state.selectedSessionName)
   const [saving, setSaving] = useState(false)
 
-  const isDetailAddPage = pathname?.includes('/detail-add')
+  // 항상 문자열에서 includes를 사용하도록 보장
+  const isDetailAddPage = pathname.includes('/detail-add')
   const isEditMode = isDetailAddPage || isEditing
 
   const handleButtonClick = async () => {
