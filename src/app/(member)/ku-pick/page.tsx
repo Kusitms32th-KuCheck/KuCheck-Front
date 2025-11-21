@@ -52,11 +52,13 @@ export default async function QPickPage() {
             </div>
           }
         />
-        <p className="caption-sm-medium text-primary-500">
-          큐픽 제출이 완료되었어요
-          <br />
-          이달 말일까지는 이미지 수정이 가능해요
-        </p>
+        {myKuPickData?.viewUrl && myKuPickData.applicationUrl && (
+          <p className="caption-sm-medium text-primary-500">
+            큐픽 제출이 완료되었어요
+            <br />
+            이달 말일까지는 이미지 수정이 가능해요
+          </p>
+        )}
       </div>
     </main>
   )
