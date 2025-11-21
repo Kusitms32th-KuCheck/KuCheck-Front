@@ -131,7 +131,7 @@ export default function ApprovalListNew({ data }: { data?: MemberApprovalRequest
                     size="sm"
                     textColor={
                       !selections[i] || selections[i] === ''
-                        ? 'text-gray-500'
+                        ? 'text-gray-00'
                         : 'text-blue-500'
                     }
                   />

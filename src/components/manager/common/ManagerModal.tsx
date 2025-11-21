@@ -87,7 +87,7 @@ export default function ManagerModal({
                   <button
                     onClick={onConfirm}
                     className="bg-primary-500 body-2xl-semibold h-[52px] w-full cursor-pointer rounded-[12px] text-white"
-                  >
+                  > 
                     {confirmLabel}
                   </button>
                 </>
