@@ -8,15 +8,16 @@ import Dropdown from '../common/ManagerdropDown'
 import RoleTag from '../common/RoleTag'
 import ImageModal from '../modal/imageModal'
 import { UpIcon, DownIcon } from '@/assets/svgComponents/manager'
+import CheckOneIcon from '@/assets/svgComponents/manager/CheckOneIcon'
 import { postKupicClient } from '@/lib/manager/client/kupic'
-import { formatDateToKorean, getPartName } from '@/utils/manager/attendance'
 import type { CheckDocumentRecord } from '@/types/manager/check-document/types'
+import { formatDateToKorean, formatDateToMD, formatTimeToHM, getPartName } from '@/utils/manager/attendance'
 
 interface AbsenceTableRowProps {
   record: CheckDocumentRecord
   isEven: boolean
   gridTemplate?: string
-  onToast?: (message: string) => void
+  onToast?: (toast: { message: string; icon?: React.ReactNode }) => void
 }
 
 const ATTENDANCE_SCORE_OPTIONS = [
@@ -33,12 +34,14 @@ const getFileNameFromUrl = (url?: string) => {
 
 export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast }: AbsenceTableRowProps) {
   const router = useRouter()
-  const initialApprovalValue = record.approval ? 'approved' : 'rejected'
+  const initialApprovalValue = record.approval === null ? '' : record.approval ? 'approved' : 'rejected'
 
   const [selectedScore, setSelectedScore] = useState(initialApprovalValue)
   const [isLoading, setIsLoading] = useState(false)
   const [modalState, setModalState] = useState<{ open: boolean; index: number }>({ open: false, index: 0 })
 
+  const formattedDate = record.submitDate ? formatDateToMD(record.submitDate) : ''
+  const formattedTime = record.submitDate ? formatTimeToHM(record.submitDate.split('T')[1] || '') : ''
   const formattedSubmitDate = record.submitDate ? formatDateToKorean(record.submitDate) : ''
 
   const files = [
@@ -60,11 +63,11 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
     try {
       const result = await postKupicClient({ kupickId: record.kupickId, approval: isApproved })
       if (!result.success) throw new Error(result.error || '알 수 없는 오류')
-      onToast?.('저장되었습니다')
+      onToast?.({ message: '저장되었습니다', icon: <CheckOneIcon width={16} height={16} /> })
       router.refresh()
     } catch (err: unknown) {
       console.error('Approval update failed:', err)
-      onToast?.(`승인 처리 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}`)
+      onToast?.({ message: `승인 처리 실패: ${err instanceof Error ? err.message : '알 수 없는 오류'}` })
       setSelectedScore(originalValue)
     } finally {
       setIsLoading(false)
@@ -74,14 +77,14 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
   return (
     <>
       <div
-        className={clsx('body-lg-regular grid items-center border-b px-6', isEven ? 'bg-white' : 'bg-background1')}
+        className={clsx('body-lg-regular grid items-center border-b px-6')}
         style={{ gridTemplateColumns: gridTemplate }}
       >
-        <p className="py-[22px] text-start whitespace-nowrap">{record.name}</p>
-        <div className="flex items-center py-[22px]">
+        <p className={clsx('py-[22px] text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{record.name}</p>
+        <div className={clsx('flex items-center py-[22px]', isEven ? 'bg-white' : 'bg-background1')}>
           <RoleTag label={getPartName(record.part)} />
         </div>
-        <p className="py-[22px] text-start whitespace-nowrap">{formattedSubmitDate}</p>
+        <p className={clsx('py-[22px] text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{formattedSubmitDate}</p>
         {files.map(({ url }, index) => {
           const fileName = getFileNameFromUrl(url)
           const isSubmitted = !!fileName
@@ -93,6 +96,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
               disabled={!isSubmitted}
               className={clsx(
                 'body-lg-regular overflow-hidden py-[22px] text-start text-ellipsis whitespace-nowrap',
+                isEven ? 'bg-white' : 'bg-background1',
                 isSubmitted ? 'text-gray-800 hover:underline' : 'cursor-default text-gray-500'
               )}
             >
@@ -102,7 +106,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
             </button>
           )
         })}
-        <div className="flex items-center justify-between text-gray-800">
+        <div className={clsx('flex items-center justify-between', isEven ? 'bg-white' : 'bg-background1')}>
           <Dropdown
             options={ATTENDANCE_SCORE_OPTIONS}
             selected={selectedScore}
@@ -111,6 +115,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
             rightIcon={<DownIcon width={24} height={24} />}
             rightIconActive={<UpIcon width={24} height={24} />}
             showValueInsteadOfLabel
+            placeholder="선택"
           />
         </div>
       </div>
@@ -119,7 +124,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate, onToast 
         <ImageModal
           titles={files.map((f) => f.title)}
           images={files.map((f) => toImageUrl(f.url))}
-          footerText={`${record.name}  ${formattedSubmitDate}`}
+          footerText={`${record.name} ${formattedDate} ${formattedTime}`}
           initialIndex={modalState.index}
           onClose={() => setModalState({ ...modalState, open: false })}
           imageClassName="px-0 m-0"
