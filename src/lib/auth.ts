@@ -33,14 +33,15 @@ export const postAuthKaKao = async (code: string | null, env: 'LOCAL' | 'DEV'): 
       cache: 'no-store',
     })
 
+
     if (!jwtResponse.ok) {
       const errorData = await jwtResponse.text()
       console.error('Kakao auth error:', errorData)
       throw new Error(`Failed to authenticate: ${jwtResponse.status}`)
     }
 
-    const jwtResponseData: ApiResponse<UserType> = await jwtResponse.json()
-
+    const jwtResponseData : ApiResponse<UserType> = await jwtResponse.json()
+    console.log('jwtResponseData', jwtResponseData)
     // isSuccess 확인
     if (!jwtResponseData.isSuccess) {
       throw new Error(jwtResponseData.message || 'Authentication failed')

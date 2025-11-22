@@ -17,7 +17,7 @@ function SignUpStepSwitcher({ step }: { step: StepType }) {
   if (step === '3') return <SchoolField />
   if (step === '4') return <MajorField />
   if (step === '5') return <PartField />
-  if (step === '6') return <StudentCardUploadField />
+  // if (step === '6') return <StudentCardUploadField />
   if (step === '7') return <SignUpDataSubmitModal />
 
   return <NameField />
