@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
+import { ProfileIcon } from '@/assets/svgComponents'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import MemberTag from '@/components/member/common/MemberTag'
@@ -30,7 +31,7 @@ export default function ProfileCard({ name, part, totalPoints, profileImage }: P
             />
           </div>
         ) : (
-          <Skeleton circle height={85} width={85} baseColor="#f3f4f6" highlightColor="#e5e7eb" />
+          <ProfileIcon  height={85} width={85} />
         )}
 
         <div className="flex min-w-0 flex-1 flex-col">
