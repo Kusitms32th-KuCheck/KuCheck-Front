@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { ProfileIcon } from '@/assets/svgComponents'
 
 import { changePartEnumToContent } from '@/utils/common'
 
@@ -32,7 +33,7 @@ export default function UserSummaryCard({ name, profileImageUrl, school, part }:
             />
           </div>
         ) : (
-          <Skeleton width={105} height={126} />
+          <ProfileIcon width={105} height={126} />
         )}
 
         <div>
