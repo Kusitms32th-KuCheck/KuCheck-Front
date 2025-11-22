@@ -30,9 +30,9 @@ function ReasonForAbsenceSubmitStepSwitcher({
   if (step === '1') return <SessionField sessionList={sessionList} />
   if (step === '2') return <AttendanceTypeSelector />
   if (step === '3') return <ReasonField />
-  if (step === '4') return <ProofDocumentUpload />
-  if (step === '5') return <FinalCheckField />
-  if (step === '6') return <SubmissionComplete />
+  // if (step === '4') return <ProofDocumentUpload />
+  if (step === '4') return <FinalCheckField />
+  if (step === '5') return <SubmissionComplete />
 
   // 'step' 값이 유효하지 않을 경우 기본값으로 1단계 표시
   return <SessionField sessionList={sessionList} />

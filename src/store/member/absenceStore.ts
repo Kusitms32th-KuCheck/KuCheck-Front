@@ -16,7 +16,7 @@ interface AbsenceStoreType {
 }
 
 export const useAbsenceStore = create<AbsenceStoreType>((set) => ({
-  absenceData: undefined,
+  absenceData: {absenceReportId: null, fileName: null, lateDateTime: null, leaveDateTime: null},
   file: undefined,
   selectedSessionContent: undefined,
   setState: (params: SetAbsenceStoreType) => {
