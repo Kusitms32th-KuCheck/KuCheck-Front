@@ -78,33 +78,40 @@ export default function ImageUploader() {
     try {
       setIsLoading(true)
       const extension = extractFileExtension(file.name)
+      error(`📡 프리사인드 URL 요청 중...`)
+
       const presignedResponse = await getMembersProfileImageUrl(`profileImageUrl.${extension}`)
 
       if (presignedResponse.error) {
-        error(`${presignedResponse.error}`)
+        error(`❌ 프리사인드 오류: ${presignedResponse.error}`)
+        return
       }
 
       if (!presignedResponse.success || !presignedResponse.data?.data?.newUrl) {
+        error('❌ 프리사인드 URL 응답 형식 오류')
         throw new Error('프리사인드 URL 요청 실패')
       }
+
+      error(`✅ 프리사인드 URL 획득 완료`)
+      error(`📤 파일 업로드 시작: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
 
       const uploadResult = await uploadFile(file, {
         preSignedUrl: presignedResponse.data.data.newUrl,
       })
 
-      if (!uploadResult.success) {
-        throw new Error('파일 업로드 실패')
-      }
+      console.log('업로드 결과:', uploadResult)
 
-      console.log('✅ 큐픽 신청서 서류 이미지 업로드 성공:', uploadResult)
       if (uploadResult.success) {
-        handleStepClick('7')
+        error(`✅ 업로드 성공! 페이지 이동 중...`)
         setFile(undefined)
-      } else if (uploadResult.error) {
-        error(`${uploadResult.error}`)
+        setTimeout(() => handleStepClick('7'), 500)
+      } else {
+        error(`❌ 업로드 실패: ${uploadResult.error || '알 수 없는 오류'}`)
       }
-    } catch (error) {
-      console.error('❌ 업로드 중 오류:', error)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      error(`❌ 오류 발생: ${msg}`)
+      console.error('에러 상세:', err)
     } finally {
       setIsLoading(false)
     }
