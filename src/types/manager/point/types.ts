@@ -20,7 +20,7 @@ export const attendanceStatusDisplayMap: Record<AttendanceStatus, (point: number
   [AttendanceStatus.PRESENT_HOLIDAY]: () => '결석(인정)',
   [AttendanceStatus.ABSENT]: (point) => `결석(${point})`,
   [AttendanceStatus.ABSENT_WITH_DOC]: (point) => {
-    if (point === -1) return '결석(사유 -1)'
+    if (point === -1) return '결석(사유 -2)'
     return `결석(${point})`
   },
   [AttendanceStatus.ABSENT_WITHOUT_DOC]: (point) => {

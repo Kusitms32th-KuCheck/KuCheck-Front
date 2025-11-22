@@ -239,8 +239,8 @@ export default function PointTableRow({
             case 'ABSENT_WITH_DOC':
             case 'ABSENT_WITHOUT_DOC':
             case 'ABSENT_NO_SUBMISSION':
-              if (attendanceRecord.point === -1) {
-                value = '결석(사유 -1)'
+              if (attendanceRecord.point === -2) {
+                value = '결석(사유 -2)'
               } else if (attendanceRecord.point === -2) {
                 value = '결석(무단 -2)'
               } else if (attendanceRecord.point === -3) {

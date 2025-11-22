@@ -16,7 +16,7 @@ interface AbsenceTableRowProps {
 
 const ATTENDANCE_SCORE_OPTIONS = [
   { label: '결석(인정)', value: 'EXCUSED', displayValue: '0' },
-  { label: '결석(사유 -1)', value: 'ABSENT_WITH_DOC', displayValue: '-1' },
+  { label: '결석(사유 -2)', value: 'ABSENT_WITH_DOC', displayValue: '-2' },
   { label: '결석(무단 -2)', value: 'ABSENT_WITH_CAUSE', displayValue: '-2' },
   { label: '결석(미제출 -3)', value: 'ABSENT', displayValue: '-3' },
   { label: '지각(-1)', value: 'LATE', displayValue: '-1' },
