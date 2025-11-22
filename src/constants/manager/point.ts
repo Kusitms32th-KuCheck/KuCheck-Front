@@ -11,7 +11,7 @@ export const allDates = Object.values(monthGroups).flat()
 export const ATTENDANCE_OPTIONS = [
   { label: '출석(0)', value: 'PRESENT' },
   { label: '결석(인정)', value: 'PRESENT_HOLIDAY' },
-  { label: '결석(사유 -1)', value: 'ABSENT_WITH_DOC' },
+  { label: '결석(사유 -2)', value: 'ABSENT_WITH_DOC' },
   { label: '결석(무단 -2)', value: 'ABSENT_WITHOUT_DOC' },
   { label: '결석(미제출 -3)', value: 'ABSENT_NO_SUBMISSION' },
   { label: '지각(-1)', value: 'LATE' },
