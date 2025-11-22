@@ -152,9 +152,6 @@ export const useFileUpload = () => {
       const uploadResponse = await fetch(preSignedUrl, {
         method: 'PUT',
         body: uploadBlob,
-        headers: {
-          'Content-Type': uploadBlob.type || 'application/octet-stream',
-        },
       })
 
       if (!uploadResponse.ok) {
