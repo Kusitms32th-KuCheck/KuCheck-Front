@@ -1,11 +1,11 @@
 export interface AbsenceDataType {
-  absenceReportId?: number
+  absenceReportId?: number | null
   sessionId?: number
   submitType?: AbsenceType
   reason?: string
-  fileName?: string
-  lateDateTime?: string
-  leaveDateTime?: string
+  fileName?: string | null
+  lateDateTime?: string | null
+  leaveDateTime?: string | null
 }
 
 export type AbsenceType = 'ABSENT' | 'LATE' | 'EARLY_LEAVE'

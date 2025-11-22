@@ -26,7 +26,7 @@ export default function FinalCheckField() {
   const { uploadFile } = useFileUpload()
   const file = useAbsenceStore((state) => state.file)
 
-  const { error } = useToast()
+  const { error, success } = useToast()
 
   const handleStepClick = (step: StepType) => {
     router.push(`${pathname}?step=${encodeURIComponent(step)}`)
@@ -55,40 +55,50 @@ export default function FinalCheckField() {
     try {
       if (!absenceData) {
         error('불참 정보를 입력해주세요')
-        console.error('불참 정보를 입력해주세요')
         return
       }
 
+      // 1. 먼저 불참 정보 제출
+      let fileName = 'test.png'
+
       if (file) {
         const extension = extractFileExtension(file.name)
-        const updatedAbsenceData = {
-          ...absenceData,
-          fileName: `absence.${extension}`,
-        }
+        fileName = `absence.${extension}`
+      }
 
-        const response = await postAbsence(updatedAbsenceData)
+      const updatedAbsenceData = {
+        ...absenceData,
+        ...(fileName && { fileName }),
+      }
 
-        const uploadResult = await uploadFile(file, { preSignedUrl: response.data.data.preSignedUrl })
+      const response = await postAbsence(updatedAbsenceData)
 
-        if (uploadResult.error) {
-          error(`${uploadResult.error}`)
-        }
+      if (!response.success) {
+        error(`${response.error || '불참 정보 제출 실패'}`)
+        console.error('❌ 불참 정보 제출 실패:', response.error)
+        return
+      }
+
+      // 2. 파일이 있으면 업로드
+      if (file && response.data.data.preSignedUrl) {
+        const uploadResult = await uploadFile(file, {
+          preSignedUrl: response.data.data.preSignedUrl,
+        })
 
         if (!uploadResult.success) {
-          error(`${uploadResult.error}`)
+          error(`파일 업로드 실패: ${uploadResult.error}`)
           console.error('❌ 파일 업로드 실패:', uploadResult.error)
           return
         }
-
-        if (response.success) {
-          handleStepClick('6')
-        } else {
-          error(`${response.error}`)
-          console.error('❌ 불참 정보 제출 실패:', response.error)
-        }
       }
-    } catch (error) {
-      console.error('❌ 제출 중 오류 발생:', error)
+
+      // 3. 성공
+      // success('✅ 불참 정보가 제출되었습니다')
+      handleStepClick('5')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '제출 중 오류 발생'
+      error(`❌ 오류: ${msg}`)
+      console.error('❌ 제출 중 오류:', err)
     }
   }
 
