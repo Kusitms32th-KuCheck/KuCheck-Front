@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import SignUpHeaderContainer from '@/components/common/sign-up/SignUpHeaderContainer'
+import SignUpHeaderContainer from '@/components/common/sign-up/member/SignUpHeaderContainer'
 
 interface SignUpLayoutProps {
   children: React.ReactNode
@@ -15,7 +15,7 @@ function HeaderFallback() {
 
 export default async function SignUpLayout({ children }: SignUpLayoutProps) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen desktop:bg-background2 laptop:bg-background2 tablet:bg-background2 bg-white">
       {/* 훅을 사용하는 컴포넌트를 포함한 MemberHeader를 Suspense로 감싼다. */}
       <Suspense fallback={<HeaderFallback />}>
         <SignUpHeaderContainer />

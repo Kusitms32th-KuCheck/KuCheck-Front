@@ -1,6 +1,6 @@
 'use client'
 
-import ImageUploader from '@/components/common/sign-up/ImageUploader'
+import ImageUploader from '@/components/common/sign-up/member/ImageUploader'
 
 export default function StudentCardUploadField() {
   return (
