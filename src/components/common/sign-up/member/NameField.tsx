@@ -6,6 +6,7 @@ import { useSignUpStore } from '@/store/signUpStore'
 import MemberInput from '@/components/member/common/MemberInput'
 import { useState, useCallback, useMemo } from 'react'
 import { validateName } from '@/utils/sign-up'
+import ManagerSignUp from '@/components/common/sign-up/manager/ManagerSignUp'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
@@ -79,40 +80,46 @@ export default function NameField() {
   const isButtonEnabled = useMemo(() => validateName(signUpData?.name).isValid, [signUpData?.name])
 
   return (
-    <div>
-      <section className="flex flex-col gap-y-[24px] px-5">
-        <h1 className="heading-lg-semibold">이름을 입력해주세요</h1>
-        <div className="flex flex-col gap-y-2">
-          <MemberInput
-            inputBoxStyle="default"
-            type="text"
-            value={signUpData?.name ?? ''}
-            placeholder="이름"
-            onKeyDown={handleKeyDown}
-            onChange={handleNameChange}
-          />
-          {error ? (
-            <p role="alert" className="body-sm-medium text-red-500">
-              {error}
-            </p>
-          ) : (
-            <p className="body-sm-medium text-gray-400">성까지 포함한 이름을 입력해 주세요.</p>
-          )}
-        </div>
-      </section>
+    <>
+      <div className="hidden desktop:block laptop:block tablet:block">
+        <ManagerSignUp />
+      </div>
+      <div className="desktop:hidden laptop:hidden tablet:hidden">
+        <section className="flex flex-col gap-y-[24px] px-5">
+          <h1 className="heading-lg-semibold">이름을 입력해주세요</h1>
+          <div className="flex flex-col gap-y-2">
+            <MemberInput
+              inputBoxStyle="default"
+              type="text"
+              value={signUpData?.name ?? ''}
+              placeholder="이름"
+              onKeyDown={handleKeyDown}
+              onChange={handleNameChange}
+            />
+            {error ? (
+              <p role="alert" className="body-sm-medium text-red-500">
+                {error}
+              </p>
+            ) : (
+              <p className="body-sm-medium text-gray-400">성까지 포함한 이름을 입력해 주세요.</p>
+            )}
+          </div>
+        </section>
 
-      <section className="fixed bottom-[60px] w-full bg-white px-5">
-        <MemberButton
-          styleSize="lg"
-          buttonType="button"
-          styleType="primary"
-          disabled={!isButtonEnabled}
-          styleStatus={isButtonEnabled ? 'default' : 'disabled'}
-          onClick={handleNextStep}
-        >
-          다음
-        </MemberButton>
-      </section>
-    </div>
+        <section className="fixed bottom-[60px] w-full bg-white px-5">
+          <MemberButton
+            styleSize="lg"
+            buttonType="button"
+            styleType="primary"
+            disabled={!isButtonEnabled}
+            styleStatus={isButtonEnabled ? 'default' : 'disabled'}
+            onClick={handleNextStep}
+          >
+            다음
+          </MemberButton>
+        </section>
+      </div>
+    </>
+
   )
 }
