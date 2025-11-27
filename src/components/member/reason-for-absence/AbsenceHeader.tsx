@@ -8,8 +8,8 @@ const absencePageData: { page: string; title: string; process: string }[] = [
   { page: '1', title: '1. 해당 세션을 선택해 주세요', process: '0%' },
   { page: '2', title: '2. 참석 유형을 선택해 주세요', process: '20%' },
   { page: '3', title: '3. 사유를 작성해 주세요', process: '50%' },
-  // { page: '4', title: '4. 증빙 서류를 첨부해 주세요 (선택)', process: '70%' },
-  { page: '4', title: '해당 내용으로 제출할까요?', process: '100%' },
+  { page: '4', title: '4. 증빙 서류를 첨부해 주세요 (선택)', process: '70%' },
+  { page: '5', title: '해당 내용으로 제출할까요?', process: '100%' },
 ]
 
 export default function AbsenceHeader() {
