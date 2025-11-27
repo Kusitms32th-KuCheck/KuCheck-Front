@@ -15,6 +15,7 @@ import { formatDateTime } from '@/utils/common'
 import { extractFileExtension, generateId } from '@/utils/upload'
 import { postKuPickApplication } from '@/lib/member/client/ku-pick'
 import { useToast } from '@/components/member/common/toast/ToastContext'
+import { useDebugStore } from '@/store/member/debugStore'
 
 interface ApplicationImageUploaderProps {
   myKuPickData: KuPickResponseType | undefined
@@ -30,6 +31,7 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
 
   const [isSubmitSuccessOpen, setIsSubmitSuccessOpen] = useState(false)
   const { error, info } = useToast()
+  const addLog = useDebugStore((state) => state.addLog)
 
   const { uploadFile } = useFileUpload()
 
@@ -42,9 +44,13 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.currentTarget.files?.[0]
 
-    if (!selectedFile) return
+    if (!selectedFile) {
+      addLog('파일 선택 취소', 'info')
+      return
+    }
 
-    // ✅ iOS HEIC 포함, 다양한 이미지 형식 지원
+    addLog('파일 선택됨', 'info', `파일명: ${selectedFile.name}, 크기: ${selectedFile.size} bytes, 타입: ${selectedFile.type}`)
+
     const supportedFormats = [
       'image/heic',
       'image/heif',
@@ -56,12 +62,15 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
     ]
 
     if (!supportedFormats.includes(selectedFile.type)) {
+      const errorMsg = `지원하지 않는 형식: ${selectedFile.type}`
       error('지원하는 형식: JPEG, PNG, GIF, WebP, HEIC')
+      addLog('지원하지 않는 형식', 'error', errorMsg)
       return
     }
 
     if (selectedFile.size > 10 * 1024 * 1024) {
       error('파일 크기가 10MB를 초과합니다')
+      addLog('파일 크기 초과', 'error', `파일 크기: ${selectedFile.size} bytes`)
       return
     }
 
@@ -69,49 +78,64 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
       const reader = new FileReader()
 
       reader.onloadend = () => {
-        if (typeof reader.result !== 'string') {
+        try {
+          if (typeof reader.result !== 'string') {
+            throw new Error('FileReader 결과가 문자열이 아닙니다')
+          }
+
+          const fileInfo = {
+            id: generateId(),
+            name: selectedFile.name,
+            size: selectedFile.size,
+            url: reader.result,
+          }
+
+          setState({ applicationFile: fileInfo })
+          addLog('파일 처리 완료', 'log', `data URL 길이: ${fileInfo.url.length}`)
+          console.log('✅ 파일 선택 완료:', fileInfo.name)
+        } catch (err) {
+          const errorMsg = err instanceof Error ? err.message : '알 수 없는 오류'
           error('파일을 읽을 수 없습니다')
-          return
+          addLog('FileReader onloadend 오류', 'error', errorMsg)
         }
-
-        const fileInfo = {
-          id: generateId(),
-          name: selectedFile.name,
-          size: selectedFile.size,
-          url: reader.result, // ✅ data URL 형식
-        }
-
-        setState({ applicationFile: fileInfo })
-        console.log('✅ 파일 선택 완료:', fileInfo.name)
       }
 
       reader.onerror = () => {
         error('파일을 읽을 수 없습니다')
-        console.error('❌ FileReader 오류')
+        addLog('FileReader 오류', 'error', `읽기 오류 발생`)
       }
 
+      reader.onabort = () => {
+        addLog('FileReader 중단', 'warn')
+      }
+
+      addLog('FileReader 시작', 'log', `readAsDataURL 호출`)
       reader.readAsDataURL(selectedFile)
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : '알 수 없는 오류'
       error('이미지 처리 중 오류가 발생했습니다')
-      console.error('❌ handleFileChange 오류:', err)
+      addLog('handleFileChange 예외', 'error', errorMsg)
     }
   }
 
   const handleSubmit = async () => {
     if (!file?.url) {
       error('업로드할 파일을 선택해주세요')
+      addLog('파일 미선택', 'warn', 'file.url이 없습니다')
       return
     }
 
     try {
       setIsLoading(true)
 
-      // presigned URL 요청
+      addLog('Presigned URL 요청', 'info')
       const extension = extractFileExtension(file.name)
       const presignedResponse = await postKuPickApplication(`kuPickApplication.${extension}`)
 
       if (presignedResponse.error) {
-        error(`${presignedResponse.error}`)
+        const errorMsg = presignedResponse.error
+        error(`${errorMsg}`)
+        addLog('Presigned URL 에러', 'error', errorMsg)
         return
       }
 
@@ -119,25 +143,27 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
         throw new Error('프리사인드 URL 요청 실패')
       }
 
-      console.log('✅ Presigned URL 획득:', presignedResponse.data.data.newUrl)
+      addLog('Presigned URL 획득 완료', 'info')
 
-      // 파일 업로드
       const uploadResult = await uploadFile(file, {
         preSignedUrl: presignedResponse.data.data.newUrl,
       })
 
       if (!uploadResult.success) {
-        error(uploadResult.error || '파일 업로드에 실패했습니다')
+        const errorMsg = uploadResult.error || '파일 업로드에 실패했습니다'
+        error(errorMsg)
+        addLog('업로드 실패', 'error', errorMsg)
         return
       }
 
-      // 업로드 성공
       router.push('/ku-pick')
       setState({ applicationFile: undefined })
       info('저장에 성공했어요')
+      addLog('업로드 성공 및 리다이렉트', 'log')
     } catch (errorMessage) {
+      const errorMsg = errorMessage instanceof Error ? errorMessage.message : '알 수 없는 오류'
       error('업로드 중 오류가 발생했습니다')
-      console.error('❌ handleSubmit 오류:', errorMessage)
+      addLog('handleSubmit 예외', 'error', errorMsg)
     } finally {
       setIsLoading(false)
     }
@@ -157,7 +183,6 @@ export default function ApplicationImageUploader({ myKuPickData }: ApplicationIm
         onChange={handleFileChange}
         disabled={isLoading}
         className="hidden"
-        capture="environment" // ✅ iOS: 카메라 앱 직접 촬영 지원
       />
 
       <div className="relative mx-5 flex flex-col gap-y-2 rounded-[8px]">
