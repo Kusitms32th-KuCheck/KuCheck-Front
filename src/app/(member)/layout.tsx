@@ -1,3 +1,5 @@
+import MobileDebugPanel from '@/components/common/MobileDebugPanel'
+
 export default function MemberLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
@@ -9,6 +11,7 @@ export default function MemberLayout({ children }: { children: React.ReactNode }
       }}
       className="desktop:flex desktop:flex-col desktop:items-center desktop:justify-center flex w-full flex-col"
     >
+      <MobileDebugPanel />
       {children}
     </div>
   )

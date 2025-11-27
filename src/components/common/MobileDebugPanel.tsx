@@ -88,6 +88,9 @@ function LogItem({ log }: { log: DebugLog }) {
 
   const time = new Date(log.timestamp).toLocaleTimeString()
 
+  // ✅ details를 문자열로 변환
+  const detailsText = typeof log.details === 'string' ? log.details : log.details ? JSON.stringify(log.details, null, 2) : undefined
+
   return (
     <div className="border-l-2 border-gray-700 pl-2 py-1">
       <button
@@ -97,12 +100,12 @@ function LogItem({ log }: { log: DebugLog }) {
         <span className="mr-1">{typeIcons[log.type]}</span>
         <span className="text-gray-500">[{time}]</span>
         <span className="ml-2">{log.message}</span>
-        {log.details && <span className="ml-1 text-gray-600">▼</span>}
+        {detailsText && <span className="ml-1 text-gray-600">▼</span>}
       </button>
 
-      {expanded && log.details && (
+      {expanded && detailsText && (
         <div className="bg-gray-800 text-gray-300 p-2 mt-1 rounded text-xs whitespace-pre-wrap break-words max-h-40 overflow-y-auto">
-          {log.details}
+          {detailsText}
         </div>
       )}
     </div>
