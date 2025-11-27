@@ -107,7 +107,7 @@ export default function MemberTableRow({
       <span className="truncate flex-shrink text-gray-500">
         {member.profileImageUrl
           ? member.profileImageUrl.split('/').pop()
-          : '사진 없음'}
+          : '사진없음'}
       </span>
     </button>
 

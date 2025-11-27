@@ -88,7 +88,7 @@ export default function ApprovalListNew({ data }: { data?: MemberApprovalRequest
                         {m.profileImageUrl.split('/').pop()}
                       </span>
                     ) : (
-                      <span className="text-gray-400">사진 없음</span>
+                      <span className="text-gray-400">사진없음</span>
                     )}
                   </button>
 
