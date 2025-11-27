@@ -94,7 +94,7 @@ export default function FinalCheckField() {
 
       // 3. 성공
       // success('✅ 불참 정보가 제출되었습니다')
-      handleStepClick('5')
+      handleStepClick('6')
     } catch (err) {
       const msg = err instanceof Error ? err.message : '제출 중 오류 발생'
       error(`❌ 오류: ${msg}`)
