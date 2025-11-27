@@ -3,6 +3,7 @@
 import { useRef, useCallback } from 'react'
 import { CancleIcon, AddPhotoIcon } from '@/assets/svgComponents/manager'
 import { SessionImage } from '@/types/manager/session/type'
+import { deleteDetailImage } from '@/lib/manager/client/session'
 
 type ImageUploadProps = {
   type?: 'post' | 'session'
@@ -85,9 +86,17 @@ export default function ImageUpload({
   const handleRemove = (index: number) => setFiles((prev) => prev.filter((_, i) => i !== index))
 
   // 기존 이미지 삭제
-  const handleRemoveEditImage = (index: number) => {
+  const handleRemoveEditImage = async (index: number) => {
     if (!setEditImage) return
-    setEditImage(editImage.filter((_, i) => i !== index))
+    const image = editImage[index]
+    if (!image) return
+
+    try {
+      await deleteDetailImage(image.sessionImageId)
+      setEditImage(editImage.filter((_, i) => i !== index))
+    } catch (e) {
+      alert('이미지 삭제에 실패했습니다.')
+    }
   }
 
   const formatFileSize = (bytes: number) => `${(bytes / (1024 * 1024)).toFixed(1)}MB`
