@@ -7,6 +7,7 @@ import AddBody from '../add-post/AddBody'
 import { SessionDetailResponse } from '@/types/manager/session/type'
 import { postClientSessionDetail } from '@/lib/manager/client/session'
 import { useSessionEdit } from '../session-table/SessionEditContext'
+import { SessionImage } from '@/types/manager/session/type'
 
 type SessionDetailEditProps = {
   sessionDetail: SessionDetailResponse
@@ -24,7 +25,7 @@ export default function SessionDetailEdit({ sessionDetail, sessionDetailId, sess
   const [startTime, setStartTime] = useState(sessionDetail.startTime || '')
   const [endTime, setEndTime] = useState(sessionDetail.endTime || '')
   const [content, setContent] = useState(sessionDetail.content || '')
-
+  const [editImage, setEditImage] = useState<SessionImage[]>(sessionDetail.sessionImages || [])
   const handleSave = async () => {
     if (!place || !startTime || !endTime || !content) {
       console.log('모든 항목을 입력해주세요.')
@@ -89,7 +90,8 @@ export default function SessionDetailEdit({ sessionDetail, sessionDetailId, sess
   return (
     <div className="mt-6 mb-6 w-[854px] space-y-6">
       <AddHeader
-        type="session"
+        editImage={editImage}
+        setEditImage={setEditImage}
         place={place}
         setPlace={setPlace}
         startTime={startTime}

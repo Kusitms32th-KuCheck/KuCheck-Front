@@ -23,20 +23,19 @@ export type SessionScheduleResponse = SessionScheduleData[]
 
 //세션 상세정보 upsert
 export interface SessionDetailRequest {
-  sessionId: number
+  sessionId: number | undefined
+  sessionDetailId?: number
   place: string
   startTime: string
   endTime: string
   content: string
 }
-export interface SessionDetailResponse {
-  sessionDetailId: number
-}
 
 //세션 detail 상세정보 조회
-interface SessionImage {
+export interface SessionImage {
   sessionImageId: number
   sessionImagePreSignedUrl: string
+  sessionOriginalFileName: string
 }
 
 export interface SessionDetailResponse {
