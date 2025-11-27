@@ -4,9 +4,10 @@ import { GrayPaperclipIcon } from '@/assets/svgComponents/member'
 
 interface FileItemProps {
   fileUrl: string
+  fileSize: number
 }
 
-export default function FileItem({ fileUrl }: FileItemProps) {
+export default function FileItem({ fileUrl, fileSize }: FileItemProps) {
   /**
    * URL에서 파일명 추출 (query string 제거)
    * S3 URL 형식에 대응: https://bucket.s3.region.amazonaws.com/path/filename?param=value
@@ -93,6 +94,7 @@ export default function FileItem({ fileUrl }: FileItemProps) {
         <p className="body1 truncate" title={displayFileName}>
           {truncatedFileName}
         </p>
+        {/*<p className="body-sm-regular text-gray-500">({fileSize})</p>*/}
       </div>
     </div>
   )

@@ -25,9 +25,9 @@ export default async function NoticeDetail({ params }: NoticeDetailPageProps) {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="desktop:w-[375px] bg-background1 relative min-h-screen w-full">
+      <div className="desktop:w-[375px] bg-white relative min-h-screen w-full">
         {/* 헤더 */}
-        <MemberHeader headerType="dynamic" title={'공지'} headerColor={'bg-background1'} isBottomBorder={true} />
+        <MemberHeader headerType="dynamic" title={'공지'} headerColor={'bg-white'} isBottomBorder={true} />
 
         {/* 헤더 높이 공간 */}
         {/*<div className="h-[116px]" />*/}
@@ -49,7 +49,7 @@ export default async function NoticeDetail({ params }: NoticeDetailPageProps) {
           {noticeData.fileUrls && noticeData.fileUrls.length > 0 && (
             <section className="my-[23px] flex flex-col gap-y-2">
               {noticeData.fileUrls.map((file) => (
-                <FileItem key={file.id} fileUrl={file.url} />
+                <FileItem key={file.id} fileUrl={file.url} fileSize={file.size}/>
               ))}
             </section>
           )}
@@ -59,7 +59,7 @@ export default async function NoticeDetail({ params }: NoticeDetailPageProps) {
             <section className="flex flex-col gap-y-2 my-[23px]">
               {noticeData.imageUrls.map((image) => (
                 <div className="relative w-full h-[335]" key={image.id}>
-                  <Image src={image.url} alt={'이미지'} fill className="object-cover"/>
+                  <Image src={image.url} alt={'이미지'} fill className="object-cover rounded-[12px]"/>
                 </div>
               ))}
             </section>

@@ -81,7 +81,7 @@ export default function SessionList({ sessionList }: SessionListProps) {
   }, [sessionList])
 
   return (
-    <div ref={containerRef} className="mr-[27px] ml-[29px] flex h-screen flex-col gap-y-[10px] overflow-y-auto">
+    <div ref={containerRef} className="mr-[27px] ml-[29px] pb-[60px] flex h-screen flex-col gap-y-[10px] overflow-y-auto">
       {sessionList?.map((session, index) => {
         const isLast = index === sessionList.length - 1
         const sessionStatus = getSessionStatus(session.startDate, thisSaturday)

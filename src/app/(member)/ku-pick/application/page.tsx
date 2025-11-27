@@ -11,7 +11,7 @@ export default async function KuPickApplicationPage() {
 
   return (
     <main>
-      <MemberHeader backPath={'/ku-pick'} headerType={'dynamic'} title={'신청 사진 업로드'} />
+      <MemberHeader backPath={'/ku-pick'} headerType={'dynamic'} title={'신청 사진 업로드'} headerColor={'bg-white'} />
       <div className="h-[60px]" />
       {/*<div className="h-[116px]" />*/}
       <div className="flex flex-col gap-y-[32px]">

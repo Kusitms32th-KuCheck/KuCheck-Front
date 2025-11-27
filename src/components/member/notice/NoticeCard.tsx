@@ -79,7 +79,7 @@ export default function NoticeCard({ id, title, content, categories, createdAt, 
         </div>
       </section>
       {imageUrls && imageUrls.length > 0 ? (
-        <div className="relative flex h-[95px] w-[95px] shrink-0 rounded-[6px] border border-gray-200 whitespace-nowrap">
+        <div className="relative flex h-[95px] w-[95px] shrink-0 rounded-[6px] whitespace-nowrap">
           <Image fill src={imageUrls[0].url} alt="이미지" className="rounded-[6px] object-cover"></Image>
           <>
             <div className="absolute right-[7px] bottom-1 z-10 flex h-[14px] w-[14px] items-center justify-center rounded-[3px] bg-[#3A4047] text-white">
