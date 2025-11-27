@@ -1,7 +1,7 @@
 import MemberHeader from '@/components/member/common/MemberHeader'
 import SessionList from '@/components/member/session/SessionList'
 import { getSession } from '@/lib/member/server/session'
-
+export const dynamic = 'force-dynamic'  // 👈 이 한 줄 추가
 export default async function SessionDetailPage() {
   const sessionResponseResult = await getSession()
   const sessionList = sessionResponseResult.data
