@@ -11,7 +11,7 @@ export default function MemberLayout({ children }: { children: React.ReactNode }
       }}
       className="desktop:flex desktop:flex-col desktop:items-center desktop:justify-center flex w-full flex-col"
     >
-      <MobileDebugPanel />
+      {/*<MobileDebugPanel />*/}
       {children}
     </div>
   )
