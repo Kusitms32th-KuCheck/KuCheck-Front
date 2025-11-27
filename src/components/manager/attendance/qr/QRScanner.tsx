@@ -93,7 +93,7 @@ export default function QRScanner({
   }, [successPulseUntil, resumeDecoding])
 
   return (
-    <div className="relative w-full max-w-[1260px] overflow-hidden rounded-[12px] bg-black shadow-md">
+    <div className="relative h-full w-full max-w-[1260px] overflow-hidden rounded-[12px] bg-black shadow-md">
       <video ref={videoRef} className="h-full w-full scale-x-[-1] object-cover" />
 
       <div ref={containerRef} className="pointer-events-none absolute inset-0">
