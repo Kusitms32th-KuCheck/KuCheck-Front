@@ -2,6 +2,7 @@ import MemberHeader from '@/components/member/common/MemberHeader'
 import { getSessionNoticeDetail } from '@/lib/member/server/session'
 import { formatDateTime, formatTimeToHHMM, formatToKoreanDate } from '@/utils/common'
 import SessionContent from '@/components/member/session/SessionContent'
+import Image from 'next/image'
 
 interface Props {
   params: Promise<{
@@ -56,7 +57,9 @@ export default async function SessionDetailPage({ params }: Props) {
           {sessionData?.images && sessionData.images.length > 0 && (
             <section className="flex flex-col gap-y-2">
               {sessionData.images.map((image) => (
-                <div key={image} className="h-[335px] w-full rounded-[16px] bg-gray-100" />
+                <div className="relative w-full h-[335px]" key={image}>
+                  <Image src={image} fill alt="그림" className="object-cover" />
+                </div>
               ))}
             </section>
           )}
