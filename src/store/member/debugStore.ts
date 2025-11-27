@@ -1,4 +1,4 @@
-// store/debugStore.ts
+// store/member/debugStore.ts
 import { create } from 'zustand'
 
 export interface DebugLog {
@@ -6,13 +6,18 @@ export interface DebugLog {
   message: string
   type: 'log' | 'error' | 'warn' | 'info'
   timestamp: number
-  details?: string| Record<string, any> // ✅ 객체도 허용
+  details?: string
 }
 
 interface DebugStore {
   logs: DebugLog[]
   isDebugOpen: boolean
-  addLog: (message: string, type: 'log' | 'error' | 'warn' | 'info', details?: string) => void
+  // ✅ details 파라미터 타입 수정
+  addLog: (
+    message: string,
+    type: 'log' | 'error' | 'warn' | 'info',
+    details?: string | Record<string, any>
+  ) => void
   clearLogs: () => void
   toggleDebug: () => void
 }
@@ -28,10 +33,16 @@ export const useDebugStore = create<DebugStore>((set) => ({
           message,
           type,
           timestamp: Date.now(),
-          details,
+          // ✅ 객체를 JSON 문자열로 변환
+          details:
+            typeof details === 'string'
+              ? details
+              : details
+                ? JSON.stringify(details, null, 2)
+                : undefined,
         },
         ...state.logs,
-      ].slice(0, 50), // 최대 50개 로그만 유지
+      ].slice(0, 50),
     })),
   clearLogs: () => set({ logs: [] }),
   toggleDebug: () => set((state) => ({ isDebugOpen: !state.isDebugOpen })),

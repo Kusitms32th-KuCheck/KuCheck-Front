@@ -4,6 +4,7 @@
 import { useState, useCallback } from 'react'
 import { FileInfoType } from '@/types/common'
 import { ImageOptimizeOptions, optimizeImage } from '@/utils/imageOptimizer'
+import { useDebugStore } from '@/store/member/debugStore'
 
 export interface UploadOptions {
   preSignedUrl: string
@@ -33,31 +34,34 @@ const isImageFile = (fileName: string): boolean => {
 
 const isDocumentFile = (fileName: string): boolean => {
   const documentExtensions = [
-    'pdf', 'hwp', 'hwpx', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'odt', 'ods', 'odp',
+    'pdf',
+    'hwp',
+    'hwpx',
+    'doc',
+    'docx',
+    'xls',
+    'xlsx',
+    'ppt',
+    'pptx',
+    'txt',
+    'csv',
+    'odt',
+    'ods',
+    'odp',
   ]
   const extension = fileName.split('.').pop()?.toLowerCase() || ''
   return documentExtensions.includes(extension)
 }
 
-const changeFileExtensionToWebp = (fileName: string): string => {
-  const nameParts = fileName.split('.')
-  nameParts.pop()
-  return `${nameParts.join('.')}.webp`
-}
-
 /**
- * data URL을 Blob으로 변환 (iOS Safari 호환성 개선)
- * "data:image/jpeg;base64,..." 형식의 문자열을 Blob으로 변환
+ * data URL을 Blob으로 변환
  */
 const dataUrlToBlob = (dataUrl: string): Blob => {
   try {
     const [header, data] = dataUrl.split(',')
-
-    // MIME 타입 추출: "data:image/jpeg;base64" -> "image/jpeg"
     const mimeMatch = header.match(/:(.*?);/)
     const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg'
 
-    // base64 문자열을 바이너리로 변환
     const binaryString = atob(data)
     const bytes = new Uint8Array(binaryString.length)
 
@@ -67,13 +71,12 @@ const dataUrlToBlob = (dataUrl: string): Blob => {
 
     return new Blob([bytes], { type: mimeType })
   } catch (error) {
-    console.error('❌ dataUrlToBlob 변환 실패:', error)
     throw new Error('이미지 처리 중 오류 발생')
   }
 }
 
 /**
- * FileInfoType에서 File 객체로 변환 (url만 사용)
+ * FileInfoType에서 File 객체로 변환
  */
 const createFileFromFileInfo = (fileInfo: FileInfoType): File => {
   try {
@@ -83,25 +86,17 @@ const createFileFromFileInfo = (fileInfo: FileInfoType): File => {
 
     let fileBlob: Blob
 
-    // URL이 data URL 형식인 경우
     if (typeof fileInfo.url === 'string' && fileInfo.url.startsWith('data:')) {
       fileBlob = dataUrlToBlob(fileInfo.url)
-    }
-    // URL이 ArrayBuffer인 경우
-    else if (fileInfo.url instanceof ArrayBuffer) {
+    } else if (fileInfo.url instanceof ArrayBuffer) {
       fileBlob = new Blob([fileInfo.url])
-    }
-    // 기타 형식
-    else {
+    } else {
       throw new Error('지원하지 않는 파일 형식입니다')
     }
 
-    // MIME 타입이 없으면 파일명에서 추출
     const mimeType = fileBlob.type || 'image/jpeg'
-
     return new File([fileBlob], fileInfo.name, { type: mimeType })
   } catch (error) {
-    console.error('❌ File 생성 실패:', error)
     throw error
   }
 }
@@ -109,10 +104,10 @@ const createFileFromFileInfo = (fileInfo: FileInfoType): File => {
 export const useFileUpload = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const addLog = useDebugStore((state) => state.addLog)
 
   /**
-   * 단일 파일 업로드 (iOS 호환성 개선)
-   * 이미지는 자동 최적화, 문서파일은 원본 유지
+   * 단일 파일 업로드 (이미지 최적화, 원본 확장자 유지)
    */
   const uploadFile = useCallback(
     async (fileInfo: FileInfoType, options: UploadOptions): Promise<UploadResult> => {
@@ -122,10 +117,12 @@ export const useFileUpload = () => {
         setIsLoading(true)
         setUploadProgress(0)
 
+        addLog('파일 업로드 시작', 'info', `파일명: ${fileInfo.name}`)
+
         // 1️⃣ FileInfoType에서 File 객체로 변환
         const file = createFileFromFileInfo(fileInfo)
         let uploadBlob: Blob = file
-        let uploadFileName = fileInfo.name
+        let uploadFileName = fileInfo.name // ✅ 원본 파일명 유지
         const originalSize = file.size
         let optimizedSize = file.size
         let compressionRatio = 0
@@ -148,8 +145,10 @@ export const useFileUpload = () => {
 
             const shouldConvertToWebP = isWebPSupported()
 
-            console.log(
-              `🔍 WebP 지원 여부: ${shouldConvertToWebP ? '예' : '아니오'} (iOS Safari는 미지원)`
+            addLog(
+              'WebP 지원 확인',
+              'info',
+              `WebP 지원: ${shouldConvertToWebP ? '예' : '아니오'}`
             )
 
             const optimizedImage = await optimizeImage(file, {
@@ -165,37 +164,37 @@ export const useFileUpload = () => {
             compressionRatio = optimizedImage.compressionRatio
             format = optimizedImage.format
 
-            // WebP로 변환된 경우에만 확장자 변경
-            if (shouldConvertToWebP && optimizedImage.format === 'webp') {
-              uploadFileName = changeFileExtensionToWebp(fileInfo.name)
-            }
+            // ✅ 파일명은 원본 그대로 유지 (확장자 변경 없음)
 
-            console.log('✅ 이미지 최적화 완료:', {
-              originalFileName: fileInfo.name,
-              uploadFileName,
+            addLog('이미지 최적화 완료', 'log', {
+              fileName: fileInfo.name,
               originalSize: `${(originalSize / 1024).toFixed(2)}KB`,
               optimizedSize: `${(optimizedSize / 1024).toFixed(2)}KB`,
               compressionRatio: `${compressionRatio}%`,
               format: optimizedImage.format,
             })
           } catch (optimizeError) {
-            console.warn('⚠️ 이미지 최적화 실패, 원본으로 업로드:', optimizeError)
+            const errorMsg = optimizeError instanceof Error ? optimizeError.message : '알 수 없는 오류'
+            addLog('이미지 최적화 실패 - 원본으로 업로드', 'warn', errorMsg)
             // 최적화 실패해도 원본으로 계속 진행
           }
+        } else if (isDocumentFile(fileInfo.name)) {
+          addLog('문서파일 인식', 'info', `${fileInfo.name} - 원본 형식으로 업로드`)
         }
 
-        // 3️⃣ S3 presigned URL로 파일 업로드
-        console.log(`📤 S3 업로드 시작: ${uploadFileName} (${(uploadBlob.size / 1024).toFixed(2)}KB)`)
+        // 3️⃣ S3에 파일 업로드
+        addLog('S3 업로드 시작', 'info',
+          `파일명: ${uploadFileName}, 크기: ${(uploadBlob.size / 1024).toFixed(2)}KB`
+        )
 
         const uploadResponse = await fetch(preSignedUrl, {
           method: 'PUT',
           body: uploadBlob,
-          // ⚠️ Content-Type 헤더 제거 - presigned URL 서명과 불일치 방지
         })
 
         if (!uploadResponse.ok) {
           const errorMsg = `S3 업로드 실패 (상태: ${uploadResponse.status})`
-          console.error('❌ 업로드 응답 오류:', {
+          addLog('S3 업로드 실패', 'error', {
             status: uploadResponse.status,
             statusText: uploadResponse.statusText,
           })
@@ -206,11 +205,12 @@ export const useFileUpload = () => {
         setUploadProgress(100)
         onProgress?.(100)
 
-        console.log('✅ 파일 업로드 성공:', {
-          originalFileName: fileInfo.name,
-          uploadFileName,
+        addLog('파일 업로드 성공', 'log', {
+          fileName: uploadFileName,
           originalSize: `${(originalSize / 1024).toFixed(2)}KB`,
           uploadedSize: `${(optimizedSize / 1024).toFixed(2)}KB`,
+          compressionRatio: compressionRatio > 0 ? `${compressionRatio}%` : '압축 없음',
+          format,
         })
 
         return {
@@ -225,7 +225,7 @@ export const useFileUpload = () => {
         }
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : '파일 업로드 중 오류 발생'
-        console.error('❌ 파일 업로드 에러:', errorMsg, error)
+        addLog('파일 업로드 에러', 'error', errorMsg)
         onError?.(errorMsg)
         return { success: false, error: errorMsg }
       } finally {
@@ -233,7 +233,7 @@ export const useFileUpload = () => {
         setUploadProgress(0)
       }
     },
-    []
+    [addLog]
   )
 
   /**
@@ -244,15 +244,29 @@ export const useFileUpload = () => {
       try {
         setIsLoading(true)
 
-        const uploadPromises = fileInfoList.map((fileInfo) => uploadFile(fileInfo, { preSignedUrl }))
+        addLog('다중 파일 업로드 시작', 'info', `파일 개수: ${fileInfoList.length}`)
+
+        const uploadPromises = fileInfoList.map((fileInfo) =>
+          uploadFile(fileInfo, { preSignedUrl })
+        )
         const results = await Promise.all(uploadPromises)
 
         const successCount = results.filter((r) => r.success).length
-        console.log(`✅ 다중 업로드 완료: ${successCount}/${fileInfoList.length}`)
+        const totalOriginalSize = results.reduce((sum, r) => sum + (r.originalSize || 0), 0)
+        const totalOptimizedSize = results.reduce((sum, r) => sum + (r.optimizedSize || 0), 0)
+        const totalSaved = totalOriginalSize - totalOptimizedSize
+
+        addLog('다중 파일 업로드 완료', 'log', {
+          successCount: `${successCount}/${fileInfoList.length}`,
+          totalOriginal: `${(totalOriginalSize / 1024 / 1024).toFixed(2)}MB`,
+          totalOptimized: `${(totalOptimizedSize / 1024 / 1024).toFixed(2)}MB`,
+          totalSaved: `${(totalSaved / 1024 / 1024).toFixed(2)}MB`,
+        })
 
         return results
       } catch (error) {
-        console.error('❌ 다중 파일 업로드 에러:', error)
+        const errorMsg = error instanceof Error ? error.message : '알 수 없는 오류'
+        addLog('다중 파일 업로드 에러', 'error', errorMsg)
         return fileInfoList.map(() => ({
           success: false,
           error: '업로드 실패',
@@ -261,7 +275,7 @@ export const useFileUpload = () => {
         setIsLoading(false)
       }
     },
-    [uploadFile]
+    [uploadFile, addLog]
   )
 
   return {

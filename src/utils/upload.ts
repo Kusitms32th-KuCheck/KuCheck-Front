@@ -21,7 +21,7 @@ export const generateId = (): string => {
 }
 
 /**
- * File 을 FileInfoType 으로 변환
+ * File을 FileInfoType으로 변환
  */
 export const convertFileToFileInfo = (file: File): Promise<FileInfoType> => {
   return new Promise((resolve) => {
@@ -45,14 +45,14 @@ export const convertFileToFileInfo = (file: File): Promise<FileInfoType> => {
  */
 export const isValidFile = (file: File): { valid: boolean; error?: string } => {
   // 허용 확장자
-  const allowedExtensions = ['png', 'jpeg', 'jpg', 'pdf', 'heic']
+  const allowedExtensions = ['png', 'jpeg', 'jpg', 'pdf', 'heic', 'gif', 'webp']
   const fileExtension = file.name.split('.').pop()?.toLowerCase()
 
   // 1️⃣ 확장자 검증
   if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
     return {
       valid: false,
-      error: `허용되지 않는 파일 형식입니다. (png, jpeg, jpg, pdf, heic만 가능)`,
+      error: `허용되지 않는 파일 형식입니다. (png, jpeg, jpg, pdf, heic, gif, webp만 가능)`,
     }
   }
 
@@ -67,6 +67,7 @@ export const isValidFile = (file: File): { valid: boolean; error?: string } => {
 
   return { valid: true }
 }
+
 /**
  * Mime 타입을 파일 확장자로 변환
  * 예: "application/pdf" → "pdf"
@@ -99,49 +100,19 @@ const getMimeTypeExtension = (mimeType: string): string => {
 }
 
 /**
- * 이미지 파일 여부 확인
- */
-const isImageExtension = (extension: string): boolean => {
-  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'heic', 'avif']
-  return imageExtensions.includes(extension.toLowerCase())
-}
-
-/**
- * 문서 파일 여부 확인
- */
-const isDocumentExtension = (extension: string): boolean => {
-  const documentExtensions = [
-    'pdf',
-    'hwp',
-    'hwpx',
-    'doc',
-    'docx',
-    'xls',
-    'xlsx',
-    'ppt',
-    'pptx',
-    'txt',
-    'csv',
-    'odt',
-    'ods',
-    'odp',
-  ]
-  return documentExtensions.includes(extension.toLowerCase())
-}
-
-/**
- * URL에서 파일 확장자를 추출하고 최적화
+ * URL에서 파일 확장자를 추출
  *
  * 동작:
- * - 이미지 확장자면 "webp"로 반환 (WebP 최적화)
- * - 문서 확장자면 원본 그대로 반환
- * - 기타 파일은 원본 확장자 반환
+ * - data URL이면 MIME 타입에서 확장자 추출
+ * - 일반 URL이면 파일명에서 확장자 추출
+ * - 쿼리 파라미터는 제거
+ * - 소문자로 반환
  *
  * 예시:
- * - "https://example.com/photo.jpg?v=1" → "webp" ✅ (이미지→WebP)
- * - "https://example.com/file.pdf" → "pdf" ✅ (문서→원본)
- * - "data:image/jpeg;base64,..." → "webp" ✅ (이미지→WebP)
- * - "data:application/pdf;base64,..." → "pdf" ✅ (문서→원본)
+ * - "https://example.com/photo.jpg?v=1" → "jpg" ✅
+ * - "https://example.com/file.pdf" → "pdf" ✅
+ * - "data:image/jpeg;base64,..." → "jpg" ✅
+ * - "data:application/pdf;base64,..." → "pdf" ✅
  */
 export const extractFileExtension = (url: string | ArrayBuffer | null): string => {
   if (!url || typeof url !== 'string') return ''
@@ -172,17 +143,7 @@ export const extractFileExtension = (url: string | ArrayBuffer | null): string =
     // 확장자가 없으면 빈 문자열 반환
     if (!extension) return ''
 
-    // ✅ 이미지 확장자면 WebP로 변환하여 반환
-    if (isImageExtension(extension)) {
-      return 'webp'
-    }
-
-    // ✅ 문서 확장자면 원본 그대로 반환
-    if (isDocumentExtension(extension)) {
-      return extension
-    }
-
-    // 기타 파일은 원본 확장자 반환
+    // ✅ 원본 확장자 그대로 반환 (WebP 변환 제거)
     return extension
   } catch (error) {
     console.error('Failed to extract extension:', error)
