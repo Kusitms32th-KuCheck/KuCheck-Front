@@ -36,8 +36,8 @@ export default async function SessionDetailPage({ params }: Props) {
 
           {/* 장소 & 일시 */}
           <section className="my-[23px] flex flex-col gap-y-[6px]">
-            <div className="bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
-              <p className="body-sm-medium text-primary-500">장소</p>
+            <div className="bg-primary-50 flex py-[14px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
+              <p className="body-sm-medium text-primary-500 whitespace-nowrap">장소</p>
               <p className="body-sm-medium">{sessionData?.place}</p>
             </div>
             <div className="bg-primary-50 flex h-[48px] items-center gap-x-[10px] rounded-[12px] pr-[10px] pl-4">
