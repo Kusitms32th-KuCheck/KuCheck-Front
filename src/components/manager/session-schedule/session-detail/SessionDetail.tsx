@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { SessionDetailResponse } from '@/types/manager/session/type'
+import { SessionDetailResponse, SessionImage } from '@/types/manager/session/type'
 import { postClientSessionDetail } from '@/lib/manager/client/session'
 import { useSessionEdit } from '../session-table/SessionEditContext'
 import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
@@ -85,7 +85,7 @@ export default function SessionDetail({
   const { isEditing, registerSaveHandler } = useSessionEdit()
   const selectedSessionName = useSessionScheduleStore(
     (state) => state.selectedSessionName
-  ) // <-- 항상 최상단에서 호출
+  ) 
   const {
     place: initialPlace,
     startTime: initialStartTime,
@@ -102,6 +102,7 @@ export default function SessionDetail({
   const [startTime, setStartTime] = useState(initialStartTime || '')
   const [endTime, setEndTime] = useState(initialEndTime || '')
   const [content, setContent] = useState(initialContent || '')
+  const [editImage, setEditImage] = useState<SessionImage[]>(sessionDetail.sessionImages || []) 
 
   const handleSave = async () => {
     if (!place || !startTime || !endTime || !content) {
@@ -110,7 +111,8 @@ export default function SessionDetail({
     }
 
     const detailData = {
-      sessionId: sessionId || sessionDetail.sessionDetailId, // sessionId 우선, 없으면 sessionDetailId 사용
+      sessionId: sessionId,
+      sessionDetailId: sessionDetail.sessionDetailId,
       place,
       startTime,
       endTime,
@@ -168,6 +170,8 @@ export default function SessionDetail({
       <div className="mx-auto mt-6 mb-6 w-[854px] space-y-6">
         <AddHeader
           place={place}
+          editImage={editImage}
+          setEditImage={setEditImage}
           setPlace={setPlace}
           startTime={startTime}
           endTime={endTime}

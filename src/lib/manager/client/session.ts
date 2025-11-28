@@ -137,6 +137,36 @@ export const postDetailImage = async (
   }
 }
 
+//세션 상세 정보 이미지 삭제
+export const deleteDetailImage = async (
+  sessionImageId: number
+): Promise<ApiCallResult<{ preSignedUrl: string }>> => {
+  try {
+    const response = await fetch('/api/session/staff/detail/image', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ sessionImageId }),
+    })
+
+    const json = await response.json()
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: json.error || `HTTP ${response.status}`,
+      }
+    }
+
+    return { success: true, data: json.data }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
 //세션 수정
 export const patchClientSession = async (
   sessionId: number,

@@ -6,9 +6,7 @@ export const getSessionDetailServer = async (
   sessionDetailId: number
 ): Promise<ApiCallResult<SessionDetailResponse>> => {
   try {
-    console.log('getSessionDetailServer called with sessionDetailId:', sessionDetailId)
     const endpoint = `/v1/session/staff/detail/${sessionDetailId}`
-    console.log('API endpoint:', endpoint)
 
     const { data, error } = await apiCallServer<SessionDetailResponse>(endpoint, {
       method: 'GET',

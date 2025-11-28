@@ -72,20 +72,20 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
   return (
     <>
       <div
-        className={`body-lg-regular grid items-center border-b border-gray-100 px-6 py-[22px] ${
+        className={`h-[68px] body-lg-regular grid items-center border-b border-gray-100  ${
           isEven ? 'bg-white' : 'bg-background1'
         }`}
         style={{ gridTemplateColumns: gridTemplate }}
       >
-        <p>{record.name}</p>
+        <p className='pl-6'>{record.name}</p>
         <div>
           <RoleTag label={record.part} />
         </div>
         <p>{record.submitDate}</p>
         <p>{record.submitType}</p>
         <p>{record.time}</p>
-        <p className="pr-5">{record.reason}</p>
-        <p>
+        <p className={`h-full flex items-center ${isEven ? '' : 'bg-background1'}`}>{record.reason}</p>
+        <p className={`h-full flex items-center ${isEven ? '' : 'bg-background1'}`}>
           <button
             onClick={handleDocumentClick}
             className="text-left hover:underline focus:underline focus:outline-none"
@@ -94,7 +94,7 @@ export default function AbsenceTableRow({ record, isEven, gridTemplate }: Absenc
             {record.documentStatus || record.url}
           </button>
         </p>
-        <div>
+        <div className={`h-full flex items-center ${isEven ? '' : 'bg-background1'}`}>
           <AbsenceDropdown
             options={ATTENDANCE_SCORE_OPTIONS}
             selected={selectedScore}

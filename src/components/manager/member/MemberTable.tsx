@@ -53,7 +53,7 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
 
   return (
     <>
-      <div className="mx-6 mt-7 mb-6 flex min-h-0 min-h-[calc(100vh-176px)] flex-1 flex-col">
+      <div className="mx-6 pt-7 mb-6 flex min-h-0 min-h-[calc(100vh-176px)] flex-1 flex-col">
         <div
           className={`rounded-t-[12px] border-b border-gray-100 bg-white ${isScrolled ? 'z-10 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
         >

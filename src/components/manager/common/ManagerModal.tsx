@@ -59,8 +59,8 @@ export default function ManagerModal({
           </div>
         ) : (
           <>
-            <div className="heading-sm-medium flex w-full items-center justify-center text-gray-700">{message}</div>
-            <div className="flex gap-x-2">
+            <div className="heading-sm-medium flex w-full items-center justify-center  text-gray-700">{message}</div>
+            <div className="flex gap-x-2 pt-6">
               {reverseButtons ? (
                 <>
                   <button

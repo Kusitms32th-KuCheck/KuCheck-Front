@@ -12,7 +12,7 @@ export default async function SessionEditPage({
   const { date } = await searchParams
   console.log('SessionEditPage - sessionId (sessionDetailId):', sessionId, 'date:', date)
 
-  const sessionDetailId = Number(sessionId) // URL 파라미터로 받은 값이 실제로는 sessionDetailId
+  const sessionDetailId = Number(sessionId) 
   const result = await getSessionDetailServer(sessionDetailId)
   console.log('SessionEditPage - API result:', result)
   const { data: sessionDetail } = result
@@ -30,7 +30,7 @@ export default async function SessionEditPage({
       <SessionDetailEdit
         sessionDetail={sessionDetail}
         sessionDetailId={sessionDetailId}
-        sessionId={sessionDetailId} // 임시로 sessionDetailId를 sessionId로 사용
+        sessionId={sessionDetailId} 
         date={date}
       />
     </main>

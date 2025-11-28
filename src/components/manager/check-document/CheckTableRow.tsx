@@ -77,14 +77,14 @@ console.log(files)
   return (
     <>
       <div
-        className={clsx('body-lg-regular grid items-center border-b px-6',isEven ? 'bg-white' : 'bg-background1')}
+        className={clsx('h-[68px] body-lg-regular grid items-center ',isEven ? 'bg-white' : 'bg-background1')}
         style={{ gridTemplateColumns: gridTemplate }}
       >
-        <p className={clsx('py-[22px] text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{record.name}</p>
-        <div className={clsx('flex items-center py-[22px]', isEven ? 'bg-white' : 'bg-background1')}>
+        <p className={clsx('px-6 text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{record.name}</p>
+        <div className={clsx(' h-full flex items-center ', isEven ? 'bg-white' : 'bg-background1')}>
           <RoleTag label={getPartName(record.part)} />
         </div>
-        <p className={clsx('py-[22px] text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{formattedSubmitDate}</p>
+        <p className={clsx('h-full flex items-center text-start whitespace-nowrap', isEven ? 'bg-white' : 'bg-background1')}>{formattedSubmitDate}</p>
         {files.map(({ url }, index) => {
           const fileName = getFileNameFromUrl(url)
           const isSubmitted = !!fileName
@@ -95,7 +95,7 @@ console.log(files)
               onClick={() => isSubmitted && setModalState({ open: true, index })}
               disabled={!isSubmitted}
               className={clsx(
-                'body-lg-regular overflow-hidden py-[22px] text-start text-ellipsis whitespace-nowrap',
+                'h-full flex items-center body-lg-regular overflow-hidden text-start text-ellipsis whitespace-nowrap',
                 isEven ? 'bg-white' : 'bg-background1',
                 isSubmitted ? 'text-gray-800 hover:underline' : 'cursor-default text-gray-500'
               )}
@@ -106,7 +106,7 @@ console.log(files)
             </button>
           )
         })}
-        <div className={clsx('flex items-center justify-between', isEven ? 'bg-white' : 'bg-background1')}>
+        <div className={clsx('h-full flex items-center justify-between', isEven ? 'bg-white' : 'bg-background1')}>
           <Dropdown
             options={ATTENDANCE_SCORE_OPTIONS}
             selected={selectedScore}

@@ -100,7 +100,7 @@ export default function ManagerAttendanceQRClient() {
   )
 
   return (
-    <main className="flex max-h-full flex-col items-center justify-start gap-5 p-6">
+    <main className="flex h-full flex-col items-center justify-start gap-5 p-6">
       <Suspense fallback={<div>로딩 중...</div>}>
         <FocusSessionCard summary={summary} />
       </Suspense>

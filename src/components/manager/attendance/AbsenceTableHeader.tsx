@@ -7,11 +7,14 @@ interface AbsenceTableHeaderProps {
 export default function AbsenceTableHeader({ gridTemplate }: AbsenceTableHeaderProps) {
   return (
     <div
-      className="grid items-center border-b border-gray-100 px-6 py-[22px]"
+      className="grid items-center"
       style={{ gridTemplateColumns: gridTemplate }}
     >
       {headers.map((header, index) => (
-        <p key={index} className="body-lg-semibold m-0 p-0 text-gray-500">
+        <p
+          key={index}
+          className={`py-[22px] border-b border-gray-100 body-lg-semibold pb-2 text-gray-500${index === 0 ? ' pl-6' : ''}`}
+        >
           {header}
         </p>
       ))}

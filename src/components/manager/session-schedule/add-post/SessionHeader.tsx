@@ -6,10 +6,13 @@ import { PointupIcon, PointdownIcon } from '@/assets/svgComponents/manager'
 import InputField from './InputField'
 import ImageUpload from './ImageUpload'
 import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
+import { SessionImage } from '@/types/manager/session/type'
 
 type SessionHeaderProps = {
   place: string
   setPlace: (v: string) => void
+  editImage?: SessionImage[]
+  setEditImage?: (images: SessionImage[]) => void
   startTime?: string
   endTime?: string
   setStartTime: (v: string) => void
@@ -28,6 +31,8 @@ export default function SessionHeader({
   setStartTime,
   setEndTime,
   date,
+  editImage,
+  setEditImage,
   files,
   setFiles,
   error = false,
@@ -41,6 +46,7 @@ export default function SessionHeader({
     value: v,
   }))
 
+  console.log('SessionHeader - startTime:', editImage)
   // 기존 시간 값이 있으면 파싱해서 초기값 설정
   const parseTime = (timeString: string) => {
     if (!timeString) return ['', '']
@@ -147,7 +153,12 @@ export default function SessionHeader({
         </div>
       </InputField>
 
-      <ImageUpload files={files} setFiles={setFiles} />
+      <ImageUpload
+        files={files}
+        setFiles={setFiles}
+        editImage={editImage}
+        setEditImage={setEditImage}
+      />
     </div>
   )
 }

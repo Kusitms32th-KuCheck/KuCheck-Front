@@ -6,9 +6,12 @@ interface CheckTableHeaderProps {
 
 export default function CheckTableHeader({ gridTemplate }: CheckTableHeaderProps) {
   return (
-    <div className="grid items-center border-b border-gray-100 px-6 py-2" style={{ gridTemplateColumns: gridTemplate }}>
+    <div className="grid items-center " style={{ gridTemplateColumns: gridTemplate }}>
       {headers.map((header, index) => (
-        <p key={index} className="body-lg-semibold text-gray-500">
+        <p
+          key={index}
+          className={`border-b pb-2 border-gray-100 body-lg-semibold text-gray-500${index === 0 ? ' pl-6' : ''}`}
+        >
           {header}
         </p>
       ))}
