@@ -22,7 +22,7 @@ export default async function NoticePage() {
           </Link>
         }
       />
-      <div className="h-[60px]" />
+      <div className="h-[70px]" />
       {/*<div className="h-[120px]" />*/}
       <div className="flex flex-1 flex-col px-5">
         <NoticeCategories noticeCategories={noticeCategories} />
