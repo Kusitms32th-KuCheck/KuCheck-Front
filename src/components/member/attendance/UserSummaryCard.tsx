@@ -1,8 +1,6 @@
 import Image from 'next/image'
 
-import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-//임시추가
 import { ProfileIcon } from '@/assets/svgComponents'
 
 import { changePartEnumToContent } from '@/utils/common'
@@ -19,7 +17,6 @@ interface UserSummaryCardProps {
 }
 
 export default function UserSummaryCard({ name, profileImageUrl, school, part }: UserSummaryCardProps) {
-  console.log('profileImageUrl', profileImageUrl)
   return (
     <div className="relative w-full rounded-[12px] bg-gradient-to-r from-[#E6EDFF] to-[#CBD9FF] py-[30px] pr-[12px] pl-[20px]">
       <section className="z-10 flex items-center gap-x-[20px]">

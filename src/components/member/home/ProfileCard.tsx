@@ -8,15 +8,30 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import MemberTag from '@/components/member/common/MemberTag'
 import { UserSummaryType } from '@/types/member/user'
 import { changePartEnumToContent } from '@/utils/common'
+import { useState } from 'react'
+import ImageModal from '@/components/member/common/ImageModal'
 
 type ProfileCardProps = UserSummaryType
 
 export default function ProfileCard({ name, part, totalPoints, profileImage }: ProfileCardProps) {
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false)
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | undefined | null>()
+
   return (
     <div className="relative flex flex-col gap-y-2 rounded-[16px] bg-white py-[11px] shadow-[0_2px_12.9px_0_rgba(0,0,0,0.05)]">
+      {isImageModalOpen ? (
+        <ImageModal
+          ImageUrl={selectedImageUrl}
+          setSelectedImageUrl={setSelectedImageUrl}
+          setIsImageModalOpen={setIsImageModalOpen}
+        />
+      ) : null}
       <section className="flex items-center gap-x-[14px] px-[18px] py-[10px]">
         {profileImage ? (
-          <div className="relative h-[53px] w-[53px] flex-shrink-0">
+          <div onClick={() => {
+            setSelectedImageUrl(profileImage)
+            setIsImageModalOpen(true)
+          }} className="relative h-[53px] w-[53px] flex-shrink-0">
             <Image
               src={profileImage}
               alt="프로필 사진"
