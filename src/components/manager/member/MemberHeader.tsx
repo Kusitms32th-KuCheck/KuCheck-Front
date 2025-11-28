@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ManagerButton from '../common/ManagerButton'
 import { useMemberStore } from '@/store/manager/useMemberStore'
 import { NewIcon } from '@/assets/svgComponents/manager'
@@ -9,6 +9,7 @@ import { patchClientStaffProfile } from '@/lib/member/client/staff'
 import { useMemberTableStore } from '@/store/manager/useMemberTableStore'
 import { useMemberApprovalStore } from '@/store/manager/useMemberApprovalStore'
 import { patchClientStaffApprovalStatusBatch } from '@/lib/member/client/staff'
+import ManagerModal from '../common/ManagerModal'
 
 export default function MemberHeader(memberLength?: number) {
   const { isEditMode, toggleEditMode, isApprovalView, setApprovalView } = useMemberStore()
@@ -21,6 +22,15 @@ export default function MemberHeader(memberLength?: number) {
   const { selections, clearSelections, approvalMembers } = useMemberApprovalStore()
   const [loadingApproval, setLoadingApproval] = useState(false)
   const [loadingProfile, setLoadingProfile] = useState(false)
+  const [approvalModalOpen, setApprovalModalOpen] = useState(false)
+  const [approvalFeedback, setApprovalFeedback] = useState<string | null>(null)
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false)
+
+  // 항상 페이지 진입 시 학회원관리 탭이 보이도록
+  useEffect(() => {
+    setApprovalView(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // 프로필 저장 핸들러 (학회원관리)
   const handleSaveProfiles = async () => {
@@ -55,28 +65,60 @@ export default function MemberHeader(memberLength?: number) {
   // 승인/거절 저장 핸들러 (회원가입 승인)
   const handleSaveApprovals = async () => {
     setLoadingApproval(true)
-    const payload = Object.entries(selections)
-      .filter(([_, status]) => status === 'APPROVED' || status === 'REJECTED')
-      .map(([idx, status]) => {
-        const member = approvalMembers?.[Number(idx)]
-        if (!member) {
-          console.error(`approvalMembers[${idx}] is undefined`)
-          return null
-        }
-        const memberId = member.memberId ?? member.id
-        if (!memberId) {
-          console.error(`Member at index ${idx} has no memberId or id`, member)
-          return null
-        }
-        return { memberId, status }
-      })
-      .filter(Boolean)
+    let feedbackMsg = ''
+    try {
+      const payload = Object.entries(selections)
+        .filter(([_, status]) => status === 'APPROVED' || status === 'REJECTED')
+        .map(([idx, status]) => {
+          const member = approvalMembers?.[Number(idx)]
+          if (!member) {
+            console.error(`approvalMembers[${idx}] is undefined`)
+            return null
+          }
+          const memberId = member.memberId ?? member.id
+          if (!memberId) {
+            console.error(`Member at index ${idx} has no memberId or id`, member)
+            return null
+          }
+          return { memberId, status }
+        })
+        .filter(Boolean)
 
-    if (payload.length > 0) {
-      await patchClientStaffApprovalStatusBatch(payload)
+      if (payload.length > 0) {
+        await patchClientStaffApprovalStatusBatch(payload)
+        feedbackMsg = '성공적으로 저장되었습니다.'
+      } else {
+        feedbackMsg = '변경사항이 없습니다.'
+      }
+    } catch (e) {
+      feedbackMsg = '저장에 실패했습니다.'
     }
+    setApprovalFeedback(feedbackMsg)
+    setShowFeedbackModal(true)
     clearSelections()
     setLoadingApproval(false)
+  }
+
+  // 저장하기 버튼 클릭 시 모달 오픈
+  const handleApprovalSaveClick = () => {
+    setApprovalModalOpen(true)
+  }
+
+  // 피드백 모달 닫기
+  const handleApprovalFeedbackClose = () => {
+    setShowFeedbackModal(false)
+    setApprovalFeedback(null)
+  }
+
+  // 모달에서 확인 시 모달 닫기 + 기존 저장 로직 호출
+  const handleApprovalModalConfirm = async () => {
+    setApprovalModalOpen(false)
+    await handleSaveApprovals()
+  }
+
+  // 모달에서 취소 시 모달 닫기
+  const handleApprovalModalCancel = () => {
+    setApprovalModalOpen(false)
   }
 
   return (
@@ -118,7 +160,7 @@ export default function MemberHeader(memberLength?: number) {
         </div>
         {isApprovalView ? (
           <ManagerButton
-            onClick={handleSaveApprovals}
+            onClick={handleApprovalSaveClick}
             styleSize="sm"
             disabled={loadingApproval}
           >
@@ -134,6 +176,25 @@ export default function MemberHeader(memberLength?: number) {
           </ManagerButton>
         )}
       </div>
+      {/* 저장 확인 모달 */}
+      <ManagerModal
+        open={approvalModalOpen}
+        message="변경사항을 저장할까요?"
+        onConfirm={handleApprovalModalConfirm}
+        onCancel={handleApprovalModalCancel}
+        confirmLabel="저장하기"
+        cancelLabel="취소"
+      />
+      {showFeedbackModal && approvalFeedback && (
+        <ManagerModal
+          open={true}
+          transientMessage={approvalFeedback}
+          transientDuration={1200}
+          onTransientClose={handleApprovalFeedbackClose}
+          onCancel={handleApprovalFeedbackClose}
+          onConfirm={handleApprovalFeedbackClose}
+        />
+      )}
     </div>
   )
 }
