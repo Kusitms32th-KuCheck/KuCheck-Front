@@ -21,12 +21,12 @@ export default function AttendanceSuccess({
     >
       <div className="flex items-center gap-2">
         <div className="relative flex items-center justify-center">
-          {isSuccess ? <QrCheckIcon width={28} height={28} /> : <QrErrorIcon width={28} height={28} />}
+          {isSuccess ? <QrCheckIcon width={36} height={36} /> : <QrErrorIcon width={36} height={36} />}
         </div>
       </div>
       <div className="flex flex-col text-left leading-tight">
-        <span className="font-medium">{isSuccess && `${name}님의 출석체크가 완료되었어요`}</span>
-        {!isSuccess && errorMessage ? <span className="text-xs text-red-600">{errorMessage}</span> : null}
+        <span className="font-medium text-lg pr-3">{isSuccess && `${name}님의 출석체크가 완료되었어요`}</span>
+        {!isSuccess && errorMessage ? <span className="text-lg text-red-600 pr-3">{errorMessage}</span> : null}
       </div>
     </div>
   )

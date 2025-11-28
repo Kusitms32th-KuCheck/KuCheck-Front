@@ -195,7 +195,7 @@ export default function MemberTableRow({
                 setPendingDeleteIndex(index)
                 setIsDeleteModalOpen(true)
               }}
-              className="text-primary-500 body-sm-semibold bg-primary-50 w-[73px] rounded-[4px] py-2"
+              className="text-primary-500 border border-primary-400 body-sm-semibold bg-primary-50 w-[73px] rounded-[4px] py-2"
             >
               삭제
             </button>
