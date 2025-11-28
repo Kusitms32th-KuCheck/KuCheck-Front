@@ -3,6 +3,7 @@ import { getNoticeDetail } from '@/lib/member/server/notice'
 import SessionContent from '@/components/member/session/SessionContent'
 import FileItem from '@/components/member/notice/FileItem'
 import Image from 'next/image'
+import ImageContainer from '@/components/member/notice/ImageContainer'
 
 interface NoticeDetailPageProps {
   params: Promise<{
@@ -55,15 +56,7 @@ export default async function NoticeDetail({ params }: NoticeDetailPageProps) {
           )}
 
           {/* 이미지 */}
-          {noticeData.imageUrls && noticeData.imageUrls.length > 0 && (
-            <section className="flex flex-col gap-y-2 my-[23px]">
-              {noticeData.imageUrls.map((image) => (
-                <div className="relative w-full h-[335]" key={image.id}>
-                  <Image src={image.url} alt={'이미지'} fill className="object-cover rounded-[12px]"/>
-                </div>
-              ))}
-            </section>
-          )}
+          <ImageContainer noticeData={noticeData} />
         </div>
       </div>
     </div>

@@ -7,12 +7,12 @@ import { useSignUpStore } from '@/store/signUpStore'
 import { postMembersOnboarding } from '@/lib/common'
 import { useToast } from '@/components/member/common/toast/ToastContext'
 import { useNativeDeviceInfo } from '@/hooks/member/useNativeDeviceInfo'
+import { useNativeMessage } from '@/hooks/member/useNativeMessage'
 
 type StepType = '1' | '2' | '3' | '4' | '5' | '6' | '7'
 
 export default function PartField() {
-  const { deviceInfo } = useNativeDeviceInfo();
-  console.log('deviceInfo', deviceInfo)
+  // const deviceInfo = useNativeMessage()
 
   const updateSignUpData = useSignUpStore((state) => state.updateSignUpData)
   const signUpData = useSignUpStore((state) => state.signUpData)
@@ -48,7 +48,7 @@ export default function PartField() {
     // deviceId가 있으면 fcmToken 추가
     const dataToSubmit = {
       ...signUpData,
-      ...(deviceInfo?.pushToken && { fcmToken: deviceInfo.pushToken }),
+      // ...(deviceInfo?.fcmToken && { fcmToken: deviceInfo.fcmToken }),
     }
 
     const response = await postMembersOnboarding(dataToSubmit)
@@ -79,6 +79,10 @@ export default function PartField() {
             )
           })}
         </div>
+        {/*<p>디바이스 장치: {deviceInfo?.deviceId}</p>*/}
+        {/*<p>fcmToken: {deviceInfo?.fcmToken}</p>*/}
+        {/*<p>platform: {deviceInfo?.platform}</p>*/}
+        {/*<p>timestamp: {deviceInfo?.timestamp}</p>*/}
       </section>
 
       {/* bottom button */}

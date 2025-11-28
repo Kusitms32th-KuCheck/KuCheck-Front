@@ -135,10 +135,10 @@ export default function QRcode({ expAt, token }: QRcodeProps) {
       </p>
 
       <div className="flex flex-col items-center justify-center gap-y-4">
-        <div className="h-[200px] w-[200px] rounded-lg border border-gray-200 bg-gray-100 p-2">
+        <div className="h-[220px] w-[220px] rounded-lg border border-gray-200 bg-gray-100 p-2">
           {!isExpired && tokenData?.token ? (
             <div className="flex h-full w-full items-center justify-center">
-              <QRCodeSVG value={qrData} size={192} level="H" />
+              <QRCodeSVG value={qrData} size={212} level="H" />
             </div>
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center bg-gray-100">
