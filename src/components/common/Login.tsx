@@ -1,9 +1,11 @@
-import { LogoIcon } from '@/assets/svgComponents/manager'
-import { HomeLogo, KakaoLogoIcon } from '@/assets/svgComponents/member'
 import Link from 'next/link'
+
+import { LogoIcon } from '@/assets/svgComponents/manager'
+import { AppleLogoIcon, HomeLogo, KakaoLogoIcon } from '@/assets/svgComponents/member'
 
 export default function Login() {
   const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`
+  const appleAuthUrl = `https://appleid.apple.com/auth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_APPLE_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_APPLE_REDIRECT_URI}&response_mode=form_post&scope=name%20email`
 
   return (
     <main className="flex items-center justify-center">
@@ -29,13 +31,13 @@ export default function Login() {
                 <KakaoLogoIcon width={18} height={18} />
                 카카오 로그인
               </Link>
-              {/*<Link*/}
-              {/*  className="body-md-semibold flex h-[44px] items-center justify-center rounded-[8px] bg-black text-white"*/}
-              {/*  href={''}*/}
-              {/*>*/}
-              {/*  <AppleLogoIcon width={24} height={24} />*/}
-              {/*  Apple로 계속하기*/}
-              {/*</Link>*/}
+              <Link
+                className="body-md-semibold flex h-[44px] items-center justify-center rounded-[8px] bg-black text-white"
+                href={appleAuthUrl}
+              >
+                <AppleLogoIcon width={24} height={24} />
+                Apple로 계속하기
+              </Link>
             </div>
             <p className="desktop:hidden laptop:hidden tablet:hidden caption-md-regular text-primary-100">
               큐시즘 학회원들을 위한 서비스 입니다.
