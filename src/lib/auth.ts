@@ -75,3 +75,71 @@ export const postAuthKaKao = async (code: string | null, env: 'LOCAL' | 'DEV'): 
     }
   }
 }
+
+
+/**
+ * 애플 인증 - code를 받아 JWT 토큰 발급
+ * PENDING 상태일 때는 accessToken만, APPROVED 상태일 때는 refreshToken도 반환
+ * @param code - 카카오에서 받은 인증 코드
+ * @param env - 개발 환경일경우 (localhost3000-> LOCAL, 배포 url 일 경우 'DEV')
+ *
+ * 주의: 이 함수는 API 응답만 처리합니다.
+ * 쿠키 설정은 백엔드의 Set-Cookie 헤더로 자동 처리됩니다.
+ */
+export const postAuthApple = async (code: string | null): Promise<AuthCallResult> => {
+  try {
+    if (!code) {
+      throw new Error('Authorization code not provided')
+    }
+
+    const jwtResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/v1/auth/apple`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code: code }),
+      cache: 'no-store',
+    })
+
+
+    if (!jwtResponse.ok) {
+      const errorData = await jwtResponse.text()
+      console.error('Apple auth error:', errorData)
+      throw new Error(`Failed to authenticate: ${jwtResponse.status}`)
+    }
+
+    const jwtResponseData : ApiResponse<UserType> = await jwtResponse.json()
+    console.log('jwtResponseData', jwtResponseData)
+    // isSuccess 확인
+    if (!jwtResponseData.isSuccess) {
+      throw new Error(jwtResponseData.message || 'Authentication failed')
+    }
+
+    const { status, role, hasInfo } = jwtResponseData.result
+
+    // 헤더에서 토큰 추출
+    // Set-Cookie 헤더: 백엔드에서 이미 httpOnly로 설정됨
+    const accessToken = jwtResponse.headers.get('authorization')?.replace('Bearer ', '')
+    const refreshToken = jwtResponse.headers.get('X-Refresh-Token')?.replace('Bearer ', '')
+
+    console.log('애플 로그인 하고 액세스토큰', accessToken)
+    console.log('애플 로그인 하고 리스레시 토큰', refreshToken)
+
+    console.log('✅ 애플 authentication successful')
+
+    return {
+      success: true,
+      accessToken,
+      refreshToken,
+      status,
+      role,
+      hasInfo,
+    }
+  } catch (error) {
+    console.error('애플 authentication error:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Authentication failed',
+    }
+  }
+}

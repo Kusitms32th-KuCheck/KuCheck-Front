@@ -40,7 +40,7 @@ function ErrorMessage({ errorCode }: { errorCode: string }) {
   )
 }
 
-export default function LoginPage({ searchParams }: LoginPageProps) {
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   const errorCode = typeof searchParams?.error === 'string' ? searchParams.error : null
 
   return (

@@ -46,7 +46,7 @@ KuCheck-Front/
 ├── src/
 │   ├── app/                         # Next.js App Router - 페이지 및 레이아웃
 │   │   ├── layout.tsx               # 루트 레이아웃
-│   │   ├── page.tsx                 # 홈페이지
+│   │   ├── route.ts                 # 홈페이지
 │   │   ├── (auth)/                  # 인증 관련 라우트 그룹
 │   │   ├── (manager)/               # 매니저 기능 라우트 그룹
 │   │   └── (member)/                # 멤버 기능 라우트 그룹
