@@ -9,7 +9,7 @@ import FeedbackBanner from '@/components/member/setting/FeedbackBanner'
 export default async function SettingPage() {
   const result = await getProfileSummary()
   const userData = result.data
-  const FEEDBACK_URL = 'https://gemini.google.com'
+  const FEEDBACK_URL = 'http://pf.kakao.com/_uxfHxkn/chat'
 
   return (
     <main className="flex items-center justify-center bg-gray-100">
