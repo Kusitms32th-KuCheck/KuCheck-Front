@@ -18,7 +18,7 @@ export default function AttendanceItem({ record }: AttendanceItemProps) {
       <div className="flex gap-x-[21px]">
         <p className="body-sm-medium text-gray-500">{record.date}</p>
         <div className="flex flex-col">
-          <p className="body-sm-semibold text-gray-700">{switchAttendanceTypeToKor(record.type)}</p>
+          <p className="body-md-semibold text-gray-700">{switchAttendanceTypeToKor(record.type)}</p>
           {record.week ? (
             <div className="flex gap-x-[6px]">
               {record.week ? <p className="caption-sm-medium text-gray-500">{record.week}주차</p> : null}
@@ -29,7 +29,7 @@ export default function AttendanceItem({ record }: AttendanceItemProps) {
           )}
         </div>
       </div>
-      <p className={`${getPointsColor(record.points)} body-sm-semibold text-gray-700`}>{record.points}</p>
+      <p className={`${getPointsColor(record.points)} body-md-semibold text-gray-700`}>{record.points}</p>
     </section>
   )
 }
