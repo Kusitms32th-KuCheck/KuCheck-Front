@@ -4,10 +4,12 @@ import AccountSettingContainer from '@/components/member/setting/AccountSettingC
 import TermsOfServiceContainer from '@/components/member/setting/TermsOfServiceContainer'
 import ProfileContainer from '@/components/member/setting/ProfileContainer'
 import { getProfileSummary } from '@/lib/member/user'
+import FeedbackBanner from '@/components/member/setting/FeedbackBanner'
 
 export default async function SettingPage() {
   const result = await getProfileSummary()
   const userData = result.data
+  const FEEDBACK_URL = 'https://gemini.google.com'
 
   return (
     <main className="flex items-center justify-center bg-gray-100">
@@ -20,6 +22,7 @@ export default async function SettingPage() {
           <TermsOfServiceContainer />
           <AccountSettingContainer />
           <EtcContainer />
+          <FeedbackBanner href={FEEDBACK_URL} />
         </div>
       </div>
     </main>

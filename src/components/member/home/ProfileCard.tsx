@@ -65,7 +65,7 @@ export default function ProfileCard({ name, part, totalPoints, profileImage }: P
           <div className="flex items-center gap-x-2">
             <p className="body-sm-regular text-gray-600">상벌점</p>
             {totalPoints !== undefined ? (
-              <p className="body-sm-regular text-gray-600">{totalPoints}</p>
+              <p className={`${totalPoints <= -5 ? 'text-sub-red' : 'text-gray-600'} body-sm-regular `}>{totalPoints}</p>
             ) : (
               <Skeleton width={25} height={20} />
             )}
