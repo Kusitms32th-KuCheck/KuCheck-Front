@@ -53,8 +53,7 @@ export default function PartField() {
 
     const response = await postMembersOnboarding(dataToSubmit)
     if (response.success) {
-      // handleStepClick('6')
-      handleStepClick('7')
+      // handleStepClick('7')
 
     } else if (response.error) {
       error(`${response.error}`)
