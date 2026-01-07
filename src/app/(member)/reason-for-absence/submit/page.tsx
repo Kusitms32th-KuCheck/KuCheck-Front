@@ -54,8 +54,7 @@ export default async function ReasonForAbsenceSubmitPage({ searchParams }: { sea
           <>
             <MemberHeader headerType={'dynamic'} title={'불참 사유서 제출'} headerColor={'bg-white'} />
             {/* 헤더의 높이만큼 공간 확보 */}
-            {/*<div className="h-[117px]" />*/}
-            <div className="h-[60px]" />
+            <div className="h-[117px]" />
           </>
         )}
         <AbsenceHeader />

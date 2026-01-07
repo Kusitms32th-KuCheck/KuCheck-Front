@@ -15,7 +15,7 @@ export default function NoticeSearchHeader({searchValue, setSearchValue}: Notice
   return (
     <header
       className={'desktop:w-[375px] fixed top-0 z-50 w-full bg-white'}
-      // style={{ paddingTop: '54px' }}
+      style={{ paddingTop: '54px' }}
     >
       <div className={'bg-white relative flex h-[62px] items-center px-[7px]'}>
         <ChevronLeftBlackIcon onClick={() => router.back()} width={36} height={36} className="cursor-pointer" />

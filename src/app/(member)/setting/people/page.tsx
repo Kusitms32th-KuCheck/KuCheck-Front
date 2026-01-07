@@ -5,8 +5,7 @@ export default function People() {
   return (
     <div className="desktop:w-[375px] min-h-screen bg-white">
       <MemberHeader headerType="dynamic" title={'만든 사람들'} headerColor={'bg-white'} />
-      {/*<div className="h-[116px]" />*/}
-      <div className="h-[60px]" />
+      <div className="h-[116px]" />
       <div className="flex flex-col">
         <section className="flex flex-col gap-y-[28px] border-b border-gray-100 px-5 py-[32px]">
           <div className="flex items-center gap-x-5">

@@ -5,9 +5,7 @@ export default function PrivacyPolicy() {
     <main className="flex items-center justify-center bg-gray-100">
       <div className="desktop:w-[375px] min-h-screen bg-white">
         <MemberHeader headerType="dynamic" title={'개인정보 처리 방침'} headerColor={'bg-white'} />
-        <div className="h-[60px]" />
-
-        {/*<div className="h-[116px]" />*/}
+        <div className="h-[116px]" />
         <div className="mt-[22px] flex flex-col gap-y-3 px-5">
           <section className="border-b border-gray-100 pb-4 text-gray-700">
             <h2 className="body-2xl-semibold">큐시즘 앱(큐첵) 개인정보처리방침</h2>

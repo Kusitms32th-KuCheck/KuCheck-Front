@@ -27,8 +27,7 @@ export default function WithDrawPage() {
         <WithDrawModal setIsWithDrawModalOpen={setIsWithDrawModalOpen} onWithDrawClick={onWithdrawClick} />
       )}
       <MemberHeader headerType="dynamic" title={'탈퇴하기'} />
-      {/*<div className="h-[116px]" />*/}
-      <div className="h-[60px]" />
+      <div className="h-[116px]" />
       <ul className="mt-5 flex flex-col gap-y-[20px] px-5">
         <h1 className="heading-sm-semibold">탈퇴 전 꼭 확인해 주세요</h1>
         <ul className="flex flex-col gap-y-[20px]">
