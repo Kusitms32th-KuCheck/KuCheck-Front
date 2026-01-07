@@ -22,7 +22,9 @@ export default function SubmitCard({ title, step, description, href, isSubmit, c
   }, [href, router])
 
   return (
-    <div className={`${colorGray ? 'bg-gray-100' : 'bg-primary-50'} flex flex-col gap-y-[16px] rounded-[16px] p-4`}>
+    <div
+      onClick={handleNavigate}
+      className={`${colorGray ? 'bg-gray-100' : 'bg-primary-50'} flex flex-col gap-y-[16px] rounded-[16px] p-4`}>
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-[2px]">
           <p className={`${colorGray ? 'text-gray-600' : 'text-primary-500'} caption-sm-medium`}>STEP {step}</p>
@@ -33,7 +35,6 @@ export default function SubmitCard({ title, step, description, href, isSubmit, c
         </div>
 
         <button
-          onClick={handleNavigate}
           className="cursor-pointer transition-transform hover:scale-110"
           aria-label={`${title} 페이지로 이동`}
           type="button"
