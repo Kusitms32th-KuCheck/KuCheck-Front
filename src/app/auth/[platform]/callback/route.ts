@@ -76,7 +76,6 @@ export async function GET(request: NextRequest, { params }: Props) {
 export async function POST(request: NextRequest, { params }: Props) {
   const { platform } = await params
   const baseUrl = request.nextUrl.origin
-  const env = baseUrl === 'http://localhost:3000' ? 'LOCAL' : 'DEV'
 
   try {
     if (platform === 'apple') {
@@ -87,11 +86,13 @@ export async function POST(request: NextRequest, { params }: Props) {
       if (!code) throw new Error('no_code')
 
       const result = await postAuthApple(code)
+      console.log('애플 로그인 result', result)
       return await processAuth(result, baseUrl)
     }
 
-    return NextResponse.redirect(new URL('/login?error=invalid_platform', baseUrl))
+    // return NextResponse.redirect(new URL('/login?error=invalid_platform', baseUrl))
   } catch (error: any) {
-    return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error.message)}`, baseUrl))
+    console.log('애플 로그인 error', error)
+    // return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error.message)}`, baseUrl))
   }
 }
