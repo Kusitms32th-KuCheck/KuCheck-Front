@@ -73,26 +73,40 @@ export async function GET(request: NextRequest, { params }: Props) {
 /**
  * 3. POST 핸들러 (애플 등 Form Data 방식)
  */
+// ... 기존 import 동일
+
 export async function POST(request: NextRequest, { params }: Props) {
   const { platform } = await params
   const baseUrl = request.nextUrl.origin
 
+  if (platform !== 'apple') {
+    return NextResponse.redirect(new URL('/login?error=invalid_platform', baseUrl), 303)
+  }
+
   try {
-    if (platform === 'apple') {
-      const formData = await request.formData()
-      const code = formData.get('code') as string
-      // 애플은 추가로 id_token, user 정보를 formData로 보낼 수 있음 (필요시 백엔드 전달)
+    const formData = await request.formData()
+    const code = formData.get('code') as string
+    const id_token = formData.get('id_token') as string // 애플은 id_token도 함께 보냅니다.
 
-      if (!code) throw new Error('no_code')
-
-      const result = await postAuthApple(code)
-      console.log('애플 로그인 result', result)
-      return await processAuth(result, baseUrl)
+    if (!code) {
+      console.error('Apple Auth Error: No code found in formData')
+      return NextResponse.redirect(new URL('/login?error=no_code', baseUrl), 303)
     }
 
-    // return NextResponse.redirect(new URL('/login?error=invalid_platform', baseUrl))
+    // 백엔드 전달 시 code 뿐만 아니라 id_token이 필요한지 확인해보세요.
+    const result = await postAuthApple(code)
+
+    // 만약 result가 undefined이거나 예상치 못한 형식이면 여기서 에러 발생
+    if (!result) throw new Error('empty_auth_result')
+
+    return await processAuth(result, baseUrl)
+
   } catch (error: any) {
-    console.log('애플 로그인 error', error)
-    // return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error.message)}`, baseUrl))
+    console.error('Apple Login Runtime Error:', error)
+    // 에러 메시지를 쿼리에 담아 리다이렉트 (상태코드 303 명시)
+    return NextResponse.redirect(
+      new URL(`/login?error=${encodeURIComponent(error.message || 'apple_auth_failed')}`, baseUrl),
+      303
+    )
   }
 }
