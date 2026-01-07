@@ -9,40 +9,46 @@ type Props = { params: Promise<{ platform: string }> }
  * API 결과값을 받아 쿠키를 굽고 최종 페이지로 리다이렉트합니다.
  */
 async function processAuth(result: any, baseUrl: string) {
-  const redirect = (path: string) => NextResponse.redirect(new URL(path, baseUrl))
+  // 리다이렉트 시 303 상태 코드를 명시하여 POST -> GET으로 전환
+  const redirect = (path: string) =>
+    NextResponse.redirect(new URL(path, baseUrl), { status: 303 });
 
   if (!result.success) {
-    console.error('Authentication failed:', result.error)
-    return redirect(`/login?error=${encodeURIComponent(result.error || 'auth_failed')}`)
+    console.error('Authentication failed:', result.error);
+    return redirect(`/login?error=${encodeURIComponent(result.error || 'auth_failed')}`);
   }
 
-  const { status, role, accessToken, refreshToken, hasInfo } = result
-  const cookieStore = await cookies()
+  const { status, role, accessToken, refreshToken, hasInfo } = result;
+  const cookieStore = await cookies();
 
-  // 쿠키 설정 로직 공통화
   const cookieOptions = {
     maxAge: 7 * 24 * 60 * 60,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax' as const,
     path: '/',
-  }
+  };
 
-  if (accessToken) cookieStore.set('accessToken', accessToken, { ...cookieOptions, httpOnly: true })
-  if (refreshToken) cookieStore.set('refreshToken', refreshToken, { ...cookieOptions, httpOnly: true })
-  if (role) cookieStore.set('role', role, cookieOptions)
+  // 1. 필수 인증 토큰/권한 쿠키 설정
+  if (accessToken) cookieStore.set('accessToken', accessToken, { ...cookieOptions, httpOnly: true });
+  if (refreshToken) cookieStore.set('refreshToken', refreshToken, { ...cookieOptions, httpOnly: true });
+  if (role) cookieStore.set('role', role, cookieOptions);
 
-  // 리다이렉트 분기 처리
+  // 2. 미들웨어에서 사용하는 status와 hasInfo 쿠키를 반드시 구워줘야 합니다.
+  if (status) cookieStore.set('status', status, cookieOptions);
+  if (hasInfo !== undefined) cookieStore.set('hasInfo', String(hasInfo), cookieOptions);
+
+  // 3. 리다이렉트 로직
   if (status === 'PENDING') {
-    return redirect(hasInfo ? '/sign-up?step=7' : '/sign-up')
+    return redirect(hasInfo ? '/sign-up?step=7' : '/sign-up');
   }
 
   if (status === 'APPROVED') {
-    const mainRoles = ['USER', 'MANAGEMENT', 'STAFF', 'EXECUTIVE']
-    if (mainRoles.includes(role)) return redirect('/home')
-    if (role === 'GUEST') return redirect('/sign-up')
+    const mainRoles = ['USER', 'MANAGEMENT', 'STAFF', 'EXECUTIVE'];
+    if (mainRoles.includes(role)) return redirect('/home');
+    if (role === 'GUEST') return redirect('/sign-up');
   }
 
-  return redirect('/login?error=unexpected_status')
+  return redirect('/login?error=unexpected_status');
 }
 
 /**
@@ -74,39 +80,29 @@ export async function GET(request: NextRequest, { params }: Props) {
  * 3. POST 핸들러 (애플 등 Form Data 방식)
  */
 // ... 기존 import 동일
-
 export async function POST(request: NextRequest, { params }: Props) {
-  const { platform } = await params
-  const baseUrl = request.nextUrl.origin
-
-  if (platform !== 'apple') {
-    return NextResponse.redirect(new URL('/login?error=invalid_platform', baseUrl), 303)
-  }
+  const { platform } = await params;
+  const baseUrl = request.nextUrl.origin;
 
   try {
-    const formData = await request.formData()
-    const code = formData.get('code') as string
-    const id_token = formData.get('id_token') as string // 애플은 id_token도 함께 보냅니다.
+    if (platform === 'apple') {
+      const formData = await request.formData();
+      const code = formData.get('code') as string;
 
-    if (!code) {
-      console.error('Apple Auth Error: No code found in formData')
-      return NextResponse.redirect(new URL('/login?error=no_code', baseUrl), 303)
+      if (!code) throw new Error('no_code');
+
+      // 백엔드 호출
+      const result = await postAuthApple(code);
+
+      // 성공/실패 여부에 상관없이 processAuth에서 303 리다이렉트 처리
+      return await processAuth(result, baseUrl);
     }
-
-    // 백엔드 전달 시 code 뿐만 아니라 id_token이 필요한지 확인해보세요.
-    const result = await postAuthApple(code)
-
-    // 만약 result가 undefined이거나 예상치 못한 형식이면 여기서 에러 발생
-    if (!result) throw new Error('empty_auth_result')
-
-    return await processAuth(result, baseUrl)
-
   } catch (error: any) {
-    console.error('Apple Login Runtime Error:', error)
-    // 에러 메시지를 쿼리에 담아 리다이렉트 (상태코드 303 명시)
+    console.error('Apple POST Handler Error:', error);
+    // 에러 발생 시에도 303으로 리다이렉트하여 405 방지
     return NextResponse.redirect(
-      new URL(`/login?error=${encodeURIComponent(error.message || 'apple_auth_failed')}`, baseUrl),
+      new URL(`/login?error=${encodeURIComponent(error.message)}`, baseUrl),
       303
-    )
+    );
   }
 }
