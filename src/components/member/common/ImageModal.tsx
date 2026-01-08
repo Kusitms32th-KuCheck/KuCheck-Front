@@ -26,7 +26,7 @@ export default function ImageModal({ ImageUrl, setSelectedImageUrl, setIsImageMo
     >
       <button
         onClick={handleCloseModal}
-        className="absolute top-[32px] right-[28px] z-60 flex cursor-pointer items-center text-white transition-colors"
+        className="absolute top-[52px] right-[28px] z-60 flex cursor-pointer items-center text-white transition-colors"
       >
         <WhiteXIcon width={32} height={32} />
       </button>
