@@ -50,14 +50,14 @@ console.log(onSaveRoles)
   }, [isModalOpen])
 
   return (
-    <div className="flex items-center justify-between px-8 pt-7  bg-background2">
+    <div className="flex items-center justify-between pl-8 pr-6 pt-[31px]  bg-background2">
       <span className="heading-lg-medium">운영진 관리</span>
       <div className="flex gap-2">
         {!isEditMode ? (
           <>
             <button
               type="button"
-              className="body-md-medium rounded-[6px] border border-primary-100 bg-white px-3 py-2 text-primary-500 hover:bg-primary-50"
+              className="body-sm-medium rounded-[4px] border border-primary-100 bg-white px-3 py-2 text-primary-500 hover:bg-primary-50"
               onClick={() => setIsModalOpen(true)}
             >
               운영진 추가/삭제
@@ -82,7 +82,7 @@ console.log(onSaveRoles)
             )}
             <button
               type="button"
-              className="body-md-medium rounded-[6px] bg-primary-500 px-3 py-1 text-white hover:bg-primary-600"
+              className="body-sm-medium rounded-[4px] bg-primary-500 px-3 py-2 text-white hover:bg-primary-600"
               onClick={() => setIsEditMode(true)}
             >
               권한 수정하기
@@ -92,14 +92,14 @@ console.log(onSaveRoles)
           <>
             <button
               type="button"
-              className="body-md-medium rounded-[6px] border border-primary-100 bg-white px-3 py-2 text-primary-500 hover:bg-primary-50"
+              className="body-sm-medium rounded-[4px] border border-primary-100 bg-white px-3 py-2 text-primary-500 hover:bg-primary-50"
               onClick={() => setIsEditMode(false)}
             >
               초기화
             </button>
             <button
               type="button"
-              className="body-md-medium rounded-[6px] bg-primary-500 px-3 py-1 text-white hover:bg-primary-600"
+              className="body-sm-medium rounded-[4px] bg-primary-500 px-3 py-2 text-white hover:bg-primary-600"
               onClick={() => {
                 if (typeof onSaveRoles === 'function') {
                   onSaveRoles()
