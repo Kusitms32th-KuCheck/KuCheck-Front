@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { getClientApprovedStaffMembers, patchClientStaffBatch } from '@/lib/member/client/staff'
 import MemberSelectModal from '@/components/manager/modal/MemberSelectModal'
+import ManagerModal from '@/components/manager/common/ManagerModal'
 import type { Member } from '@/types/manager/member/mockData'
 
 interface StaffHeaderProps {
@@ -17,7 +18,9 @@ export default function StaffHeader({ isEditMode, setIsEditMode, onSaveRoles }: 
   const [modalMembers, setModalMembers] = useState<Member[]>([])
   const [modalLoading, setModalLoading] = useState(false)
   const [modalError, setModalError] = useState<string | null>(null)
-console.log(onSaveRoles)
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+
   useEffect(() => {
     if (isModalOpen) {
       setModalLoading(true)
@@ -49,6 +52,20 @@ console.log(onSaveRoles)
     }
   }, [isModalOpen])
 
+  const handleSuccessAlertClose = () => {
+    setShowSuccessAlert(false)
+    setSuccessMessage('')
+  }
+
+  const handleRolesSave = async () => {
+    if (typeof onSaveRoles === 'function') {
+      await onSaveRoles()
+      setSuccessMessage('성공적으로 저장되었습니다.')
+      setShowSuccessAlert(true)
+      setIsEditMode(false)
+    }
+  }
+
   return (
     <div className="flex items-center justify-between pl-8 pr-6 pt-[31px]  bg-background2">
       <span className="heading-lg-medium">운영진 관리</span>
@@ -76,15 +93,11 @@ console.log(onSaveRoles)
                     .map(m => (m as any).memberId)
                   if (selectedIds.length > 0) {
                     await patchClientStaffBatch(selectedIds)
+                    setSuccessMessage('성공적으로 저장되었습니다.')
+                    setShowSuccessAlert(true)
                   }
                 }}
-              >
-                {modalLoading && (
-                  <div className="flex flex-col items-center justify-center py-10">
-                    <span className="body-lg-medium text-gray-400">불러오는 중...</span>
-                  </div>
-                )}
-              </MemberSelectModal>
+              />
             )}
             <button
               type="button"
@@ -106,17 +119,24 @@ console.log(onSaveRoles)
             <button
               type="button"
               className="body-sm-medium rounded-[4px] bg-primary-500 px-3 py-2 text-white hover:bg-primary-600"
-              onClick={() => {
-                if (typeof onSaveRoles === 'function') {
-                  onSaveRoles()
-                }
-              }}
+              onClick={handleRolesSave}
             >
               저장하기
             </button>
           </>
         )}
       </div>
+      {/* 저장 성공 피드백 모달 */}
+      {showSuccessAlert && (
+        <ManagerModal
+          open={true}
+          transientMessage={successMessage}
+          transientDuration={1200}
+          onTransientClose={handleSuccessAlertClose}
+          onCancel={handleSuccessAlertClose}
+          onConfirm={handleSuccessAlertClose}
+        />
+      )}
     </div>
   )
 }
