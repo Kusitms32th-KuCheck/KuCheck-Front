@@ -92,7 +92,7 @@ console.log(onSaveRoles)
           <>
             <button
               type="button"
-              className="body-md-medium rounded-[6px] border border-primary-100 bg-white px-3 py-1 text-primary-500 hover:bg-primary-50"
+              className="body-md-medium rounded-[6px] border border-primary-100 bg-white px-3 py-2 text-primary-500 hover:bg-primary-50"
               onClick={() => setIsEditMode(false)}
             >
               초기화
