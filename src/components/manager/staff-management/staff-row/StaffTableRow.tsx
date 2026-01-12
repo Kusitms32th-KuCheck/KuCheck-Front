@@ -6,6 +6,7 @@ import Dropdown from '../../common/ManagerdropDown'
 import { PointupIcon, PointdownIcon } from '@/assets/svgComponents/manager'
 import { useState } from 'react'
 import RoleTag from '../../common/RoleTag'
+
 const partMap: Record<string, string> = {
   BACKEND: '백엔드',
   FRONTEND: '프론트엔드',
@@ -70,9 +71,9 @@ export default function StaffTableRow({
     }
   }
 
-  // 권한 드롭다운 스타일
+  // 권한 드롭다운 스타일 - 선택값이 원래값과 다르면 파란색
   const triggerClassName =
-    selectedRole === '경영총괄팀'
+    selectedRole !== initialRole
       ? 'body-lg-semibold text-primary-500'
       : 'text-gray-900 body-lg-medium'
 

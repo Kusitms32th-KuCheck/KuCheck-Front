@@ -198,7 +198,7 @@ export const patchClientStaffBatch = async (staffMemberIds: number[]): Promise<A
 
 //운영진 권한 일괄 수정
 export const patchClientStaffRolesBatch = async (
-  staffRoles: { memberId: number; role: 'STAFF' | 'MANAGEMENT' }[]
+  staffRoles: { memberId: number; role: 'STAFF' | 'MANAGEMENT' | 'EXECUTIVE' }[]
 ): Promise<ApiCallResult<null>> => {
   try {
     const payload = { items: staffRoles }

@@ -1,8 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { Member } from '@/types/manager/member/mockData'
 import { ModalXIcon } from '@/assets/svgComponents/manager'
+
+const partMap: Record<string, string> = {
+  BACKEND: '백엔드',
+  FRONTEND: '프론트엔드',
+  DESIGN: '디자인',
+  PLANNING: '기획',
+}
 
 export default function MemberSelectModal({
   open,
@@ -19,14 +26,20 @@ export default function MemberSelectModal({
   onClose?: () => void
   onSave?: (selected: Member[]) => void
 }) {
-  const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>(() => {
-    const initial: Record<number, boolean> = {}
-    members.forEach((m, i) => {
-      // 운영진(role이 'manager' 또는 '운영진')이거나 checked가 true면 체크
-      if (m.role === 'manager' || m.role === '운영진' || !!m.checked) initial[i] = true
-    })
-    return initial
-  })
+  const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>({})
+
+  // members 데이터가 완전히 로드된 후 체크박스 상태 초기화
+  useEffect(() => {
+    if (!loading && members.length > 0) {
+      const initial: Record<number, boolean> = {}
+      members.forEach((m, i) => {
+        if (m.role === 'manager' || m.role === '운영진' || !!m.checked) {
+          initial[i] = true
+        }
+      })
+      setSelectedIds(initial)
+    }
+  }, [members, loading])
 
   if (!open) return null
 
@@ -76,20 +89,26 @@ export default function MemberSelectModal({
 
               <div className="overflow-auto">
                 <div className="grid gap-0">
-                  {members.map((m, i) => (
-                    <div
-                      key={i}
-                      className={`grid items-center border-b border-gray-100`}
-                      style={{ gridTemplateColumns: '64px 160px 160px 350px' }}
-                    >
-                      <div className="pl-5">
-                        <input checked={!!selectedIds[i]} onChange={() => toggle(i)} type="checkbox" />
+                  {members.length > 0 ? (
+                    members.map((m, i) => (
+                      <div
+                        key={i}
+                        className={`grid items-center border-b border-gray-100`}
+                        style={{ gridTemplateColumns: '64px 160px 160px 350px' }}
+                      >
+                        <div className="pl-5">
+                          <input checked={!!selectedIds[i]} onChange={() => toggle(i)} type="checkbox" />
+                        </div>
+                        <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{m.name}</p>
+                        <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{partMap[m.part] || m.part}</p>
+                        <p className="body-lg-regular truncate p-3 text-gray-800">{m.school}</p>
                       </div>
-                      <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{m.name}</p>
-                      <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{m.part}</p>
-                      <p className="body-lg-regular truncate p-3 text-gray-800">{m.school}</p>
+                    ))
+                  ) : (
+                    <div className="flex items-center justify-center py-10">
+                      <span className="body-lg-medium text-gray-400">데이터가 없습니다.</span>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </>

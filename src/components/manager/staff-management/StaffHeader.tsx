@@ -10,9 +10,10 @@ interface StaffHeaderProps {
   isEditMode: boolean
   setIsEditMode: (isEditMode: boolean) => void
   onSaveRoles?: () => void
+  onStaffUpdated?: () => void
 }
 
-export default function StaffHeader({ isEditMode, setIsEditMode, onSaveRoles }: StaffHeaderProps) {
+export default function StaffHeader({ isEditMode, setIsEditMode, onSaveRoles, onStaffUpdated }: StaffHeaderProps) {
   const [editMode, setEditMode] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalMembers, setModalMembers] = useState<Member[]>([])
@@ -20,16 +21,26 @@ export default function StaffHeader({ isEditMode, setIsEditMode, onSaveRoles }: 
   const [modalError, setModalError] = useState<string | null>(null)
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Record<number, boolean>>(() => {
+    const initial: Record<number, boolean> = {}
+    modalMembers.forEach((m, i) => {
+      // 운영진(role이 'manager' 또는 '운영진')이거나 checked가 true면 체크
+      if (m.role === 'manager' || m.role === '운영진' || !!m.checked) initial[i] = true
+    })
+    return initial
+  })
 
   useEffect(() => {
     if (isModalOpen) {
       setModalLoading(true)
+      setIsLoadingComplete(false)
       getClientApprovedStaffMembers(1, 50)
         .then((res) => {
           if (res.success && res.data?.members?.data) {
             setModalMembers(
               res.data.members.data.map((m) => ({
-                memberId: m.memberId, // memberId 추가
+                memberId: m.memberId,
                 name: m.name,
                 photo: m.profileImageUrl ?? '',
                 part: m.part,
@@ -48,7 +59,10 @@ export default function StaffHeader({ isEditMode, setIsEditMode, onSaveRoles }: 
         .catch((err) => {
           setModalError(err.message || 'API 호출 오류')
         })
-        .finally(() => setModalLoading(false))
+        .finally(() => {
+          setModalLoading(false)
+          setIsLoadingComplete(true)
+        })
     }
   }, [isModalOpen])
 
@@ -85,7 +99,7 @@ export default function StaffHeader({ isEditMode, setIsEditMode, onSaveRoles }: 
                 open={isModalOpen}
                 title="운영진 추가/삭제"
                 members={modalMembers}
-                loading={modalLoading}
+                loading={modalLoading || !isLoadingComplete}
                 onClose={() => setIsModalOpen(false)}
                 onSave={async (selected) => {
                   const selectedIds = modalMembers
@@ -95,6 +109,11 @@ export default function StaffHeader({ isEditMode, setIsEditMode, onSaveRoles }: 
                     await patchClientStaffBatch(selectedIds)
                     setSuccessMessage('성공적으로 저장되었습니다.')
                     setShowSuccessAlert(true)
+                    setIsLoadingComplete(false)
+                    // 운영진 페이지 데이터 갱신
+                    if (typeof onStaffUpdated === 'function') {
+                      onStaffUpdated()
+                    }
                   }
                 }}
               />
