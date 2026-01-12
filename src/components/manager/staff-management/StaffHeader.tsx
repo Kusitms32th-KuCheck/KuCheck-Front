@@ -61,16 +61,15 @@ console.log(onSaveRoles)
               onClick={() => setIsModalOpen(true)}
             >
               운영진 추가/삭제
-             </button>
+            </button>
             {/* 운영진 추가/삭제 모달 */}
             {isModalOpen && (
               <MemberSelectModal
                 open={isModalOpen}
                 title="운영진 추가/삭제"
-                members={modalMembers}
+                members={modalLoading ? [] : modalMembers}
                 onClose={() => setIsModalOpen(false)}
                 onSave={async (selected) => {
-                  // memberId를 modalMembers에서 매칭해 추출
                   const selectedIds = modalMembers
                     .filter(m => selected.some(sel => sel.name === m.name && sel.phone === m.phone))
                     .map(m => (m as any).memberId)
@@ -78,7 +77,13 @@ console.log(onSaveRoles)
                     await patchClientStaffBatch(selectedIds)
                   }
                 }}
-              />
+              >
+                {modalLoading && (
+                  <div className="flex flex-col items-center justify-center py-10">
+                    <span className="body-lg-medium text-gray-400">불러오는 중...</span>
+                  </div>
+                )}
+              </MemberSelectModal>
             )}
             <button
               type="button"
