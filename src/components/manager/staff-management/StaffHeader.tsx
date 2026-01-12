@@ -67,7 +67,8 @@ console.log(onSaveRoles)
               <MemberSelectModal
                 open={isModalOpen}
                 title="운영진 추가/삭제"
-                members={modalLoading ? [] : modalMembers}
+                members={modalMembers}
+                loading={modalLoading}
                 onClose={() => setIsModalOpen(false)}
                 onSave={async (selected) => {
                   const selectedIds = modalMembers

@@ -8,12 +8,14 @@ export default function MemberSelectModal({
   open,
   title = '',
   members = [],
+  loading = false,
   onClose,
   onSave,
 }: {
   open: boolean
   title?: string
   members?: Member[]
+  loading?: boolean
   onClose?: () => void
   onSave?: (selected: Member[]) => void
 }) {
@@ -56,34 +58,42 @@ export default function MemberSelectModal({
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col">
-          <div
-            className="grid items-center border-b border-gray-100 p-3"
-            style={{ gridTemplateColumns: '64px 160px 160px 350px' }}
-          >
-            <div />
-            <p className="body-sm-medium text-gray-500">이름</p>
-            <p className="body-sm-medium text-gray-500">파트</p>
-            <p className="body-sm-medium text-gray-500">학교</p>
-          </div>
-
-          <div className="overflow-auto">
-            <div className="grid gap-0">
-              {members.map((m, i) => (
-                <div
-                  key={i}
-                  className={`grid items-center border-b border-gray-100`}
-                  style={{ gridTemplateColumns: '64px 160px 160px 350px' }}
-                >
-                  <div className="pl-5">
-                    <input checked={!!selectedIds[i]} onChange={() => toggle(i)} type="checkbox" />
-                  </div>
-                  <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{m.name}</p>
-                  <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{m.part}</p>
-                  <p className="body-lg-regular truncate p-3 text-gray-800">{m.school}</p>
-                </div>
-              ))}
+          {loading ? (
+            <div className="flex items-center justify-center flex-1">
+              <span className="body-lg-medium text-gray-400">불러오는 중...</span>
             </div>
-          </div>
+          ) : (
+            <>
+              <div
+                className="grid items-center border-b border-gray-100 p-3"
+                style={{ gridTemplateColumns: '64px 160px 160px 350px' }}
+              >
+                <div />
+                <p className="body-sm-medium text-gray-500">이름</p>
+                <p className="body-sm-medium text-gray-500">파트</p>
+                <p className="body-sm-medium text-gray-500">학교</p>
+              </div>
+
+              <div className="overflow-auto">
+                <div className="grid gap-0">
+                  {members.map((m, i) => (
+                    <div
+                      key={i}
+                      className={`grid items-center border-b border-gray-100`}
+                      style={{ gridTemplateColumns: '64px 160px 160px 350px' }}
+                    >
+                      <div className="pl-5">
+                        <input checked={!!selectedIds[i]} onChange={() => toggle(i)} type="checkbox" />
+                      </div>
+                      <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{m.name}</p>
+                      <p className="body-lg-regular truncate border-r border-gray-100 p-3 text-gray-800">{m.part}</p>
+                      <p className="body-lg-regular truncate p-3 text-gray-800">{m.school}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="mt-4 flex justify-end">
