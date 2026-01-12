@@ -23,8 +23,9 @@ export default function MemberManagementClient() {
 
   return (
     <>
-      {MemberHeader(approvalRequests?.pendingCount ?? 0)}
+      {MemberHeader(approvalRequests?.pendingCount )}
       {isApprovalView ? <ApprovalList data={approvalRequests} /> : <MemberTable data={approvedStaff} />}
+      {}
     </>
   )
 }

@@ -64,7 +64,8 @@ export const useMemberTableStore = create<MemberTableState>((set) => ({
     }),
 
   isManagerModalOpen: false,
-  setIsManagerModalOpen: (open) => set({ isManagerModalOpen: open }),
+  //학회원 관리에서 저장 확인 모달 두 번 뜨길래 일단 set함수 비워놈
+  setIsManagerModalOpen: (open) => set({}),
   pendingDeleteIndex: null,
   setPendingDeleteIndex: (idx) => set({ pendingDeleteIndex: idx }),
   isDeleteModalOpen: false,

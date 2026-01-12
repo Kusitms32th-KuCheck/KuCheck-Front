@@ -9,6 +9,6 @@ export function getKupickMonths(): number[] {
   if (currentMonth >= 7 && currentMonth <= 12) {
     return [8, 9, 10, 11, 12]
   } else {
-    return [2, 3, 4, 5, 6]
+    return [1, 2, 3, 4, 5, 6]
   }
 }

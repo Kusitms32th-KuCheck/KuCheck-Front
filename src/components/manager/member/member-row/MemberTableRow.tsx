@@ -185,7 +185,7 @@ export default function MemberTableRow({
         >
           <span className="flex items-center gap-2">
            {member.socialType=== 'APPLE' ? <AppleIcon width={20} height={20} /> : <KakaoIcon width={20} height={20} />}
-            <span className="ml-2 truncate">{member.email}</span>
+            <span className="w-[230px] ml-2 truncate">{member.email}</span>
           </span>
           {isEditMode && (
             <button

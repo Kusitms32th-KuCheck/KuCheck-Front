@@ -29,7 +29,7 @@ export default function StaffTableRow({
   index: number
   gridTemplate?: string
   isEditMode?: boolean
-  onRoleChange?: (item: { memberId: number; role: 'STAFF' | 'MANAGEMENT' }) => void
+  onRoleChange?: (item: { memberId: number; role: 'STAFF' | 'MANAGEMENT'| 'EXECUTIVE' }) => void
 }) {
   const baseBg = index % 2 === 0 ? 'bg-white' : 'bg-background1'
   const name = member.name
@@ -61,9 +61,10 @@ export default function StaffTableRow({
   const handleRoleChange = (value: string) => {
     console.log('[handleRoleChange 호출] value:', value)
     setSelectedRole(value)
-    let role: 'STAFF' | 'MANAGEMENT' | undefined
+    let role: 'STAFF' | 'MANAGEMENT' | 'EXECUTIVE' | undefined
     if (value === '운영진') role = 'STAFF'
     else if (value === '경영총괄팀') role = 'MANAGEMENT'
+    else if (value === '학부학') role = 'EXECUTIVE'
     if (role && member.memberId && onRoleChange) {
       onRoleChange({ memberId: member.memberId, role })
     }

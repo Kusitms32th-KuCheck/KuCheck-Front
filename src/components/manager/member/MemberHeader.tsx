@@ -12,17 +12,20 @@ import { patchClientStaffApprovalStatusBatch } from '@/lib/member/client/staff'
 import ManagerModal from '../common/ManagerModal'
 
 export default function MemberHeader(memberLength?: number) {
-  const { isEditMode, toggleEditMode, isApprovalView, setApprovalView } = useMemberStore()
+  const { isEditMode, setEditMode, toggleEditMode, isApprovalView, setApprovalView } = useMemberStore()
   const [pendingApprovals, setPendingApprovals] = useState<number>(2)
   const {
     members,
     editBuffer,
     clearEditBuffer,
+    updateEditBufferEntry,
+    applyEditBuffer
   } = useMemberTableStore()
   const { selections, clearSelections, approvalMembers } = useMemberApprovalStore()
   const [loadingApproval, setLoadingApproval] = useState(false)
   const [loadingProfile, setLoadingProfile] = useState(false)
   const [approvalModalOpen, setApprovalModalOpen] = useState(false)
+  const [profileModalOpen, setProfileModalOpen] = useState(false) // 추가: 프로필 저장 모달 상태
   const [approvalFeedback, setApprovalFeedback] = useState<string | null>(null)
   const [showFeedbackModal, setShowFeedbackModal] = useState(false)
 
@@ -32,35 +35,52 @@ export default function MemberHeader(memberLength?: number) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // 프로필 저장 핸들러 (학회원관리)
-  const handleSaveProfiles = async () => {
-    setLoadingProfile(true)
-    const requiredFields = ['name', 'school', 'major', 'part', 'phoneNumber']
+// 프로필 저장 핸들러 (학회원관리)
+const handleSaveProfiles = async () => {
+  if (loadingProfile) return; // 중복 실행 방지
+  
+  setLoadingProfile(true); 
+  try {
+    const requiredFields = ['name', 'school', 'major', 'part', 'phoneNumber'];
     const requests = Object.entries(editBuffer)
       .filter(([_, patch]) => Object.keys(patch).length > 0)
       .map(([idx, patch]) => {
-        const member = members[Number(idx)]
-        if (!member) return null
-        // 모든 필수 필드를 patch에 없으면 member에서 채워서 보냄
-        const fullPatch = { ...patch } as Record<string, any>
+        const member = members[Number(idx)];
+        if (!member) return null;
+        
+        const fullPatch = { ...patch } as Record<string, any>;
         requiredFields.forEach(field => {
           if (fullPatch[field] === undefined || fullPatch[field] === '') {
-            fullPatch[field] = (member as Record<string, any>)[field]
+            fullPatch[field] = (member as Record<string, any>)[field];
           }
-        })
-        // 필수 필드가 모두 채워졌는지 확인
+        });
+
         const hasAllFields = requiredFields.every(
           field => fullPatch[field] !== undefined && String(fullPatch[field]).trim() !== ''
-        )
-        if (!hasAllFields) return null
-        return patchClientStaffProfile(member.memberId, fullPatch)
+        );
+        if (!hasAllFields) return null;
+        
+        return patchClientStaffProfile(member.memberId, fullPatch);
       })
-      .filter(Boolean)
-    if (requests.length > 0) await Promise.all(requests)
-  clearEditBuffer()
-  setLoadingProfile(false)
-  toggleEditMode() // 저장 후 수정모드 해제
+      .filter(Boolean);
+
+    if (requests.length > 0) {
+      await Promise.all(requests);
+      setApprovalFeedback('성공적으로 저장되었습니다.');
+      setShowFeedbackModal(true);
+    }
+
+    // ✅ [중요] 모달 중복 방지: 수정 모드를 확실히 종료
+    setEditMode(false); 
+    
+  } catch (error) {
+    console.error("저장 실패:", error);
+    setApprovalFeedback('저장에 실패했습니다.');
+    setShowFeedbackModal(true);
+  } finally {
+    setLoadingProfile(false);
   }
+};
 
   // 승인/거절 저장 핸들러 (회원가입 승인)
   const handleSaveApprovals = async () => {
@@ -108,9 +128,10 @@ export default function MemberHeader(memberLength?: number) {
   const handleApprovalFeedbackClose = () => {
     setShowFeedbackModal(false)
     setApprovalFeedback(null)
+    
   }
 
-  // 모달에서 확인 시 모달 닫기 + 기존 저장 로직 호출
+  // (승인/미승인)모달에서 확인 시 모달 닫기 + 기존 저장 로직 호출
   const handleApprovalModalConfirm = async () => {
     setApprovalModalOpen(false)
     await handleSaveApprovals()
@@ -119,6 +140,18 @@ export default function MemberHeader(memberLength?: number) {
   // 모달에서 취소 시 모달 닫기
   const handleApprovalModalCancel = () => {
     setApprovalModalOpen(false)
+  }
+
+  // 프로필 저장 모달에서 확인 시
+  const handleProfileModalConfirm = async () => {
+     applyEditBuffer(); 
+  setProfileModalOpen(false) // 모달을 즉시 닫음
+  await handleSaveProfiles() // 저장 로직 실행
+}
+
+  // 프로필 저장 모달에서 취소 시
+  const handleProfileModalCancel = () => {
+    setProfileModalOpen(false)
   }
 
   return (
@@ -148,7 +181,7 @@ export default function MemberHeader(memberLength?: number) {
               className={`border- border-primary-500  body-sm-medium text-primary-500 flex cursor-pointer items-center rounded-[4px] bg-white px-3 py-2`}
               onClick={() => setApprovalView(true)}
             >
-              승인요청{memberLength}
+              승인요청 {memberLength}
             </button>
           )}
           <button className="sr-only" onClick={() => setPendingApprovals((n) => n + 1)} aria-hidden />
@@ -168,7 +201,7 @@ export default function MemberHeader(memberLength?: number) {
           </ManagerButton>
         ) : (
           <ManagerButton
-            onClick={isEditMode ? handleSaveProfiles : toggleEditMode}
+            onClick={isEditMode ? () => setProfileModalOpen(true) : toggleEditMode}
             styleSize="sm"
             disabled={loadingProfile}
           >
@@ -185,6 +218,15 @@ export default function MemberHeader(memberLength?: number) {
         confirmLabel="저장하기"
         cancelLabel="취소"
       />
+      {/* 프로필 저장 확인 모달 */}
+      <ManagerModal
+        open={profileModalOpen}
+        message="변경사항을 저장할까요?"
+        onConfirm={handleProfileModalConfirm}
+        onCancel={handleProfileModalCancel}
+        confirmLabel="저장하기"
+        cancelLabel="취소"
+      />
       {showFeedbackModal && approvalFeedback && (
         <ManagerModal
           open={true}
@@ -197,4 +239,4 @@ export default function MemberHeader(memberLength?: number) {
       )}
     </div>
   )
-} 
+}

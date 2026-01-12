@@ -8,6 +8,7 @@ import { useMemberStore } from '@/store/manager/useMemberStore'
 import { useMemberTableStore } from '@/store/manager/useMemberTableStore'
 import useScrollSync from '@/utils/manager/useScrollSync'
 import ManagerModal from '@/components/manager/common/ManagerModal'
+import { AbsenceIcon } from '@/assets/svgComponents/manager'
 
 export default function MemberTable({ data }: { data?: MemberListResult }) {
   const { isEditMode } = useMemberStore()
@@ -31,6 +32,8 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { feedbackMessage, setFeedbackMessage } = useMemberTableStore()
   const gridTemplate = '132px 171px 163px 185px 419px 170px 404px'
+  // 데이터가 없거나 members가 비어있으면 안내 메시지
+  const isEmpty = data?.approvedCount === 0 
 
   useEffect(() => {
     // data.members가 배열로 오므로 그대로 사용
@@ -51,6 +54,8 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
   }, [isEditMode, prevEdit, setIsManagerModalOpen])
   console.log('members', members)
 
+
+
   return (
     <>
       <div className="mx-6 pt-7 mb-6 flex min-h-0 min-h-[calc(100vh-176px)] flex-1 flex-col">
@@ -69,23 +74,30 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
             </div>
           </div>
         </div>
-
+        {isEmpty ? (
+          <div className="flex flex-col items-center justify-center flex-1 bg-white">
+            <AbsenceIcon width={80} height={80} />
+            <p className="mt-4 body-lg-regular text-gray-500">승인된 학회원이 없어요.</p>
+          </div>
+        ):(
         <div ref={containerRef} className="scrollbar-custom h-full overflow-auto rounded-b-[12px] bg-white">
           <div>
             {members.map((m, i) => (
-              <MemberTableRow
-                key={i}
-                member={m}
-                index={i}
-                isEditMode={isEditMode}
-                gridTemplate={gridTemplate}
-                revertToken={revertToken}
-                onEdit={(patch) => updateEditBufferEntry(i, patch)}
-                editedValues={editBuffer[i]}
-              />
-            ))}
+                <MemberTableRow
+                  key={i}
+                  member={m}
+                  index={i}
+                  isEditMode={isEditMode}
+                  gridTemplate={gridTemplate}
+                  revertToken={revertToken}
+                  onEdit={(patch) => updateEditBufferEntry(i, patch)}
+                  editedValues={editBuffer[i]}
+                />
+              ))}
           </div>
+
         </div>
+        )}
         <ManagerModal
           open={isManagerModalOpen}
           onCancel={() => {
@@ -139,5 +151,6 @@ export default function MemberTable({ data }: { data?: MemberListResult }) {
         )}
       </div>
     </>
-  )}
+  )
+}
 

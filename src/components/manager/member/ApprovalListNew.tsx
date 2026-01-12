@@ -7,7 +7,7 @@ import RoleTag from '@/components/manager/common/RoleTag'
     PLANNING: '기획',
   }
 
-import { AppleIcon ,KakaoIcon} from '@/assets/svgComponents/manager'
+import { AbsenceIcon, AppleIcon ,KakaoIcon} from '@/assets/svgComponents/manager'
 import { useState, useEffect } from 'react'
 import useScrollSync from '@/utils/manager/useScrollSync'
 import Dropdown from '../common/ManagerdropDown'
@@ -25,6 +25,8 @@ export default function ApprovalListNew({ data }: { data?: MemberApprovalRequest
   const gridTemplate = '132px  171px 163px 185px 419px 170px 404px 170px'
   const { containerRef, headerScrollRef, isScrolled } = useScrollSync()
   const { selections, setSelection, setApprovalMembers } = useMemberApprovalStore()
+
+ const isEmpty = members.length === 0
 
   const APPROVAL_OPTIONS = [
     { label: '선택', value: '' },
@@ -56,7 +58,12 @@ export default function ApprovalListNew({ data }: { data?: MemberApprovalRequest
             </div>
           </div>
         </div>
-
+{isEmpty ? (
+          <div className="flex flex-col items-center justify-center flex-1 bg-white">
+            <AbsenceIcon width={80} height={80} />
+            <p className="mt-4 body-lg-regular text-gray-500">아직 승인 요청이 없어요.</p>
+          </div>
+        ):(
         <div ref={containerRef} className="scrollbar-custom h-full overflow-auto rounded-b-[12px] bg-white">
           <div>
             {members.map((m, i) => (
@@ -140,6 +147,7 @@ export default function ApprovalListNew({ data }: { data?: MemberApprovalRequest
             ))}
           </div>
         </div>
+        )}
         {modalOpen && (
           <ImageModal
             title={'사진'}

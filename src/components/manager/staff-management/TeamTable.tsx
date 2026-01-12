@@ -42,7 +42,7 @@ export default function TeamTable({ isEditMode, setHandleSaveRoles }: { isEditMo
 
   useEffect(() => {
     setLoading(true)
-    getClientApprovedStaffMembers(1, 50, true)
+    getClientApprovedStaffMembers(1, 80, true)
       .then((res) => {
         if (res.success && res.data?.members?.data) {
           setMembers(
