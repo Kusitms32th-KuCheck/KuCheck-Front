@@ -4,7 +4,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Heading from '@tiptap/extension-heading'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import {
   Tiptap1Icon,
@@ -39,17 +39,23 @@ type AddBodyProps = {
 }
 
 export default function AddBody({ content, setContent, error }: AddBodyProps) {
-  const [isEmpty, setIsEmpty] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
+  const [isEmpty, setIsEmpty] = useState(true)
 
-  // 클라이언트에서만 렌더링
+  // 🔑 editor 값 저장용 (렌더 영향 X)
+  const contentRef = useRef<string>(content)
+
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ heading: false }),
+      StarterKit.configure({
+        orderedList: false,
+        bulletList: false,
+        heading: false,
+      }),
       Heading.configure({ levels: [1, 2, 3] }),
       Link.configure({
         openOnClick: true,
@@ -62,23 +68,29 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
         },
       }),
     ],
-    content: isMounted ? content : '', // 클라이언트에서만 content 적용
+
+    // ✅ 최초 1회만 content 주입
+    content: isMounted ? content : '',
     immediatelyRender: false,
+
     onUpdate: ({ editor }) => {
-      setContent(editor.getHTML())
+      const html = editor.getHTML()
+      contentRef.current = html
+      setContent(html) // ← 저장 목적 OK (editor로 다시 안 밀어넣음)
       setIsEmpty(editor.isEmpty)
     },
   })
 
-  // content가 변경될 때 isEmpty 상태 업데이트
+  /**
+   * ✅ 수정 모드 / 외부 content 변경 시에만 editor에 반영
+   */
   useEffect(() => {
-    if (editor && content) {
-      editor.commands.setContent(content) // 수정 모드에서 content 적용
-      const tempDiv = document.createElement('div')
-      tempDiv.innerHTML = content
-      const textContent = tempDiv.textContent || tempDiv.innerText || ''
-      setIsEmpty(textContent.trim().length === 0)
-    }
+    if (!editor) return
+    if (!content) return
+    if (editor.getHTML() === content) return
+
+    editor.commands.setContent(content, false) // selection 유지
+    setIsEmpty(editor.isEmpty)
   }, [content, editor])
 
   if (!isMounted || !editor) return null
@@ -110,12 +122,13 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
   }
 
   return (
-    <div className="mt-6 w-full pb-6 ">
-      <div className={`mb-6 rounded-2xl bg-white ${error && isEmpty ? 'border-sub-red border' : ''}`}>
+    <div className="mt-6 w-full pb-6">
+      <div className={`mb-6 rounded-2xl bg-white ${error && isEmpty ? 'border border-sub-red' : ''}`}>
         <div className="flex border-b">
           {BUTTONS.map((b) => {
             const Icon = b.icon
             const active = isActive(b.name)
+
             return (
               <button
                 key={b.name}
@@ -123,7 +136,7 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => handleClick(b)}
                 className={`p-[7px] transition-colors ${
-                  active ? 'text-primary-600 bg-gray-200' : 'text-gray-700 hover:bg-gray-100'
+                  active ? 'bg-gray-200 text-primary-600' : 'text-gray-700 hover:bg-gray-100'
                 } border-r border-gray-200`}
               >
                 <Icon width={32} height={32} />
@@ -131,9 +144,10 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
             )
           })}
         </div>
-        <div className="relative w-full px-8 py-6 min-h-[500px] max-h-[2000px] overflow-auto">
+
+        <div className="relative w-full min-h-[500px] max-h-[2000px] overflow-auto px-8 py-6">
           {isEmpty && (
-            <p className="pointer-events-none absolute top-6 left-8 text-gray-400 select-none">
+            <p className="pointer-events-none absolute left-8 top-6 select-none text-gray-400">
               내용을 입력해 주세요...
             </p>
           )}
@@ -144,49 +158,35 @@ export default function AddBody({ content, setContent, error }: AddBodyProps) {
       <style jsx global>{`
         .tiptap-content {
           line-height: 1.5;
-          width: 100%;
-          max-width: 100%;
           min-height: 500px;
-          border: none !important;
-          outline: none !important;
+          outline: none;
         }
         .tiptap-content .ProseMirror {
-          outline: none !important;
-          border: none !important;
-          box-shadow: none !important;
+          outline: none;
         }
         .tiptap-content h1 {
           font-size: 1.75rem;
           font-weight: 700;
-          margin-bottom: 0.5rem;
         }
         .tiptap-content h2 {
           font-size: 1.5rem;
           font-weight: 600;
-          margin-bottom: 0.5rem;
         }
         .tiptap-content h3 {
           font-size: 1.25rem;
           font-weight: 500;
-          margin-bottom: 0.5rem;
-        }
-        .tiptap-content p {
-          margin-bottom: 0.5rem;
         }
         .tiptap-content ul {
-          list-style-type: disc;
+          list-style: disc;
           margin-left: 1.25rem;
-          margin-bottom: 0.5rem;
         }
         .tiptap-content ol {
-          list-style-type: decimal;
+          list-style: decimal;
           margin-left: 1.25rem;
-          margin-bottom: 0.5rem;
         }
         .tiptap-content a {
           color: #2563eb;
           text-decoration: underline;
-          cursor: pointer;
         }
       `}</style>
     </div>

@@ -22,6 +22,7 @@ export default function ColorSelectDropdown({
   options,
   selected,
   onChange,
+  refreshTrigger = 0,
   placeholder = '색상',
 }: ColorSelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -29,17 +30,21 @@ export default function ColorSelectDropdown({
   const [availableColors, setAvailableColors] = useState<string[]>([])
 
   useEffect(() => {
-    // 사용 가능한 컬러 API 연동 -> 타입에러보기
+    // 사용 가능한 컬러 API 연동
     getClientAvailableCategoryColors().then((res) => {
-      if (res.success && res.data && Array.isArray(res.data.colors)) {
-        setAvailableColors(res.data.colors)
-      } else if (res.success && Array.isArray(res.data)) {
-        setAvailableColors(res.data)
+      if (res.success && res.data) {
+        if (Array.isArray(res.data)) {
+          setAvailableColors(res.data)
+        } else if (res.data && typeof res.data === 'object' && 'colors' in res.data && Array.isArray((res.data as any).colors)) {
+          setAvailableColors((res.data as any).colors)
+        } else {
+          setAvailableColors([])
+        }
       } else {
         setAvailableColors([])
       }
     })
-  }, [])
+  }, [refreshTrigger])
 
   // 옵션 중 사용 가능한 컬러만 필터링
   const filteredOptions = options.filter(

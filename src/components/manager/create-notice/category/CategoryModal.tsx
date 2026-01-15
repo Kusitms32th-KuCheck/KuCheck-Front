@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import { ModalXIcon } from '@/assets/svgComponents/manager'
 import ColorSelectDropdown from './ColorDropDown'
@@ -31,6 +31,7 @@ export default function CategoryModal({
   onDeleteCategory,
   onEditCategory,
 }: CategoryModalProps) {
+  const [localCategories, setLocalCategories] = useState<NoticeCategory[]>([])
   const [newCategoryName, setNewCategoryName] = useState('')
   const [selectedColor, setSelectedColor] = useState(DEFAULT_COLOR)
   const [error, setError] = useState('')
@@ -41,10 +42,28 @@ export default function CategoryModal({
 
   const colorOptions = createColorDropdownOptions()
 
+  // 모달 열릴 때 로컬 카테고리 동기화
+  useEffect(() => {
+    if (isOpen) {
+      setLocalCategories(categories)
+    }
+  }, [isOpen, categories])
+
+  // 모달 닫을 때 상태 초기화
+  useEffect(() => {
+    if (!isOpen) {
+      setNewCategoryName('')
+      setSelectedColor(DEFAULT_COLOR)
+      setError('')
+      setEditingId(null)
+      setEditingName('')
+    }
+  }, [isOpen])
+
   const validateCategory = (name: string): string => {
     return validateCategoryName(
       name,
-      categories.map((c) => ({ ...c, id: c.id.toString() }))
+      localCategories.map((c) => ({ ...c, id: c.id.toString() }))
     )
   }
 
@@ -69,9 +88,15 @@ export default function CategoryModal({
     const res = await postClientCategory(newCategoryName.trim(), selectedColor)
     if (res.success && res.data) {
       onAddCategory({ name: newCategoryName.trim(), color: selectedColor })
+      // 즉시 로컬 상태 업데이트
+      setLocalCategories((prev) => [
+        ...prev,
+        { id: res.data.id, name: newCategoryName.trim(), color: selectedColor },
+      ])
       setNewCategoryName('')
       setSelectedColor(DEFAULT_COLOR)
       setError('')
+      // 색상 드롭다운 즉시 새로고침
       setRefreshTrigger((prev) => prev + 1)
     } else {
       if (res.error?.includes('이미 같은 이름의 카테고리가 있어요')) {
@@ -95,27 +120,38 @@ export default function CategoryModal({
     if (!editingId || !editingName.trim()) return cancelEdit()
     const err = validateCategory(editingName)
     if (err) return setError(err)
-    const current = categories.find((c) => c.id.toString() === editingId)
+    const current = localCategories.find((c) => c.id.toString() === editingId)
     if (current) {
+      // 즉시 로컬 상태 업데이트
+      setLocalCategories((prev) =>
+        prev.map((cat) =>
+          cat.id.toString() === editingId ? { ...cat, name: editingName.trim() } : cat
+        )
+      )
+      // 부모 상태 업데이트
+      onEditCategory(editingId, { name: editingName.trim(), color: current.color })
+      setEditingId(null)
+      setEditingName('')
+      setError('')
+
+      // 그 다음 API 호출
       const res = await putClientCategory(Number(editingId), editingName.trim(), current.color)
       if (res.success && res.data) {
-        onEditCategory(editingId, { name: editingName.trim(), color: current.color })
-        setEditingId(null)
-        setEditingName('')
-        setError('')
-        setRefreshTrigger((prev) => prev + 1) // 색상 목록 새로고침
+        setRefreshTrigger((prev) => prev + 1)
       } else {
         setError(res.error || '카테고리 수정 실패')
       }
     }
-    cancelEdit()
   }
 
   // 삭제
   const handleDeleteCategory = async (id: string) => {
     const res = await deleteClientCategory(Number(id))
     if (res.success) {
+      // 즉시 로컬 상태 업데이트
+      setLocalCategories((prev) => prev.filter((cat) => cat.id.toString() !== id))
       onDeleteCategory(id)
+      // 색상 드롭다운 즉시 새로고침
       setRefreshTrigger((prev) => prev + 1)
     } else {
       if (
@@ -154,7 +190,7 @@ export default function CategoryModal({
         <div className="mb-5 border-b pb-5">
           <div className="flex flex-wrap gap-3">
             <div className="grid w-full grid-cols-5 gap-3">
-              {categories.map((cat) => {
+              {localCategories.map((cat) => {
                 const isEditing = editingId === cat.id.toString()
                 return (
                   <div
@@ -168,7 +204,12 @@ export default function CategoryModal({
                     {isEditing ? (
                       <input
                         value={editingName}
-                        onChange={(e) => setEditingName(e.target.value)}
+                        onChange={(e) => {
+                          setEditingName(e.target.value)
+                          if (e.target.value.length <= MAX_CATEGORY_LENGTH) {
+                            setError('')
+                          }
+                        }}
                         onBlur={confirmEdit}
                         onKeyDown={(e) => e.key === 'Enter' && confirmEdit()}
                         maxLength={MAX_CATEGORY_LENGTH}
@@ -199,7 +240,10 @@ export default function CategoryModal({
               value={newCategoryName}
               onChange={(e) => {
                 setNewCategoryName(e.target.value)
-                if (e.target.value.length > 7) {
+                // 글자수가 7 이하로 줄어들면 에러 제거
+                if (e.target.value.length <= MAX_CATEGORY_LENGTH) {
+                  setError('')
+                } else {
                   setError('최대 7자까지 등록할 수 있어요')
                 }
               }}
