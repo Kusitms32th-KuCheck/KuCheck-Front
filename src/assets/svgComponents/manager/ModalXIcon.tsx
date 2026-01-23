@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgModalXIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 32 32" {...props}><path stroke="#353744" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.667} d="M24 8 8 24" /><path stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeOpacity={0.2} strokeWidth={2.667} d="M24 8 8 24" /><path stroke="#353744" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.667} d="m8 8 16 16" /><path stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeOpacity={0.2} strokeWidth={2.667} d="m8 8 16 16" /></svg>;
+export default SvgModalXIcon;

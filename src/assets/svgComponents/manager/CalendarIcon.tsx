@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgCalendarIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" {...props}><path fill="#7E83A1" d="M15.733 3.5a.5.5 0 0 1 .5.5v1.031H18a2 2 0 0 1 2 2V18.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7.031a2 2 0 0 1 2-2h1.767V4a.5.5 0 0 1 1 0v1.031h6.466V4a.5.5 0 0 1 .5-.5M5 18.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.281H5zM6 6.031a1.01 1.01 0 0 0-.908.581l-.018.037a1 1 0 0 0-.07.28L5 7.03v3.188h14V7.03a1 1 0 0 0-1-1h-1.767v1.063a.5.5 0 0 1-1 0V6.03H8.767v1.063a.5.5 0 0 1-1 0V6.03z" /></svg>;
+export default SvgCalendarIcon;

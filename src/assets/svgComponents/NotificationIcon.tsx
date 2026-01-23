@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgNotificationIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 19 23" {...props}><path stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.318 17.348c5.639 0 8.248-.724 8.5-3.627 0-2.902-1.82-2.716-1.82-6.276 0-2.78-2.635-5.945-6.68-5.945-4.046 0-6.682 3.164-6.682 5.945 0 3.56-1.818 3.374-1.818 6.275.252 2.915 2.861 3.628 8.5 3.628" clipRule="evenodd" /><path stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.706 20.357c-1.364 1.515-3.492 1.533-4.869 0" /></svg>;
+export default SvgNotificationIcon;

@@ -1,0 +1,90 @@
+import { MonthlyAttendanceResult } from '@/types/manager/point/types'
+import { DropLIcon, DropRIcon } from '@/assets/svgComponents/manager'
+import { computeGridTemplate, computeMinWidth } from '@/utils/manager/computePointTable'
+import { useSessionScheduleStore } from '@/store/manager/useSessionScheduleStore'
+import { getOptimalVisibleDates } from '@/utils/manager/sessionDataConverter'
+
+type Props = {
+  collapsedMonths: Set<string>
+  onToggleMonth: (m: string) => void
+  isScrolled: boolean
+  isHorizScrolled?: boolean
+  headerScrollRef: React.RefObject<HTMLDivElement | null>
+  monthlyData: Record<number, MonthlyAttendanceResult>
+}
+
+export default function PointTableHeader({
+  collapsedMonths,
+  onToggleMonth,
+  isScrolled,
+  isHorizScrolled,
+  headerScrollRef,
+  monthlyData,
+}: Props) {
+  const { sessions } = useSessionScheduleStore()
+
+  console.log('헤더에서 받은 세션 데이터:', sessions?.length || 0, '개')
+  console.log('헤더에서 받은 월별 데이터:', Object.keys(monthlyData).length, '개월')
+
+  const visibleDates = getOptimalVisibleDates(sessions, monthlyData, collapsedMonths)
+
+  const gridTemplate = computeGridTemplate(visibleDates)
+  const contentMinWidth = computeMinWidth(gridTemplate)
+
+  console.log('사용할 데이터 타입:', sessions && sessions.length > 0 ? '세션 데이터' : '월별 데이터')
+  console.log('visibleDates:', visibleDates)
+
+  return (
+    <div
+      className={`mx-[24px] mt-[28px] flex overflow-hidden rounded-t-[12px] bg-white ${isScrolled ? 'z-20 shadow-[0_6px_20px_rgba(0,0,0,0.13)]' : ''}`}
+    >
+      <div ref={headerScrollRef} className="scrollbar-hide overflow-x-auto">
+        <div style={{ minWidth: contentMinWidth }}>
+          <div
+            className={`relative z-100 grid h-[52px] items-center justify-center transition-shadow duration-200 ${
+              isScrolled ? 'shadow-[0_0_20px_4px_rgba(0,0,0,0.15)]' : 'border-b border-gray-200'
+            }`}
+            style={{ gridTemplateColumns: gridTemplate, minWidth: 'max-content' }}
+          >
+            <p
+              className={`body-lg-medium sticky left-0 flex h-full items-center bg-white pl-[30px] text-start text-gray-500 ${
+                isHorizScrolled ? 'border-r border-gray-200' : ''
+              }`}
+            >
+              이름
+            </p>
+            <p className="body-lg-medium px-[13px] text-end text-gray-500">상벌점</p>
+            <p className="body-lg-medium px-[13px] text-end text-gray-500">파트</p>
+            {visibleDates.map((item, index) => (
+              <div key={index} className="flex items-center justify-end px-[13px]">
+                {item.month ? (
+                  <button onClick={() => onToggleMonth(item.month!)} className="flex cursor-pointer items-center">
+                    <p
+                      className={`body-lg-medium text-end ${collapsedMonths.has(item.month) ? 'text-gray-500' : 'text-gray-700'}`}
+                    >
+                      {item.month}
+                    </p>
+                    {collapsedMonths.has(item.month) ? (
+                      <DropRIcon width={24} height={24} />
+                    ) : (
+                      <DropLIcon width={24} height={24} />
+                    )}
+                  </button>
+                ) : (
+                  <p className="body-lg-medium text-end text-gray-500">{item.date}</p>
+                )}
+              </div>
+            ))}
+            {['9월 큐픽', '10월 큐픽', '11월 큐픽', 'TF', '큐포터즈', '운영진', '메모', '전화번호', '학교', '학과'].map(
+              (label, i) => (
+                <p key={label + i} className="body-lg-medium px-[13px] text-end text-gray-500">
+                  {label}
+                </p>
+              )
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

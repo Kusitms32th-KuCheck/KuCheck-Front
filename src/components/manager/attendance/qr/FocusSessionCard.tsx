@@ -1,0 +1,54 @@
+'use client'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { AttendanceSummaryType } from '@/types/manager/attendance/type'
+
+export default function FocusSessionCard({ summary }: { summary: AttendanceSummaryType | null }) {
+  const searchParams = useSearchParams()
+
+  const sessionTitle = searchParams.get('title')
+  const location = searchParams.get('location')
+  const time = searchParams.get('time')
+
+  const router = useRouter()
+
+  return (
+    <div className="mx-auto w-full max-w-[1260px] rounded-[12px] bg-white">
+      <div className="flex h-[116px] items-start justify-between border-b border-gray-100">
+        <div className="flex flex-col gap-3 px-[31px] py-6">
+          <p className="heading-1xl-semibold">{sessionTitle}</p>
+          <p className="body-lg-medium text-gray-500">
+            장소 {location} 일시 {time}
+          </p>
+        </div>
+        <div className="px-[31px] py-6">
+          <button
+            onClick={() => router.push('/attendance')}
+            className={'= body-2xl-semibold rounded-[12px] bg-gray-700 px-[15.5] py-3 text-white'}
+          >
+            출석체크 종료하기
+          </button>
+        </div>
+      </div>
+      <div className="flex h-[120px] items-center justify-center">
+        <Stat label="출석" value={summary?.present} highlight />
+        <div className="h-[80px] border border-gray-100"></div>
+        <Stat label="조퇴" value={summary?.earlyLeave} />
+        <div className="h-[80px] border border-gray-100"></div>
+        <Stat label="지각" value={summary?.late} />
+        <div className="h-[80px] border border-gray-100"></div>
+        <Stat label="결석" value={summary?.absent} />
+      </div>
+    </div>
+  )
+}
+
+function Stat({ label, value, highlight = false }: { label: string; value?: number | null; highlight?: boolean }) {
+  return (
+    <div className="flex w-[192px] flex-col items-center">
+      <span className="body-lg-regular text-gray-500">{label}</span>
+      <span className={`heading-3xl-medium font-semibold ${highlight ? 'text-primary-500' : 'text-gray-500'}`}>
+        {value}
+      </span>
+    </div>
+  )
+}

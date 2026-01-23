@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgQrErrorIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 25 25" {...props}><rect width={24.261} height={24.261} fill="#FFE9E9" rx={11.947} /><path fill="#FF9F9F" d="M10.894 4.343a1.195 1.195 0 0 1 2.104 0l6.363 11.817a1.195 1.195 0 0 1-1.052 1.76H5.583c-.904 0-1.48-.964-1.052-1.76z" /><rect width={2.389} height={5.974} x={10.753} y={7.167} fill="#EA1B1B" rx={1.195} /><circle cx={11.948} cy={15.529} r={1.195} fill="#EA1B1B" /></svg>;
+export default SvgQrErrorIcon;

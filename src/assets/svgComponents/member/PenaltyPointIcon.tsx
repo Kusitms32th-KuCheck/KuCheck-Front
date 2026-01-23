@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgPenaltyPointIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" {...props}><rect width={23.333} height={23.333} x={0.083} y={0.333} fill="#FFE9E9" rx={11.667} /><path fill="#FF9F9F" d="M10.723 4.575a1.167 1.167 0 0 1 2.054 0l6.214 11.539a1.167 1.167 0 0 1-1.027 1.72H5.537a1.167 1.167 0 0 1-1.027-1.72z" /><rect width={2.333} height={5.833} x={10.584} y={7.333} fill="#EA1B1B" rx={1.167} /><circle cx={11.75} cy={15.5} r={1.167} fill="#EA1B1B" /></svg>;
+export default SvgPenaltyPointIcon;

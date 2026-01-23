@@ -1,0 +1,4 @@
+import * as React from "react";
+import type { SVGProps } from "react";
+const SvgHomeLogoIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 36 29" {...props}><rect width={7.442} height={7.442} x={24.795} y={5.462} fill="#2C60FF" rx={3.721} transform="rotate(-43.844 24.795 5.462)" /><path fill="#326BFF" d="M19.386 8.748a3.978 3.978 0 0 1 4.643 6.46L6.966 27.472q-.18.129-.37.235A3.977 3.977 0 0 1 0 24.716v-12.24a3.977 3.977 0 1 1 7.956 0v4.488z" /><path fill="#EDEDF4" d="m3.988 19.89 3.978-3.06v6.201z" /><path fill="#326BFF" d="M7.966 23.561c-.435 3.044-1.438 2.448-3.213 2.448-1.774 0-3.212-1.37-3.212-3.06s-.523-3.06 2.447-3.06c2.142 0 4.284 1.53 3.978 3.672" /></svg>;
+export default SvgHomeLogoIcon;

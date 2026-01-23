@@ -1,0 +1,759 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+@import 'tailwindcss';
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: 'Pretendard Variable';
+  /* Using 'truetype-variations' or 'truetype' is often better */
+  src: url('/fonts/PretendardVariable.ttf') format('truetype-variations'),
+  url('/fonts/PretendardVariable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-desktop: 1440px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-ios: 375px;
+  --breakpoint-android: 360px;
+}
+
+:root {
+  --safe-area-inset-bottom: max(0px, env(safe-area-inset-bottom));
+  --safe-area-inset-top: max(0px, env(safe-area-inset-top));
+  --safe-area-inset-left: max(0px, env(safe-area-inset-left));
+  --safe-area-inset-right: max(0px, env(safe-area-inset-right));
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* tailwindCSS에서 해당 color들을 사용할 수 있도록 변경 */
+/* :root에 선언된 애들을 사용하고 있어서 그대로 뒀습니다. 아래와 같이 @theme에 선언해주면 tailwindcss처럼 사용할 수 있어서 @theme도 만들었습니다. */
+@theme {
+  --color-primary-50: #EEF2FF;
+  --color-primary-100: #D4DFFF;
+  --color-primary-200: #B4C7FF;
+  --color-primary-300: #94AEFF;
+  --color-primary-400: #5F86FF;
+  --color-primary-500: #326BFF;
+  --color-primary-600: #2655E6;
+  --color-primary-700: #224BCC;
+  --color-primary-800: #1538A1;
+  --color-primary-900: #0C2369;
+
+  --color-gray-50: #FCFDFF;
+  --color-gray-100: #F2F2F9;
+  --color-gray-200: #D7D7E3;
+  --color-gray-300: #C4C6D3;
+  --color-gray-400: #A9AABE;
+  --color-gray-500: #7E83A1;
+  --color-gray-600: #747693;
+  --color-gray-700: #393F4E;
+  --color-gray-800: #262A34;
+  --color-gray-900: #353744;
+
+  --color-background1: #FAFAFA;
+  --color-background2: #EDEDF4;
+
+  --color-sub-red: #FF0F2D;
+  --color-sub-red-accent: #D80516;
+  --color-sub-red-light: #FFE9E9;
+  --color-sub-green: #00C400;
+  --color-sub-green-light: #DBF1DB;
+  --color-opacity-40: #00000066;
+  --color-opacity-20: #00000033;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --shadow-middlemodal: 0px 4px 50px 0px #0000000d;
+  --shadow-location-search: 0px 4px 28px 0px #0000000d;
+}
+
+/* 전역 폰트 스타일 */
+body {
+  font-family: Pretendard, 'Pretendard Variable', sans-serif;
+  background-color: #000000;
+  color: #000000;
+}
+
+{/* title */}
+@utility title-lg-bold {
+  /* Title/lg/bold */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 72px; /* 120% */
+}
+@utility title-lg-semibold {
+  /* Title/lg/semiBold */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 72px; /* 120% */
+}
+@utility title-lg-medium {
+  /* Title/lg/medium */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 72px; /* 120% */
+}
+@utility title-lg-regular {
+  /* Title/lg/regular */
+  font-family: Pretendard;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 73px; /* 121.667% */
+}
+@utility title-md-bold {
+  /* Title/md/bold */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-md-semibold {
+  /* Title/md/semibold */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-md-medium {
+  /* Title/md/medium */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-md-regular {
+  /* Title/md/regular */
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 56px; /* 116.667% */
+}
+@utility title-sm-bold {
+  /* Title/sm/bold */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 52px; /* 130% */
+}
+@utility title-sm-semibold {
+  /* Title/sm/semiBold */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 52px; /* 130% */
+}
+@utility title-sm-medium {
+  /* Title/sm/medium */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 52px; /* 130% */
+}
+@utility title-sm-regular {
+  /* Title/sm/regular */
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 52px; /* 130% */
+}
+
+{/* heading */}
+@utility heading-3xl-bold {
+  /* Heading/3xl/bold */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-3xl-semibold {
+  /* Heading/3xl/semibold */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-3xl-medium {
+  /* Heading/3xl/medium */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-3xl-regular {
+  /* Heading/3xl/regular */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 52px; /* 144.444% */
+}
+@utility heading-2xl-bold {
+  /* Heading/2xl/bold */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px; /* 150% */
+}
+@utility heading-2xl-semibold {
+  /* Heading/2xl/semibold */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 48px; /* 150% */
+}
+@utility heading-2xl-medium {
+  /* Heading/2xl/medium */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 48px; /* 150% */
+}
+@utility heading-2xl-regular {
+  /* Heading/2xl/regular */
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 48px; /* 150% */
+}
+@utility heading-1xl-bold {
+  /* Heading/1xl/bold */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-1xl-semibold {
+  /* Heading/1xl/semibold */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-1xl-medium {
+  /* Heading/1xl/medium */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-1xl-regular {
+  /* Heading/1xl/regular */
+  font-family: Pretendard;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 36px; /* 128.571% */
+}
+@utility heading-lg-bold {
+  /* Heading/lg/bold */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-lg-semibold {
+  /* Heading/lg/semibold */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-lg-medium {
+  /* Heading/lg/medium */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-lg-regular {
+  /* Heading/lg/regular */
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 116.667% */
+}
+@utility heading-md-bold {
+  /* Heading/md/bold */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-md-semibold {
+  /* Heading/md/semibold */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-md-medium {
+  /* Heading/md/medium */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-md-regular {
+  /* Heading/md/regular */
+  font-family: Pretendard;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 145.455% */
+}
+@utility heading-sm-bold {
+  /* Heading/sm/bold */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px; /* 160% */
+}
+@utility heading-sm-semibold {
+  /* Heading/sm/semibold */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px; /* 160% */
+}
+@utility heading-sm-medium {
+  /* Heading/sm/medium */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px; /* 160% */
+}
+@utility heading-sm-regular {
+  /* Heading/sm/regular */
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 160% */
+}
+
+{/* body */}
+@utility body-2xl-bold {
+  /* Body/2xl/bold */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-2xl-semibold {
+  /* Body/2xl/semibold */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-2xl-medium {
+  /* Body/2xl/medium */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-2xl-regular {
+  /* Body/2xl/regular */
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 155.556% */
+}
+@utility body-read {
+  /* Body/read */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 188.235% */
+}
+@utility body-xl-bold {
+  /* Body/xl/bold */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-xl-semibold {
+  /* Body/xl/semibold */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-xl-medium {
+  /* Body/xl/medium */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-xl-regular {
+  /* Body/xl/regular */
+  font-family: Pretendard;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 164.706% */
+}
+@utility body-lg-bold {
+  /* Body/lg/bold */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 150% */
+}
+@utility body-lg-semibold {
+  /* Body/lg/semibold */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+}
+@utility body-lg-medium {
+  /* Body/lg/medium */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+}
+@utility body-lg-regular {
+  /* Body/lg/regular */
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+}
+
+@utility body-md-bold {
+  /* Body/md/bold */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 160% */
+}
+@utility body-md-semibold {
+  /* Body/md/semibold */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 160% */
+}
+@utility body-md-medium {
+  /* Body/md/medium */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 160% */
+}
+@utility body-md-regular {
+  /* Body/md/regular */
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 160% */
+}
+
+@utility body-sm-bold {
+  /* Body/sm/bold */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px; /* 142.857% */
+}
+@utility body-sm-semibold {
+  /* Body/sm/semibold */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 142.857% */
+}
+@utility body-sm-medium {
+  /* Body/sm/medium */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}
+@utility body-sm-regular {
+  /* Body/sm/regular */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+
+{/* caption */}
+@utility caption-md-bold {
+  /* Caption/md/bold */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-md-semibold {
+  /* Caption/md/semibold */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-md-medium {
+  /* Caption/md/medium */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-md-regular {
+  /* Caption/md/regular */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 123.077% */
+}
+@utility caption-sm-medium {
+  /* Caption/sm/medium */
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 133.333% */
+}
+@utility caption-sm-semibold {
+  /* Caption/sm/semibold */
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 133.333% */
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+.tiptap-content {
+  @apply w-full;
+  line-height: 1.5;
+}
+
+.tiptap-content h1 {
+  @apply text-2xl font-bold mb-2;
+}
+
+.tiptap-content h2 {
+  @apply text-xl font-semibold mb-2;
+}
+
+.tiptap-content h3 {
+  @apply text-lg font-medium mb-2;
+}
+
+.tiptap-content p {
+  @apply mb-2;
+}
+
+.tiptap-content ul {
+  @apply list-disc ml-5 mb-2;
+}
+
+.tiptap-content ol {
+  @apply list-decimal ml-5 mb-2;
+}
+
+.tiptap-content a {
+  @apply text-blue-600 underline cursor-pointer;
+}
+
+.tiptap-content strong {
+  @apply font-bold;
+}
+
